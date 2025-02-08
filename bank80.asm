@@ -57,8 +57,8 @@ init:
         lda #%00000000      ;sprite size: 8x8 + 16x16; base address 0000
         sta $2101
         
-        jsl load_spritetiles    ;see bank $81
-        jsl load_palette
+        jsl gliderload      ;see bank $81
+        ;jsl load_palette
         
         lda #$8f
         sta $2100           ;turn screen brightness on and enable forced blank
@@ -69,10 +69,7 @@ main:   {
     lda $4212               ;wait until v-blank
     bpl .loop
     
-    sep #$20
-    lda #$0f
-    sta $2100
-    rep #$20
+
     
     bra .loop
         
@@ -95,7 +92,7 @@ nmi:
     rti
     
 errhandle:
-    jmp errhandle
+    jml errhandle
     
 irq:
     rti
