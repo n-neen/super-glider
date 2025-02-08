@@ -51,34 +51,34 @@ init:
         bne --
         
         sep #$20            ;<-------
-        lda #%00010011      ;main screen = sprites, L1, L2
+        lda #%00010001      ;main screen = sprites, L1, L2
         sta $212c           ;main screen turn on
         
         lda #%00000000      ;sprite size: 8x8 + 16x16; base address 0000
         sta $2101
+        rep #$20            ;<-------
         
+    .graphics:
+        jsl clearvram
         jsl gliderload      ;see bank $81
-        ;jsl load_palette
+        jsl palettetest
+        jsl tilemaptest
         
-        lda #$8f
-        sta $2100           ;turn screen brightness on and enable forced blank
+        sep #$20            ;<-------
+        lda #$0f
+        sta $2100           ;turn screen brightness on and disable forced blank
         rep #$20            ;<-------
         
 main:   {
     .loop:
     lda $4212               ;wait until v-blank
-    bpl .loop
+    bmi .loop
     
-
     
-    bra .loop
-        
-        
-        
     ;rest of program goes here
-        
-        
-        
+    inc $20
+    
+    
     bra .loop
 } ;
     
