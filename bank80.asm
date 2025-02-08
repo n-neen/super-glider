@@ -62,6 +62,7 @@ init:
         jsl clearvram
         jsl gliderload      ;see bank $81
         jsl palettetest
+        jsl bg1test
         jsl tilemaptest
         
         sep #$20            ;<-------

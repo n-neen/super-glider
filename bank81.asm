@@ -24,10 +24,8 @@ endmacro
 
 
 dma:
-    .vramtransfur: {
+    .vramtransfur: {        ;for dma channel 0
     
-
-        ;for dma channel 0
                                                 ;register width (bytes)
         !dma_control            =   $2115       ;1
         !dma_dest_baseaddr      =   $2116       ;2
@@ -93,7 +91,7 @@ dma:
         
 }
 
-    .loadpalettes: {                 ;copypaste of above vram but with dma mode/destination register changed
+    .loadpalettes: {        ;copypaste of above vram routine but with dma mode/destination register changed
         sep #$20
         
         lda $03,s                   ;db = caller bank
@@ -150,7 +148,7 @@ dma:
 }
 
 gliderload: {
-    %vramtransfur(#glider_graphics, $0300, $0000)
+    %vramtransfur(#glider_graphics, $0300, $c000)                                                   ;sprites base address: $c000
     rtl
 }
 
@@ -164,15 +162,26 @@ palettetest: {
     rtl
 }
 
-;===============================layer tilemaps================================
+;===============================background layers================================
 
 tilemaptest: {
     sep #$20
-    lda #$50
+    
+    lda #$08
     sta $2107
+    
+    lda #$00
+    sta $210b
+    
     rep #$20
     
-    %vramtransfur(#bg1tilemap, $0700, $5000)
+    
+    
+    ;%vramtransfur(#bg1tilemap, $0800, $0800)                                                        ;bg1 tilemap base address: $0800
     rtl
 }
 
+bg1test: {
+    %vramtransfur(#bg1gfx, $0800, $0000)                                                            ;bg1 grx base address: $0000
+    rtl
+}
