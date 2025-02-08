@@ -1,0 +1,1 @@
+"E:\Program Files (x86)\Emulators\super metroid\asar\asar.exe" -v --no-title-check --fix-checksum=off "C:\Users\keenan\Desktop\glider pro snes\snes\glider.asm"
