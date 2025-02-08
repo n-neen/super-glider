@@ -11,115 +11,101 @@ org $818000
 
 
 dma:
-    .setup: {
+    .vramtransfur: {
     
-    !dma_args_start         =   $50
-                                                            ;register to be written to
-    !dma_channel            =   !dma_args_start             ;none [determines register set]
-                                                                        ;register width (bytes)
-    !dma_control            =   !dma_args_start+$2          ;$2115      ;1
-    !dma_dest_baseaddr      =   !dma_args_start+$4          ;$2116      ;2
-    !dma_transfur_mode      =   !dma_args_start+$6          ;$43x0      ;1              ;x=dma channel
-    !dma_reg_destination    =   !dma_args_start+$8          ;$43x1      ;1
-    !dma_source_address     =   !dma_args_start+$a          ;$43x2      ;2
-    !dma_bank               =   !dma_args_start+$c          ;$43x4      ;1
-    !dma_transfur_size      =   !dma_args_start+$e          ;$43x5      ;2
-    !dma_enable             =   !dma_args_start+$10         ;$430b      ;1
-    
-    
-    phk             ;\
-    plb             ;db = $81
-    php
-    
-    rep #$30
-    
-    lda !dma_channel
-    asl #4
-    ora #$4300
-    tay
+
+    ;for dma channel
+                                            ;register width (bytes)
+    !dma_control            =   $2115       ;1
+    !dma_dest_baseaddr      =   $2116       ;2
+    !dma_transfur_mode      =   $4300       ;1
+    !dma_reg_destination    =   $4301       ;1
+    !dma_source_address     =   $4302       ;2
+    !dma_bank               =   $4304       ;1
+    !dma_transfur_size      =   $4305       ;2
+    !dma_enable             =   $430b       ;1      ;set to #%00000001 to enable transfer on channel 0
     
     sep #$20
-    lda !dma_control            ;1
+    
+    lda $03,s
+    pha
+    plb
+    
+                                ;width  register
+    lda.b #$80                  ;1      dma control
     sta $2115
     rep #$20
     
-    lda !dma_dest_baseaddr      ;2
+    ldy #$0006
+    
+    lda ($01,s),y               ;2      dest base addr
     sta $2116
     
     sep #$20
-    lda !dma_transfur_mode      ;1
-    sta $0000,y                 ;$43x0
-    iny
+    lda #$01                    ;1      transfur mode
+    sta $4300
     
-    lda !dma_reg_destination    ;1
-    sta $0000,y                 ;$43x1
-    iny
+    lda #$18                    ;1      register dest (vram port)
+    sta $4301
     rep #$20
     
-    lda !dma_source_address     ;2
-    sta $0000,y                 ;$43x2
-    iny : iny
+    ldy #$0001                          ;y=0
+    lda ($01,s),y               ;2      source addr
+    sta $4302
+    
+    iny : iny                           ;y=2
     
     sep #$20
-    lda !dma_bank               ;1
-    sta $0000,y                 ;$43x4
-    iny
+    lda ($01,s),y               ;1      source bank
+    sta $4304
     rep #$20
     
-    lda !dma_transfur_size      ;2
-    sta $0000,y                 ;$43x5
+    iny                                 ;y=3
     
-    sep #$20                    ;1
-    lda !dma_enable             ;caller needs to set correct bit!
+    lda ($01,s),y               ;2      transfur size
+    sta $4305
+    
+    sep #$20                    ;1      enable transfur on dma channel 0
+    lda #$01                    
     sta $420b
     rep #$20
     
-    
-    plp
-    rtl
-    
-
-}
-
-gliderload: {
-    php
+    lda $00,s
+    clc
+    adc #$0007
+    sta $00,s
     
     rep #$30
     
-    lda.w #$0080
-    sta !dma_control
+    rtl
     
-    lda.w #$0000                    ;destination base address
-    sta !dma_dest_baseaddr
-    
-    lda.w #$0081
-    sta !dma_bank                   ;set dma source bank = $81
-    
-    lda.w #glider_graphics
-    sta !dma_source_address         ;set dma source address pointer
-    
-    lda.w #$0600
-    sta !dma_transfur_size          ;dma size = $300
-    
-    lda.w #$0018                    ;destination is $2118 (vram port)
-    sta !dma_reg_destination
-    
-    lda.w #$0001                    ;transfer mode 1 (two byte mode)
-    sta !dma_transfur_mode
-    
-    lda.w #$0001
-    sta !dma_enable                 ;enable transfur
-    
-    jsl dma_setup
-    
-    plp
+
+}
+
+macro vramtransfur(gfxptr, size, vramdest)
+    jsl dma_vramtransfur
+    dl <gfxptr>
+    dw <size>
+    dw <vramdest>
+endmacro
+
+
+gliderload: {
+    %vramtransfur(#glider_graphics, $0300, $0000)
     rtl
 }
+
+
+
+
 ;===============================sprite data===============================
 
 glider:
     .header:
         dw #.graphics, #.spritemap, #.palette, #.hitbox
+        
+    .hitbox:                ;radii
+        db $0a, $05         ;x, y
         
     .graphics:
         incbin "./data/sprites/glider.gfx"
@@ -130,5 +116,3 @@ glider:
     .palette:
         incbin "./data/sprites/glider.pal"
         
-    .hitbox:                ;radii
-        db $0a, $05         ;x, y
