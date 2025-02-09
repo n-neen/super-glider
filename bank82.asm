@@ -20,7 +20,9 @@ org $828000
         dw $2940, $0000, $6739, $7ec7, $2108, $5ef7, $39ac, $24a4,
            $2529, $39ce, $4e73, $44c4, $7fff, $5294, $3c3c, $643c
         
-        ;gets thrown at the start of cgram
+    splashpalette:
+        incbin "./data/palettes/splash.pal"
+        
         
 ;===============================sprite data===============================
 
@@ -41,7 +43,7 @@ glider:
         incbin "./data/sprites/glider.pal"
 
 
-;===============================background data===============================
+;===============================background data==============================
 
 bg1tilemap:
     incbin "./data/tilemaps/bg1tilemap.bin"

@@ -34,7 +34,8 @@ dma:
         !dma_source_address     =   $4302       ;2
         !dma_bank               =   $4304       ;1
         !dma_transfur_size      =   $4305       ;2
-        !dma_enable             =   $430b       ;1      ;set to #%00000001 to enable transfer on channel 0
+        !dma_enable             =   $430b       ;1
+                            ;set to #%00000001 to enable transfer on channel 0
         
         sep #$20
         
@@ -91,7 +92,7 @@ dma:
         
 }
 
-    .loadpalettes: {        ;copypaste of above vram routine but with dma mode/destination register changed
+    .loadpalettes: {        ;copypaste of above vram routine
         sep #$20
         
         lda $03,s                   ;db = caller bank
@@ -148,7 +149,7 @@ dma:
 }
 
 gliderload: {
-    %vramtransfur(#glider_graphics, $1000, $c000)                                                   ;sprites base address: $c000
+    %vramtransfur(#glider_graphics, $1000, $c000)   ;sprites base address: $c000
     rtl
 }
 
@@ -162,32 +163,39 @@ loadpalettes: {
     rtl
 }
 
+
 ;===============================background layers================================
+
+splash_loadgfx: {
+    %vramtransfur(#splashgfx, $8000, $0000)         ;bg1 grx base address: $0000
+    rtl
+}
+
+
+splash_loadtilemap: {
+     %vramtransfur(#splashtilemap, $0800, $2000)    ;bg1 tilemap base address: $2000
+                  ;pointer,     size,  destination
+    rtl
+}
+
+
+splash_loadpalettes: {
+    %cgramtransfur(#splashpalette, $0100, $0000)
+    rtl
+}
+
 
 bg1: {
     .loadtilemap: {
-        sep #$20
-        
-        lda #$01                ;drawing mode
-        sta $2105
     
-        lda #$20                ;bg1 tilemap base address
-        sta $2107
-    
-        lda #$00                ;bg1 tiles base address
-        sta $210b
-    
-        rep #$30
-    
-        %vramtransfur(#bg1tilemap, $0800, $2000)                                                        ;bg1 tilemap base address: $2000
-                     ;pointer,     size,    destination
+        %vramtransfur(#bg1tilemap, $0800, $2000)    ;bg1 tilemap base address: $2000
+                     ;pointer,     size,  destination
     
         rtl
     }
 
-
     .loadgfx: {      ;gfx
-        %vramtransfur(#bg1gfx, $4000, $0000)                                                            ;bg1 grx base address: $0000
+        %vramtransfur(#bg1gfx, $4000, $0000)        ;bg1 grx base address: $0000
         rtl
     }
 }

@@ -76,7 +76,14 @@ init:
         
         lda #%00000000      ;sprite size: 8x8 + 16x16; base address 0000
         sta $2101
-        rep #$20            ;<-------
+        
+        lda #$01            ;drawing mode
+        sta $2105
+        lda #$20            ;bg1 tilemap base address
+        sta $2107
+        lda #$00            ;bg1 tiles base address
+        sta $210b
+        rep #$20
 }   ;fall through to main
 
 ;===========================================================================================
@@ -115,11 +122,20 @@ statetable:             ;program modes, game states, etc
 splash: {
     !backgroundtype         =       $700
     
+    jsr screenoff
+    
     lda #$0000              ;not currently implemented
     sta !backgroundtype     ;we will eventually use this to determine a set of:
-    jsl bg1_loadgfx                                     ;bg1 gfx
-    jsl bg1_loadtilemap                                 ;bg1 tilemaps
-    jsl loadpalettes                                    ;and palettes
+    jsl splash_loadgfx                                      ;bg1 gfx
+    jsl splash_loadtilemap                                  ;bg1 tilemaps
+    jsl splash_loadpalettes                                 ;and palettes
+    
+    jsr screenon
+    
+    waitforstart: {
+        
+    } : jmp waitforstart
+    +
     inc !gamestate          ;advance to game state 1 (newgame)
     rts
 }
@@ -142,12 +158,20 @@ newgame: {
     ;place glider
     
     ;jsl gliderinit
+    
+    jsr screenoff
+    
+    lda #$0001              ;not currently implemented
+    sta !backgroundtype     ;we will eventually use this to determine a set of:
+    jsl bg1_loadgfx                                     ;bg1 gfx
+    jsl bg1_loadtilemap                                 ;bg1 tilemaps
+    jsl loadpalettes                                    ;and palettes
+    
     jsl gliderload      ;exists
     
-    sep #$20            ;<-------
-    lda #$0f
-    sta $2100           ;turn screen brightness on and disable forced blank
-    rep #$20            ;<-------
+    jsr screenon
+    
+    
     
     inc !gamestate      ;advance to game state 2
     rts
@@ -167,7 +191,7 @@ playgame: {
         ;jsl handle_bands
         ;jsl handle_glider
         
-        ;if [you died]: jmp .endgame
+        ;if [you died]: jmp .out
         jsr waitfornmi
         jmp .loop
     }
@@ -238,6 +262,30 @@ nmi: {
     inc !nmicounter
     rti
 }
+
+
+screenon: {
+    sep #$30
+    lda #$0f
+    sta $2100           ;turn screen brightness on and disable forced blank
+    rep #$30            ;<-------
+    rts
+}
+
+
+screenoff: {
+    sep #$20
+    lda #$8f
+    sta $2100           ;enable f-blank
+    rep #$20
+}
+
+
+
+
+
+
+
 
 
 updateoam: {
