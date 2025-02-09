@@ -157,7 +157,7 @@ clearvram: {
     rtl
 }
 
-palettetest: {
+loadpalettes: {
     %cgramtransfur(#testpalette, $0100, $0000)
     rtl
 }

@@ -12,6 +12,8 @@ org $808000
 !nmicounter         =           $24
 !framecounter       =           $26
 
+!oambuffer          =           $500                       ;start of oam table to dma at nmi
+
 ;===========================================================================================
 ;===================================  B O O T  =============================================
 ;===========================================================================================
@@ -66,17 +68,16 @@ init:
         
         jsl clearvram
         
-        
         sep #$20            ;<-------
         lda #$80            ;enable nmi
         sta $4200
         lda #%00010001      ;main screen = sprites, L1, L2
-        sta $212c           ;main screen turn on
+        sta $212c
         
         lda #%00000000      ;sprite size: 8x8 + 16x16; base address 0000
         sta $2101
         rep #$20            ;<-------
-}   ;fall through
+}   ;fall through to main
 
 ;===========================================================================================
 ;===================================  M A I N  =============================================
@@ -106,12 +107,26 @@ statetable:             ;program modes, game states, etc
     dw #playgame        ;2
     dw #gameover        ;3
 
+;===========================================================================================
+;=================================== STATE 0:  SPLASH  =====================================
+;===========================================================================================
+
 
 splash: {
-    inc !gamestate
+    !backgroundtype         =       $700
+    
+    lda #$0000              ;not currently implemented
+    sta !backgroundtype     ;we will eventually use this to determine a set of:
+    jsl bg1_loadgfx                                     ;bg1 gfx
+    jsl bg1_loadtilemap                                 ;bg1 tilemaps
+    jsl loadpalettes                                    ;and palettes
+    inc !gamestate          ;advance to game state 1 (newgame)
     rts
 }
 
+;===========================================================================================
+;================================== STATE 1:  NEWGAME  =====================================
+;===========================================================================================
 
 newgame: {
 ;prospective outline of newgame
@@ -125,23 +140,22 @@ newgame: {
     ;load sprite graphics
     ;load sprite palettes
     ;place glider
-
-    jsl gliderload      ;see bank $81
-    jsl palettetest
-    jsl bg1_loadgfx
-    jsl bg1_loadtilemap
     
     ;jsl gliderinit
-        
+    jsl gliderload      ;exists
+    
     sep #$20            ;<-------
     lda #$0f
     sta $2100           ;turn screen brightness on and disable forced blank
     rep #$20            ;<-------
     
-    inc !gamestate
+    inc !gamestate      ;advance to game state 2
     rts
 }
 
+;===========================================================================================
+;================================== STATE 2:  PLAYGAME  ====================================
+;===========================================================================================
 
 playgame: {
     .loop: {
@@ -159,7 +173,7 @@ playgame: {
     }
     
     .out:
-        inc !gamestate   ;go from gamestate 2 (playgame) to gamestate 3 (endgame)
+        inc !gamestate   ;advance gamestate from 2 (playgame) to 3 (endgame)
         rts
 }
 
