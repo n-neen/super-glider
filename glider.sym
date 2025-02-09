@@ -5,9 +5,11 @@
 80:8020 :neg_1_1
 80:803A :neg_1_2
 80:8044 :neg_2_1
-82:8765 bg1gfx
-81:80CD bg1test
-82:8765 bg1tilemap
+81:80BE bg1
+81:80DD bg1_loadgfx
+81:80BE bg1_loadtilemap
+82:ADA5 bg1gfx
+82:A5A5 bg1tilemap
 80:8000 boot
 80:8018 clear7e
 81:80A6 clearvram
@@ -15,12 +17,12 @@
 81:804D dma_loadpalettes
 81:8000 dma_vramtransfur
 80:8080 errhandle
-82:8120 glider
-82:812A glider_graphics
-82:8120 glider_header
-82:8128 glider_hitbox
-82:8465 glider_palette
-82:842A glider_spritemap
+82:8260 glider
+82:826A glider_graphics
+82:8260 glider_header
+82:8268 glider_hitbox
+82:A2A5 glider_palette
+82:A26A glider_spritemap
 81:809A gliderload
 80:8029 init
 80:8059 init_graphics
@@ -32,14 +34,13 @@
 81:80B2 palettetest
 80:8007 setbank
 82:8000 testpalette
-81:80BE tilemaptest
 
 [source files]
-0000 28dfce67 c:/users/keenan/desktop/glider pro snes/snes/bank80.asm
-0001 0e3922df c:/users/keenan/desktop/glider pro snes/snes/bank81.asm
+0000 5eff8500 c:/users/keenan/desktop/glider pro snes/snes/bank80.asm
+0001 8eeb7076 c:/users/keenan/desktop/glider pro snes/snes/bank81.asm
 
 [rom checksum]
-1063b0b5
+cf263448
 
 [addr-to-line mapping]
 80:8000 0000:00000006
@@ -182,12 +183,15 @@
 81:80b1 0001:0000009d
 81:80b2 0001:0000000e
 81:80bd 0001:000000a2
-81:80be 0001:000000a8
-81:80c0 0001:000000aa
-81:80c2 0001:000000ab
-81:80c5 0001:000000ad
-81:80c7 0001:000000ae
-81:80ca 0001:000000b0
-81:80cc 0001:000000b5
-81:80cd 0001:00000007
-81:80d8 0001:000000ba
+81:80be 0001:000000a9
+81:80c0 0001:000000ab
+81:80c2 0001:000000ac
+81:80c5 0001:000000ae
+81:80c7 0001:000000af
+81:80ca 0001:000000b1
+81:80cc 0001:000000b2
+81:80cf 0001:000000b4
+81:80d1 0001:00000007
+81:80dc 0001:000000b9
+81:80dd 0001:00000007
+81:80e8 0001:000000bf

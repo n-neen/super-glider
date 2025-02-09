@@ -60,18 +60,18 @@ dma:
         sta $4301
         rep #$20
         
-        ldy #$0001                          ;y=0
+        ldy #$0001                          ;y=1
         lda ($01,s),y               ;2      source addr
         sta $4302
         
-        iny : iny                           ;y=2
+        iny : iny                           ;y=3
         
         sep #$20
         lda ($01,s),y               ;1      source bank
         sta $4304
         rep #$20
         
-        iny                                 ;y=3
+        iny                                 ;y=4
         
         lda ($01,s),y               ;2      transfur size
         sta $4305
@@ -148,7 +148,7 @@ dma:
 }
 
 gliderload: {
-    %vramtransfur(#glider_graphics, $0300, $c000)                                                   ;sprites base address: $c000
+    %vramtransfur(#glider_graphics, $1000, $c000)                                                   ;sprites base address: $c000
     rtl
 }
 
@@ -164,24 +164,30 @@ palettetest: {
 
 ;===============================background layers================================
 
-tilemaptest: {
-    sep #$20
+bg1: {
+    .loadtilemap: {
+        sep #$20
+        
+        lda #$01                ;drawing mode
+        sta $2105
     
-    lda #$08
-    sta $2107
+        lda #$20                ;bg1 tilemap base address
+        sta $2107
     
-    lda #$00
-    sta $210b
+        lda #$00                ;bg1 tiles base address
+        sta $210b
     
-    rep #$20
+        rep #$30
     
+        %vramtransfur(#bg1tilemap, $0800, $2000)                                                        ;bg1 tilemap base address: $2000
+                     ;pointer,     size,    destination
     
-    
-    ;%vramtransfur(#bg1tilemap, $0800, $0800)                                                        ;bg1 tilemap base address: $0800
-    rtl
-}
+        rtl
+    }
 
-bg1test: {
-    %vramtransfur(#bg1gfx, $0800, $0000)                                                            ;bg1 grx base address: $0000
-    rtl
+
+    .loadgfx: {      ;gfx
+        %vramtransfur(#bg1gfx, $4000, $0000)                                                            ;bg1 grx base address: $0000
+        rtl
+    }
 }
