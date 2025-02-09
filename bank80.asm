@@ -2,7 +2,21 @@ lorom
 
 org $808000
 
-boot:
+;===========================================================================================
+;===================================  DEFINES  =============================================
+;===========================================================================================
+
+!gamestate          =           $30
+!maincounter        =           $20
+!nmiflag            =           $22
+!nmicounter         =           $24
+!framecounter       =           $26
+
+;===========================================================================================
+;===================================  B O O T  =============================================
+;===========================================================================================
+
+boot: {
     sei
     clc
     xce             ;enable native mode
@@ -28,8 +42,8 @@ clear7e:
     bne -
     phk
     plb
-    
-    
+    ;fall through
+
 init:
     .registers:
         sep #$30            ;<-------
@@ -50,51 +64,184 @@ init:
         dex : dex
         bne --
         
+        jsl clearvram
+        
+        
         sep #$20            ;<-------
+        lda #$80            ;enable nmi
+        sta $4200
         lda #%00010001      ;main screen = sprites, L1, L2
         sta $212c           ;main screen turn on
         
         lda #%00000000      ;sprite size: 8x8 + 16x16; base address 0000
         sta $2101
         rep #$20            ;<-------
+}   ;fall through
+
+;===========================================================================================
+;===================================  M A I N  =============================================
+;===========================================================================================
+
+main: {
+        .stateinit: {
+            lda #$0000
+            sta !gamestate
+        }
         
-    .graphics:
-        jsl clearvram
-        jsl gliderload      ;see bank $81
-        jsl palettetest
-        jsl bg1_loadgfx
-        jsl bg1_loadtilemap
+        .statehandle: {
+            inc !maincounter                ;main switch case jump table loop
+            lda !gamestate                  ;usually, state handler will 
+            asl                             ;return after running once, like newgame
+            tax                             ;or itself has a loop, like playgame
+            jsr (statetable,x)
+            
+            jmp .statehandle
+        }
+}
+
+
+statetable:             ;program modes, game states, etc
+    dw #splash          ;0
+    dw #newgame         ;1
+    dw #playgame        ;2
+    dw #gameover        ;3
+
+
+splash: {
+    inc !gamestate
+    rts
+}
+
+
+newgame: {
+;prospective outline of newgame
+    ;load house data
+    ;identify starting room
+    ;load starting room's data
+        ;starting room informs the following:
+        ;background palettes,
+        ;background graphics,
+        ;background tilemap
+    ;load sprite graphics
+    ;load sprite palettes
+    ;place glider
+
+    jsl gliderload      ;see bank $81
+    jsl palettetest
+    jsl bg1_loadgfx
+    jsl bg1_loadtilemap
+    
+    ;jsl gliderinit
         
-        sep #$20            ;<-------
-        lda #$0f
-        sta $2100           ;turn screen brightness on and disable forced blank
-        rep #$20            ;<-------
+    sep #$20            ;<-------
+    lda #$0f
+    sta $2100           ;turn screen brightness on and disable forced blank
+    rep #$20            ;<-------
+    
+    inc !gamestate
+    rts
+}
+
+
+playgame: {
+    .loop: {
+        inc !framecounter
+        ;jsl getinput
+        ;jsl handle_objects
+        ;jsl handle_interaction
+        ;jsl handle_switches
+        ;jsl handle_bands
+        ;jsl handle_glider
         
-main:   {
-    .loop:
-    lda $4212               ;wait until v-blank
-    bmi .loop
+        ;if [you died]: jmp .endgame
+        jsr waitfornmi
+        jmp .loop
+    }
     
+    .out:
+        inc !gamestate   ;go from gamestate 2 (playgame) to gamestate 3 (endgame)
+        rts
+}
+
+waitfornmi: {
+    php
+    phb
     
-    ;rest of program goes here
-    inc $20
+    sep #$20
+    lda $01
+    sta !nmiflag
+    rep #$20
+    lda !nmiflag
+    bne waitfornmi
     
+    plb
+    plp
+    rts
+}
+
+
+gameover: {
+    ;todo
+    rts
+}
+
+;===========================================================================================
+;===================================  N  M  I  =============================================
+;===========================================================================================
+
+nmi: {
+    rep #$30
+    php
+    phb
+    phd
+    pha
+    phx
+    phy
     
-    bra .loop
-} ;
+    phk
+    plb
+    lda #$0000
+    tcd
     
+    sep #$10
+    ldx $4210
+    ldx !nmiflag
+    beq .return
     
+    jsr updateoam               ;dma from wram buffer to oam
+    jsr updateppuregisters      ;dma from wram buffer to a whole bunch of stuff
     
+    stz !nmiflag
     
-    
-    
-    
-nmi:
+    .return
+    rep #$30
+    ply
+    plx
+    pla
+    pld
+    plb
+    plp
+    inc !nmicounter
     rti
-    
+}
+
+
+updateoam: {
+    ;todo
+    rts
+}
+
+
+updateppuregisters: {
+    ;todo
+    rts
+}
+
+
 errhandle:
     jml errhandle
-    
+
+
 irq:
     rti
     

@@ -44,7 +44,7 @@ glider:
 ;===============================background data===============================
 
 bg1tilemap:
-    incbin "./data/tiles/bg1tilemap.bin"
+    incbin "./data/tilemaps/bg1tilemap.bin"
     
 bg1gfx:
     incbin "./data/tiles/bg1_gfx.gfx"
