@@ -42,14 +42,19 @@ lorom
 ;===================================               =========================================
 ;===========================================================================================
 
-
+;code
 incsrc "./bank80.asm"           ;main
 incsrc "./bank81.asm"           ;dma, graphics and palette loading
-incsrc "./bank82.asm"           ;palettes, graphics data
-incsrc "./bank83.asm"           ;house, rooms
+incsrc "./bank82.asm"           ;reserved
+incsrc "./bank83.asm"           ;house, rooms definitions
 incsrc "./bank84.asm"           ;reserved for objects
-incsrc "./bank85.asm"           ;splash screen graphics
-incsrc "./bank86.asm"           ;splash screen tilemap
+incsrc "./bank85.asm"           ;reserved for glider
+
+;data
+incsrc "./bank90.asm"           ;splash screen graphics
+incsrc "./bank91.asm"           ;splash screen tilemap
+incsrc "./bank92.asm"           ;palettes, graphics data
+
 
 
 ;===========================================================================================
