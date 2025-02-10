@@ -1,0 +1,93 @@
+
+MAIN GAMEPLAY
+            if [two player game] ( do stuff )
+            else
+            ( do the same stuff but only with one player)
+            so gameplay is more like
+                        HandleDynamics();
+                        if (!gameOver)
+                        {
+                            if (demoGoing)
+                                GetDemoInput(&theGlider);
+                            else
+                                GetInput(&theGlider);
+                            HandleInteraction();
+                        }
+                        HandleTriggers();
+                        HandleBands();
+                        if (!gameOver)
+                            HandleGlider(&theGlider);
+            dynamics means enemies or other objects that move
+            bands are your weapons
+            glider is the player character
+            triggers are an object type like switches for tuning off and on lights and other objects
+            so:
+                                    handle enemies,
+                                    handle interaction,
+                                    handle switches,
+                                    handle rubber bands,
+                                    handle glider
+            also has
+             
+                    gameFrame++;
+                    evenFrame = !evenFrame;
+             way up the function
+             
+             
+             
+             
+             
+             
+             
+boot
+init registers etc
+clear wram
+load level
+init enemies
+init glider
+             
+gameplay loop:                                                                  play.c
+    while (!quitting) && (playing):
+        gameFrame++;
+        evenFrame = !evenFrame;
+        get input,
+        handle enemies,
+        handle interaction,
+        handle switches,
+        handle rubber bands,
+        handle glider
+                giant switch case statement for every movement in               player.c
+        if (playing)
+            renderframe
+        if (gameover)
+            dogameover
+            
+essentials:
+    display any background at all           ;start here
+    basic glider sprites                    ;and then this
+    multi-screen levels
+        some kind of level format
+    basic enemies
+        dart
+        balloon
+    basic furniture
+    original assets massaged to fit
+    
+nice to have:
+    hud
+    splash screen
+    all enemy types
+    all furniture types
+    all object types
+        incl. grease
+    all backgrounds
+    level data compression
+    transport ducts
+    switches
+    lighting
+    candles [+glider can catch on fire]
+    
+stretch:
+    level data compatibility
+    high res mode?
+    animated screen transition like original

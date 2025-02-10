@@ -136,7 +136,7 @@ splash: {
     waitforstart: {
         jsr waitfornmi
         lda !nmicounter
-        cmp #$0060
+        cmp #$0080
         beq proceed
     } : jmp waitforstart
     proceed:                ;proceed to
@@ -189,6 +189,8 @@ playgame: {
     jsr screenon
     .loop: {
         inc !framecounter
+        jsr waitfornmi
+        
         ;jsl getinput
         ;jsl handle_objects
         ;jsl handle_interaction
@@ -196,9 +198,8 @@ playgame: {
         ;jsl handle_bands
         ;jsl handle_glider
         ;jsl handle_background
-        
         ;if [you died]: jmp .out
-        jsr waitfornmi
+        
         jmp .loop
     }
     
@@ -209,11 +210,12 @@ playgame: {
 
 waitfornmi: {
     php
+    sep #$20
+    lda #$01
+    sta !nmiflag
+    rep #$20
+    
     .waitloop: {
-        sep #$20
-        lda #$01
-        sta !nmiflag
-        rep #$20
         lda !nmiflag
     } : bne .waitloop
     plp
@@ -252,9 +254,9 @@ nmi: {
     jsr updateoam               ;dma from wram buffer to oam
     jsr updateppuregisters      ;dma from wram buffer to a whole bunch of stuff
     jsr readcontroller
+    stz !nmiflag
     
     .return
-    stz !nmiflag
     rep #$30
     ply
     plx
