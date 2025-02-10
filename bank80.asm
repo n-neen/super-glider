@@ -187,9 +187,16 @@ newgame: {
 
 playgame: {
     jsr screenon
+    
+    stz !nmiflag
+    sep #$20
+    lda #$80
+    sta $4200
+    rep #$20
+    
     .loop: {
         inc !framecounter
-        jsr waitfornmi
+        
         
         ;jsl getinput
         ;jsl handle_objects
@@ -199,7 +206,7 @@ playgame: {
         ;jsl handle_glider
         ;jsl handle_background
         ;if [you died]: jmp .out
-        
+        jsr waitfornmi
         jmp .loop
     }
     
