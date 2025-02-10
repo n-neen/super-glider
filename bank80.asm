@@ -6,13 +6,15 @@ org $808000
 ;===================================  DEFINES  =============================================
 ;===========================================================================================
 
-!gamestate          =           $30
-!maincounter        =           $20
-!nmiflag            =           $22
-!nmicounter         =           $24
-!framecounter       =           $26
+!gamestate              =           $30
+!maincounter            =           $20
+!nmiflag                =           $22
+!nmicounter             =           $24
+!framecounter           =           $26
 
-!oambuffer          =           $500                       ;start of oam table to dma at nmi
+!oambuffer              =           $500                       ;start of oam table to dma at nmi
+
+!bg1tilemapshifted  =           !bg1tilemap>>8
 
 ;===========================================================================================
 ;===================================  B O O T  =============================================
@@ -68,7 +70,7 @@ init:
         
         jsl clearvram
         
-        sep #$20            ;<-------
+        sep #$20        ;<------------
         lda #$80            ;enable nmi
         sta $4200
         lda #%00010001      ;main screen = sprites, L1, L2
@@ -77,13 +79,13 @@ init:
         lda #%00000000      ;sprite size: 8x8 + 16x16; base address 0000
         sta $2101
         
-        lda #$01            ;drawing mode
+        lda #$01                    ;drawing mode
         sta $2105
-        lda #$20            ;bg1 tilemap base address
+        lda.b #!bg1tilemapshifted   ;bg1 tilemap base address
         sta $2107
-        lda #$00            ;bg1 tiles base address
+        lda #$00                    ;bg1 tiles base address
         sta $210b
-        rep #$20
+        rep #$20        ;<------------
 }   ;fall through to main
 
 ;===========================================================================================
@@ -118,7 +120,6 @@ statetable:             ;program modes, game states, etc
 ;=================================== STATE 0:  SPLASH  =====================================
 ;===========================================================================================
 
-
 splash: {
     !backgroundtype         =       $700
     
@@ -126,16 +127,16 @@ splash: {
     
     lda #$0000              ;not currently implemented
     sta !backgroundtype     ;we will eventually use this to determine a set of:
-    jsl splash_loadgfx                                      ;bg1 gfx
-    jsl splash_loadtilemap                                  ;bg1 tilemaps
-    jsl splash_loadpalettes                                 ;and palettes
+    jsl splashload_gfx                                      ;bg1 gfx
+    jsl splashload_tilemap                                  ;bg1 tilemaps
+    jsl splashload_palettes                                 ;and palettes
     
     jsr screenon
     
     waitforstart: {
-        
+        ;todo
     } : jmp waitforstart
-    +
+    
     inc !gamestate          ;advance to game state 1 (newgame)
     rts
 }
@@ -182,6 +183,7 @@ newgame: {
 ;===========================================================================================
 
 playgame: {
+    jsr screenon
     .loop: {
         inc !framecounter
         ;jsl getinput
@@ -190,6 +192,7 @@ playgame: {
         ;jsl handle_switches
         ;jsl handle_bands
         ;jsl handle_glider
+        ;jsl handle_background
         
         ;if [you died]: jmp .out
         jsr waitfornmi

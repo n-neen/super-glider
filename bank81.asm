@@ -19,6 +19,9 @@ macro cgramtransfur(palptr, size, dest)
 endmacro
 
 
+;===================================defines====================================
+;moved v_v
+
 ;=================================dma routines=================================
 
 
@@ -149,7 +152,7 @@ dma:
 }
 
 gliderload: {
-    %vramtransfur(#glider_graphics, $1000, $c000)   ;sprites base address: $c000
+    %vramtransfur(#glider_graphics, $1000, !spritestart)   ;sprites base address: $c000
     rtl
 }
 
@@ -159,43 +162,41 @@ clearvram: {
 }
 
 loadpalettes: {
-    %cgramtransfur(#testpalette, $0100, $0000)
+    %cgramtransfur(#testpalette, $0100, !palettes)
     rtl
 }
 
 
 ;===============================background layers================================
 
-splash_loadgfx: {
-    %vramtransfur(#splashgfx, $8000, $0000)         ;bg1 grx base address: $0000
-    rtl
+splashload: {
+    .gfx: {
+        %vramtransfur(#splashgfx, $8000, !bg1gfx)             ;bg1 grx base address: $0000
+        rtl
+    }
+    
+    .tilemap: {
+         %vramtransfur(#splashtilemap, $0800, !bg1tilemap)    ;bg1 tilemap base address
+                      ;pointer,     size,  destination
+        rtl
+    }
+    
+    .palettes: {
+        %cgramtransfur(#splashpalette, $0100, !palettes)
+        rtl
+    }
 }
-
-
-splash_loadtilemap: {
-     %vramtransfur(#splashtilemap, $0800, $2000)    ;bg1 tilemap base address: $2000
-                  ;pointer,     size,  destination
-    rtl
-}
-
-
-splash_loadpalettes: {
-    %cgramtransfur(#splashpalette, $0100, $0000)
-    rtl
-}
-
 
 bg1: {
     .loadtilemap: {
     
-        %vramtransfur(#bg1tilemap, $0800, $2000)    ;bg1 tilemap base address: $2000
+        %vramtransfur(#bg1tilemap, $0800, !bg1tilemap)      ;bg1 tilemap base address
                      ;pointer,     size,  destination
-    
         rtl
     }
 
-    .loadgfx: {      ;gfx
-        %vramtransfur(#bg1gfx, $4000, $0000)        ;bg1 grx base address: $0000
+    .loadgfx: {
+        %vramtransfur(#bg1gfx, $4000, $0000)                ;bg1 grx base address: $0000
         rtl
     }
 }

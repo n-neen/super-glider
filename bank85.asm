@@ -5,7 +5,3 @@ org $858000
     
     splashgfx:
         incbin "./data/tiles/splash.gfx"
-    
-    splashtilemap:
-        incbin "./data/tilemaps/splash.bin"
-        
