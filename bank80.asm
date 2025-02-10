@@ -134,9 +134,12 @@ splash: {
     jsr screenon
     
     waitforstart: {
-        ;todo
+        jsr waitfornmi
+        lda !nmicounter
+        cmp #$0060
+        beq proceed
     } : jmp waitforstart
-    
+    proceed:                ;proceed to
     inc !gamestate          ;advance to game state 1 (newgame)
     rts
 }
@@ -206,16 +209,13 @@ playgame: {
 
 waitfornmi: {
     php
-    phb
-    
-    sep #$20
-    lda $01
-    sta !nmiflag
-    rep #$20
-    lda !nmiflag
-    bne waitfornmi
-    
-    plb
+    .waitloop: {
+        sep #$20
+        lda #$01
+        sta !nmiflag
+        rep #$20
+        lda !nmiflag
+    } : bne .waitloop
     plp
     rts
 }
@@ -239,7 +239,7 @@ nmi: {
     phx
     phy
     
-    phk
+    phk         ;db=80
     plb
     lda #$0000
     tcd
@@ -251,10 +251,10 @@ nmi: {
     
     jsr updateoam               ;dma from wram buffer to oam
     jsr updateppuregisters      ;dma from wram buffer to a whole bunch of stuff
-    
-    stz !nmiflag
+    jsr readcontroller
     
     .return
+    stz !nmiflag
     rep #$30
     ply
     plx
@@ -268,22 +268,33 @@ nmi: {
 
 
 screenon: {
-    sep #$30
+    sep #$20
     lda #$0f
     sta $2100           ;turn screen brightness on and disable forced blank
-    rep #$30            ;<-------
+    rep #$20
     rts
 }
-
 
 screenoff: {
     sep #$20
     lda #$8f
-    sta $2100           ;enable f-blank
+    sta $2100           ;enable forced blank
     rep #$20
 }
 
-
+readcontroller: {
+    php
+    sep #$20
+    waitforread:
+    lda $4212
+    bit #$01
+    bne waitforread
+    rep #$20
+    
+    lda $4218
+    sta !controller
+    plp
+}
 
 
 
