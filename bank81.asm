@@ -27,11 +27,13 @@ endmacro
 ;===================================  D E F I N E S  =======================================
 ;===========================================================================================
 ;moved v_v
+!oambuffer      =                   $500                    ;start of oam table to dma at nmi
 
 
 ;===========================================================================================
 ;================================  D M A    R O U T I N E S  ===============================
 ;===========================================================================================
+
 ;set up a dma to
     ;vram or cgram
     
@@ -39,7 +41,7 @@ endmacro
     ;dma_loadpalettes
     
     
-dma:
+dma: {
     .vramtransfur: {        ;for dma channel 0
     
                                                 ;register width (bytes)
@@ -97,16 +99,17 @@ dma:
         lda #$01                    
         sta $420b
         
-        lda $01,s
-        clc                         ;adjust return address
-        adc #$07
-        sta $01,s
-        
         rep #$30
         
-        rtl
+        lda $01,s
+        clc                         ;adjust return address
+        adc #$0007
+        sta $01,s
         
-}
+        
+        rtl
+    }
+
 
     .loadpalettes: {        ;copypaste of above vram routine
         sep #$20
@@ -153,16 +156,37 @@ dma:
         lda #$01                    
         sta $420b
         
-        lda $01,s
-        clc                         ;adjust return address
-        adc #$07
-        sta $01,s
-        
         rep #$30
         
+        lda $01,s
+        clc                         ;adjust return address
+        adc #$0007
+        sta $01,s
+
         rtl
-        
+    }
 }
+
+oam: {
+    .clear: {
+        phx
+        phy
+        php
+        
+        ;todo
+        
+        plp
+        ply
+        plx
+        rtl
+    }
+    
+    .update: {
+        ;todo: all of this
+        rtl
+    }
+}
+
 
 ;===========================================================================================
 ;===================================  L O A D I N G  =======================================

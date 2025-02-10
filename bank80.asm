@@ -3,8 +3,9 @@ lorom
 org $808000
 
 ;===========================================================================================
-;===================================  DEFINES  =============================================
+;======================================  DEFINES  ==========================================
 ;===========================================================================================
+
 
 !gamestate              =           $30
 !maincounter            =           $20
@@ -12,13 +13,18 @@ org $808000
 !nmicounter             =           $24
 !framecounter           =           $26
 
-!oambuffer              =           $500                       ;start of oam table to dma at nmi
 
-!bg1tilemapshifted  =           !bg1tilemap>>8
+!bg1tilemapshifted      =           !bg1tilemap>>8
+!spriteaddrshifted      =           !spritestart>>13
+
+
+!backgroundtype         =           $700
+
 
 ;===========================================================================================
-;===================================  B O O T  =============================================
+;======================================  B O O T  ==========================================
 ;===========================================================================================
+
 
 boot: {
     sei
@@ -46,7 +52,6 @@ clear7e:
     bne -
     phk
     plb
-    ;fall through
 
 init:
     .registers:
@@ -69,6 +74,7 @@ init:
         bne --
         
         jsl clearvram
+        jsl oam_clear
         
         sep #$20
         lda #$80            ;enable nmi
@@ -76,7 +82,7 @@ init:
         lda #%00010001      ;main screen = sprites, L1, L2
         sta $212c
         
-        lda #%00000000      ;sprite size: 8x8 + 16x16; base address 0000
+        lda.b #!spriteaddrshifted   ;sprite size: 8x8 + 16x16; base address c000
         sta $2101
         
         lda #$01                    ;drawing mode
@@ -88,9 +94,11 @@ init:
         rep #$20
 }   ;fall through to main
 
+
 ;===========================================================================================
-;===================================  M A I N  =============================================
+;======================================  M A I N  ==========================================
 ;===========================================================================================
+
 
 main: {
         .stateinit: {
@@ -116,13 +124,14 @@ statetable:             ;program modes, game states, etc
     dw #playgame        ;2
     dw #gameover        ;3
 
+
 ;===========================================================================================
 ;=================================== STATE 0:  SPLASH  =====================================
 ;===========================================================================================
 
+
 splash: {
-    !backgroundtype         =       $700
-    
+    jsr waitfornmi
     jsr screenoff           ;enable forced blank to to the following dmas
     
     lda #$0000              ;not currently implemented
@@ -135,8 +144,8 @@ splash: {
     
     waitforstart: {
         jsr waitfornmi
-        lda !nmicounter
-        cmp #$0080
+        lda !controller
+        cmp #$1000
         beq proceed
     } : jmp waitforstart
     proceed:                ;proceed to
@@ -144,9 +153,11 @@ splash: {
     rts
 }
 
+
 ;===========================================================================================
 ;================================== STATE 1:  NEWGAME  =====================================
 ;===========================================================================================
+
 
 newgame: {
 ;prospective outline of newgame
@@ -160,9 +171,9 @@ newgame: {
     ;load sprite graphics
     ;load sprite palettes
     ;place glider
-    
     ;jsl gliderinit
     
+    jsr waitfornmi
     jsr screenoff           ;enable forced blank to do the following dmas
     
     lda #$0001              ;not currently implemented
@@ -173,16 +184,16 @@ newgame: {
     jsl gliderload      ;exists
     
     jsr screenon
-    
-    
-    
+
     inc !gamestate      ;advance to game state 2
     rts
 }
 
+
 ;===========================================================================================
 ;================================== STATE 2:  PLAYGAME  ====================================
 ;===========================================================================================
+
 
 playgame: {
     jsr screenon
@@ -195,8 +206,6 @@ playgame: {
     
     .loop: {
         inc !framecounter
-        
-        
         ;jsl getinput
         ;jsl handle_objects
         ;jsl handle_interaction
@@ -214,29 +223,24 @@ playgame: {
         rts
 }
 
-waitfornmi: {
-    php
-    sep #$20
-    lda #$01
-    sta !nmiflag
-    rep #$20
-    
-    .waitloop: {
-        lda !nmiflag
-    } : bne .waitloop
-    plp
-    rts
-}
+
+;===========================================================================================
+;================================== STATE 3:  GAMEOVER  ====================================
+;===========================================================================================
 
 
 gameover: {
-    ;todo
+    ;todo: this
     rts
 }
 
+
 ;===========================================================================================
-;===================================  N  M  I  =============================================
+;===================================                   =====================================
+;===================================    N    M    I    =====================================
+;===================================                   =====================================
 ;===========================================================================================
+
 
 nmi: {
     rep #$30
@@ -257,7 +261,7 @@ nmi: {
     ldx !nmiflag
     beq .return
     
-    jsr updateoam               ;dma from wram buffer to oam
+    jsl oam_update              ;dma from wram buffer to oam
     jsr updateppuregisters      ;dma from wram buffer to a whole bunch of stuff
     jsr readcontroller
     stz !nmiflag
@@ -275,6 +279,21 @@ nmi: {
 }
 
 
+waitfornmi: {
+    php
+    sep #$20
+    lda #$01
+    sta !nmiflag
+    rep #$20
+    
+    .waitloop: {
+        lda !nmiflag
+    } : bne .waitloop
+    plp
+    rts
+}
+
+
 screenon: {
     sep #$20
     lda #$0f
@@ -283,6 +302,7 @@ screenon: {
     rts
 }
 
+
 screenoff: {
     sep #$20
     lda #$8f
@@ -290,28 +310,21 @@ screenoff: {
     rep #$20
 }
 
+
 readcontroller: {
     php
     sep #$20
+    lda #$81            ;enable controller read
+    sta $4200
     waitforread:
     lda $4212
     bit #$01
     bne waitforread
     rep #$20
     
-    lda $4218
+    lda $4218           ;store to wram
     sta !controller
     plp
-}
-
-
-
-
-
-
-
-updateoam: {
-    ;todo
     rts
 }
 
