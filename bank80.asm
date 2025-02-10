@@ -50,12 +50,12 @@ clear7e:
 
 init:
     .registers:
-        sep #$30            ;<-------
+        sep #$30
         lda #$8f
         sta $2100           ;enable forced blank
         lda #$01
         sta $4200           ;enable joypad autoread
-        rep #$30            ;<-------
+        rep #$30
         
         
         ldx #$000a
@@ -63,14 +63,14 @@ init:
         dex : dex
         bne - 
         
-        ldx #$0084          ;clear registers $2101-2184
+        ldx #$0084          ;clear registers $2101-2185
 --      stz $2101,x
         dex : dex
         bne --
         
         jsl clearvram
         
-        sep #$20        ;<------------
+        sep #$20
         lda #$80            ;enable nmi
         sta $4200
         lda #%00010001      ;main screen = sprites, L1, L2
@@ -85,7 +85,7 @@ init:
         sta $2107
         lda #$00                    ;bg1 tiles base address
         sta $210b
-        rep #$20        ;<------------
+        rep #$20
 }   ;fall through to main
 
 ;===========================================================================================
@@ -123,7 +123,7 @@ statetable:             ;program modes, game states, etc
 splash: {
     !backgroundtype         =       $700
     
-    jsr screenoff
+    jsr screenoff           ;enable forced blank to to the following dmas
     
     lda #$0000              ;not currently implemented
     sta !backgroundtype     ;we will eventually use this to determine a set of:
@@ -163,14 +163,13 @@ newgame: {
     
     ;jsl gliderinit
     
-    jsr screenoff
+    jsr screenoff           ;enable forced blank to do the following dmas
     
     lda #$0001              ;not currently implemented
     sta !backgroundtype     ;we will eventually use this to determine a set of:
     jsl bg1_loadgfx                                     ;bg1 gfx
     jsl bg1_loadtilemap                                 ;bg1 tilemaps
     jsl loadpalettes                                    ;and palettes
-    
     jsl gliderload      ;exists
     
     jsr screenon
