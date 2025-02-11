@@ -206,20 +206,14 @@ playgame: {
     
     .loop: {
         inc !framecounter
-        ;jsl getinput
-        ;jsl handle_objects
-        ;jsl handle_interaction
-        ;jsl handle_switches
-        ;jsl handle_bands
-        ;jsl handle_glider
-        ;jsl handle_background
-        ;if [you died]: jmp .out
+        jsl game_play       ;one iteration (frame) of handling gameplay happens here
         jsr waitfornmi
+        ;if [youdied]: jmp .out
         jmp .loop
     }
     
     .out:
-        inc !gamestate   ;advance gamestate from 2 (playgame) to 3 (endgame)
+        inc !gamestate      ;advance gamestate from 2 (playgame) to 3 (endgame)
         rts
 }
 
@@ -230,7 +224,7 @@ playgame: {
 
 
 gameover: {
-    ;todo: this
+    jsl game_end
     rts
 }
 

@@ -16,7 +16,7 @@ macro vramtransfur(gfxptr, size, vramdest)
 endmacro
 
 macro cgramtransfur(palptr, size, dest)
-    jsl dma_loadpalettes
+    jsl dma_cgramtransfur
     dl <palptr>
     dw <size>
     dw <dest>
@@ -39,6 +39,16 @@ endmacro
     
     ;dma_vramtransfur
     ;dma_loadpalettes
+    
+    
+    
+    ;===========================================================================================
+    ;===========================================================================================
+    ;both dma routines need to be rewritten to use new arguments (no more stack relative stuff phew)
+    ;after that we can change all the callsites
+    ;===========================================================================================
+    ;===========================================================================================
+    
     
     
 dma: {
@@ -111,7 +121,7 @@ dma: {
     }
 
 
-    .loadpalettes: {        ;copypaste of above vram routine
+    .cgramtransfur: {        ;copypaste of above vram routine
         sep #$20
         
         lda $03,s                   ;db = caller bank
@@ -193,38 +203,142 @@ oam: {
 ;===========================================================================================
 ;set up a dma for a specific purpose
 
+macro loadtablentry(index, pointer, size, baseaddr)
+    db <index>
+    dl <pointer>
+    dw <size>
+    dw <baseaddr>
+endmacro
+
+
+consult: {
+    !dmaargs        =                   $60                     ;start of dma routine arguments
+    !dmatype        =                   !dmaargs+0
+    !dmasrcptr      =                   !dmaargs+2
+    !dmatrsize      =                   !dmaargs+4
+    !dmabaseaddr    =                   !dmaargs+6
+    
+    
+    ;takes arguments:
+    ;a = type of item
+    ;    0 = sprite
+    ;    1 = background
+    ;x = item index
+    ;
+    
+    rep #$30
+    
+    asl                                     ;a*4
+    asl                                     ;
+    tay
+    lda #tablepointers,y                    ;if sprite: grab ptr #loadingtable_sprites_gfx
+                                            ;if bkg, grab ptr #loadingtable_bg_gfx
+    sta $10         ;$10 = pointer to table
+    txa         
+    asl #3      
+    tax             ;x*8
+    
+    lda ($10),x     ;grab first table item (dma type)
+    sta !dmatype
+    inx
+    
+    lda ($10),x     ;grab first table item (dma source long pointer)
+    sta !dmasrcptr
+    inx : inx : inx
+    
+    lda ($10),x     ;grab first table item (dma transfur size)
+    sta !dmatrsize
+    inx : inx
+    
+    lda ($10),x
+    sta !dmabaseaddr
+    
+    lda !dmatype
+    beq gotovramtransfur
+    ;else
+    jsl dma_cgramtransfur
+    rtl
+    
+    gotovramtransfur:
+    jsl dma_vramtransfur
+    rtl
+}
+
+
+tablepointers: {                                        ;y=0 or 1 before shift
+    dw #loadingtable_sprites_gfx            ;2      0   0         after shift
+    dw #loadingtable_sprites_palettes       ;2      2
+    
+    dw #loadingtable_bg_gfx                 ;2      4   4         after shift
+    dw #loadingtable_bg_tilemaps            ;2      6
+    dw #loadingtable_bg_palettes            ;2      8
+}
+
+
+loadingtable: {          ;type: 00 = vram, 01 = cgram
+    .sprites: {
+        ..gfx: {         ;type, long pointer,       size,  baseaddr
+            %loadtablentry($00, #glider_graphics,   $1000, !spritestart)     ;glider = 00
+        }
+        
+        ..palettes: {
+           ;%loadtablentry($00, #glider_palette,    $1000, !spritestart)     ;glider = 00            ;todo: this
+        }
+    }
+    
+    .bg: {
+        ..gfx: {
+            %loadtablentry($00, #splashgfx,         $8000, !bg1gfx)           ;splash = 00
+            %loadtablentry($00, #bg1gfx,            $4000, $0000)             ;bg1    = 01
+        }
+        
+        ..tilemaps: {
+            %loadtablentry($00, #splashtilemap,     $0800, !bg1tilemap)       ;splash = 00
+            %loadtablentry($00, #bg1tilemap,        $0800, !bg1tilemap)       ;bg1    = 01
+        }
+        
+        ..palettes: {
+            %loadtablentry($01, #splashpalette,     $0100, !palettes)         ;splash = 00
+            %loadtablentry($01, #testpalette,       $0100, !palettes)         ;bg1    = 01
+        }
+    }
+}
+
+;THIS IS THE LINE====================================
+;below this is currently implemented. above it is not
+
 gliderload: {
-    %vramtransfur(#glider_graphics, $1000, !spritestart)   ;sprites base address: $c000
+    %vramtransfur(#glider_graphics, $1000, !spritestart)   ;sprites base address: $c000         ;xxxxxxxxxxxxx
     rtl
 }
 
 
 clearvram: {
-    %vramtransfur($7e2000, $ffff, $0000)
+    %vramtransfur($7e2000, $ffff, $0000)                                                       ;xxxxxxxxxxxxx
     rtl
 }
 
 
 loadpalettes: {
-    %cgramtransfur(#testpalette, $0100, !palettes)
+    %cgramtransfur(#testpalette, $0100, !palettes)                                             ;xxxxxxxxxxx
     rtl
 }
 
 
 splashload: {
     .gfx: {
-        %vramtransfur(#splashgfx, $8000, !bg1gfx)             ;bg1 grx base address: $0000
+        %vramtransfur(#splashgfx, $8000, !bg1gfx)             ;bg1 grx base address: $0000      xxxxxxxxxxxxxxxxxxxx     
         rtl
     }
     
     .tilemap: {
-         %vramtransfur(#splashtilemap, $0800, !bg1tilemap)    ;bg1 tilemap base address
+         %vramtransfur(#splashtilemap, $0800, !bg1tilemap)    ;bg1 tilemap base address             xxxxxxxxxxxx
                       ;pointer,     size,  destination
         rtl
     }
     
     .palettes: {
-        %cgramtransfur(#splashpalette, $0100, !palettes)
+        %cgramtransfur(#splashpalette, $0100, !palettes)                                       ; xxxxxxxxxxxxxx
         rtl
     }
 }
@@ -233,13 +347,13 @@ splashload: {
 bg1: {
     .loadtilemap: {
     
-        %vramtransfur(#bg1tilemap, $0800, !bg1tilemap)      ;bg1 tilemap base address
+        %vramtransfur(#bg1tilemap, $0800, !bg1tilemap)      ;bg1 tilemap base address            xxxxxxxxxxx       
                      ;pointer,     size,  destination
         rtl
     }
 
     .loadgfx: {
-        %vramtransfur(#bg1gfx, $4000, $0000)                ;bg1 grx base address: $0000
+        %vramtransfur(#bg1gfx, $4000, $0000)                ;bg1 grx base address: $0000                 xxxxxxxxxxxxxxxxx   
         rtl
     }
 }
