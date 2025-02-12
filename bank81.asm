@@ -138,7 +138,6 @@ dma: {
         sta $4301
         rep #$20
         
-        ldy #$0001                          ;y=0
         lda !dmasrcptr              ;2      source addr
         sta $4302
         
@@ -158,7 +157,51 @@ dma: {
         
         rtl
     }
+    
+    .clearvram: {
+        sep #$20                    ;width  register
+        lda.b #$80                  ;1      dma control
+        sta $2115
+        rep #$20
+        
+        lda #$0000                  ;2      dest base addr
+        sta $2116
+        
+        sep #$20
+        lda #%00011001              ;1      transfur mode
+        sta $4300
+        
+        lda #$18                    ;1      register dest (vram port)
+        sta $4301
+        rep #$20
+        
+        lda #..fillword             ;2      source addr
+        sta $4302
+        
+        lda #$fffe                  ;2      transfur size
+        sta $4305
+        
+        sep #$20
+        lda #$81                    ;1      source bank
+        sta $4304
+
+        
+        lda #$01                    ;1      enable transfur on dma channel 0    
+        sta $420b
+        
+        rep #$20
+        
+        rtl
+    
+        ..fillword: {
+            dw $0000
+        }
+    }
 }
+
+
+
+
 
 oam: {
     .clear: {

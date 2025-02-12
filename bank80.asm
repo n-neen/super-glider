@@ -73,9 +73,6 @@ init:
         dex : dex
         bne --
         
-        ;jsl clearvram
-        ;jsl oam_clear
-        
         sep #$20
         lda #$80            ;enable nmi
         sta $4200
@@ -92,6 +89,8 @@ init:
         lda #$00                    ;bg1 tiles base address
         sta $210b
         rep #$20
+        
+        jsl dma_clearvram
 }   ;fall through to main
 
 
