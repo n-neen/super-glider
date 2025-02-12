@@ -90,7 +90,6 @@ dma: {
         
         
         lda !dmabaseaddr            ;2      dest base addr
-        xba
         sta $2116
         
         sep #$20
@@ -110,7 +109,6 @@ dma: {
         rep #$20
         
         lda !dmasize                ;2      transfur size
-        xba
         sta $4305
         
         sep #$20                    ;1      enable transfur on dma channel 0
@@ -130,7 +128,6 @@ dma: {
         rep #$20
         
         lda !dmabaseaddr            ;2      dest base addr
-        xba
         sta $2116
         
         sep #$20
@@ -151,7 +148,6 @@ dma: {
         rep #$20
         
         lda !dmasize                ;2      transfur size
-        xba
         sta $4305
         
         sep #$20                    ;1      enable transfur on dma channel 0
@@ -245,7 +241,7 @@ load: {
             lda.w loadingtable_bg_gfx,x
             and #$00ff
             sta !dmasrcbank
-            inx : inx
+            inx
             
             lda.w loadingtable_bg_gfx,x
             sta !dmasize
@@ -269,7 +265,7 @@ load: {
             lda.w loadingtable_bg_tilemaps,x
             and #$00ff
             sta !dmasrcbank
-            inx : inx
+            inx
             
             lda.w loadingtable_bg_tilemaps,x
             sta !dmasize
@@ -293,7 +289,7 @@ load: {
             lda.w loadingtable_bg_palettes,x
             and #$00ff
             sta !dmasrcbank
-            inx : inx
+            inx
             
             lda.w loadingtable_bg_palettes,x
             sta !dmasize
