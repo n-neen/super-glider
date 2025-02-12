@@ -13,14 +13,14 @@ org $928000
            $0420, $08a0, $439C, $0216, $2A10, $0000, $0000, $0000
 
     
-        incbin "./data/palettes/palette0.bin"
-        incbin "./data/palettes/palette1.bin"
+        ;incbin "./data/palettes/palette0.bin"
+        ;incbin "./data/palettes/palette1.bin"
         
-        dw $2940, $0000, $6739, $7ec7, $2108, $5ef7, $39ac, $24a4,
-           $2529, $39ce, $4e73, $44c4, $7fff, $5294, $3c3c, $643c
-           
-        dw $2940, $0000, $6739, $7ec7, $2108, $5ef7, $39ac, $24a4,
-           $2529, $39ce, $4e73, $44c4, $7fff, $5294, $3c3c, $643c
+        ;dw $2940, $0000, $6739, $7ec7, $2108, $5ef7, $39ac, $24a4,
+        ;   $2529, $39ce, $4e73, $44c4, $7fff, $5294, $3c3c, $643c
+        ;   
+        ;dw $2940, $0000, $6739, $7ec7, $2108, $5ef7, $39ac, $24a4,
+        ;   $2529, $39ce, $4e73, $44c4, $7fff, $5294, $3c3c, $643c
         
     splashpalette:
         incbin "./data/palettes/splash.pal"
@@ -45,16 +45,19 @@ glider:
         incsrc "./data/sprites/glider_spritemap.asm"
     
     .palette:
-        incbin "./data/sprites/glider.pal"
-
+        ;incbin "./data/sprites/glider.pal"
+        dw $2940, $0000, $6739, $7ec7, $2108, $5ef7, $39ac, $24a4,
+           $2529, $39ce, $4e73, $44c4, $7fff, $5294, $3c3c, $643c
 
 ;===========================================================================================
-;===============================   B A C K G R O U N D S   =================================
+;===============================    B A C K G R O U N D    =================================
+;===============================      T I L E M A P S      =================================
 ;===========================================================================================
 
 
 bg1tilemap:
     incbin "./data/tilemaps/bg1tilemap.bin"
     
-bg1gfx:
-    incbin "./data/tiles/bg1_gfx.gfx"
+splashtilemap:
+        incbin "./data/tilemaps/splash.bin"
+        

@@ -175,8 +175,8 @@ newgame: {
     lda #$0001
     jsl load_background
     
-    ;lda #$0000
-    ;jsl load_sprite            ;currently ruins everything [why?]
+    lda #$0000
+    jsl load_sprite            ;currently ruins everything [why?]
     
     jsr screenon
 

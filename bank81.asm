@@ -123,12 +123,14 @@ dma: {
 
     .cgramtransfur: {
         sep #$20                    ;width  register
-        lda.b #$00                  ;1      cgadd
+        
+        lda.b !dmabaseaddr          ;1      cgadd
         sta $2121
+        
         rep #$20
         
-        lda !dmabaseaddr            ;2      dest base addr
-        sta $2116
+        ;lda !dmabaseaddr           ;2      dest base addr
+        ;sta $2116
         
         sep #$20
         lda #$02                    ;1      transfur mode: write twice
@@ -352,12 +354,24 @@ load: {
     ;gfx, palette
     ;takes arguments:
     ;a = sprite index
+    
+        phb
+        php
+        phx
+        
+        phk
+        plb             ;bank = $81
+    
         rep #$30
         asl #3          ;a = a * 8 (table entries are 8 bytes long
         sta !dmaloadindex
     
         jsr load_sprite_gfx
         jsr load_sprite_palette
+        
+        plx
+        plp
+        plb
         rtl
     
         ..gfx: {
@@ -370,7 +384,7 @@ load: {
             lda.w loadingtable_sprites_gfx,x
             and #$00ff
             sta !dmasrcbank
-            inx : inx
+            inx
             
             lda.w loadingtable_sprites_gfx,x
             sta !dmasize
@@ -394,7 +408,7 @@ load: {
             lda.w loadingtable_sprites_palettes,x
             and #$00ff
             sta !dmasrcbank
-            inx : inx
+            inx
             
             lda.w loadingtable_sprites_palettes,x
             sta !dmasize
@@ -423,19 +437,19 @@ tablepointers: {            ;not actually used in this refactored routine
 
 loadingtable: {
     .sprites: {
-        ..gfx: {         ;long pointer,        size,  baseaddr,         unused
+        ..gfx: {          ;long pointer,       size,  baseaddr,         unused
             %loadtablentry(#glider_graphics,   $1000, !spritestart,     $00)     ;glider = 00
         }
         
         ..palettes: {
-           %loadtablentry(#glider_palette,     $1000, !spritepalette,   $00)     ;glider = 00
+           %loadtablentry(#glider_palette,     $0080, !spritepalette,   $00)     ;glider = 00
         }
     }
     
     .bg: {
         ..gfx: {
             %loadtablentry(#splashgfx,         $8000, !bg1start,        $00)     ;splash = 00
-            %loadtablentry(#bg1gfx,            $8000, $0000,            $00)     ;bg1    = 01dddddddddddddddddddddddddddddddddddddd
+            %loadtablentry(#bg1gfx,            $8000, !bg1start,        $00)     ;bg1    = 01
         }
         
         ..tilemaps: {

@@ -26,10 +26,11 @@ lorom
 !bg1start           =           $0000
 !bg1tilemap         =           $6000           ;vram offset for bg1tilemap
 !spritestart        =           $c000           ;sprite gfx
-!spritepalette      =           $0100
 
-;cgram
+
+;cgram map: start of palette chunk
 !palettes           =           $0000
+!spritepalette      =           $0080
 
 
 ;wram
@@ -49,11 +50,13 @@ incsrc "./bank82.asm"           ;reserved for gameplay
 incsrc "./bank83.asm"           ;house, rooms definitions
 incsrc "./bank84.asm"           ;reserved for objects
 incsrc "./bank85.asm"           ;reserved for glider
+incsrc "./bank86.asm"           ;reserved for code
 
 ;data
 incsrc "./bank90.asm"           ;splash screen graphics
-incsrc "./bank91.asm"           ;splash screen tilemap
-incsrc "./bank92.asm"           ;palettes, graphics data
+incsrc "./bank91.asm"           ;reserved for data
+incsrc "./bank92.asm"           ;palettes, sprite data, background tilemaps
+incsrc "./bank93.asm"           ;bg01 graphics
 
 
 
