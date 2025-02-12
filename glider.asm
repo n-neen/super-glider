@@ -23,10 +23,10 @@ lorom
 ;incsrc "./headers/globals.asm"
 
 ;vram map
-!bg1gfx             =           $0000
+!bg1start           =           $0000
 !bg1tilemap         =           $6000           ;vram offset for bg1tilemap
-!spritestart        =           $c000
-
+!spritestart        =           $c000           ;sprite gfx
+!spritepalette      =           $0100
 
 ;cgram
 !palettes           =           $0000

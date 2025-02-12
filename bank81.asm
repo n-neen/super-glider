@@ -7,7 +7,6 @@ org $818000
 ;====================================  M A C R O S  ========================================
 ;===========================================================================================
 
-
 macro vramtransfur(gfxptr, size, vramdest)
     jsl dma_vramtransfur
     dl <gfxptr>
@@ -26,15 +25,24 @@ endmacro
 ;===========================================================================================
 ;===================================  D E F I N E S  =======================================
 ;===========================================================================================
-;moved v_v
+
 !oambuffer      =                   $500                    ;start of oam table to dma at nmi
+
+;arguments for passing info between dma related routines
+    ;(i.e. from loading routines to the dma ones)
+!dmaargstart    =                   $80
+!dmasrcptr      =                   !dmaargstart+0          ;2
+!dmasrcbank     =                   !dmaargstart+2          ;2
+!dmasize        =                   !dmaargstart+4          ;2
+!dmabaseaddr    =                   !dmaargstart+6          ;2
+!dmaloadindex   =                   !dmaargstart+8          ;2
 
 
 ;===========================================================================================
 ;================================  D M A    R O U T I N E S  ===============================
 ;===========================================================================================
 
-;set up a dma to
+;initiates up a dma to
     ;vram or cgram
     
     ;dma_vramtransfur
@@ -64,21 +72,25 @@ dma: {
         !dma_transfur_size      =   $4305       ;2
         !dma_enable             =   $430b       ;1
                             ;set to #%00000001 to enable transfer on channel 0
+                            
+                            
+                            
+        !dmaargstart    =                   $80                     ;start of dma arguments
+        !dmasrcptr      =                   !dmaargstart+0          ;2
+        !dmasrcbank     =                   !dmaargstart+2          ;2
+        !dmasize        =                   !dmaargstart+4          ;2
+        !dmabaseaddr    =                   !dmaargstart+6          ;2
+        !dmaloadindex   =                   !dmaargstart+8          ;2
         
-        sep #$20
         
-        lda $03,s                   ;db = caller bank
-        pha
-        plb
-        
-                                    ;width  register
+        sep #$20                    ;width  register
         lda.b #$80                  ;1      dma control
         sta $2115
         rep #$20
         
-        ldy #$0006
         
-        lda ($01,s),y               ;2      dest base addr
+        lda !dmabaseaddr            ;2      dest base addr
+        xba
         sta $2116
         
         sep #$20
@@ -89,20 +101,16 @@ dma: {
         sta $4301
         rep #$20
         
-        ldy #$0001                          ;y=1
-        lda ($01,s),y               ;2      source addr
+        lda !dmasrcptr              ;2      source addr
         sta $4302
         
-        iny : iny                           ;y=3
-        
         sep #$20
-        lda ($01,s),y               ;1      source bank
+        lda !dmasrcbank             ;1      source bank
         sta $4304
         rep #$20
         
-        iny                                 ;y=4
-        
-        lda ($01,s),y               ;2      transfur size
+        lda !dmasize                ;2      transfur size
+        xba
         sta $4305
         
         sep #$20                    ;1      enable transfur on dma channel 0
@@ -111,31 +119,18 @@ dma: {
         
         rep #$30
         
-        lda $01,s
-        clc                         ;adjust return address
-        adc #$0007
-        sta $01,s
-        
-        
         rtl
     }
 
 
-    .cgramtransfur: {        ;copypaste of above vram routine
-        sep #$20
-        
-        lda $03,s                   ;db = caller bank
-        pha
-        plb
-        
-                                    ;width  register
+    .cgramtransfur: {
+        sep #$20                    ;width  register
         lda.b #$00                  ;1      cgadd
         sta $2121
         rep #$20
         
-        ldy #$0006
-        
-        lda ($01,s),y               ;2      dest base addr
+        lda !dmabaseaddr            ;2      dest base addr
+        xba
         sta $2116
         
         sep #$20
@@ -147,19 +142,16 @@ dma: {
         rep #$20
         
         ldy #$0001                          ;y=0
-        lda ($01,s),y               ;2      source addr
+        lda !dmasrcptr              ;2      source addr
         sta $4302
         
-        iny : iny                           ;y=2
-        
         sep #$20
-        lda ($01,s),y               ;1      source bank
+        lda !dmasrcbank             ;1      source bank
         sta $4304
         rep #$20
         
-        iny                                 ;y=3
-        
-        lda ($01,s),y               ;2      transfur size
+        lda !dmasize                ;2      transfur size
+        xba
         sta $4305
         
         sep #$20                    ;1      enable transfur on dma channel 0
@@ -168,11 +160,6 @@ dma: {
         
         rep #$30
         
-        lda $01,s
-        clc                         ;adjust return address
-        adc #$0007
-        sta $01,s
-
         rtl
     }
 }
@@ -202,158 +189,224 @@ oam: {
 ;===================================  L O A D I N G  =======================================
 ;===========================================================================================
 ;set up a dma for a specific purpose
+;five copypasted routines [sowweee]
 
-macro loadtablentry(index, pointer, size, baseaddr)
-    db <index>
+macro loadtablentry(pointer, size, baseaddr, index)
     dl <pointer>
     dw <size>
     dw <baseaddr>
+    db <index>          ;unused byte just makes the table entries 8 bytes long
 endmacro
 
 
-consult: {
-    !dmaargs        =                   $60                     ;start of dma routine arguments
-    !dmatype        =                   !dmaargs+0
-    !dmasrcptr      =                   !dmaargs+2
-    !dmatrsize      =                   !dmaargs+4
-    !dmabaseaddr    =                   !dmaargs+6
+load: {
+    ;label 'load' is just here for scope/logical reasons
+    
+    ;defined above, here for refernece
+    ;!dmaargstart    =                   $80                     ;start of dma arguments
+    ;!dmasrcptr      =                   !dmaargstart+0          ;2
+    ;!dmasrcbank     =                   !dmaargstart+2          ;2
+    ;!dmasize        =                   !dmaargstart+4          ;2
+    ;!dmabaseaddr    =                   !dmaargstart+6          ;2
+    ;!dmaloadindex   =                   !dmaargstart+8          ;2
     
     
+    .background: {
+        ;initiates 3 vram transfers:
+        ;gfx, palette, tilemap
+        ;takes arguments:
+        ;a = background index
+        phb
+        php
+        phx
+        
+        phk
+        plb             ;bank = $81
+        
+        rep #$30
+        asl #3          ;a = a * 8 (table entries are 8 bytes long)
+        sta !dmaloadindex
+        jsr load_background_gfx
+        jsr load_background_tilemap
+        jsr load_background_palette
+        
+        plx
+        plp
+        plb
+        rtl
+        
+        ..gfx: {
+            ldx !dmaloadindex
+            
+            lda.w loadingtable_bg_gfx,x
+            sta !dmasrcptr
+            inx : inx
+            
+            lda.w loadingtable_bg_gfx,x
+            and #$00ff
+            sta !dmasrcbank
+            inx : inx
+            
+            lda.w loadingtable_bg_gfx,x
+            sta !dmasize
+            inx : inx
+            
+            lda.w loadingtable_bg_gfx,x
+            sta !dmabaseaddr
+            
+            jsl dma_vramtransfur
+            
+            rts
+        }
+    
+        ..tilemap: {
+            ldx !dmaloadindex
+            
+            lda.w loadingtable_bg_tilemaps,x
+            sta !dmasrcptr
+            inx : inx
+            
+            lda.w loadingtable_bg_tilemaps,x
+            and #$00ff
+            sta !dmasrcbank
+            inx : inx
+            
+            lda.w loadingtable_bg_tilemaps,x
+            sta !dmasize
+            inx : inx
+            
+            lda.w loadingtable_bg_tilemaps,x
+            sta !dmabaseaddr
+            
+            jsl dma_vramtransfur
+            
+            rts
+        }
+    
+        ..palette: {
+            ldx !dmaloadindex
+            
+            lda.w loadingtable_bg_palettes,x
+            sta !dmasrcptr
+            inx : inx
+            
+            lda.w loadingtable_bg_palettes,x
+            and #$00ff
+            sta !dmasrcbank
+            inx : inx
+            
+            lda.w loadingtable_bg_palettes,x
+            sta !dmasize
+            inx : inx
+            
+            lda.w loadingtable_bg_palettes,x
+            sta !dmabaseaddr
+            
+            jsl dma_cgramtransfur
+            
+            rts
+        }
+    }
+    
+    .sprite: {
+    ;initiates s vram transfers:
+    ;gfx, palette
     ;takes arguments:
-    ;a = type of item
-    ;    0 = sprite
-    ;    1 = background
-    ;x = item index
-    ;
+    ;a = sprite index
+        rep #$30
+        asl #3          ;a = a * 8 (table entries are 8 bytes long
+        sta !dmaloadindex
     
-    rep #$30
+        jsr load_sprite_gfx
+        jsr load_sprite_palette
+        rtl
     
-    asl                                     ;a*4
-    asl                                     ;
-    tay
-    lda #tablepointers,y                    ;if sprite: grab ptr #loadingtable_sprites_gfx
-                                            ;if bkg, grab ptr #loadingtable_bg_gfx
-    sta $10         ;$10 = pointer to table
-    txa         
-    asl #3      
-    tax             ;x*8
+        ..gfx: {
+            ldx !dmaloadindex
+            
+            lda.w loadingtable_sprites_gfx,x
+            sta !dmasrcptr
+            inx : inx
+            
+            lda.w loadingtable_sprites_gfx,x
+            and #$00ff
+            sta !dmasrcbank
+            inx : inx
+            
+            lda.w loadingtable_sprites_gfx,x
+            sta !dmasize
+            inx : inx
+            
+            lda.w loadingtable_sprites_gfx,x
+            sta !dmabaseaddr
+            
+            jsl dma_vramtransfur
+            
+            rts
+        }
     
-    lda ($10),x     ;grab first table item (dma type)
-    sta !dmatype
-    inx
-    
-    lda ($10),x     ;grab first table item (dma source long pointer)
-    sta !dmasrcptr
-    inx : inx : inx
-    
-    lda ($10),x     ;grab first table item (dma transfur size)
-    sta !dmatrsize
-    inx : inx
-    
-    lda ($10),x
-    sta !dmabaseaddr
-    
-    lda !dmatype
-    beq gotovramtransfur
-    ;else
-    jsl dma_cgramtransfur
-    rtl
-    
-    gotovramtransfur:
-    jsl dma_vramtransfur
-    rtl
+        ..palette: {
+            ldx !dmaloadindex
+            
+            lda.w loadingtable_sprites_palettes,x
+            sta !dmasrcptr
+            inx : inx
+            
+            lda.w loadingtable_sprites_palettes,x
+            and #$00ff
+            sta !dmasrcbank
+            inx : inx
+            
+            lda.w loadingtable_sprites_palettes,x
+            sta !dmasize
+            inx : inx
+            
+            lda.w loadingtable_sprites_palettes,x
+            sta !dmabaseaddr
+            
+            jsl dma_cgramtransfur
+            
+            rts
+        }
+    }
 }
 
 
-tablepointers: {                                        ;y=0 or 1 before shift
-    dw #loadingtable_sprites_gfx            ;2      0   0         after shift
-    dw #loadingtable_sprites_palettes       ;2      2
-    
-    dw #loadingtable_bg_gfx                 ;2      4   4         after shift
-    dw #loadingtable_bg_tilemaps            ;2      6
-    dw #loadingtable_bg_palettes            ;2      8
+tablepointers: {            ;not actually used in this refactored routine
+    dw #loadingtable_sprites_gfx
+    dw #loadingtable_sprites_palettes
+
+    dw #loadingtable_bg_gfx
+    dw #loadingtable_bg_tilemaps
+    dw #loadingtable_bg_palettes
 }
 
 
-loadingtable: {          ;type: 00 = vram, 01 = cgram
+loadingtable: {
     .sprites: {
-        ..gfx: {         ;type, long pointer,       size,  baseaddr
-            %loadtablentry($00, #glider_graphics,   $1000, !spritestart)     ;glider = 00
+        ..gfx: {         ;long pointer,        size,  baseaddr,         unused
+            %loadtablentry(#glider_graphics,   $1000, !spritestart,     $00)     ;glider = 00
         }
         
         ..palettes: {
-           ;%loadtablentry($00, #glider_palette,    $1000, !spritestart)     ;glider = 00            ;todo: this
+           %loadtablentry(#glider_palette,     $1000, !spritepalette,   $00)     ;glider = 00
         }
     }
     
     .bg: {
         ..gfx: {
-            %loadtablentry($00, #splashgfx,         $8000, !bg1gfx)           ;splash = 00
-            %loadtablentry($00, #bg1gfx,            $4000, $0000)             ;bg1    = 01
+            %loadtablentry(#splashgfx,         $8000, !bg1start,        $00)     ;splash = 00
+            %loadtablentry(#bg1gfx,            $8000, $0000,            $00)     ;bg1    = 01dddddddddddddddddddddddddddddddddddddd
         }
         
         ..tilemaps: {
-            %loadtablentry($00, #splashtilemap,     $0800, !bg1tilemap)       ;splash = 00
-            %loadtablentry($00, #bg1tilemap,        $0800, !bg1tilemap)       ;bg1    = 01
+            %loadtablentry(#splashtilemap,     $0800, !bg1tilemap,      $00)     ;splash = 00
+            %loadtablentry(#bg1tilemap,        $0800, !bg1tilemap,      $01)     ;bg1    = 01
         }
         
         ..palettes: {
-            %loadtablentry($01, #splashpalette,     $0100, !palettes)         ;splash = 00
-            %loadtablentry($01, #testpalette,       $0100, !palettes)         ;bg1    = 01
+            %loadtablentry(#splashpalette,     $0100, !palettes,        $00)     ;splash = 00
+            %loadtablentry(#testpalette,       $0100, !palettes,        $01)     ;bg1    = 01
         }
-    }
-}
-
-;THIS IS THE LINE====================================
-;below this is currently implemented. above it is not
-
-gliderload: {
-    %vramtransfur(#glider_graphics, $1000, !spritestart)   ;sprites base address: $c000         ;xxxxxxxxxxxxx
-    rtl
-}
-
-
-clearvram: {
-    %vramtransfur($7e2000, $ffff, $0000)                                                       ;xxxxxxxxxxxxx
-    rtl
-}
-
-
-loadpalettes: {
-    %cgramtransfur(#testpalette, $0100, !palettes)                                             ;xxxxxxxxxxx
-    rtl
-}
-
-
-splashload: {
-    .gfx: {
-        %vramtransfur(#splashgfx, $8000, !bg1gfx)             ;bg1 grx base address: $0000      xxxxxxxxxxxxxxxxxxxx     
-        rtl
-    }
-    
-    .tilemap: {
-         %vramtransfur(#splashtilemap, $0800, !bg1tilemap)    ;bg1 tilemap base address             xxxxxxxxxxxx
-                      ;pointer,     size,  destination
-        rtl
-    }
-    
-    .palettes: {
-        %cgramtransfur(#splashpalette, $0100, !palettes)                                       ; xxxxxxxxxxxxxx
-        rtl
-    }
-}
-
-
-bg1: {
-    .loadtilemap: {
-    
-        %vramtransfur(#bg1tilemap, $0800, !bg1tilemap)      ;bg1 tilemap base address            xxxxxxxxxxx       
-                     ;pointer,     size,  destination
-        rtl
-    }
-
-    .loadgfx: {
-        %vramtransfur(#bg1gfx, $4000, $0000)                ;bg1 grx base address: $0000                 xxxxxxxxxxxxxxxxx   
-        rtl
     }
 }

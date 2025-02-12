@@ -73,8 +73,8 @@ init:
         dex : dex
         bne --
         
-        jsl clearvram
-        jsl oam_clear
+        ;jsl clearvram
+        ;jsl oam_clear
         
         sep #$20
         lda #$80            ;enable nmi
@@ -134,11 +134,8 @@ splash: {
     jsr waitfornmi
     jsr screenoff           ;enable forced blank to to the following dmas
     
-    lda #$0000              ;not currently implemented
-    sta !backgroundtype     ;we will eventually use this to determine a set of:
-    jsl splashload_gfx                                      ;bg1 gfx
-    jsl splashload_tilemap                                  ;bg1 tilemaps
-    jsl splashload_palettes                                 ;and palettes
+    lda #$0000              ;load gfx, tilemap, and palettes
+    jsl load_background     ;for background 00 (splash screen)
     
     jsr screenon
     
@@ -176,12 +173,11 @@ newgame: {
     jsr waitfornmi
     jsr screenoff           ;enable forced blank to do the following dmas
     
-    lda #$0001              ;not currently implemented
-    sta !backgroundtype     ;we will eventually use this to determine a set of:
-    jsl bg1_loadgfx                                     ;bg1 gfx
-    jsl bg1_loadtilemap                                 ;bg1 tilemaps
-    jsl loadpalettes                                    ;and palettes
-    jsl gliderload      ;exists
+    lda #$0001
+    jsl load_background
+    
+    ;lda #$0000
+    ;jsl load_sprite            ;currently ruins everything [why?]
     
     jsr screenon
 
