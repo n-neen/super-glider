@@ -449,17 +449,20 @@ loadingtable: {
     .bg: {
         ..gfx: {
             %loadtablentry(#splashgfx,         $8000, !bg1start,        $00)     ;splash = 00
-            %loadtablentry(#bg1gfx,            $8000, !bg1start,        $00)     ;bg1    = 01
+            %loadtablentry(#bg1gfx,            $8000, !bg1start,        $01)     ;bg1    = 01
+            %loadtablentry(#bg2gfx,            $8000, !bg1start,        $02)     ;bg2    = 02
         }
         
         ..tilemaps: {
             %loadtablentry(#splashtilemap,     $0800, !bg1tilemap,      $00)     ;splash = 00
             %loadtablentry(#bg1tilemap,        $0800, !bg1tilemap,      $01)     ;bg1    = 01
+            %loadtablentry(#bg2tilemap,        $0800, !bg1tilemap,      $02)     ;bg1    = 01
         }
         
         ..palettes: {
             %loadtablentry(#splashpalette,     $0100, !palettes,        $00)     ;splash = 00
             %loadtablentry(#testpalette,       $0100, !palettes,        $01)     ;bg1    = 01
+            %loadtablentry(#bg2palette,        $0100, !palettes,        $02)     ;bg1    = 01
         }
     }
 }

@@ -24,6 +24,9 @@ org $928000
         
     splashpalette:
         incbin "./data/palettes/splash.pal"
+        
+    bg2palette:
+        incbin "./data/palettes/bg2.pal"
 
 
 ;===========================================================================================
@@ -59,5 +62,7 @@ bg1tilemap:
     incbin "./data/tilemaps/bg1tilemap.bin"
     
 splashtilemap:
-        incbin "./data/tilemaps/splash.bin"
+    incbin "./data/tilemaps/splash.bin"
         
+bg2tilemap:
+    incbin "./data/tilemaps/bg2tilemap.bin"

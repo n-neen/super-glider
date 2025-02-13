@@ -8,6 +8,7 @@ org $808000
 
 
 !gamestate              =           $30
+!debugstate             =           $32
 !maincounter            =           $20
 !nmiflag                =           $22
 !nmicounter             =           $24
@@ -42,6 +43,7 @@ boot: {
     txs             ;set initial stack pointer
     lda #$0000
     tcd             ;clear dp register
+    
 
 clear7e:
     pea $7e7e
@@ -50,11 +52,14 @@ clear7e:
 -   stz $0000,x     ;loop to clear all of $7e
     dex : dex       ;definitely don't jsr to here or you'll obliterate your return address lol
     bne -
-    phk
-    plb
+    
 
 init:
     .registers:
+        
+        phk
+        plb                 ;set db
+        
         sep #$30
         lda #$8f
         sta $2100           ;enable forced blank
@@ -90,6 +95,11 @@ init:
         sta $210b
         rep #$20
         
+        stz $210d
+        stz $210d
+        stz $210e
+        stz $210e
+        
         jsl dma_clearvram
 }   ;fall through to main
 
@@ -100,28 +110,31 @@ init:
 
 
 main: {
-        .stateinit: {
-            lda #$0000
-            sta !gamestate
-        }
+    .stateinit: {
+        lda #$0000
+        sta !gamestate
+    }
         
-        .statehandle: {
-            inc !maincounter                ;main switch case jump table loop
-            lda !gamestate                  ;usually, state handler will 
-            asl                             ;return after running once, like newgame
-            tax                             ;or itself has a loop, like playgame
-            jsr (statetable,x)
-            
-            jmp .statehandle
-        }
+    .statehandle: {
+        inc !maincounter                ;main switch case jump table loop
+        lda !gamestate                  ;usually, state handler will 
+        asl                             ;return after running once, like newgame
+        tax                             ;or itself has a loop, like playgame
+        jsr (main_statetable,x)
+        
+        jmp .statehandle
+    }
+        
+    .statetable: {           ;program modes, game states, etc
+        dw #splash          ;0
+        dw #newgame         ;1
+        dw #playgame        ;2
+        dw #gameover        ;3
+        dw #debug           ;4
+    }
 }
 
 
-statetable:             ;program modes, game states, etc
-    dw #splash          ;0
-    dw #newgame         ;1
-    dw #playgame        ;2
-    dw #gameover        ;3
 
 
 ;===========================================================================================
@@ -203,6 +216,7 @@ playgame: {
         inc !framecounter
         jsl game_play       ;one iteration (frame) of handling gameplay happens here
         jsr waitfornmi
+        
         ;if [youdied]: jmp .out
         jmp .loop
     }
@@ -223,6 +237,34 @@ gameover: {
     rts
 }
 
+
+;===========================================================================================
+;==================================   STATE 4:  DEBUG   ====================================
+;===========================================================================================
+
+
+debug: {
+    .init: {
+        lda #$0000
+        sta !debugstate
+    }
+    ;todo: write whatever routines here that you want
+    ;to be useful for whatever
+    
+    .statehandle: {
+        lda !debugstate
+        asl
+        tax
+        jsr (debug_statetable,x)
+        jmp .statehandle
+    }
+    
+    rts
+
+    .statetable: {
+        ;dw #debug_scrollbg
+    }
+    
 
 ;===========================================================================================
 ;===================================                   =====================================

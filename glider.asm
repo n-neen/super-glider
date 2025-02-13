@@ -57,6 +57,7 @@ incsrc "./bank90.asm"           ;splash screen graphics
 incsrc "./bank91.asm"           ;reserved for data
 incsrc "./bank92.asm"           ;palettes, sprite data, background tilemaps
 incsrc "./bank93.asm"           ;bg01 graphics
+incsrc "./bank94.asm"           ;bg02 graphics
 
 
 
