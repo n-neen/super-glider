@@ -292,120 +292,118 @@ debug: {
         jsr screenon
         jmp .statehandle
     }
-    
     rts
 
     .statetable: {
-        dw #debug_scrollbg
+        dw #debug_controller
     }
     
-    .scrollbg: {
+    .controller: {
         lda !controller
-        beq ..end
-        bmi .pressed_b
-        cmp !y
-        beq .pressed_y
-        cmp !st
-        beq .pressed_st
-        cmp !sl
-        beq .pressed_sl
-        cmp !up
-        beq .pressed_up
-        cmp !dn
-        beq .pressed_dn
-        cmp !lf
-        beq .pressed_lf
-        cmp !rt
-        beq .pressed_rt
-        cmp !a
-        beq .pressed_a
-        cmp !x
-        beq .pressed_x
-        cmp !l
-        beq .pressed_l
-        cmp !r
-        beq .pressed_r
-        ;else
-        ..end:
-        rts
-    }
-    
-    .pressed:
-        ..b: {
-            lda !backgroundupdateflag
-            bne +
-            stz !backgroundtype
-            lda #$0001
-            sta !backgroundupdateflag
-        +   rts
-        }
-        
-        ..y: {
-            lda !backgroundupdateflag
-            bne +
-            lda #$0001
-            sta !backgroundtype
-            sta !backgroundupdateflag
-        +   rts
-            rts
-        }
         
         ..st: {
-            rts
+            bit !st
+            beq ...nost
+            ...nost:
         }
         
         ..sl: {
-            rts
+            bit !sl
+            beq ...nosl
+            ...nosl:
         }
         
         ..up: {
+            bit !up
+            beq ...noup
             sep #$20
             dec !bg1y
             rep #$20
-            rts
+            ...noup:
         }
         
         ..dn: {
-           sep #$20
-           inc !bg1y
-           rep #$20
-           rts
+            bit !dn
+            beq ...nodn
+            sep #$20
+            inc !bg1y
+            rep #$20
+            ...nodn:
         }
         
         ..lf: {
+            bit !lf
+            beq ...nolf
             sep #$20
             dec !bg1x
             rep #$20
-            rts
+            ...nolf:
         }
         
         ..rt: {
+            bit !rt
+            beq ...nort
             sep #$20
             inc !bg1x
             rep #$20
-            rts
+            ...nort:
         }
         
         ..a: {
-            rts
+            bit !a
+            beq ...noa
+            ...noa:
         }
         
         ..x: {
+            bit !x
+            beq ...nox
             lda !backgroundupdateflag
-            bne +
+            bne ...noupdate
             lda #$0002
             sta !backgroundtype
             sta !backgroundupdateflag
-        +   rts
+            ...nox:
+            ...noupdate:
+        }
+        
+        ..b: {
+            bit !b
+            beq ...nob
+            lda !backgroundupdateflag
+            bne ...noupdate
+            stz !backgroundtype
+            lda #$0001
+            sta !backgroundupdateflag
+            ...nob:
+            ...noupdate:
+        }
+        
+        ..y: {
+            bit !y
+            beq ...noy
+            lda !backgroundupdateflag
+            bne ...noupdate
+            lda #$0001
+            sta !backgroundtype
+            sta !backgroundupdateflag
+            ...noy:
+            ...noupdate:
         }
         
         ..l: {
-            rts
+            bit !l
+            beq ...nol
+            ...nol:
         }
         
         ..r: {
-            rts
+            bit !r
+            beq ...nor
+            ...nor:
         }
+        rts
+    }
 }
 
 ;===========================================================================================
@@ -507,12 +505,12 @@ readcontroller: {
 }
 
 
-updateppuregisters: {
+updateppuregisters: { ;transfer wram mirrors to their registers
     sep #$20
     lda !bg1x
+    sta $210d           ;update bg1 x scroll
     sta $210d
-    sta $210d
-    lda !bg1y
+    lda !bg1y           ;update bg1 y scroll
     sta $210e
     sta $210e
     rep #$20
