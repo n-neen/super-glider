@@ -232,25 +232,9 @@ oam: {
 ;set up a dma for a specific purpose
 ;five copypasted routines [sowweee]
 
-macro loadtablentry(pointer, size, baseaddr, index)
-    dl <pointer>
-    dw <size>
-    dw <baseaddr>
-    db <index>          ;unused byte just makes the table entries 8 bytes long
-endmacro
-
 
 load: {
     ;label 'load' is just here for scope/logical reasons
-    
-    ;defined above, here for refernece
-    ;!dmaargstart    =                   $80                     ;start of dma arguments
-    ;!dmasrcptr      =                   !dmaargstart+0          ;2
-    ;!dmasrcbank     =                   !dmaargstart+2          ;2
-    ;!dmasize        =                   !dmaargstart+4          ;2
-    ;!dmabaseaddr    =                   !dmaargstart+6          ;2
-    ;!dmaloadindex   =                   !dmaargstart+8          ;2
-    
     
     .background: {
         ;initiates 3 vram transfers:
@@ -434,6 +418,17 @@ tablepointers: {            ;not actually used in this refactored routine
     dw #loadingtable_bg_palettes
 }
 
+;in order to add a background type, you must add an entry in each corresponding table
+;loading "background 00" loads the first entry of .bg_gfx, .bg_tilemaps and .bg_palettes
+;table format:
+
+macro loadtablentry(pointer, size, baseaddr, index)
+    dl <pointer>
+    dw <size>
+    dw <baseaddr>
+    db <index>          ;unused byte just makes the table entries 8 bytes long
+endmacro
+
 
 loadingtable: {
     .sprites: {
@@ -449,20 +444,20 @@ loadingtable: {
     .bg: {
         ..gfx: {
             %loadtablentry(#splashgfx,         $8000, !bg1start,        $00)     ;splash = 00
-            %loadtablentry(#bg1gfx,            $8000, !bg1start,        $01)     ;bg1    = 01
-            %loadtablentry(#bg2gfx,            $8000, !bg1start,        $02)     ;bg2    = 02
+            %loadtablentry(#bg1gfx,            $4000, !bg1start,        $01)     ;bg1    = 01
+            %loadtablentry(#bg2gfx,            $4000, !bg1start,        $02)     ;bg2    = 02
         }
         
         ..tilemaps: {
             %loadtablentry(#splashtilemap,     $0800, !bg1tilemap,      $00)     ;splash = 00
             %loadtablentry(#bg1tilemap,        $0800, !bg1tilemap,      $01)     ;bg1    = 01
-            %loadtablentry(#bg2tilemap,        $0800, !bg1tilemap,      $02)     ;bg1    = 01
+            %loadtablentry(#bg2tilemap,        $0800, !bg1tilemap,      $02)     ;bg2    = 02
         }
         
         ..palettes: {
             %loadtablentry(#splashpalette,     $0100, !palettes,        $00)     ;splash = 00
             %loadtablentry(#testpalette,       $0100, !palettes,        $01)     ;bg1    = 01
-            %loadtablentry(#bg2palette,        $0100, !palettes,        $02)     ;bg1    = 01
+            %loadtablentry(#bg2palette,        $0100, !palettes,        $02)     ;bg2    = 02
         }
     }
 }

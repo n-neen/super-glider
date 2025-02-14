@@ -13,18 +13,22 @@ org $808000
 !nmiflag                =           $22
 !nmicounter             =           $24
 !framecounter           =           $26
-
+!bg1x                   =           $40
+!bg1y                   =           $42
 
 !bg1tilemapshifted      =           !bg1tilemap>>8
 !spriteaddrshifted      =           !spritestart>>13
 
-
+!backgroundupdateflag   =           $6fe
 !backgroundtype         =           $700
 
 
 ;===========================================================================================
 ;======================================  B O O T  ==========================================
 ;===========================================================================================
+
+debugflag:
+    dw $0001
 
 
 boot: {
@@ -73,7 +77,7 @@ init:
         dex : dex
         bne - 
         
-        ldx #$0084          ;clear registers $2101-2185
+        ldx #$0082          ;clear registers $2101-2183
 --      stz $2101,x
         dex : dex
         bne --
@@ -89,16 +93,17 @@ init:
         
         lda #$01                    ;drawing mode
         sta $2105
+        
         lda.b #!bg1tilemapshifted   ;bg1 tilemap base address
         sta $2107
+        
+        lda #$ff                    ;gotta set the bg1 scroll
+        sta $210e                   ;to -1 because of course we do
+        sta $210e
+        
         lda #$00                    ;bg1 tiles base address
         sta $210b
         rep #$20
-        
-        stz $210d
-        stz $210d
-        stz $210e
-        stz $210e
         
         jsl dma_clearvram
 }   ;fall through to main
@@ -111,8 +116,7 @@ init:
 
 main: {
     .stateinit: {
-        lda #$0000
-        sta !gamestate
+        stz !gamestate
     }
         
     .statehandle: {
@@ -185,16 +189,21 @@ newgame: {
     jsr waitfornmi
     jsr screenoff           ;enable forced blank to do the following dmas
     
-    lda #$0001
-    jsl load_background
+    lda #$0002
+    jsl load_background     ;load background 2 (panneled room)
     
     lda #$0000
-    jsl load_sprite            ;currently ruins everything [why?]
+    jsl load_sprite         ;load sprite data 0 (glider)
     
     jsr screenon
 
-    inc !gamestate      ;advance to game state 2
-    rts
+    inc !gamestate          ;advance to game state 2
+    
+    lda debugflag
+    beq +
+    lda #$0004
+    sta !gamestate          ;if [debug], goto debug game mode
++   rts
 }
 
 
@@ -242,29 +251,161 @@ gameover: {
 ;==================================   STATE 4:  DEBUG   ====================================
 ;===========================================================================================
 
+;controller bits
+!b                      =           #$8000
+!y                      =           #$4000
+!st                     =           #$2000
+!sl                     =           #$1000
+!up                     =           #$0800
+!dn                     =           #$0400
+!lf                     =           #$0200
+!rt                     =           #$0100
+!a                      =           #$0080
+!x                      =           #$0040
+!l                      =           #$0020
+!r                      =           #$0010
+
 
 debug: {
     .init: {
         lda #$0000
         sta !debugstate
+        sep #$20
+        lda #$ff
+        sta $210e           ;set bg1 scroll to -1
+        sta $210e
+        sta !bg1y
+        rep #$20
     }
     ;todo: write whatever routines here that you want
     ;to be useful for whatever
     
     .statehandle: {
+        jsr waitfornmi
+        jsr screenoff
+        stz !nmiflag
+        jsr updatebackground
         lda !debugstate
         asl
         tax
         jsr (debug_statetable,x)
+        jsr screenon
         jmp .statehandle
     }
     
     rts
 
     .statetable: {
-        ;dw #debug_scrollbg
+        dw #debug_scrollbg
     }
     
+    .scrollbg: {
+        lda !controller
+        beq ..end
+        bmi .pressed_b
+        cmp !y
+        beq .pressed_y
+        cmp !st
+        beq .pressed_st
+        cmp !sl
+        beq .pressed_sl
+        cmp !up
+        beq .pressed_up
+        cmp !dn
+        beq .pressed_dn
+        cmp !lf
+        beq .pressed_lf
+        cmp !rt
+        beq .pressed_rt
+        cmp !a
+        beq .pressed_a
+        cmp !x
+        beq .pressed_x
+        cmp !l
+        beq .pressed_l
+        cmp !r
+        beq .pressed_r
+        ;else
+        ..end:
+        rts
+    }
+    
+    .pressed:
+        ..b: {
+            lda !backgroundupdateflag
+            bne +
+            stz !backgroundtype
+            lda #$0001
+            sta !backgroundupdateflag
+        +   rts
+        }
+        
+        ..y: {
+            rts
+        }
+        
+        ..st: {
+            rts
+        }
+        
+        ..sl: {
+            rts
+        }
+        
+        ..up: {
+            sep #$20
+            dec !bg1y
+            rep #$20
+            rts
+        }
+        
+        ..dn: {
+           sep #$20
+           inc !bg1y
+           rep #$20
+           rts
+        }
+        
+        ..lf: {
+            sep #$20
+            dec !bg1x
+            rep #$20
+            rts
+        }
+        
+        ..rt: {
+            sep #$20
+            inc !bg1x
+            rep #$20
+            rts
+        }
+        
+        ..a: {
+            lda !backgroundupdateflag
+            bne +
+            lda #$0001
+            sta !backgroundtype
+            sta !backgroundupdateflag
+        +   rts
+        }
+        
+        ..x: {
+            lda !backgroundupdateflag
+            bne +
+            lda #$0002
+            sta !backgroundtype
+            sta !backgroundupdateflag
+        +   rts
+        }
+        
+        ..l: {
+            rts
+        }
+        
+        ..r: {
+            rts
+        }
+}
 
 ;===========================================================================================
 ;===================================                   =====================================
@@ -326,19 +467,24 @@ waitfornmi: {
 
 
 screenon: {
+    pha
     sep #$20
     lda #$0f
     sta $2100           ;turn screen brightness on and disable forced blank
     rep #$20
+    pla
     rts
 }
 
 
 screenoff: {
+    pha
     sep #$20
     lda #$8f
     sta $2100           ;enable forced blank
     rep #$20
+    pla
+    rts
 }
 
 
@@ -361,8 +507,27 @@ readcontroller: {
 
 
 updateppuregisters: {
-    ;todo
+    sep #$20
+    lda !bg1x
+    sta $210d
+    sta $210d
+    lda !bg1y
+    sta $210e
+    sta $210e
+    rep #$20
     rts
+}
+
+updatebackground: {
+    
+    lda !backgroundupdateflag
+    beq +
+    
+    jsr screenoff
+    lda !backgroundtype
+    jsl load_background
+    stz !backgroundupdateflag
++   rts
 }
 
 
