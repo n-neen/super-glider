@@ -341,6 +341,12 @@ debug: {
         }
         
         ..y: {
+            lda !backgroundupdateflag
+            bne +
+            lda #$0001
+            sta !backgroundtype
+            sta !backgroundupdateflag
+        +   rts
             rts
         }
         
@@ -381,12 +387,7 @@ debug: {
         }
         
         ..a: {
-            lda !backgroundupdateflag
-            bne +
-            lda #$0001
-            sta !backgroundtype
-            sta !backgroundupdateflag
-        +   rts
+            rts
         }
         
         ..x: {
