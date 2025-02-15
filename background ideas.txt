@@ -1,0 +1,33 @@
+current ideas:
+-move backgrounds to layer 2, so that layer 1 can be used for furniture and other static objects
+-rewrite background loading so that we upload the tilemap to ram, because we need to be able to modify it during room load before it is initially rendered
+the latter idea is like, being able to have rooms without a right or left wall so that they connect to other rooms
+so part of the room data will include bits for left and right walls being present
+i had thought maybe we wanted to upload the new modified tilemap duirng nmi but doing that every frame wastes precious nmi cycles
+and also i am not planning on having the room backgrounds need to dynamically change
+so loading initial tilemap into ram, determinining the assortment of modifications to apply, do them, then dma it from work ram into vram 
+
+
+furniture objects should be defined as a rectangle of the tiles of layer 1 tilemap to write
+but this presents the problem that they can't overlap
+which constrains level design
+could define some as sprites
+or maybe just all?
+hmmmm
+having both means we are less likely to hit sprite limitations
+but it's more work to create the same object twice, implemented in two different systems
+i can wrap my head around how to make the tile objects
+so I'll do that, for now 
+just to get this idea in motion
+
+
+
+OUTLINE OF WORK
+-modify existing background loading to put backgrounds on layer 2
+-copy initial background tilemap to wram (bank $7f) and then dma from there to vram
+    -this is so we can modify it in between those two steps, like removing or adding walls
+-create system to make objects on layer 1 (furniture and other static objects)
+    -part of objects' definition will be:
+        -tilemap data to write
+        -position in room
+        -collision hitbox
