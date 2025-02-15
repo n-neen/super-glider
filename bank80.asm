@@ -19,6 +19,8 @@ org $808000
 !bg1tilemapshifted      =           !bg1tilemap>>8
 !spriteaddrshifted      =           !spritestart>>13
 
+!debugiterateflag       =           $6fa
+!splashflag             =           $6fc
 !backgroundupdateflag   =           $6fe
 !backgroundtype         =           $700
 
@@ -97,15 +99,17 @@ init:
         lda.b #!bg1tilemapshifted   ;bg1 tilemap base address
         sta $2107
         
+        lda #$00                    ;bg1 tiles base address
+        sta $210b
+        
         lda #$ff                    ;gotta set the bg1 scroll
         sta $210e                   ;to -1 because of course we do
         sta $210e
-        
-        lda #$00                    ;bg1 tiles base address
-        sta $210b
+        sta !bg1y
         rep #$20
         
         jsl dma_clearvram
+        
 }   ;fall through to main
 
 
@@ -114,12 +118,14 @@ init:
 ;===========================================================================================
 
 
+
 main: {
     .stateinit: {
         stz !gamestate
     }
         
     .statehandle: {
+        jsr waitfornmi
         inc !maincounter                ;main switch case jump table loop
         lda !gamestate                  ;usually, state handler will 
         asl                             ;return after running once, like newgame
@@ -129,24 +135,21 @@ main: {
         jmp .statehandle
     }
         
-    .statetable: {           ;program modes, game states, etc
-        dw #splash          ;0
-        dw #newgame         ;1
-        dw #playgame        ;2
-        dw #gameover        ;3
-        dw #debug           ;4
+    .statetable: {
+        dw #splashsetup     ;0
+        dw #splash          ;1
+        dw #newgame         ;2
+        dw #playgame        ;3
+        dw #gameover        ;4
+        dw #debug           ;5
     }
 }
 
-
-
-
 ;===========================================================================================
-;=================================== STATE 0:  SPLASH  =====================================
+;================================ STATE 0:  SPLASHSETUP  ===================================
 ;===========================================================================================
 
-
-splash: {
+splashsetup: {
     jsr waitfornmi
     jsr screenoff           ;enable forced blank to to the following dmas
     
@@ -154,21 +157,47 @@ splash: {
     jsl load_background     ;for background 00 (splash screen)
     
     jsr screenon
-    
-    waitforstart: {
-        jsr waitfornmi
-        lda !controller
-        cmp #$1000
-        beq proceed
-    } : jmp waitforstart
-    proceed:                ;proceed to
-    inc !gamestate          ;advance to game state 1 (newgame)
+    lda #$0001
+    sta !gamestate          ;advance to game state 1 (splash screen)
     rts
 }
 
 
 ;===========================================================================================
-;================================== STATE 1:  NEWGAME  =====================================
+;=================================== STATE 1:  SPLASH  =====================================
+;===========================================================================================
+
+
+splash: {
+    lda !splashflag         ;set flag so we only load bg the first time
+    bne +
+    
+    jsr waitfornmi
+    jsr screenoff           ;enable forced blank to to the following dmas
+    
+    lda #$0000              ;load gfx, tilemap, and palettes
+    jsl load_background     ;for background 00 (splash screen)
+    
+    jsr screenon
+    lda #$0001
+    sta !splashflag
+    
++   waitforstart: {
+        jsr waitfornmi
+        lda !controller
+        cmp #$1000
+        beq proceed
+        rts
+    }
+    proceed:                ;proceed to
+    lda #$0002
+    sta !gamestate          ;advance to game state 1 (newgame)
+    rts
+}
+
+
+;===========================================================================================
+;================================== STATE 2:  NEWGAME  =====================================
 ;===========================================================================================
 
 
@@ -196,19 +225,21 @@ newgame: {
     jsl load_sprite         ;load sprite data 0 (glider)
     
     jsr screenon
-
-    inc !gamestate          ;advance to game state 2
+    
+    lda #$0003
+    sta !gamestate          ;advance to game state 3 (playgame)
     
     lda debugflag
     beq +
-    lda #$0004
-    sta !gamestate          ;if [debug], goto debug game mode
+    
+    lda #$0005
+    sta !gamestate          ;if [debug], goto debug setup mode
 +   rts
 }
 
 
 ;===========================================================================================
-;================================== STATE 2:  PLAYGAME  ====================================
+;================================== STATE 3:  PLAYGAME  ====================================
 ;===========================================================================================
 
 
@@ -224,20 +255,20 @@ playgame: {
     .loop: {
         inc !framecounter
         jsl game_play       ;one iteration (frame) of handling gameplay happens here
-        jsr waitfornmi
         
         ;if [youdied]: jmp .out
-        jmp .loop
+        rts
     }
     
     .out:
-        inc !gamestate      ;advance gamestate from 2 (playgame) to 3 (endgame)
+        lda #$0004
+        sta !gamestate      ;advance gamestate from 3 (playgame) to 4 (endgame)
         rts
 }
 
 
 ;===========================================================================================
-;================================== STATE 3:  GAMEOVER  ====================================
+;================================== STATE 4:  GAMEOVER  ====================================
 ;===========================================================================================
 
 
@@ -248,7 +279,7 @@ gameover: {
 
 
 ;===========================================================================================
-;==================================   STATE 4:  DEBUG   ====================================
+;==================================   STATE 5:  DEBUG   ====================================
 ;===========================================================================================
 
 ;controller bits
@@ -267,33 +298,21 @@ gameover: {
 
 
 debug: {
-    .init: {
-        lda #$0000
-        sta !debugstate
-        sep #$20
-        lda #$ff
-        sta $210e           ;set bg1 scroll to -1
-        sta $210e
-        sta !bg1y
-        rep #$20
-    }
+
     ;todo: write whatever routines here that you want
     ;to be useful for whatever
     
     .statehandle: {
-        jsr waitfornmi
         jsr screenoff
-        stz !nmiflag
         jsr updatebackground
         lda !debugstate
         asl
         tax
         jsr (debug_statetable,x)
         jsr screenon
-        jmp .statehandle
     }
     rts
-
+    
     .statetable: {
         dw #debug_controller
     }
@@ -304,12 +323,14 @@ debug: {
         ..st: {
             bit !st
             beq ...nost
+            ;if start pressed go here
             ...nost:
         }
         
         ..sl: {
             bit !sl
             beq ...nosl
+            ;if select pressed go here
             ...nosl:
         }
         
@@ -352,6 +373,7 @@ debug: {
         ..a: {
             bit !a
             beq ...noa
+            ;if a pressed go here
             ...noa:
         }
         
@@ -394,12 +416,14 @@ debug: {
         ..l: {
             bit !l
             beq ...nol
+            ;if l pressed go here
             ...nol:
         }
         
         ..r: {
             bit !r
             beq ...nor
+            ;if r pressed go here
             ...nor:
         }
         rts
@@ -517,8 +541,8 @@ updateppuregisters: { ;transfer wram mirrors to their registers
     rts
 }
 
+
 updatebackground: {
-    
     lda !backgroundupdateflag
     beq +
     
@@ -530,10 +554,11 @@ updatebackground: {
 }
 
 
-errhandle:
+errhandle: {
     jml errhandle
+}
 
 
-irq:
+irq: {
     rti
-    
+}

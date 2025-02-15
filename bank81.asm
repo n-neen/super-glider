@@ -30,7 +30,6 @@ org $818000
     ;dma_loadpalettes
     
     
-    
 dma: {
     .vramtransfur: {        ;for dma channel 0
     
