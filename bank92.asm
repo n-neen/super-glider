@@ -66,3 +66,6 @@ splashtilemap:
         
 bg2tilemap:
     incbin "./data/tilemaps/bg2tilemap.bin"
+    
+objtilemap:
+    incbin "./data/tilemaps/obj_initial_tilemap.bin"

@@ -23,9 +23,12 @@ lorom
 ;incsrc "./headers/globals.asm"
 
 ;vram map
-!bg1start           =           $0000
+!bg1start           =           $2000
 !bg1tilemap         =           $6000           ;vram offset for bg1tilemap
 !spritestart        =           $c000           ;sprite gfx
+
+!bg2start           =           $0000
+!bg2tilemap         =           $7000
 
 
 ;cgram map: start of palette chunk

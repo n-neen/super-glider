@@ -13,10 +13,15 @@ org $808000
 !nmiflag                =           $22
 !nmicounter             =           $24
 !framecounter           =           $26
+
 !bg1x                   =           $40
 !bg1y                   =           $42
-
 !bg1tilemapshifted      =           !bg1tilemap>>8
+
+!bg2x                   =           $44
+!bg2y                   =           $46
+!bg2tilemapshifted      =           !bg2tilemap>>8
+
 !spriteaddrshifted      =           !spritestart>>13
 
 !debugiterateflag       =           $6fa
@@ -87,7 +92,7 @@ init:
         sep #$20
         lda #$80            ;enable nmi
         sta $4200
-        lda #%00010001      ;main screen = sprites, L1, L2
+        lda #%00010010      ;main screen = sprites, L2
         sta $212c
         
         lda.b #!spriteaddrshifted   ;sprite size: 8x8 + 16x16; base address c000
@@ -99,8 +104,11 @@ init:
         lda.b #!bg1tilemapshifted   ;bg1 tilemap base address
         sta $2107
         
-        lda #$00                    ;bg1 tiles base address
+        lda #$02                    ;bg2/1 tiles base address (nibble apiece)
         sta $210b
+        
+        lda.b #!bg2tilemapshifted
+        sta $2108
         
         lda #$ff                    ;gotta set the bg1 scroll
         sta $210e                   ;to -1 because of course we do
@@ -127,9 +135,9 @@ main: {
     .statehandle: {
         jsr waitfornmi
         inc !maincounter                ;main switch case jump table loop
-        lda !gamestate                  ;usually, state handler will 
-        asl                             ;return after running once, like newgame
-        tax                             ;or itself has a loop, like playgame
+        lda !gamestate
+        asl
+        tax
         jsr (main_statetable,x)
         
         jmp .statehandle
@@ -152,6 +160,7 @@ main: {
 splashsetup: {
     jsr waitfornmi
     jsr screenoff           ;enable forced blank to to the following dmas
+    
     
     lda #$0000              ;load gfx, tilemap, and palettes
     jsl load_background     ;for background 00 (splash screen)
@@ -216,13 +225,19 @@ newgame: {
     ;jsl gliderinit
     
     jsr waitfornmi
-    jsr screenoff           ;enable forced blank to do the following dmas
+    jsr screenoff           ;enable forced blank to do the following loading
     
     lda #$0002
     jsl load_background     ;load background 2 (panneled room)
     
+    lda #$0003
+    jsl load_background     ;load obj tilemap for layer 1 (called background type 3 for now)
+    
     lda #$0000
     jsl load_sprite         ;load sprite data 0 (glider)
+    
+    lda #%00010011          ;main screen = sprites, L2, L1
+    sta $212c
     
     jsr screenon
     
@@ -338,7 +353,7 @@ debug: {
             bit !up
             beq ...noup
             sep #$20
-            dec !bg1y
+            dec !bg2y
             rep #$20
             ...noup:
         }
@@ -347,7 +362,7 @@ debug: {
             bit !dn
             beq ...nodn
             sep #$20
-            inc !bg1y
+            inc !bg2y
             rep #$20
             ...nodn:
         }
@@ -356,7 +371,7 @@ debug: {
             bit !lf
             beq ...nolf
             sep #$20
-            dec !bg1x
+            dec !bg2x
             rep #$20
             ...nolf:
         }
@@ -365,7 +380,7 @@ debug: {
             bit !rt
             beq ...nort
             sep #$20
-            inc !bg1x
+            inc !bg2x
             rep #$20
             ...nort:
         }
@@ -429,6 +444,17 @@ debug: {
         rts
     }
 }
+
+scroll: {
+    ;takes argument for direction
+    L1: {
+        rts
+    }
+    L2: {
+        rts
+    }
+}
+
 
 ;===========================================================================================
 ;===================================                   =====================================
@@ -531,12 +557,21 @@ readcontroller: {
 
 updateppuregisters: { ;transfer wram mirrors to their registers
     sep #$20
+    
     lda !bg1x
     sta $210d           ;update bg1 x scroll
     sta $210d
     lda !bg1y           ;update bg1 y scroll
     sta $210e
     sta $210e
+    
+    lda !bg2x
+    sta $210f
+    sta $210f
+    lda !bg2y
+    sta $2110
+    sta $2110
+    
     rep #$20
     rts
 }
