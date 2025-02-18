@@ -6,7 +6,7 @@ org $848000
 ;===================================  D E F I N E S  =======================================
 ;===========================================================================================
 
-;24 words, 24 objects = 24 words, 48 bytes per array (430)
+;24 words, 24 objects = 24 words, 48 bytes per array ($30)
 !objectarraystart       =       $1000
 !objectarraysize        =       $0030
 !objID                  =       !objectarraystart
