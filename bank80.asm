@@ -6,6 +6,8 @@ org $808000
 ;======================================  DEFINES  ==========================================
 ;===========================================================================================
 
+!localtempvar           =           $10
+!localtempvar2          =           $12
 
 !gamestate              =           $30
 !debugstate             =           $32
@@ -22,12 +24,15 @@ org $808000
 !bg2y                   =           $46
 !bg2tilemapshifted      =           !bg2tilemap>>8
 
+!backgroundupdateflag   =           $48
+!backgroundtype         =           $4a
+
 !spriteaddrshifted      =           !spritestart>>13
 
-!debugiterateflag       =           $6fa
-!splashflag             =           $6fc
-!backgroundupdateflag   =           $6fe
-!backgroundtype         =           $700
+;!debugiterateflag       =           $6fa
+;!splashflag             =           $6fc
+
+!oamwramtable           =           $0500
 
 
 ;===========================================================================================
@@ -114,6 +119,7 @@ init:
         sta $210e                   ;to -1 because of course we do
         sta $210e
         sta !bg1y
+        sta !bg2y
         rep #$20
         
         jsl dma_clearvram
@@ -178,20 +184,8 @@ splashsetup: {
 
 
 splash: {
-    lda !splashflag         ;set flag so we only load bg the first time
-    bne +
-    
-    jsr waitfornmi
-    jsr screenoff           ;enable forced blank to to the following dmas
-    
-    lda #$0000              ;load gfx, tilemap, and palettes
-    jsl load_background     ;for background 00 (splash screen)
-    
-    jsr screenon
-    lda #$0001
-    sta !splashflag
-    
-+   waitforstart: {
+
+    waitforstart: {
         jsr waitfornmi
         lda !controller
         cmp #$1000
@@ -236,19 +230,22 @@ newgame: {
     lda #$0000
     jsl load_sprite         ;load sprite data 0 (glider)
     
+    sep #$20
     lda #%00010011          ;main screen = sprites, L2, L1
     sta $212c
+    lda #$ff
+    sta !bg1y
+    rep #$20
     
     jsr screenon
     
     lda #$0003
     sta !gamestate          ;advance to game state 3 (playgame)
     
-    lda debugflag
-    beq +
-    
-    lda #$0005
-    sta !gamestate          ;if [debug], goto debug setup mode
+    ;lda debugflag
+    ;beq +
+    ;lda #$0005
+    ;sta !gamestate          ;if [debug], goto debug setup mode
 +   rts
 }
 
@@ -259,15 +256,15 @@ newgame: {
 
 
 playgame: {
-    jsr screenon
     
-    stz !nmiflag
-    sep #$20
-    lda #$80
-    sta $4200
-    rep #$20
+    ;stz !nmiflag
+    ;sep #$20
+    ;lda #$80
+    ;sta $4200
+    ;rep #$20
     
     .loop: {
+        jsr waitfornmi
         inc !framecounter
         jsl game_play       ;one iteration (frame) of handling gameplay happens here
         
@@ -431,14 +428,14 @@ debug: {
         ..l: {
             bit !l
             beq ...nol
-            ;if l pressed go here
+            ;go here if l pressed
             ...nol:
         }
         
         ..r: {
             bit !r
             beq ...nor
-            ;if r pressed go here
+            inc !oambuffer
             ...nor:
         }
         rts
@@ -464,7 +461,6 @@ scroll: {
 
 
 nmi: {
-    rep #$30
     php
     phb
     phd
@@ -482,8 +478,8 @@ nmi: {
     ldx !nmiflag
     beq .return
     
-    jsl oam_update              ;dma from wram buffer to oam
-    jsr updateppuregisters      ;dma from wram buffer to a whole bunch of stuff
+    jsl oam_write               ;dma from wram buffer to oam
+    jsr updateppuregisters      ;read wram buffer and write register
     jsr readcontroller
     stz !nmiflag
     
@@ -515,22 +511,22 @@ waitfornmi: {
 }
 
 
-screenon: {
+screenon: {         ;turn screen brightness on and disable forced blank
     pha
     sep #$20
     lda #$0f
-    sta $2100           ;turn screen brightness on and disable forced blank
+    sta $2100
     rep #$20
     pla
     rts
 }
 
 
-screenoff: {
+screenoff: {        ;enable forced blank
     pha
     sep #$20
     lda #$8f
-    sta $2100           ;enable forced blank
+    sta $2100
     rep #$20
     pla
     rts

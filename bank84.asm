@@ -6,7 +6,7 @@ org $848000
 ;===================================  D E F I N E S  =======================================
 ;===========================================================================================
 
-;24 words, 24 objects = 24 words, 48 bytes per array (430)
+;24 words, 24 objects = 24 words, 48 bytes per array ($30)
 !objectarraystart       =       $1000
 !objectarraysize        =       $0030
 !objID                  =       !objectarraystart
@@ -17,8 +17,11 @@ org $848000
 !objycoord              =       !objxcoord+!objectarraysize
 ;arrays' ends                   +!objectarraysize
 
+!localtempvar           =       $10
+!localtempvar2          =       $12
 
-!objtilemaps            =       $7f6000
+
+!objtilemap             =       $7f6000
 
 
 
@@ -70,10 +73,10 @@ obj: {
         sta !objtilemapointer,x     ;store tilemap pointer
         
         lda $0002,y
-        sta !objsizey,x             ;store object x
+        sta !objsizey,x             ;store object x size (length of rows)
         
         lda $0004,y
-        sta !objsizex,x             ;store object y
+        sta !objsizex,x             ;store object y size (number of rows)
         
         ply
         plb
@@ -99,7 +102,7 @@ obj: {
     
     .place: {
         ;deals with an instance of an object, called after it is init
-        ;get position in room from room object list
+        ;get position in room, from room object list, and write it in the array
         rtl
     }
     
@@ -109,11 +112,34 @@ obj: {
         rtl
     }
     
+    .copytowram: {
+        ;copy from rom to wram to be dma'd to vram at a later time
+        ;takes argument:
+            ;x = object id (already loaded AND placed, previously)
+            
+        ;produces output:
+            ;reads tilemap rectangle and its size
+            ;write to the wram layer 1 tilemap buffer,
+            ;a rectangle of the correct size and location
+        phb
+        phk
+        plb
+        phx
+        phy
+        
+        
+        
+        ply
+        plx
+        plb
+        rtl
+    }
+    
     
     .headers: {
         ;object types
         ..vent: {     ;tilemap pointer, xsize, ysize
-            dw #obj_tilemaps_floorvent, $0002, $0008
+            dw #obj_tilemaps_floorvent, $0006, $0002
         }
         
         ..candle: {
@@ -121,22 +147,24 @@ obj: {
         }
         
         ..fanR: {
-            dw #obj_tilemaps_fanR,      $0000, $0000
+            dw #obj_tilemaps_fanR,      $0004, $0007
         }
     }
     
     .tilemaps: {
         ..floorvent: {
-            ;incbin "./data/tilemaps/obj/floorvent.bin"
+            incbin "./data/tilemaps/objects/floorvent.bin"
         }
         
         ..candle: {
-            ;incbin "./data/tilemaps/obj/candle.bin"
+            ;incbin "./data/tilemaps/objects/candle.bin"
         }
         
         ..fanR: {
-            ;incbin "./data/tilemaps/obj/fanR.bin"
+            incbin "./data/tilemaps/objects/fanR.bin"
         }
         
     }
+    
+    
 }

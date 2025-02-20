@@ -7,8 +7,6 @@ org $818000
 ;===================================  D E F I N E S  =======================================
 ;===========================================================================================
 
-!oambuffer      =                   $500                    ;start of oam table to dma at nmi
-
 ;arguments for passing info between dma related routines
     ;(i.e. from loading routines to the dma ones)
 !dmaargstart    =                   $80
@@ -87,6 +85,7 @@ dma: {
         sta $420b
         
         rep #$30
+        
         
         rtl
     }
@@ -174,26 +173,44 @@ dma: {
 
 
 
-
-
 oam: {
-    .clear: {
+    
+    .write: {
         phx
-        phy
         php
         
-        ;todo
+        sep #$10                    ;8 bit x/y mode
+        rep #$20                    ;16 bit A
+        
+                                    ;width  register
+        ;ldx #$80                    ;1      dma control
+        ;stx $2104
+        
+        ;stz $2102                   ;1      oam high starting addr = 0
+        
+        ldx #$00                    ;1      transfur mode
+        stx $4300
+        
+        ldx #$04                    ;1      register dest (oam add)
+        stx $4301
+        
+        ldx #$00                    ;1      source bank
+        stx $4304
+        
+        lda #!oambuffer             ;2      source addr
+        sta $4302
+        
+        lda #$0220                  ;2      transfur size = 544 bytes (oam table size)
+        sta $4305
+        
+        ldx #$01                    ;1      enable transfur on dma channel 0             
+        stx $420b
         
         plp
-        ply
         plx
         rtl
     }
     
-    .update: {
-        ;todo: all of this
-        rtl
-    }
 }
 
 
