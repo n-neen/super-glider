@@ -7,12 +7,19 @@ org $828000
 ;===========================================================================================
 
 ;glider ram
-
 !gliderramstart     =       $0200
 !gliderx            =       !gliderramstart
 !glidery            =       !gliderramstart+2
 !gliderstate        =       !gliderramstart+4
 !gliderdir          =       !gliderramstart+6
+!glidermovetimer    =       !gliderramstart+8
+!gliderliftstate    =       !gliderramstart+10
+
+;constants!!!!
+!gliderstateidle    =       $0000
+!gliderstateleft    =       $0001
+!gliderstateright   =       $0002
+!floor              =       $00d0
 
 
 ;===========================================================================================
@@ -46,6 +53,7 @@ game: {
     .play: {
         jsr get_input
         jsr player_update
+        jsr player_handle
         rtl
     }
     
@@ -58,6 +66,7 @@ game: {
 
 get: {
     .input: {
+        phx
         lda !controller
         
         ..st: {
@@ -75,7 +84,7 @@ get: {
         }
         
         ..up: {                                 ;dpad start
-            bit !up                             ;1 = up, 2 = down, 4 = left, 8 = right
+            bit !up
             beq ...noup
             pha
             %gliderpositionsub(!glidery)
@@ -95,18 +104,20 @@ get: {
         ..lf: {
             bit !lf
             beq ...nolf
-            pha
-            %gliderpositionsub(!gliderx)
-            pla
+            ldx #!gliderstateleft
+            stx !gliderstate
+            ldx #$0002
+            stx !glidermovetimer
             ...nolf:
         }
         
         ..rt: {
             bit !rt
             beq ...nort
-            pha
-            %gliderpositionadd(!gliderx)
-            pla
+            ldx #!gliderstateright
+            stx !gliderstate
+            ldx #$0002
+            stx !glidermovetimer
             ...nort:
         }                                       ;dpad end
         
@@ -141,22 +152,25 @@ get: {
         ..l: {
             bit !l
             beq ...nol
-            ;go here if l pressed
+            stz !glidermovetimer
             ...nol:
         }
         
         ..r: {
             bit !r
             beq ...nor
-            ;if pressed go here
+            stz !glidermovetimer
             ...nor:
         }
+        plx
         rts
     }
 }
 
 player: {
     .update: {
+        ;write to oam table
+        ;todo: use spritemaps
         sep #$20
         lda !gliderx
         sta !oamwramtable           ;update glider position
@@ -169,32 +183,58 @@ player: {
         sta !oamwramtable+3
         
         rep #$20
-        
         rts
     }
     
-    .move: {
-        ;currently unimplemented (see above for what we do right now)
-        
-        bit #$0001
-        beq ..noup
-        %gliderpositionsub(!glidery)
-        ..noup:
-        
-        bit #$0002
-        beq ..nodown
-        %gliderpositionadd(!glidery)
-        ..nodown:
-        
-        bit #$0004
-        beq ..noleft
-        %gliderpositionsub(!gliderx)
-        ..noleft:
-        
-        bit #$0008
-        beq ..noright
-        %gliderpositionadd(!gliderx)
-        ..noright:
+    .handle: {
+        lda !gliderliftstate
+        beq +
+        lda !glidery
+        cmp #!floor
+        bpl +
+        inc !glidery
+    +   
+    
+    
+        lda !gliderstate
+        asl
+        tax
+        jsr (.gliderstatetable,x)
         rts
     }
+    
+    .gliderstatetable: {
+        dw #.idle, #.movingleft, #.movingright
+    }
+    
+    ;idle        = 0
+    ;movingleft  = 1
+    ;movingright = 3
+    
+    .idle: {
+        rts
+    }
+    
+    .movingleft: {
+        lda !glidermovetimer
+        beq +
+        %gliderpositionsub(!gliderx)
+        dec !glidermovetimer
+        beq ++
+    +   rts
+    ++  stz !gliderstate
+        rts
+    }
+    
+    .movingright: {
+        lda !glidermovetimer
+        beq +
+        %gliderpositionadd(!gliderx)
+        dec !glidermovetimer
+        beq ++
+    +   rts
+    ++  stz !gliderstate
+        rts
+    }
+    
 }

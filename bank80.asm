@@ -237,6 +237,12 @@ newgame: {
     sta !bg1y
     rep #$20
     
+    lda #$0010
+    sta !gliderx            ;glider initial position
+    sta !glidery
+    lda #$0001
+    sta !gliderliftstate    ;glider lift flag (or state?!)
+    
     jsr screenon
     
     lda #$0003
