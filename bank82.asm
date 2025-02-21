@@ -7,38 +7,41 @@ org $828000
 ;===========================================================================================
 
 ;glider ram
-!gliderramstart     =       $0200
-!gliderx            =       !gliderramstart
-!glidery            =       !gliderramstart+2
-!gliderstate        =       !gliderramstart+4
-!gliderdir          =       !gliderramstart+6
-!glidermovetimer    =       !gliderramstart+8
-!gliderliftstate    =       !gliderramstart+10
+;here for reference only
+;!gliderramstart     =       $0200
+;!gliderx            =       !gliderramstart
+;!glidery            =       !gliderramstart+2
+;!gliderstate        =       !gliderramstart+4
+;!gliderdir          =       !gliderramstart+6
+;!glidermovetimer    =       !gliderramstart+8
+;!gliderliftstate    =       !gliderramstart+10
+;!gliderturntimer    =       !gliderramstart+12
+;!gliderhitbound     =       !gliderramstart+14
 
-;constants!!!!
-!gliderstateidle    =       $0000
-!gliderstateleft    =       $0001
-!gliderstateright   =       $0002
-!floor              =       $00d0
+;constants, not yet added to defines.asm
+!kliftstateidle     =       #$0000
+!kliftstateup       =       #$0001
+!kliftstatedown     =       #$0002
 
 
 ;===========================================================================================
 ;====================================  M A C R O S  ========================================
 ;===========================================================================================
 
-!gliderspeed        =       #$0002
+;local constant
+!kgliderspeed        =       #$0002
 
 macro gliderpositionadd(axis)
     lda <axis>
     clc
-    adc !gliderspeed
+    adc !kgliderspeed
     sta <axis>
 endmacro
 
 macro gliderpositionsub(axis)
     lda <axis>
     sec
-    sbc !gliderspeed
+    sbc !kgliderspeed
     sta <axis>
 endmacro
 
@@ -47,13 +50,12 @@ endmacro
 ;=================================    G A M E P L A Y    ===================================
 ;===========================================================================================
 
-db "currently reserved for gameplay"
     
 game: {
     .play: {
         jsr get_input
-        jsr player_update
-        jsr player_handle
+        jsr glider_update
+        jsr glider_handle
         rtl
     }
     
@@ -67,24 +69,25 @@ game: {
 get: {
     .input: {
         phx
+        ;use x for general stores here to preserve A without needing to push
         lda !controller
         
         ..st: {
-            bit !st
+            bit !kst
             beq ...nost
             ;if start pressed go here
             ...nost:
         }
         
         ..sl: {
-            bit !sl
+            bit !ksl
             beq ...nosl
             ;if select pressed go here
             ...nosl:
         }
         
         ..up: {                                 ;dpad start
-            bit !up
+            bit !kup
             beq ...noup
             pha
             %gliderpositionsub(!glidery)
@@ -93,7 +96,7 @@ get: {
         }
         
         ..dn: {
-            bit !dn
+            bit !kdn
             beq ...nodn
             pha
             %gliderpositionadd(!glidery)
@@ -102,9 +105,9 @@ get: {
         }
         
         ..lf: {
-            bit !lf
+            bit !klf
             beq ...nolf
-            ldx #!gliderstateleft
+            ldx !kgliderstateleft
             stx !gliderstate
             ldx #$0002
             stx !glidermovetimer
@@ -112,9 +115,9 @@ get: {
         }
         
         ..rt: {
-            bit !rt
+            bit !krt
             beq ...nort
-            ldx #!gliderstateright
+            ldx !kgliderstateright
             stx !gliderstate
             ldx #$0002
             stx !glidermovetimer
@@ -122,44 +125,50 @@ get: {
         }                                       ;dpad end
         
         ..a: {
-            bit !a
+            bit !ka
             beq ...noa
-            ;if a pressed go here
+            ldx !kliftstatedown
+            stx !gliderliftstate
             ...noa:
         }
         
         ..x: {
-            bit !x
+            bit !kx
             beq ...nox
             ;if pressed go here
+            ;current plan: fire bands
             ...nox:
         }
         
         ..b: {
-            bit !b
+            bit !kb
             beq ...nob
             ;if pressed go here
+            ;current plan: turn glider around
+            ;
             ...nob:
         }
         
         ..y: {
-            bit !y
+            bit !ky
             beq ...noy
             ;if pressed go here
+            ;current plan: use battery
             ...noy:
         }
         
         ..l: {
-            bit !l
+            bit !kl
             beq ...nol
-            stz !glidermovetimer
+            stz !gliderliftstate
             ...nol:
         }
         
         ..r: {
-            bit !r
+            bit !kr
             beq ...nor
-            stz !glidermovetimer
+            ldx !kliftstateup
+            stx !gliderliftstate
             ...nor:
         }
         plx
@@ -167,11 +176,12 @@ get: {
     }
 }
 
-player: {
+glider: {
     .update: {
         ;write to oam table
         ;todo: use spritemaps
         sep #$20
+        
         lda !gliderx
         sta !oamwramtable           ;update glider position
         
@@ -182,20 +192,51 @@ player: {
         ora #%00110000
         sta !oamwramtable+3
         
+        lda !oamwramtable+$200
+        ora #%00000010
+        sta !oamwramtable+$200
+        
+        
         rep #$20
         rts
     }
     
     .handle: {
-        lda !gliderliftstate
-        beq +
-        lda !glidery
-        cmp #!floor
-        bpl +
-        inc !glidery
-    +   
+        ..falling: {
+            lda !gliderliftstate
+            beq +
+            
+            cmp !kliftstateup
+            beq ...up
+            
+            cmp !kliftstatedown
+            beq ...down
+            
+            bra +   ;else (should not be reachable!)
+            
+            ...up:
+                dec !glidery
+                bra +
+            ...down:
+                inc !glidery
+        +
+        }
     
-    
+        ..bounds: {
+            lda !gliderx            ;hit left bound = 1
+            cmp !kleftbound
+            bpl ++
+            lda !khitboundleft
+            sta !gliderhitbound
+        ++
+            cmp !krightbound        ;hit right bound = 2
+            bmi +++
+            lda !khitboundright
+            sta !gliderhitbound
+        +++
+        }
+        
+        
         lda !gliderstate
         asl
         tax
@@ -204,36 +245,67 @@ player: {
     }
     
     .gliderstatetable: {
-        dw #.idle, #.movingleft, #.movingright
+        ;idle        = 0
+        ;movingleft  = 1
+        ;movingright = 3
+        ;turnaround  = 4
+        
+        dw #.idle, #.movingleft, #.movingright, #.turnaround
     }
     
-    ;idle        = 0
-    ;movingleft  = 1
-    ;movingright = 3
     
     .idle: {
+        stz !gliderhitbound     ;i cant believe this works
+        lda !kliftstatedown
+        sta !gliderliftstate
         rts
     }
     
     .movingleft: {
+        lda !gliderhitbound
+        cmp !khitboundleft      ;left bound = 1
+        beq +
+        
         lda !glidermovetimer
         beq +
         %gliderpositionsub(!gliderx)
         dec !glidermovetimer
         beq ++
-    +   rts
+    +   
+        rts
+    
     ++  stz !gliderstate
         rts
     }
     
     .movingright: {
+        lda !gliderhitbound
+        cmp !khitboundright     ;right bound = 2
+        beq +
+        
         lda !glidermovetimer
         beq +
         %gliderpositionadd(!gliderx)
         dec !glidermovetimer
         beq ++
-    +   rts
+    +   
+        rts
+    
     ++  stz !gliderstate
+        rts
+    }
+    
+    .bounceoffbound: {
+        ;todo
+        rts
+    }
+    
+    .turnaround: {
+        lda !gliderturntimer
+        beq +
+        lda !kgliderturnamount
+        
+    +   stz !gliderstate
         rts
     }
     

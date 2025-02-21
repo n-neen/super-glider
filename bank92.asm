@@ -34,7 +34,7 @@ org $928000
 ;===========================================================================================
 
 
-glider:
+gliderdata:
     .header:
         dw #.graphics, #.spritemap, #.palette, #.hitbox
         

@@ -23,9 +23,9 @@ incsrc "./defines.asm"
 ;code
 incsrc "./bank80.asm"           ;boot, main, interrupts
 incsrc "./bank81.asm"           ;dma, graphics and palette loading
-incsrc "./bank82.asm"           ;reserved for gameplay
+incsrc "./bank82.asm"           ;gameplay
 incsrc "./bank83.asm"           ;house, rooms definitions
-incsrc "./bank84.asm"           ;reserved for objects
+incsrc "./bank84.asm"           ;tile objects
 incsrc "./bank85.asm"           ;reserved for glider
 incsrc "./bank86.asm"           ;reserved for code
 

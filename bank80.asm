@@ -29,9 +29,6 @@ org $808000
 
 !spriteaddrshifted      =           !spritestart>>13
 
-;!debugiterateflag       =           $6fa
-;!splashflag             =           $6fc
-
 !oamwramtable           =           $0500
 
 
@@ -40,7 +37,7 @@ org $808000
 ;===========================================================================================
 
 debugflag:
-    dw $0001
+    dw $0000
 
 
 boot: {
@@ -248,10 +245,10 @@ newgame: {
     lda #$0003
     sta !gamestate          ;advance to game state 3 (playgame)
     
-    ;lda debugflag
-    ;beq +
-    ;lda #$0005
-    ;sta !gamestate          ;if [debug], goto debug setup mode
+    lda debugflag
+    beq +
+    lda #$0005
+    sta !gamestate          ;if [debug], goto debug setup mode
 +   rts
 }
 
@@ -300,20 +297,6 @@ gameover: {
 ;==================================   STATE 5:  DEBUG   ====================================
 ;===========================================================================================
 
-;controller bits
-!b                      =           #$8000
-!y                      =           #$4000
-!st                     =           #$2000
-!sl                     =           #$1000
-!up                     =           #$0800
-!dn                     =           #$0400
-!lf                     =           #$0200
-!rt                     =           #$0100
-!a                      =           #$0080
-!x                      =           #$0040
-!l                      =           #$0020
-!r                      =           #$0010
-
 
 debug: {
 
@@ -339,21 +322,21 @@ debug: {
         lda !controller
         
         ..st: {
-            bit !st
+            bit !kst
             beq ...nost
             ;if start pressed go here
             ...nost:
         }
         
         ..sl: {
-            bit !sl
+            bit !ksl
             beq ...nosl
             ;if select pressed go here
             ...nosl:
         }
         
         ..up: {
-            bit !up
+            bit !kup
             beq ...noup
             sep #$20
             dec !bg2y
@@ -362,7 +345,7 @@ debug: {
         }
         
         ..dn: {
-            bit !dn
+            bit !kdn
             beq ...nodn
             sep #$20
             inc !bg2y
@@ -371,7 +354,7 @@ debug: {
         }
         
         ..lf: {
-            bit !lf
+            bit !klf
             beq ...nolf
             sep #$20
             dec !bg2x
@@ -380,7 +363,7 @@ debug: {
         }
         
         ..rt: {
-            bit !rt
+            bit !krt
             beq ...nort
             sep #$20
             inc !bg2x
@@ -389,14 +372,14 @@ debug: {
         }
         
         ..a: {
-            bit !a
+            bit !ka
             beq ...noa
             ;if a pressed go here
             ...noa:
         }
         
         ..x: {
-            bit !x
+            bit !kx
             beq ...nox
             lda !backgroundupdateflag
             bne ...noupdate
@@ -408,7 +391,7 @@ debug: {
         }
         
         ..b: {
-            bit !b
+            bit !kb
             beq ...nob
             lda !backgroundupdateflag
             bne ...noupdate
@@ -420,7 +403,7 @@ debug: {
         }
         
         ..y: {
-            bit !y
+            bit !ky
             beq ...noy
             lda !backgroundupdateflag
             bne ...noupdate
@@ -432,14 +415,14 @@ debug: {
         }
         
         ..l: {
-            bit !l
+            bit !kl
             beq ...nol
             ;go here if l pressed
             ...nol:
         }
         
         ..r: {
-            bit !r
+            bit !kr
             beq ...nor
             inc !oambuffer
             ...nor:

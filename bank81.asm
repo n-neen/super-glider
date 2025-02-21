@@ -396,6 +396,15 @@ load: {
     }
 }
 
+processspritemap: {
+    ;takes arguments:
+    ;spritemap pointer
+    ;produces output:
+    ;a number of sprites based on the number of spritemap entries
+    
+    rtl
+}
+
 
 tablepointers: {            ;not actually used in this refactored routine
     dw #loadingtable_sprites_gfx
@@ -420,35 +429,35 @@ endmacro
 
 loadingtable: {
     .sprites: {
-        ..gfx: {          ;long pointer,       size,  baseaddr,         unused
-            %loadtablentry(#glider_graphics,   $1000, !spritestart,     $00)     ;glider = 00
+        ..gfx: {          ;long pointer,            size,  baseaddr,         unused
+            %loadtablentry(#gliderdata_graphics,    $1000, !spritestart,     $00)     ;glider = 00
         }
         
         ..palettes: {
-           %loadtablentry(#glider_palette,     $0080, !spritepalette,   $00)     ;glider = 00
+           %loadtablentry(#gliderdata_palette,      $0080, !spritepalette,   $00)     ;glider = 00
         }
     }
     
     .bg: {
         ..gfx: {
-            %loadtablentry(#splashgfx,         $8000, !bg2start,        $00)     ;splash = 00
-            %loadtablentry(#bg1gfx,            $4000, !bg2start,        $01)     ;bg1    = 01
-            %loadtablentry(#bg2gfx,            $4000, !bg2start,        $02)     ;bg2    = 02
-            %loadtablentry(#objgfx,            $2000, !bg1start,        $03)     ;obj    = 03           ;object layer
+            %loadtablentry(#splashgfx,              $8000, !bg2start,        $00)     ;splash = 00
+            %loadtablentry(#bg1gfx,                 $4000, !bg2start,        $01)     ;bg1    = 01
+            %loadtablentry(#bg2gfx,                 $4000, !bg2start,        $02)     ;bg2    = 02
+            %loadtablentry(#objgfx,                 $2000, !bg1start,        $03)     ;obj    = 03           ;object layer
         }
         
         ..tilemaps: {
-            %loadtablentry(#splashtilemap,     $0800, !bg2tilemap,      $00)     ;splash = 00
-            %loadtablentry(#bg1tilemap,        $0800, !bg2tilemap,      $01)     ;bg1    = 01
-            %loadtablentry(#bg2tilemap,        $0800, !bg2tilemap,      $02)     ;bg2    = 02
-            %loadtablentry(#objtilemap,        $0800, !bg1tilemap,      $03)     ;obj    = 03           ;object layer
+            %loadtablentry(#splashtilemap,          $0800, !bg2tilemap,      $00)     ;splash = 00
+            %loadtablentry(#bg1tilemap,             $0800, !bg2tilemap,      $01)     ;bg1    = 01
+            %loadtablentry(#bg2tilemap,             $0800, !bg2tilemap,      $02)     ;bg2    = 02
+            %loadtablentry(#objtilemap,             $0800, !bg1tilemap,      $03)     ;obj    = 03           ;object layer
         }
         
         ..palettes: {
-            %loadtablentry(#splashpalette,     $0100, !palettes,        $00)     ;splash = 00
-            %loadtablentry(#testpalette,       $0100, !palettes,        $01)     ;bg1    = 01
-            %loadtablentry(#bg2palette,        $0100, !palettes,        $02)     ;bg2    = 02
-            %loadtablentry(#bg2palette,        $0100, !palettes,        $03)     ;obj    = 03            ;object layer
+            %loadtablentry(#splashpalette,          $0100, !palettes,        $00)     ;splash = 00
+            %loadtablentry(#testpalette,            $0100, !palettes,        $01)     ;bg1    = 01
+            %loadtablentry(#bg2palette,             $0100, !palettes,        $02)     ;bg2    = 02
+            %loadtablentry(#bg2palette,             $0100, !palettes,        $03)     ;obj    = 03            ;object layer
         }
     }
 }
