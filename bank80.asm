@@ -191,7 +191,7 @@ splash: {
     }
     proceed:                ;proceed to
     lda #$0002
-    sta !gamestate          ;advance to game state 1 (newgame)
+    sta !gamestate          ;advance to game state 2 (newgame)
     rts
 }
 
@@ -210,8 +210,11 @@ newgame: {
         ;background palettes,
         ;background graphics,
         ;background tilemap
+        ;load objects
+        ;assemble object tilemap
     ;load sprite graphics
     ;load sprite palettes
+    ;load spritemaps
     ;place glider
     ;jsl gliderinit
     

@@ -6,22 +6,7 @@ org $828000
 ;===================================  D E F I N E S  =======================================
 ;===========================================================================================
 
-;glider ram
-;here for reference only
-;!gliderramstart     =       $0200
-;!gliderx            =       !gliderramstart
-;!glidery            =       !gliderramstart+2
-;!gliderstate        =       !gliderramstart+4
-;!gliderdir          =       !gliderramstart+6
-;!glidermovetimer    =       !gliderramstart+8
-;!gliderliftstate    =       !gliderramstart+10
-;!gliderturntimer    =       !gliderramstart+12
-;!gliderhitbound     =       !gliderramstart+14
-
-;constants, not yet added to defines.asm
-!kliftstateidle     =       #$0000
-!kliftstateup       =       #$0001
-!kliftstatedown     =       #$0002
+;moved to defines.asm
 
 
 ;===========================================================================================
@@ -180,6 +165,7 @@ glider: {
     .update: {
         ;write to oam table
         ;todo: use spritemaps
+        ;this thing is all temp badness
         sep #$20
         
         lda !gliderx
@@ -202,14 +188,18 @@ glider: {
     }
     
     .handle: {
+        ;high level checks that need to be done regardless of glider state go here
+        ;like falling (happens always unless on a vent)
+        ;or room bounds (always needs to be checked)
+        
         ..falling: {
             lda !gliderliftstate
             beq +
             
-            cmp !kliftstateup
+            cmp !kliftstateup   ;up=1
             beq ...up
             
-            cmp !kliftstatedown
+            cmp !kliftstatedown ;down=2
             beq ...down
             
             bra +   ;else (should not be reachable!)
@@ -219,8 +209,9 @@ glider: {
                 bra +
             ...down:
                 inc !glidery
-        +
+        +   ;actually now that i think about it, what would lift state 0 even mean
         }
+        
     
         ..bounds: {
             lda !gliderx            ;hit left bound = 1
@@ -234,8 +225,16 @@ glider: {
             lda !khitboundright
             sta !gliderhitbound
         +++
-        }
         
+            lda !glidery
+            cmp !kfloor
+            beq ...hitfloor
+            bra ++++
+            ...hitfloor:
+            lda !kgliderstatelostlife
+            sta !gliderstate
+        }
+        ++++
         
         lda !gliderstate
         asl
@@ -247,10 +246,15 @@ glider: {
     .gliderstatetable: {
         ;idle        = 0
         ;movingleft  = 1
-        ;movingright = 3
-        ;turnaround  = 4
+        ;movingright = 2
+        ;turnaround  = 3
+        ;lostlife    = 4
         
-        dw #.idle, #.movingleft, #.movingright, #.turnaround
+        dw #.idle,
+           #.movingleft,
+           #.movingright,
+           #.turnaround,
+           #.lostlife
     }
     
     
@@ -258,6 +262,11 @@ glider: {
         stz !gliderhitbound     ;i cant believe this works
         lda !kliftstatedown
         sta !gliderliftstate
+        rts
+    }
+    
+    .lostlife: {
+        dec !gliderlives
         rts
     }
     

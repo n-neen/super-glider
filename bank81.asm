@@ -90,7 +90,6 @@ dma: {
         rtl
     }
 
-
     .cgramtransfur: {
         sep #$20                    ;width  register
         

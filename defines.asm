@@ -28,10 +28,6 @@
 !controller         =       $100
 
 
-;start of oam table to dma at nmi. 544 bytes long
-!oambuffer          =       $500
-;end: $720
-
 ;glider ram
 !gliderramstart     =       $0200
 !gliderx            =       !gliderramstart
@@ -42,6 +38,12 @@
 !gliderliftstate    =       !gliderramstart+10
 !gliderturntimer    =       !gliderramstart+12
 !gliderhitbound     =       !gliderramstart+14
+!gliderlives        =       !gliderramstart+16
+
+
+;start of oam table to dma at nmi. 544 bytes long
+!oambuffer          =       $500
+;end: $720
 
 
 ;object ram
@@ -61,26 +63,37 @@
 
 
 ;====================================   CONSTANTS   =======================================
-!kgliderstateidle   =       #$0000
-!kgliderstateleft   =       #$0001
-!kgliderstateright  =       #$0002
-!kfloor             =       #$00d0
-!kgliderturnamount  =       #$0008
-!kleftbound         =       #$0010
-!krightbound        =       #$00d8
-!khitboundleft      =       #$0001
-!khitboundright     =       #$0002
 
-;controller bits
-!kb                 =       #$8000
-!ky                 =       #$4000
-!kst                =       #$2000
-!ksl                =       #$1000
-!kup                =       #$0800
-!kdn                =       #$0400
-!klf                =       #$0200
-!krt                =       #$0100
-!ka                 =       #$0080
-!kx                 =       #$0040
-!kl                 =       #$0020
-!kr                 =       #$0010
+;glider constants
+!kgliderstateidle           =       #$0000
+!kgliderstateleft           =       #$0001
+!kgliderstateright          =       #$0002
+!kgliderstateturnaround     =       #$0003
+!kgliderstatelostlife       =       #$0004
+
+!kliftstateidle             =       #$0000
+!kliftstateup               =       #$0001
+!kliftstatedown             =       #$0002
+
+!kgliderturnamount          =       #$0008
+!khitboundleft              =       #$0001
+!khitboundright             =       #$0002
+
+;room constants
+!kfloor                     =       #$00d0
+!kleftbound                 =       #$0010
+!krightbound                =       #$00d8
+
+;controller bit constants
+!kb                         =       #$8000
+!ky                         =       #$4000
+!kst                        =       #$2000
+!ksl                        =       #$1000
+!kup                        =       #$0800
+!kdn                        =       #$0400
+!klf                        =       #$0200
+!krt                        =       #$0100
+!ka                         =       #$0080
+!kx                         =       #$0040
+!kl                         =       #$0020
+!kr                         =       #$0010
