@@ -112,8 +112,7 @@ get: {
         ..a: {
             bit !ka
             beq ...noa
-            ldx !kliftstatedown
-            stx !gliderliftstate
+            stz !gliderliftstate
             ...noa:
         }
         
@@ -145,7 +144,8 @@ get: {
         ..l: {
             bit !kl
             beq ...nol
-            stz !gliderliftstate
+            ldx !kliftstatedown
+            stx !gliderliftstate
             ...nol:
         }
         
@@ -162,6 +162,20 @@ get: {
 }
 
 glider: {
+
+    .init: {
+        lda #$0010
+        sta !gliderx            ;glider initial position
+        sta !glidery
+        lda !kliftstatedown
+        sta !gliderliftstate
+        
+        lda #$0004
+        sta !gliderlives
+        
+        rtl
+    }
+
     .update: {
         ;write to oam table
         ;todo: use spritemaps
@@ -210,7 +224,9 @@ glider: {
             ...down:
                 inc !glidery
         +   ;actually now that i think about it, what would lift state 0 even mean
+        
         }
+        
         
     
         ..bounds: {
@@ -260,8 +276,6 @@ glider: {
     
     .idle: {
         stz !gliderhitbound     ;i cant believe this works
-        lda !kliftstatedown
-        sta !gliderliftstate
         rts
     }
     

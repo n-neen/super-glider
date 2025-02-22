@@ -29,16 +29,16 @@
 
 
 ;glider ram
-!gliderramstart     =       $0200
-!gliderx            =       !gliderramstart
-!glidery            =       !gliderramstart+2
-!gliderstate        =       !gliderramstart+4
-!gliderdir          =       !gliderramstart+6
-!glidermovetimer    =       !gliderramstart+8
-!gliderliftstate    =       !gliderramstart+10
-!gliderturntimer    =       !gliderramstart+12
-!gliderhitbound     =       !gliderramstart+14
-!gliderlives        =       !gliderramstart+16
+!gliderramstart     =       $0200                   ;base address
+!gliderx            =       !gliderramstart         ;x coord
+!glidery            =       !gliderramstart+2       ;y coord
+!gliderstate        =       !gliderramstart+4       ;movement state
+!gliderdir          =       !gliderramstart+6       ;left or right (1 or 2)
+!glidermovetimer    =       !gliderramstart+8       ;for moving left and right
+!gliderliftstate    =       !gliderramstart+10      ;vent state: up down or the mysterious neither
+!gliderturntimer    =       !gliderramstart+12      ;unimplemented
+!gliderhitbound     =       !gliderramstart+14      ;boolean (zero or nonzero)
+!gliderlives        =       !gliderramstart+16      ;int
 
 
 ;start of oam table to dma at nmi. 544 bytes long
