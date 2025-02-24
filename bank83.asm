@@ -10,6 +10,24 @@ lorom
 
 org $838000
 
+room: {
+    .load: {
+    ;takes input:
+        ;room pointer
+    ;produces output:
+        ;load object list
+        ;write object tilemap buffer (layer 1)
+        ;load background (layer 2)
+        ;load enemies
+        ;load prize sprites
+    
+    rtl
+    }
+}
+
+
+
+
     thehouse:                       ;house struct                   ;
         db $02                      ;number of rooms                ;1
         db $01                      ;starting room index            ;1

@@ -58,8 +58,10 @@
 
 ;arrays' ends                   +!objectarraysize for total size
 
-!objtilemap         =       $7f6000
 
+
+
+!objtilemapbuffer       =       $7f6000
 
 
 ;====================================   CONSTANTS   =======================================

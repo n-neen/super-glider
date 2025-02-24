@@ -449,7 +449,7 @@ loadingtable: {
             %loadtablentry(#splashtilemap,          $0800, !bg2tilemap,      $00)     ;splash = 00
             %loadtablentry(#bg1tilemap,             $0800, !bg2tilemap,      $01)     ;bg1    = 01
             %loadtablentry(#bg2tilemap,             $0800, !bg2tilemap,      $02)     ;bg2    = 02
-            %loadtablentry(#objtilemap,             $0800, !bg1tilemap,      $03)     ;obj    = 03           ;object layer
+            %loadtablentry(#objtilemap,             $0800, !objtilemapbuffer,$03)     ;obj    = 03           ;object layer
         }
         
         ..palettes: {

@@ -21,7 +21,7 @@ org $848000
 !localtempvar2          =       $12
 
 
-!objtilemap             =       $7f6000
+!objtilemapbuffer       =       $7f6000
 
 
 
@@ -133,6 +133,39 @@ obj: {
         plx
         plb
         rtl
+    }
+    
+    .tilemap: {
+        ..upload: {
+            lda #$6000
+            sta !dmasrcptr
+            lda #$007f
+            sta !dmasrcbank
+            lda #$0800
+            sta !dmasize
+            lda #!bg1tilemap
+            sta !dmabaseaddr
+            
+            jsl dma_vramtransfur
+            rtl
+        }
+        
+        ..init: {
+            ;call from newgame
+            ;clear 7f6000-6800 for obj tilemap
+            phb
+            
+            pea $7f7f       ;#$7f7f
+            plb : plb
+            
+            ldx #$0800
+        -   stz $6000,x
+            dex : dex
+            bne -
+            
+            plb
+            rtl
+        }
     }
     
     

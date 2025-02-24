@@ -40,7 +40,7 @@ debugflag:
     dw $0000
 
 
-boot: {
+boot:
     sei
     clc
     xce             ;enable native mode
@@ -65,6 +65,15 @@ clear7e:
 -   stz $0000,x     ;loop to clear all of $7e
     dex : dex       ;definitely don't jsr to here or you'll obliterate your return address lol
     bne -
+    
+clear7f:
+    pea $7f7f
+    plb : plb
+    ldx #$7ffe
+--  stz $0000,x
+    stz $8000,x
+    dex : dex
+    bne --
     
 
 init:
@@ -121,7 +130,7 @@ init:
         
         jsl dma_clearvram
         
-}   ;fall through to main
+    ;fall through to main
 
 
 ;===========================================================================================
@@ -153,6 +162,7 @@ main: {
         dw #playgame        ;3
         dw #gameover        ;4
         dw #debug           ;5
+        dw #loadroom        ;6
     }
 }
 
@@ -163,7 +173,6 @@ main: {
 splashsetup: {
     jsr waitfornmi
     jsr screenoff           ;enable forced blank to to the following dmas
-    
     
     lda #$0000              ;load gfx, tilemap, and palettes
     jsl load_background     ;for background 00 (splash screen)
@@ -226,6 +235,8 @@ newgame: {
     
     lda #$0003
     jsl load_background     ;load obj tilemap for layer 1 (called background type 3 for now)
+    
+    jsl obj_tilemap_init
     
     lda #$0000
     jsl load_sprite         ;load sprite data 0 (glider)
@@ -440,6 +451,21 @@ scroll: {
     }
 }
 
+;===========================================================================================
+;================================   STATE 5:  LOAD ROOM   ==================================
+;===========================================================================================
+
+loadroom: {
+    jsr screenoff
+    jsl room_load
+    jsr waitfornmi
+    jsr screenon
+    
+    lda #$0003
+    sta !gamestate
+    rts
+}
+
 
 ;===========================================================================================
 ;===================================                   =====================================
@@ -467,6 +493,7 @@ nmi: {
     beq .return
     
     jsl oam_write               ;dma from wram buffer to oam
+    jsl obj_tilemap_upload
     jsr updateppuregisters      ;read wram buffer and write register
     jsr readcontroller
     stz !nmiflag
@@ -571,6 +598,7 @@ updatebackground: {
     stz !backgroundupdateflag
 +   rts
 }
+
 
 
 errhandle: {
