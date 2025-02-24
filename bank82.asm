@@ -74,18 +74,18 @@ get: {
         ..up: {                                 ;dpad start
             bit !kup
             beq ...noup
-            pha
-            %gliderpositionsub(!glidery)
-            pla
+            ;pha
+            ;%gliderpositionsub(!glidery)       ;debug only!
+            ;pla
             ...noup:
         }
         
         ..dn: {
             bit !kdn
             beq ...nodn
-            pha
-            %gliderpositionadd(!glidery)
-            pla
+            ;pha
+            ;%gliderpositionadd(!glidery)       ;debug only!
+            ;pla
             ...nodn:
         }
         
@@ -164,15 +164,20 @@ get: {
 glider: {
 
     .init: {
-        lda #$0010
-        sta !gliderx            ;glider initial position
-        sta !glidery
-        lda !kliftstatedown
-        sta !gliderliftstate
+        ;this is laid out like this so we can:
+        ;call glider_init on newgame
+        ;call glider_init_spawn on death to reset
         
         lda #$0004
         sta !gliderlives
         
+        ..spawn: {
+            lda #$0010
+            sta !gliderx            ;glider initial position
+            sta !glidery
+            lda !kliftstatedown
+            sta !gliderliftstate
+        }
         rtl
     }
 
@@ -201,34 +206,56 @@ glider: {
         rts
     }
     
+    .gameover: {
+        jml boot
+    }
+    
     .handle: {
         ;high level checks that need to be done regardless of glider state go here
         ;like falling (happens always unless on a vent)
         ;or room bounds (always needs to be checked)
+        ;then go to state handler
         
-        ..falling: {
+        lda !gliderlives
+        beq glider_gameover
+        
+        ..lift: {
             lda !gliderliftstate
-            beq +
+            beq ..bounds            ;if 0, exit (like we hit the ceiling)
             
-            cmp !kliftstateup   ;up=1
+            cmp !kliftstateup       ;if 1, go up
             beq ...up
             
-            cmp !kliftstatedown ;down=2
+            cmp !kliftstatedown     ;if 2, go down
             beq ...down
             
-            bra +   ;else (should not be reachable!)
+            bra +                   ;else (should not be reachable!)
             
             ...up:
-                dec !glidery
-                bra +
+                lda !glidery
+                cmp !kceiling       ;if hit ceiling, exit (do not go up or down)
+                bmi +
+                dec !glidery        ;else, go up like normal
+                bra ..bounds
             ...down:
+                lda !glidery
+                cmp !kfloor
+                bpl ...hitfloor
                 inc !glidery
-        +   ;actually now that i think about it, what would lift state 0 even mean
+                bra ..bounds
+                
+            +  
+            stz !gliderliftstate    ;we only end up here if we hit the ceiling
+            bra ..bounds
+            
+            ...hitfloor:
+            stz !gliderliftstate
+            lda !kgliderstatelostlife
+            sta !gliderstate
+            
+        }   ;fall through to ..bounds
         
-        }
         
-        
-    
         ..bounds: {
             lda !gliderx            ;hit left bound = 1
             cmp !kleftbound
@@ -242,37 +269,32 @@ glider: {
             sta !gliderhitbound
         +++
         
-            lda !glidery
-            cmp !kfloor
-            beq ...hitfloor
-            bra ++++
-            ...hitfloor:
-            lda !kgliderstatelostlife
-            sta !gliderstate
         }
-        ++++
         
-        lda !gliderstate
-        asl
-        tax
-        jsr (.gliderstatetable,x)
-        rts
-    }
-    
-    .gliderstatetable: {
-        ;idle        = 0
-        ;movingleft  = 1
-        ;movingright = 2
-        ;turnaround  = 3
-        ;lostlife    = 4
         
-        dw #.idle,
-           #.movingleft,
-           #.movingright,
-           #.turnaround,
-           #.lostlife
+        ..state: {
+            lda !gliderstate
+            asl
+            tax
+            jsr (glider_handle_state_table,x)
+            rts
+            
+            ...table: {
+                ;idle        = 0
+                ;movingleft  = 1
+                ;movingright = 2
+                ;turnaround  = 3
+                ;lostlife    = 4
+        
+                dw #.idle,
+                   #.movingleft,
+                   #.movingright,
+                   #.turnaround,
+                   #.lostlife
+            }
+        }
     }
-    
+
     
     .idle: {
         stz !gliderhitbound     ;i cant believe this works
@@ -281,6 +303,8 @@ glider: {
     
     .lostlife: {
         dec !gliderlives
+        stz !gliderstate
+        jsl glider_init_spawn
         rts
     }
     

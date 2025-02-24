@@ -80,7 +80,8 @@
 !khitboundright             =       #$0002
 
 ;room constants
-!kfloor                     =       #$00d0
+!kceiling                   =       #$0010
+!kfloor                     =       #$00c8
 !kleftbound                 =       #$0010
 !krightbound                =       #$00d8
 
