@@ -26,7 +26,7 @@
 !localtempvar2      =       $12
 
 !controller         =       $100
-
+!multresult         =       $102
 
 ;glider ram
 !gliderramstart     =       $0200                   ;base address

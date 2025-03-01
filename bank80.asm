@@ -235,6 +235,7 @@ newgame: {
     
     lda #$0003
     jsl load_background     ;load obj tilemap for layer 1 (called background type 3 for now)
+                            ;now that the wram buffer exists, this mainly just loads the graphics
     
     jsl obj_tilemap_init
     

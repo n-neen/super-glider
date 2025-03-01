@@ -103,12 +103,34 @@ obj: {
     .place: {
         ;deals with an instance of an object, called after it is init
         ;get position in room, from room object list, and write it in the array
+        ;argument: x = obj id
+        
         rtl
     }
     
     .writetilemap: {
         ;deals with an instance of an object
-        ;get object ID, get x and y post, get tilemap pointer, draw
+        ;get object ID, get x and y pos, get tilemap pointer, draw
+        ;argument: x=object id
+        
+        lda !objxcoord,x
+        sta !localtempvar
+        
+        lda !objycoord,x
+        sta !localtempvar2
+        
+        ldx !localtempvar
+        ldy !localtempvar2
+        
+        jsl multiply
+        lda !multresult
+        asl
+        tax
+        
+        ;waves arms
+        
+        sta $7f6000,x
+        
         rtl
     }
     

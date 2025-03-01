@@ -460,3 +460,29 @@ loadingtable: {
         }
     }
 }
+
+;===========================================================================================
+;==========================  M A T H   R O U T I N E S  ====================================
+;===========================================================================================
+
+multiply: {
+    ;takes arguments:
+    ;x and y: numbers to multiply
+    ;x=length of row
+    ;y=number of rows
+    
+    ;returns:
+    ;answer in !multresult
+    
+    tax
+    stx $10
+    
+-   clc
+    adc $10
+    dey
+    bne -
+    
+    sta !multresult
+    
+    rtl
+}
