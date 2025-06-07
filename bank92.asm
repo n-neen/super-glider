@@ -36,16 +36,13 @@ org $928000
 
 gliderdata:
     .header:
-        dw #.graphics, #.spritemap, #.palette, #.hitbox
+        dw #.graphics, #.palette, #.hitbox
         
     .hitbox:                ;radii
         db $0a, $05         ;x, y
         
     .graphics:
         incbin "./data/sprites/glider.gfx"
-    
-    .spritemap:
-        incsrc "./data/sprites/glider_spritemap.asm"
     
     .palette:
         ;incbin "./data/sprites/glider.pal"
@@ -69,3 +66,5 @@ bg2tilemap:
     
 objtilemap:
     incbin "./data/tilemaps/obj_initial_tilemap.bin"
+    
+;warn pc

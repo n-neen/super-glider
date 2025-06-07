@@ -19,6 +19,8 @@ org $848000
 
 !localtempvar           =       $10
 !localtempvar2          =       $12
+!localtempvar3          =       $14
+
 
 
 !objtilemapbuffer       =       $7f6000
@@ -103,15 +105,21 @@ obj: {
     .place: {
         ;deals with an instance of an object, called after it is init
         ;get position in room, from room object list, and write it in the array
-        ;argument: x = obj id
+        
+        
         
         rtl
     }
+    
     
     .writetilemap: {
         ;deals with an instance of an object
         ;get object ID, get x and y pos, get tilemap pointer, draw
         ;argument: x=object id
+        
+        txy
+        phk
+        plb
         
         lda !objxcoord,x
         sta !localtempvar
@@ -119,17 +127,33 @@ obj: {
         lda !objycoord,x
         sta !localtempvar2
         
-        ldx !localtempvar
-        ldy !localtempvar2
+        lda !objsizex,x
+        sta !localtempvar3
         
-        jsl multiply
-        lda !multresult
-        asl
+        lda #$0000
+        ldx !localtempvar2
+        -
+        clc
+        adc #$0020
+        dex
+        bne -
+        
+        clc
+        adc !localtempvar
         tax
         
-        ;waves arms
         
-        sta $7f6000,x
+        lda !objtilemapointer,y
+        sta !localtempvar2
+        
+        ldy #$0000
+        --
+        lda [!localtempvar2],y
+        sta !objtilemapbuffer,x
+        iny : iny
+        inx : inx
+        cpy !localtempvar3
+        bne --
         
         rtl
     }
@@ -191,10 +215,16 @@ obj: {
     }
     
     
+    .collision: {
+        rtl
+    }
+    
+    
     .headers: {
         ;object types
         ..vent: {     ;tilemap pointer, xsize, ysize
             dw #obj_tilemaps_floorvent, $0006, $0002
+                ;0              1       2  3   4  5
         }
         
         ..candle: {

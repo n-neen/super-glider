@@ -38,9 +38,9 @@ endmacro
     
 game: {
     .play: {
-        jsr get_input
-        jsr glider_update
+        jsr getinput
         jsr glider_handle
+        jsr glider_draw
         rtl
     }
     
@@ -51,114 +51,128 @@ game: {
     }
 }
 
-get: {
-    .input: {
-        phx
-        ;use x for general stores here to preserve A without needing to push
-        lda !controller
-        
-        ..st: {
-            bit !kst
-            beq ...nost
+noinput: {
+    stz !gliderstate
+    rts
+}
+
+
+getinput: {
+    phx
+    ;use x for general stores here to preserve A
+    lda !controller
+    ;beq noinput
+    
+    .st: {
+        bit !kst
+        beq ..nost
             ;if start pressed go here
-            ...nost:
-        }
-        
-        ..sl: {
-            bit !ksl
-            beq ...nosl
+        ..nost:
+    }
+    
+    .sl: {
+        bit !ksl
+        beq ..nosl
             ;if select pressed go here
-            ...nosl:
-        }
-        
-        ..up: {                                 ;dpad start
-            bit !kup
-            beq ...noup
+        ..nosl:
+    }
+    
+    .up: {                                      ;dpad start
+        bit !kup
+        beq ..noup
             ;pha
             ;%gliderpositionsub(!glidery)       ;debug only!
             ;pla
-            ...noup:
-        }
-        
-        ..dn: {
-            bit !kdn
-            beq ...nodn
+        ..noup:
+    }
+    
+    .dn: {
+        bit !kdn
+        beq ..nodn
             ;pha
             ;%gliderpositionadd(!glidery)       ;debug only!
             ;pla
-            ...nodn:
-        }
+        ..nodn:
+    }
+    
+    .lf: {
+        bit !klf
+        beq ..nolf
         
-        ..lf: {
-            bit !klf
-            beq ...nolf
             ldx !kgliderstateleft
-            stx !gliderstate
+            stx !glidernextstate
+            
+            ldx !kgliderdirleft
+            stx !gliderdir
+        
             ldx #$0002
             stx !glidermovetimer
-            ...nolf:
-        }
+        ..nolf:
+    }
+    
+    .rt: {
+        bit !krt
+        beq ..nort
         
-        ..rt: {
-            bit !krt
-            beq ...nort
             ldx !kgliderstateright
-            stx !gliderstate
+            stx !glidernextstate
+            
+            ldx !kgliderdirright
+            stx !gliderdir
+        
             ldx #$0002
             stx !glidermovetimer
-            ...nort:
-        }                                       ;dpad end
-        
-        ..a: {
-            bit !ka
-            beq ...noa
+        ..nort:
+    }                                           ;dpad end
+    
+    .a: {
+        bit !ka
+        beq ..noa
             stz !gliderliftstate
-            ...noa:
-        }
-        
-        ..x: {
-            bit !kx
-            beq ...nox
+        ..noa:
+    }
+    
+    .x: {
+        bit !kx
+        beq ..nox
             ;if pressed go here
             ;current plan: fire bands
-            ...nox:
-        }
-        
-        ..b: {
-            bit !kb
-            beq ...nob
+        ..nox:
+    }
+    
+    .b: {
+        bit !kb
+        beq ..nob
             ;if pressed go here
             ;current plan: turn glider around
-            ;
-            ...nob:
-        }
-        
-        ..y: {
-            bit !ky
-            beq ...noy
+        ..nob:
+    }
+    
+    .y: {
+        bit !ky
+        beq ..noy
             ;if pressed go here
             ;current plan: use battery
-            ...noy:
-        }
-        
-        ..l: {
-            bit !kl
-            beq ...nol
+        ..noy:
+    }
+    
+    .l: {
+        bit !kl
+        beq ..nol
             ldx !kliftstatedown
             stx !gliderliftstate
-            ...nol:
-        }
-        
-        ..r: {
-            bit !kr
-            beq ...nor
+        ..nol:
+    }
+    
+    .r: {
+        bit !kr
+        beq ..nor
             ldx !kliftstateup
             stx !gliderliftstate
-            ...nor:
-        }
-        plx
-        rts
+        ..nor:
     }
+    plx
+    rts
 }
 
 glider: {
@@ -181,28 +195,122 @@ glider: {
         rtl
     }
 
-    .update: {
-        ;write to oam table
-        ;todo: use spritemaps
-        ;this thing is all temp badness
+    .draw: {
+        ;todo: high table macro like this
+       
+        macro oambufferwrite(spriteindex,spritebyte)
+            !kspriteentrylength     =   $0004
+            sta !oambuffer+(!kspriteentrylength*<spriteindex>)+<spritebyte>
+        endmacro
+        
+        
+        
         sep #$20
         
+        ;=========================================================glider sprite 1
+        
+        lda !gliderx                    ;x position
+        clc
+        adc #$f0
+        %oambufferwrite(0, 0)
+        
+        lda !glidery                    ;y position
+        %oambufferwrite(0, 1)
+        
+        lda #$00                        ;tile index
+        %oambufferwrite(0,2)
+        
+        lda #%00110000                  ;properties (tile flip, priority, palette)
+        %oambufferwrite(0, 3)
+        
+        lda !oambuffer+$200
+        ora #%00000010                  ;high table (size select)
+        sta !oambuffer+$200
+        
+        ;=========================================================glider sprite 2
+        
         lda !gliderx
-        sta !oamwramtable           ;update glider position
+        %oambufferwrite(1, 0)
         
         lda !glidery
-        sta !oamwramtable+1
+        %oambufferwrite(1, 1)
         
-        lda !oamwramtable+3
-        ora #%00110000
-        sta !oamwramtable+3
+        lda #$02
+        %oambufferwrite(1, 2)
         
-        lda !oamwramtable+$200
-        ora #%00000010
-        sta !oamwramtable+$200
+        lda #%00110000
+        %oambufferwrite(1, 3)
         
+        lda !oambuffer+$200
+        ora #%00001000
+        sta !oambuffer+$200
+        
+        ;=========================================================glider sprite 3
+        
+        lda !gliderx
+        clc
+        adc #$10
+        %oambufferwrite(2, 0)
+        
+        lda !glidery
+        %oambufferwrite(2, 1)
+        
+        lda #$04
+        %oambufferwrite(2, 2)
+        
+        lda #%00110000
+        %oambufferwrite(2, 3)
+        
+        lda !oambuffer+$200
+        ora #%00100000
+        sta !oambuffer+$200
         
         rep #$20
+        rts
+    }
+    
+    .newdraw: {
+        ;todo: read from spritemaps_glider in spritemaps.asm
+        phx
+        phb
+        
+        phk
+        plb
+        
+        
+        lda !gliderdir                  ;uses same left = 1, right = 2 convention
+        asl
+        tax
+        lda spritemap_pointers,x
+        
+        sta !spritemappointer           ;!spritemappointer = pointer to spritemap
+        lda (!spritemappointer)         ;number of sprites to write
+        and #$00ff
+        sta !numberofsprites
+        
+        
+        ldx #$0000                      ;x = 0
+        ;x should eventually be set to an oam index value here
+        inc !spritemappointer
+        
+        ;low table loop:
+        -
+        lda (!spritemappointer)
+        sta !oambuffer,x
+        inx : inx                       ;x = 2
+        inc !spritemappointer
+        inc !spritemappointer
+        lda (!spritemappointer)
+        sta !oambuffer,x
+        
+        dec !numberofsprites
+        bpl -
+        
+        
+        ;todo: the rest of this. time to sleep
+        
+        plb
+        plx
         rts
     }
     
@@ -259,12 +367,13 @@ glider: {
         ..bounds: {
             lda !gliderx            ;hit left bound = 1
             cmp !kleftbound
-            bpl ++
+            bne ++
             lda !khitboundleft
             sta !gliderhitbound
+            bra +++
         ++
             cmp !krightbound        ;hit right bound = 2
-            bmi +++
+            bne +++
             lda !khitboundright
             sta !gliderhitbound
         +++
@@ -274,23 +383,30 @@ glider: {
         
         ..state: {
             lda !gliderstate
+            cmp !glidernextstate
+            bne ..state_changestate
+            ...resume:
+            lda !gliderstate
             asl
             tax
             jsr (glider_handle_state_table,x)
             rts
             
+            ...changestate: {
+                ;todo: something
+                lda !glidernextstate
+                sta !gliderstate
+                jmp ..state_resume
+            }
+            
             ...table: {
-                ;idle        = 0
-                ;movingleft  = 1
-                ;movingright = 2
-                ;turnaround  = 3
-                ;lostlife    = 4
-        
-                dw #.idle,
-                   #.movingleft,
-                   #.movingright,
-                   #.turnaround,
-                   #.lostlife
+                dw #.idle,              ;0
+                   #.movingleft,        ;1
+                   #.movingright,       ;2
+                   #.tipleft,           ;3
+                   #.tipright,          ;4
+                   #.turnaround,        ;5
+                   #.lostlife           ;6
             }
         }
     }
@@ -311,34 +427,49 @@ glider: {
     .movingleft: {
         lda !gliderhitbound
         cmp !khitboundleft      ;left bound = 1
-        beq +
+        beq ++
         
         lda !glidermovetimer
         beq +
         %gliderpositionsub(!gliderx)
+        
         dec !glidermovetimer
         beq ++
     +   
         rts
     
-    ++  stz !gliderstate
+    ++  stz !glidernextstate
+        stz !glidermovetimer
         rts
     }
     
     .movingright: {
         lda !gliderhitbound
         cmp !khitboundright     ;right bound = 2
-        beq +
+        beq ++
         
         lda !glidermovetimer
         beq +
         %gliderpositionadd(!gliderx)
+        
         dec !glidermovetimer
         beq ++
     +   
         rts
     
-    ++  stz !gliderstate
+    ++  stz !glidernextstate
+        
+        stz !glidermovetimer
+        rts
+    }
+    
+    .tipleft: {
+        ;
+        rts
+    }
+    
+    .tipright: {
+        ;
         rts
     }
     
@@ -348,12 +479,14 @@ glider: {
     }
     
     .turnaround: {
-        lda !gliderturntimer
-        beq +
-        lda !kgliderturnamount
-        
-    +   stz !gliderstate
+        lda !gliderdir
+        eor #$0001
+        sta !gliderdir
         rts
     }
     
 }
+
+incsrc "./data/sprites/spritemaps.asm"
+
+;warn pc
