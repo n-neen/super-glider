@@ -219,12 +219,17 @@ obj: {
         rtl
     }
     
+    .pointers: {
+        dw #obj_headers_vent,
+           #obj_headers_candle,
+           #obj_headers_fanR
+    }
     
     .headers: {
         ;object types
         ..vent: {     ;tilemap pointer, xsize, ysize
             dw #obj_tilemaps_floorvent, $0006, $0002
-                ;0              1       2  3   4  5
+                ;0              1       3  2   5  4
         }
         
         ..candle: {

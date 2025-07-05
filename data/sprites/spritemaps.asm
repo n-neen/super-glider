@@ -8,7 +8,9 @@
 
 spritemap: {
     .pointers: {
-        dw .glider_idle,
+        ;see glider constants in defines.asm
+        ;these correspond to !gliderstate
+        dw .glider_left,
            .glider_left,
            .glider_right,
            .glider_tipleft,
@@ -24,7 +26,7 @@ spritemap: {
         
         ..left: {
             db $03
-            ;  x,   y,   tile,  properties, high bits (size select)
+            ;  x,   y,   tile,  properties, high table bits (size select)
             db $f0, $00, $00,   %00110000,  %00000010
             db $00, $00, $02,   %00110000,  %00001000
             db $10, $00, $04,   %00110000,  %00100000

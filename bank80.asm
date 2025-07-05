@@ -127,6 +127,7 @@ init:
         rep #$20
         
         jsl dma_clearvram
+        ;jsr hightablefill
         
     ;fall through to main
 
@@ -143,12 +144,14 @@ main: {
     }
         
     .statehandle: {
-        jsr waitfornmi
         inc !maincounter                ;main switch case jump table loop
         lda !gamestate
         asl
         tax
         jsr (main_statetable,x)
+        
+        jsr debug_showcpu
+        jsr waitfornmi
         
         jmp .statehandle
     }
@@ -249,6 +252,12 @@ newgame: {
     
     jsl glider_init
     
+    ;sep #$20
+    ;lda $2133
+    ;ora #%00000000         ;interlacingtest
+    ;sta $2133
+    ;rep #$20
+    
     jsr screenon
     
     lda #$0003
@@ -268,19 +277,9 @@ newgame: {
 
 
 playgame: {
-    
-    ;stz !nmiflag
-    ;sep #$20
-    ;lda #$80
-    ;sta $4200
-    ;rep #$20
-    
     .loop: {
-        jsr waitfornmi
         inc !framecounter
         jsl game_play       ;one iteration (frame) of handling gameplay happens here
-        
-        ;if [youdied]: jmp .out
         rts
     }
     
@@ -308,6 +307,13 @@ gameover: {
 
 
 debug: {
+    .showcpu: {
+        jsr screenoff
+        nop #20
+        jsr screenon
+        rts
+    }
+    
 
     ;todo: write whatever routines here that you want
     ;to be useful for whatever
@@ -607,6 +613,16 @@ errhandle: {
 
 irq: {
     rti
+}
+
+hightablefill: {
+    lda #$aaaa
+    ldx #$0080
+    -
+    sta !oambuffer,x
+    dex : dex
+    bpl -
+    rts
 }
 
 ;warn pc

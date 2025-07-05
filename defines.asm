@@ -25,8 +25,11 @@
 !localtempvar       =       $10
 !localtempvar2      =       $12
 
+!oamentrypointbckp  =       $ec
+!oamentrypoint      =       $ee
 !numberofsprites    =       $f0                     ;used by oam routine
 !spritemappointer   =       $f2
+!oamhightableindex  =       $f4
 
 !controller         =       $100
 !multresult         =       $102
@@ -43,6 +46,8 @@
 !gliderhitbound     =       !gliderramstart+14      ;boolean (zero or nonzero)
 !gliderlives        =       !gliderramstart+16      ;int
 !glidernextstate    =       !gliderramstart+18      ;next movement state
+!glidersubx         =       !gliderramstart+20      ;subpixel x
+!glidersuby         =       !gliderramstart+22      ;subpixel y
 
 
 ;start of oam table to dma at nmi. 544 bytes long
@@ -78,6 +83,8 @@
 !kgliderstatetipright       =       #$0004
 !kgliderstateturnaround     =       #$0005
 !kgliderstatelostlife       =       #$0006
+!kgliderxsubspeed           =       #$ff00      ;subpixel speed
+!kgliderysubspeed           =       #$9c00
 
 !kgliderdirleft             =       #$0001      ;i guess dir = 0 isn't a thing huh
 !kgliderdirright            =       #$0002

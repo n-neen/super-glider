@@ -3,35 +3,6 @@ lorom
 org $828000
 
 ;===========================================================================================
-;===================================  D E F I N E S  =======================================
-;===========================================================================================
-
-;moved to defines.asm
-
-
-;===========================================================================================
-;====================================  M A C R O S  ========================================
-;===========================================================================================
-
-;local constant
-!kgliderspeed        =       #$0002
-
-macro gliderpositionadd(axis)
-    lda <axis>
-    clc
-    adc !kgliderspeed
-    sta <axis>
-endmacro
-
-macro gliderpositionsub(axis)
-    lda <axis>
-    sec
-    sbc !kgliderspeed
-    sta <axis>
-endmacro
-
-
-;===========================================================================================
 ;=================================    G A M E P L A Y    ===================================
 ;===========================================================================================
 
@@ -40,7 +11,13 @@ game: {
     .play: {
         jsr getinput
         jsr glider_handle
+        ;handle enemies
+        ;handle objects
+        
         jsr glider_draw
+        ;jsr glider_newdraw
+        ;draw enemies
+        ;draw objects
         rtl
     }
     
@@ -186,7 +163,7 @@ glider: {
         sta !gliderlives
         
         ..spawn: {
-            lda #$0010
+            lda #$0020
             sta !gliderx            ;glider initial position
             sta !glidery
             lda !kliftstatedown
@@ -218,7 +195,7 @@ glider: {
         %oambufferwrite(0, 1)
         
         lda #$00                        ;tile index
-        %oambufferwrite(0,2)
+        %oambufferwrite(0, 2)
         
         lda #%00110000                  ;properties (tile flip, priority, palette)
         %oambufferwrite(0, 3)
@@ -269,50 +246,127 @@ glider: {
         rts
     }
     
-    .newdraw: {
-        ;todo: read from spritemaps_glider in spritemaps.asm
-        phx
-        phb
-        
-        phk
-        plb
-        
-        
-        lda !gliderdir                  ;uses same left = 1, right = 2 convention
-        asl
-        tax
-        lda spritemap_pointers,x
-        
-        sta !spritemappointer           ;!spritemappointer = pointer to spritemap
-        lda (!spritemappointer)         ;number of sprites to write
-        and #$00ff
-        sta !numberofsprites
-        
-        
-        ldx #$0000                      ;x = 0
-        ;x should eventually be set to an oam index value here
-        inc !spritemappointer
-        
-        ;low table loop:
-        -
-        lda (!spritemappointer)
-        sta !oambuffer,x
-        inx : inx                       ;x = 2
-        inc !spritemappointer
-        inc !spritemappointer
-        lda (!spritemappointer)
-        sta !oambuffer,x
-        
-        dec !numberofsprites
-        bpl -
-        
-        
-        ;todo: the rest of this. time to sleep
-        
+    .nodraw: {
+        lda !oamentrypointbckp
+        sta !oamentrypoint
+        rep #$20
+        plp
         plb
         plx
         rts
     }
+    
+    .newdraw: {
+        ;todo: read from spritemaps_glider in spritemaps.asm
+        ;prospective outline:
+        ;y = oam entry index
+        ;actually no, this drawing routine happens first
+        ;so we draw glider then save the starting index for the next objects drawn
+        
+        phx
+        phb
+        php
+        
+        phk
+        plb
+        
+        ldy #$0000
+        
+        stz !oamhightableindex
+        stz !oamentrypoint
+        
+        lda !gliderstate                ;see glider constants in defines.asm
+        ;beq glider_nodraw               ;todo
+        asl
+        tax
+        lda spritemap_pointers,x
+        tax                             ;x = spritemap pointer
+        
+        sep #$20
+        
+        lda $0000,x                     ;number of sprites in spritemap
+        sta !numberofsprites
+        beq +
+        
+        inx
+        
+        -
+        lda $0000,x                     ;x position
+        clc
+        adc !gliderx
+        sta !oambuffer,y
+        iny
+        
+        lda $0001,x                     ;y position
+        clc
+        adc !glidery
+        sta !oambuffer,y
+        iny
+        
+        lda $0002,x                     ;tile number
+        sta !oambuffer,y
+        iny
+        
+        lda $0003,x                     ;properties
+        sta !oambuffer,y
+        iny
+        
+        jsr .newdraw_hightablebitwrite
+        
+        txa
+        clc
+        adc #$05                        ;x = x + 5 (next sprite entry)
+        tax
+        
+        dec !numberofsprites
+        bne -
+        
+        sty !oamentrypoint              ;glider gets drawn first, then the other sprites
+        sty !oamentrypointbckp          ;so we need to keep track of oam entry point after each drawing stage
+        
+    +   rep #$20
+        plp
+        plb
+        plx
+        rts
+        
+        
+        ..hightablebitwrite: {
+            ;parameters:
+            ;x = spritemap pointer
+            ;y = oam index
+            ;sep #$20
+            
+            ;returns:
+            ;reads oam high table bits from spritemap
+            ;writes them to high table
+            
+            phy
+            
+            lda $0004,x                 ;a = high table bits
+            sta !localtempvar
+            
+            tya
+            lsr : lsr
+            tay
+            lda oamhightablebittable,y
+            tay
+            ;y is now high table index
+            ;da !oambuffer+$200,y
+            lda !oambuffer+$200,y
+            ora !localtempvar
+            sta !oambuffer+$200,y
+            
+            ply
+            rts
+        }
+    }
+    
+    .hightablewrite: {
+        ;todo: the thing
+        rts
+    }
+    
     
     .gameover: {
         jml boot
@@ -343,13 +397,33 @@ glider: {
                 lda !glidery
                 cmp !kceiling       ;if hit ceiling, exit (do not go up or down)
                 bmi +
-                dec !glidery        ;else, go up like normal
+                ;else, go up:
+                
+                ;the actual going of up:
+                lda !glidersuby
+                sec
+                sbc !kgliderysubspeed
+                sta !glidersuby
+                lda !glidery
+                sbc #$0000
+                sta !glidery
+                
+                
                 bra ..bounds
             ...down:
                 lda !glidery
                 cmp !kfloor
                 bpl ...hitfloor
-                inc !glidery
+                ;else, go down:
+                
+                lda !glidersuby
+                clc
+                adc !kgliderysubspeed
+                sta !glidersuby
+                lda !glidery
+                adc #$0000
+                sta !glidery
+                
                 bra ..bounds
                 
             +  
@@ -431,7 +505,15 @@ glider: {
         
         lda !glidermovetimer
         beq +
-        %gliderpositionsub(!gliderx)
+        
+        ;the actual moving of left:
+        lda !glidersubx
+        sec
+        sbc !kgliderxsubspeed
+        sta !glidersubx
+        lda !gliderx
+        sbc #$0000
+        sta !gliderx
         
         dec !glidermovetimer
         beq ++
@@ -450,7 +532,15 @@ glider: {
         
         lda !glidermovetimer
         beq +
-        %gliderpositionadd(!gliderx)
+        
+        ;the actual moving of right:
+        lda !glidersubx
+        clc
+        adc !kgliderxsubspeed
+        sta !glidersubx
+        lda !gliderx
+        adc #$0000
+        sta !gliderx
         
         dec !glidermovetimer
         beq ++
@@ -485,6 +575,41 @@ glider: {
         rts
     }
     
+}
+
+oamhightablebittable: {
+    db $00, $00, $00, $00
+    db $01, $01, $01, $01
+    db $02, $02, $02, $02
+    db $03, $03, $03, $03
+    db $04, $04, $04, $04
+    db $05, $05, $05, $05
+    db $06, $06, $06, $06
+    db $07, $07, $07, $07
+    db $08, $08, $08, $08
+    db $09, $09, $09, $09
+    db $0a, $0a, $0a, $0a
+    db $0b, $0b, $0b, $0b
+    db $0c, $0c, $0c, $0c
+    db $0d, $0d, $0d, $0d
+    db $0e, $0e, $0e, $0e
+    db $0f, $0f, $0f, $0f
+    db $10, $10, $10, $10
+    db $11, $11, $11, $11
+    db $12, $12, $12, $12
+    db $13, $13, $13, $13
+    db $14, $14, $14, $14
+    db $15, $15, $15, $15
+    db $16, $16, $16, $16
+    db $17, $17, $17, $17
+    db $18, $18, $18, $18
+    db $19, $19, $19, $19
+    db $1a, $1a, $1a, $1a
+    db $1b, $1b, $1b, $1b
+    db $1c, $1c, $1c, $1c
+    db $1d, $1d, $1d, $1d
+    db $1e, $1e, $1e, $1e
+    db $1f, $1f, $1f, $1f
 }
 
 incsrc "./data/sprites/spritemaps.asm"
