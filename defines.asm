@@ -30,6 +30,7 @@
 !numberofsprites    =       $f0                     ;used by oam routine
 !spritemappointer   =       $f2
 !oamhightableindex  =       $f4
+!spriteindex        =       $f6
 
 !controller         =       $100
 !multresult         =       $102
@@ -48,10 +49,12 @@
 !glidernextstate    =       !gliderramstart+18      ;next movement state
 !glidersubx         =       !gliderramstart+20      ;subpixel x
 !glidersuby         =       !gliderramstart+22      ;subpixel y
+!gliderturntimer    =       !gliderramstart+24
 
 
 ;start of oam table to dma at nmi. 544 bytes long
 !oambuffer          =       $500
+!oamhightable       =       !oambuffer+$200
 ;end: $720
 
 
@@ -96,6 +99,7 @@
 !kgliderturnamount          =       #$0008
 !khitboundleft              =       #$0001
 !khitboundright             =       #$0002
+!kturnaroundcooldown        =       #$0010
 
 ;room constants
 !kceiling                   =       #$0010

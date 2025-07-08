@@ -6,6 +6,18 @@ org $828000
 ;=================================    G A M E P L A Y    ===================================
 ;===========================================================================================
 
+hightablejank: {
+    phx
+    ldx #$0020
+-   lda !oamhightable,x
+    ora #$aaaa
+    sta !oamhightable,x
+    dex : dex
+    bpl -
+    plx
+    rts
+}
+
     
 game: {
     .play: {
@@ -14,8 +26,9 @@ game: {
         ;handle enemies
         ;handle objects
         
-        jsr glider_draw
-        ;jsr glider_newdraw
+        ;jsr glider_draw
+        jsr glider_newdraw
+        jsr hightablejank
         ;draw enemies
         ;draw objects
         rtl
@@ -79,8 +92,8 @@ getinput: {
             ldx !kgliderstateleft
             stx !glidernextstate
             
-            ldx !kgliderdirleft
-            stx !gliderdir
+            ;ldx !kgliderdirleft
+            ;stx !gliderdir
         
             ldx #$0002
             stx !glidermovetimer
@@ -94,8 +107,8 @@ getinput: {
             ldx !kgliderstateright
             stx !glidernextstate
             
-            ldx !kgliderdirright
-            stx !gliderdir
+            ;ldx !kgliderdirright
+            ;stx !gliderdir
         
             ldx #$0002
             stx !glidermovetimer
@@ -121,7 +134,8 @@ getinput: {
         bit !kb
         beq ..nob
             ;if pressed go here
-            ;current plan: turn glider around
+            ldx !kgliderstateturnaround
+            stx !glidernextstate
         ..nob:
     }
     
@@ -274,9 +288,10 @@ glider: {
         
         stz !oamhightableindex
         stz !oamentrypoint
+        stz !spriteindex
         
-        lda !gliderstate                ;see glider constants in defines.asm
-        ;beq glider_nodraw               ;todo
+        lda !gliderdir                ;see glider constants in defines.asm
+        
         asl
         tax
         lda spritemap_pointers,x
@@ -311,13 +326,14 @@ glider: {
         sta !oambuffer,y
         iny
         
-        jsr .newdraw_hightablebitwrite
+        ;jsr .newdraw_hightablebitwrite
         
         txa
         clc
         adc #$05                        ;x = x + 5 (next sprite entry)
         tax
         
+        inc !spriteindex
         dec !numberofsprites
         bne -
         
@@ -338,26 +354,25 @@ glider: {
             ;sep #$20
             
             ;returns:
-            ;reads oam high table bits from spritemap
-            ;writes them to high table
+            ;a = oam high table bitmaks to write
             
+            php
             phy
+            phx
+            rep #$30
             
-            lda $0004,x                 ;a = high table bits
-            sta !localtempvar
+            lda oamhighbytes,y
+            and #$00ff
             
-            tya
-            lsr : lsr
+            
             tay
-            lda oamhightablebittable,y
-            tay
-            ;y is now high table index
-            ;da !oambuffer+$200,y
-            lda !oambuffer+$200,y
-            ora !localtempvar
-            sta !oambuffer+$200,y
+            lda !oamhightable,y
+            ora #$aaaa
+            sta !oamhightable,y
             
+        +   plx
             ply
+            plp
             rts
         }
     }
@@ -376,10 +391,13 @@ glider: {
         ;high level checks that need to be done regardless of glider state go here
         ;like falling (happens always unless on a vent)
         ;or room bounds (always needs to be checked)
+        ;or pose update
         ;then go to state handler
         
         lda !gliderlives
         beq glider_gameover
+        
+        jsr glider_turnaround_handletimer
         
         ..lift: {
             lda !gliderliftstate
@@ -456,6 +474,7 @@ glider: {
         
         
         ..state: {
+            
             lda !gliderstate
             cmp !glidernextstate
             bne ..state_changestate
@@ -484,7 +503,7 @@ glider: {
             }
         }
     }
-
+    
     
     .idle: {
         stz !gliderhitbound     ;i cant believe this works
@@ -569,15 +588,32 @@ glider: {
     }
     
     .turnaround: {
+        lda !gliderturntimer
+        bne +
+        
         lda !gliderdir
-        eor #$0001
+        eor !kgliderdirleft
         sta !gliderdir
+        
+        lda !kturnaroundcooldown
+        sta !gliderturntimer
+        
+    +   stz !gliderstate
+        stz !glidernextstate
         rts
+        
+        ..handletimer: {
+            lda !gliderturntimer
+            beq +
+            dec
+            sta !gliderturntimer
+            
+        +   rts
+        }
     }
-    
 }
 
-oamhightablebittable: {
+oamhighbytes: {
     db $00, $00, $00, $00
     db $01, $01, $01, $01
     db $02, $02, $02, $02
@@ -610,6 +646,41 @@ oamhightablebittable: {
     db $1d, $1d, $1d, $1d
     db $1e, $1e, $1e, $1e
     db $1f, $1f, $1f, $1f
+}
+
+oamhighbits: {
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
+    db $02, $08, $20, $80
 }
 
 incsrc "./data/sprites/spritemaps.asm"
