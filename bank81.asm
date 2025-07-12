@@ -442,21 +442,21 @@ loadingtable: {
             %loadtablentry(#splashgfx,              $8000, !bg2start,        $00)     ;splash = 00
             %loadtablentry(#bg1gfx,                 $4000, !bg2start,        $01)     ;bg1    = 01
             %loadtablentry(#bg2gfx,                 $4000, !bg2start,        $02)     ;bg2    = 02
-            %loadtablentry(#objgfx,                 $2000, !bg1start,        $03)     ;obj    = 03           ;object layer
+            %loadtablentry(#objgfx,                 $2000, !bg1start,        $03)     ;obj    = 03              ;object layer
         }
         
         ..tilemaps: {
             %loadtablentry(#splashtilemap,          $0800, !bg2tilemap,      $00)     ;splash = 00
             %loadtablentry(#bg1tilemap,             $0800, !bg2tilemap,      $01)     ;bg1    = 01
             %loadtablentry(#bg2tilemap,             $0800, !bg2tilemap,      $02)     ;bg2    = 02
-            %loadtablentry(#objtilemap,             $0800, !objtilemapbuffer,$03)     ;obj    = 03           ;object layer
+            %loadtablentry(#objtilemap,             $0800, !objtilemapbuffer,$03)     ;obj    = 03              ;object layer
         }
         
         ..palettes: {
             %loadtablentry(#splashpalette,          $0100, !palettes,        $00)     ;splash = 00
             %loadtablentry(#testpalette,            $0100, !palettes,        $01)     ;bg1    = 01
             %loadtablentry(#bg2palette,             $0100, !palettes,        $02)     ;bg2    = 02
-            %loadtablentry(#bg2palette,             $0100, !palettes,        $03)     ;obj    = 03            ;object layer
+            %loadtablentry(#bg2palette,             $0100, !palettes,        $03)     ;obj    = 03              ;object layer
         }
     }
 }

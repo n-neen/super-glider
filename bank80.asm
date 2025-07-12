@@ -252,13 +252,9 @@ newgame: {
     
     jsl glider_init
     
-    ;sep #$20
-    ;lda $2133
-    ;ora #%00000000         ;interlacingtest
-    ;sta $2133
-    ;rep #$20
-    
     jsr screenon
+    
+    jsl obj_debugmakevent
     
     lda #$0003
     sta !gamestate          ;advance to game state 3 (playgame)

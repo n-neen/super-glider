@@ -59,6 +59,8 @@
 
 
 ;object ram
+!nextobj            =       $0ffe
+
 !objectarraystart   =       $1000
 !objectarraysize    =       $0030
 !objID              =       !objectarraystart
@@ -102,9 +104,9 @@
 !kturnaroundcooldown        =       #$0010
 
 ;room constants
-!kceiling                   =       #$0010
-!kfloor                     =       #$00c8
-!kleftbound                 =       #$0012
+!kceiling                   =       #$0016
+!kfloor                     =       #$00c9
+!kleftbound                 =       #$0016
 !krightbound                =       #$00d8
 
 ;controller bit constants

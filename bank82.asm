@@ -23,8 +23,10 @@ game: {
     .play: {
         jsr getinput
         jsr glider_handle
+        
+        
         ;handle enemies
-        ;handle objects
+        jsl obj_handle
         
         ;jsr glider_draw
         jsr glider_newdraw
@@ -377,11 +379,6 @@ glider: {
         }
     }
     
-    .hightablewrite: {
-        ;todo: the thing
-        rts
-    }
-    
     
     .gameover: {
         jml boot
@@ -483,6 +480,7 @@ glider: {
             asl
             tax
             jsr (glider_handle_state_table,x)
+            jsr glider_resetliftstate               ;the actual falling of down
             rts
             
             ...changestate: {
@@ -588,17 +586,18 @@ glider: {
     }
     
     .turnaround: {
-        lda !gliderturntimer
+        lda !gliderturntimer            ;if timer = 0, exit
         bne +
         
         lda !gliderdir
-        eor !kgliderdirleft
+        eor !kgliderdirleft             ;direction switch
         sta !gliderdir
         
         lda !kturnaroundcooldown
         sta !gliderturntimer
         
-    +   stz !gliderstate
+        +
+        stz !gliderstate
         stz !glidernextstate
         rts
         
@@ -610,6 +609,12 @@ glider: {
             
         +   rts
         }
+    }
+    
+    .resetliftstate: {
+        lda !kliftstatedown
+        sta !gliderliftstate
+        rts
     }
 }
 

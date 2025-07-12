@@ -40,15 +40,28 @@ org $848000
         ;origin coords in room (where to start writing tilemap update)
     
 obj: {
+    .handle: {
+        ;debug: just do the vent thing
+        
+        lda !gliderx        ;30-50
+        cmp #$0030
+        bmi +
+        cmp #$0050
+        bpl +
+        
+        lda !kliftstateup
+        sta !gliderliftstate
+        
+    +   rtl
+    }
+    
     
     .init: {
         ;creates instance of an object
         ;takes argument:
         ;a = object header pointer
         
-        
-        ;does not fetch x, y coords, room populator will do that
-        ;via the obj_place routine below
+        ;returns: next item slot in !nextobj
         
         phx
         phy
@@ -63,10 +76,12 @@ obj: {
         -
             dex : dex                   ;we want the zero flag from lda
             lda !objID,x                ;so the loop starts at ammount+2 (dex would affect zero flag)
-            bne -
+            bpl -
             ;after we exit this loop, x will be the first available slot
         }
         pla
+        
+        stx !nextobj
         
         sta !objID,x                ;store object ID
         tay
@@ -107,6 +122,62 @@ obj: {
         ;get position in room, from room object list, and write it in the array
         
         
+        ;argument:
+        ;x = object population entry
+        ;y = what slot
+        
+        
+        phb
+        phx
+        
+        pea $8383                   ;db = 83
+        plb : plb
+        
+        lda $0000,x                 ;the pointer object header
+        tax
+        lda $840000,x               ;tilemap pointer
+        sta !objtilemapointer,y
+        plx
+        
+        lda $0002,x
+        sta !objxcoord,y
+        
+        lda $0004,x
+        sta !objycoord,y
+        
+        plb
+        rtl
+    }
+    
+    
+    .makedummy: {                   ;dummy vent
+        ;x = obj population pointer
+        txa
+        jsl obj_init
+        
+        ldx #objlist_dummy
+        ldy !nextobj
+        jsl obj_place
+        rtl
+    }
+    
+    .debugmakevent: {
+        phb
+        
+        phk
+        plb
+        
+        ldx #$0008
+        
+        -
+        lda obj_tilemaps_vent,x
+        ora #$0400
+        sta !objtilemapbuffer+(52*32)+12,x
+        
+        dex : dex
+        bpl -
+        
+        plb
         
         rtl
     }
@@ -228,8 +299,7 @@ obj: {
     .headers: {
         ;object types
         ..vent: {     ;tilemap pointer, xsize, ysize
-            dw #obj_tilemaps_floorvent, $0006, $0002
-                ;0              1       3  2   5  4
+            dw #obj_tilemaps_vent,      $0006, $0002
         }
         
         ..candle: {
@@ -242,7 +312,7 @@ obj: {
     }
     
     .tilemaps: {
-        ..floorvent: {
+        ..vent: {
             incbin "./data/tilemaps/objects/floorvent.bin"
         }
         
