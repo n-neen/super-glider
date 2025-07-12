@@ -2,7 +2,7 @@ Glider for snes
 
 based on Glider (PRO) by john calhoun
 
-build with asar 1.90pre, thedopefish fork (metconst)
+build with asar 1.91
 
 
 status:
