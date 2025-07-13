@@ -26,6 +26,7 @@
 !localtempvar2      =       $12
 !localtempvar3      =       $14
 !localtempvar4      =       $16
+!pausecounter       =       $18
 
 !oamentrypointbckp  =       $ec
 !oamentrypoint      =       $ee
@@ -112,7 +113,7 @@
 !kgliderstateturnaround     =       #$0005
 !kgliderstatelostlife       =       #$0006
 !kgliderxsubspeed           =       #$ff00      ;subpixel speed
-!kgliderysubspeed           =       #$9c00
+!kgliderysubspeed           =       #$ac00
 
 !kgliderdirleft             =       #$0001      ;i guess dir = 0 isn't a thing huh
 !kgliderdirright            =       #$0002
@@ -135,8 +136,8 @@
 ;controller bit constants
 !kb                         =       #$8000
 !ky                         =       #$4000
-!kst                        =       #$2000
-!ksl                        =       #$1000
+!ksl                        =       #$2000
+!kst                        =       #$1000
 !kup                        =       #$0800
 !kdn                        =       #$0400
 !klf                        =       #$0200
@@ -145,3 +146,16 @@
 !kx                         =       #$0040
 !kl                         =       #$0020
 !kr                         =       #$0010
+
+;game state constants
+
+!kstatesplashsetup          =       #$0000
+!kstatesplash               =       #$0001
+!kstatenewgame              =       #$0002
+!kstateplaygame             =       #$0003
+!kstategameover             =       #$0004
+!kstatedebug                =       #$0005
+!kstateloadroom             =       #$0006
+!kstatepause                =       #$0007
+
+!kpausewait                 =       #$0030

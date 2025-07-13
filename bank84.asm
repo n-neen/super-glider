@@ -198,7 +198,7 @@ obj: {
         sta !objdrawpointer     ;backup the tilemap pointer
         
         lda !objysize,x
-        asl
+        asl : asl
         sta !objdrawrows        ;backup number of rows to draw
         
         lda !objypos,x
@@ -209,6 +209,7 @@ obj: {
         sta !objdrawanchor      ;objypos*32+objxpos
         
         lda !objxsize,x         ;length of written portion of each row
+        asl
         sta !objdrawrowlength
         
         ;32-objxsize = length of remaining row and start of next row
@@ -226,6 +227,8 @@ obj: {
         
         ..loop: {       ;for each row
             lda (!objdrawpointer),y
+            cmp #$ffff
+            beq .out
             ora !objdrawpalette                 ;palette selection
             sta !objtilemapbuffer,x
             
@@ -240,10 +243,10 @@ obj: {
             
             -
             
-            inc !rowcounter
-            lda !rowcounter
-            cmp !objdrawrows
-            beq .out
+            ;inc !rowcounter
+            ;lda !rowcounter
+            ;cmp !objdrawrows
+            ;beq .out
             
             jmp ..loop
         }
@@ -267,7 +270,6 @@ obj: {
         ply
         rts
     }
-    
     
     .tilemap: {
         ..upload: {
@@ -329,25 +331,29 @@ obj: {
         }
         
         ..table: {
-            dw #obj_tilemaps_table,     $0009, $000c
+            dw #obj_tilemaps_table,     $0009, $000d
         }
     }
     
     .tilemaps: {
         ..vent: {
             incbin "./data/tilemaps/objects/floorvent.bin"
+            dw $ffff
         }
         
         ..candle: {
             ;incbin "./data/tilemaps/objects/candle.bin"
+            dw $ffff
         }
         
         ..fanR: {
             incbin "./data/tilemaps/objects/fanR.bin"
+            dw $ffff
         }
         
         ..table: {
             incbin "./data/tilemaps/objects/table.bin"
+            dw $ffff
         }
         
     }
@@ -374,7 +380,7 @@ objdebug:
         sta !objID,x
         
         lda obj_headers_fanR+2
-        asl
+        ;asl
         sta !objxsize,x
         
         lda obj_headers_fanR+4
@@ -416,7 +422,7 @@ objdebug:
         sta !objID,x
         
         lda obj_headers_vent+2
-        asl
+        ;asl
         sta !objxsize,x
         
         lda obj_headers_vent+4
@@ -458,13 +464,11 @@ objdebug:
         sta !objID,x
         
         lda obj_headers_table+2
-        asl
+        ;asl
         sta !objxsize,x
         
         lda obj_headers_table+4
         asl
-        asl
-        inc
         sta !objysize,x
         
         lda #obj_tilemaps_table

@@ -21,7 +21,7 @@ hightablejank: {
     
 game: {
     .play: {
-        jsr getinput
+        jsl getinput
         jsr glider_handle
         
         
@@ -41,6 +41,19 @@ game: {
         ;todo
         rtl
     }
+    
+    .pause: {
+        pha
+        
+        lda !kpausewait
+        sta !pausecounter
+        
+        lda !kstatepause
+        sta !gamestate
+        
+        pla
+        rts
+    }
 }
 
 noinput: {
@@ -58,7 +71,7 @@ getinput: {
     .st: {
         bit !kst
         beq ..nost
-            ;if start pressed go here
+            ;jsr game_pause
         ..nost:
     }
     
@@ -165,7 +178,7 @@ getinput: {
         ..nor:
     }
     plx
-    rts
+    rtl
 }
 
 glider: {

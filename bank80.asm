@@ -157,6 +157,7 @@ main: {
     }
         
     .statetable: {
+
         dw #splashsetup     ;0
         dw #splash          ;1
         dw #newgame         ;2
@@ -164,6 +165,7 @@ main: {
         dw #gameover        ;4
         dw #debug           ;5
         dw #loadroom        ;6
+        dw #pause           ;7
     }
 }
 
@@ -464,6 +466,33 @@ loadroom: {
     
     lda #$0003
     sta !gamestate
+    rts
+}
+
+
+;===========================================================================================
+;================================   STATE 7:  P A U S E   ==================================
+;===========================================================================================
+
+pause: {
+    jsl getinput
+    
+    
+    dec !pausecounter
+    bmi ++
+    
+    lda !controller
+    cmp !kst
+    beq +
+    rts
+    
+    +
+    lda !kpausewait
+    sta !pausecounter
+    lda #$0003
+    sta !gamestate
+    ++
+    stz !controller
     rts
 }
 
