@@ -134,95 +134,6 @@ obj: {
         rtl
     }
     
-    
-    .debugobjmakefan: {
-        phb
-        
-        phk
-        plb
-        
-        ldx #$0000
-        
-        lda #obj_headers_fanR
-        sta !objID,x
-        
-        lda obj_headers_fanR+2
-        asl
-        sta !objxsize,x
-        
-        lda obj_headers_fanR+4
-        asl
-        sta !objysize,x
-        
-        lda #obj_tilemaps_fanR
-        sta !objtilemapointer,x
-        
-        lda #$0014
-        dec
-        asl
-        sta !objxpos,x
-        
-        lda #$0007
-        dec
-        asl
-        sta !objypos,x
-        
-        lda #$1800
-        sta !objpal,x
-        
-        ldx #$0000
-        jsr obj_draw
-        
-        plb
-        rtl
-    }
-    
-        .debugobjmakevent: {
-        phb
-        
-        phk
-        plb
-        
-        ldx #$0002
-        
-        lda #obj_headers_vent
-        sta !objID,x
-        
-        lda obj_headers_vent+2
-        asl
-        sta !objxsize,x
-        
-        lda obj_headers_vent+4
-        asl
-        sta !objysize,x
-        
-        lda #obj_tilemaps_vent
-        sta !objtilemapointer,x
-        
-        lda #$0006
-        dec
-        asl
-        sta !objxpos,x
-        
-        lda #$001a
-        dec
-        asl
-        sta !objypos,x
-        
-        lda #$1000
-        sta !objpal,x
-        
-        ldx #$0002
-        jsr obj_draw
-        
-        plb
-        rtl
-    }
-    
-    
-    
-    
-    
     .place: {
         ;deals with an instance of an object, called after it is init
         ;get position in room, from room object list, and write it in the array
@@ -264,27 +175,6 @@ obj: {
         ldx #objlist_dummy_list
         ldy !nextobj
         jsl obj_place
-        rtl
-    }
-    
-    .debugmakevent: {
-        phb
-        
-        phk
-        plb
-        
-        ldx #$0008
-        
-        -
-        lda obj_tilemaps_vent,x
-        ora #$0400
-        sta !objtilemapbuffer+(52*32)+12,x
-        
-        dex : dex
-        bpl -
-        
-        plb
-        
         rtl
     }
     
@@ -420,7 +310,8 @@ obj: {
     .pointers: {
         dw #obj_headers_vent,
            #obj_headers_candle,
-           #obj_headers_fanR
+           #obj_headers_fanR,
+           #obj_headers_table
     }
     
     .headers: {
@@ -435,6 +326,10 @@ obj: {
         
         ..fanR: {
             dw #obj_tilemaps_fanR,      $0004, $0007
+        }
+        
+        ..table: {
+            dw #obj_tilemaps_table,     $0009, $000c
         }
     }
     
@@ -451,8 +346,156 @@ obj: {
             incbin "./data/tilemaps/objects/fanR.bin"
         }
         
+        ..table: {
+            incbin "./data/tilemaps/objects/table.bin"
+        }
+        
     }
     
 }
+
+objdebug:
+    .makeall: {                     ;obj index
+        jsr objdebug_makefan        ;0
+        jsr objdebug_makevent       ;2
+        jsr objdebug_maketable      ;4
+        rtl
+    }
+    
+    .makefan: {
+        phb
+        
+        phk
+        plb
+        
+        ldx #$0000
+        
+        lda #obj_headers_fanR
+        sta !objID,x
+        
+        lda obj_headers_fanR+2
+        asl
+        sta !objxsize,x
+        
+        lda obj_headers_fanR+4
+        asl
+        sta !objysize,x
+        
+        lda #obj_tilemaps_fanR
+        sta !objtilemapointer,x
+        
+        lda #$0014
+        dec
+        asl
+        sta !objxpos,x
+        
+        lda #$000a
+        dec
+        asl
+        sta !objypos,x
+        
+        lda #$1800
+        sta !objpal,x
+        
+        ldx #$0000
+        jsr obj_draw
+        
+        plb
+        rts
+    }
+    
+    .makevent: {
+        phb
+        
+        phk
+        plb
+        
+        ldx #$0002
+        
+        lda #obj_headers_vent
+        sta !objID,x
+        
+        lda obj_headers_vent+2
+        asl
+        sta !objxsize,x
+        
+        lda obj_headers_vent+4
+        asl
+        sta !objysize,x
+        
+        lda #obj_tilemaps_vent
+        sta !objtilemapointer,x
+        
+        lda #$0006
+        dec
+        asl
+        sta !objxpos,x
+        
+        lda #$001a
+        dec
+        asl
+        sta !objypos,x
+        
+        lda #$1000
+        sta !objpal,x
+        
+        ldx #$0002
+        jsr obj_draw
+        
+        plb
+        rts
+    }
+    
+    .maketable: {
+        phb
+        
+        phk
+        plb
+        
+        ldx #$0004
+        
+        lda #obj_headers_table
+        sta !objID,x
+        
+        lda obj_headers_table+2
+        asl
+        sta !objxsize,x
+        
+        lda obj_headers_table+4
+        asl
+        asl
+        inc
+        sta !objysize,x
+        
+        lda #obj_tilemaps_table
+        sta !objtilemapointer,x
+        
+        lda #$0011
+        dec
+        asl
+        sta !objxpos,x
+        
+        lda #$0011
+        dec
+        asl
+        sta !objypos,x
+        
+        lda #$1800
+        sta !objpal,x
+        
+        ldx #$0004
+        jsr obj_draw
+        
+        plb
+        rts
+    }
+    
+}
+
+
+
+
+
+
 
 ;warn pc

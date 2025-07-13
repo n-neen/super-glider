@@ -254,9 +254,7 @@ newgame: {
     
     jsr screenon
     
-    ;jsl obj_debugmakevent
-    jsl obj_debugobjmakefan     ;make a fan
-    jsl obj_debugobjmakevent    ;make a vent
+    jsl objdebug_makeall
     
     lda #$0003
     sta !gamestate          ;advance to game state 3 (playgame)
