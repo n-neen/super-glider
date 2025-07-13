@@ -688,6 +688,34 @@ oamhighbits: {
     db $02, $08, $20, $80
 }
 
-incsrc "./data/sprites/spritemaps.asm"
+;===========================================================================================
+;=============================    R O O M    L O A D I N G    ==============================
+;===========================================================================================
 
-;warn pc
+
+
+room: {
+    .load: {
+    ;takes input:
+        ;room pointer
+    ;produces output:
+        ;load object list
+        ;write object tilemap buffer (layer 1)
+        ;load background (layer 2)
+        ;load enemies
+        ;load prize sprites
+    
+    ;load room ptr
+    ;load obj list
+    ;load objects [loop]
+    ;load enemy list
+    ;load enemies [loop]
+    
+    
+    
+    
+    rtl
+    }
+}
+
+incsrc "./data/sprites/spritemaps.asm"

@@ -24,6 +24,8 @@
 ;=====================================   W  R A M   ========================================
 !localtempvar       =       $10
 !localtempvar2      =       $12
+!localtempvar3      =       $14
+!localtempvar4      =       $16
 
 !oamentrypointbckp  =       $ec
 !oamentrypoint      =       $ee
@@ -57,20 +59,41 @@
 !oamhightable       =       !oambuffer+$200
 ;end: $720
 
+!housestart         =       $800
+!houseptr           =       !housestart
+!roomptr            =       !housestart+2
+!roomobjlistptr     =       !housestart+4
+!roomenemylistptr   =       !housestart+6
+!roomprizelistptr   =       !housestart+8
+
+
+
 
 ;object ram
+!rowcounter         =       $06
+!objdrawpointer     =       $08
+!objdrawpalette     =       $0ff2
+!rowlengthcounter   =       $0ff4
+!objdrawnextline    =       $0ff6
+!objdrawrows        =       $0ff8
+!objdrawrowlength   =       $0ffa
+!objdrawanchor      =       $0ffc
 !nextobj            =       $0ffe
 
 !objectarraystart   =       $1000
 !objectarraysize    =       $0030
 !objID              =       !objectarraystart
-!objsizex           =       !objID+!objectarraysize
-!objsizey           =       !objsizex+!objectarraysize
-!objtilemapointer   =       !objsizey+!objectarraysize
-!objxcoord          =       !objtilemapointer+!objectarraysize
-!objycoord          =       !objxcoord+!objectarraysize
+!objxsize           =       !objID+!objectarraysize
+!objysize           =       !objxsize+!objectarraysize
+!objtilemapointer   =       !objysize+!objectarraysize
+!objxpos            =       !objtilemapointer+!objectarraysize
+!objypos            =       !objxpos+!objectarraysize
+!objpal             =       !objypos+!objectarraysize
 
-;arrays' ends                   +!objectarraysize for total size
+
+;arrays' ends       last define + !objectarraysize for total size
+
+
 
 
 

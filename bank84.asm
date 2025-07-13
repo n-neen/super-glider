@@ -7,25 +7,25 @@ org $848000
 ;===========================================================================================
 
 ;24 words, 24 objects = 24 words, 48 bytes per array ($30)
-!objectarraystart       =       $1000
-!objectarraysize        =       $0030
-!objID                  =       !objectarraystart
-!objsizex               =       !objID+!objectarraysize
-!objsizey               =       !objsizex+!objectarraysize
-!objtilemapointer       =       !objsizey+!objectarraysize
-!objxcoord              =       !objtilemapointer+!objectarraysize
-!objycoord              =       !objxcoord+!objectarraysize
+;!objectarraystart       =       $1000
+;!objectarraysize        =       $0030
+;!objID                  =       !objectarraystart
+;!objxsize               =       !objID+!objectarraysize
+;!objysize               =       !objxsize+!objectarraysize
+;!objtilemapointer       =       !objysize+!objectarraysize
+;!objxpos                =       !objtilemapointer+!objectarraysize
+;!objypos                =       !objxpos+!objectarraysize
 ;arrays' ends                   +!objectarraysize
 
-!localtempvar           =       $10
-!localtempvar2          =       $12
-!localtempvar3          =       $14
+;!localtempvar           =       $10
+;!localtempvar2          =       $12
+;!localtempvar3          =       $14
 
 
 
-!objtilemapbuffer       =       $7f6000
+;!objtilemapbuffer       =       $7f6000
 
-
+incsrc "./defines.asm"
 
 ;===========================================================================================
 ;=========================    R O O M   O B J E C T S   ====================================
@@ -42,17 +42,35 @@ org $848000
 obj: {
     .handle: {
         ;debug: just do the vent thing
-        
-        lda !gliderx        ;30-50
-        cmp #$0030
-        bmi +
-        cmp #$0050
-        bpl +
-        
-        lda !kliftstateup
-        sta !gliderliftstate
-        
-    +   rtl
+        ..vent: {
+            lda !gliderx            ;if gliderx is between $30-$50 [vent x +/- $10]
+            cmp #$0030
+            bmi +
+            cmp #$0050
+            bpl +
+            
+            
+            
+            lda !kliftstateup       ;then lift state = up
+            sta !gliderliftstate
+            
+            lda !framecounter       ;if frame %8
+            bit #$0008
+            bne +
+            
+            lda !glidery            ;if glidery < ceiling
+            cmp !kceiling+4
+            bpl +
+            
+            lda !glidersuby
+            clc
+            adc #$4000
+            sta !glidersuby         ;glidery +1.25
+            
+            inc !glidery
+            
+        +   rtl
+        }
     }
     
     
@@ -90,10 +108,10 @@ obj: {
         sta !objtilemapointer,x     ;store tilemap pointer
         
         lda $0002,y
-        sta !objsizey,x             ;store object x size (length of rows)
+        sta !objysize,x             ;store object x size (length of rows)
         
         lda $0004,y
-        sta !objsizex,x             ;store object y size (number of rows)
+        sta !objxsize,x             ;store object y size (number of rows)
         
         ply
         plb
@@ -107,14 +125,102 @@ obj: {
         ;argument: x = obj id to clear
         
         stz !objID,x
-        stz !objsizex,x
-        stz !objsizey,x
+        stz !objxsize,x
+        stz !objysize,x
         stz !objtilemapointer,x
-        stz !objxcoord,x
-        stz !objycoord,x
+        stz !objxpos,x
+        stz !objypos,x
         
         rtl
     }
+    
+    
+    .debugobjmakefan: {
+        phb
+        
+        phk
+        plb
+        
+        ldx #$0000
+        
+        lda #obj_headers_fanR
+        sta !objID,x
+        
+        lda obj_headers_fanR+2
+        asl
+        sta !objxsize,x
+        
+        lda obj_headers_fanR+4
+        asl
+        sta !objysize,x
+        
+        lda #obj_tilemaps_fanR
+        sta !objtilemapointer,x
+        
+        lda #$0014
+        dec
+        asl
+        sta !objxpos,x
+        
+        lda #$0007
+        dec
+        asl
+        sta !objypos,x
+        
+        lda #$1800
+        sta !objpal,x
+        
+        ldx #$0000
+        jsr obj_draw
+        
+        plb
+        rtl
+    }
+    
+        .debugobjmakevent: {
+        phb
+        
+        phk
+        plb
+        
+        ldx #$0002
+        
+        lda #obj_headers_vent
+        sta !objID,x
+        
+        lda obj_headers_vent+2
+        asl
+        sta !objxsize,x
+        
+        lda obj_headers_vent+4
+        asl
+        sta !objysize,x
+        
+        lda #obj_tilemaps_vent
+        sta !objtilemapointer,x
+        
+        lda #$0006
+        dec
+        asl
+        sta !objxpos,x
+        
+        lda #$001a
+        dec
+        asl
+        sta !objypos,x
+        
+        lda #$1000
+        sta !objpal,x
+        
+        ldx #$0002
+        jsr obj_draw
+        
+        plb
+        rtl
+    }
+    
+    
+    
     
     
     .place: {
@@ -140,10 +246,10 @@ obj: {
         plx
         
         lda $0002,x
-        sta !objxcoord,y
+        sta !objxpos,y
         
         lda $0004,x
-        sta !objycoord,y
+        sta !objypos,y
         
         plb
         rtl
@@ -155,7 +261,7 @@ obj: {
         txa
         jsl obj_init
         
-        ldx #objlist_dummy
+        ldx #objlist_dummy_list
         ldy !nextobj
         jsl obj_place
         rtl
@@ -183,74 +289,95 @@ obj: {
     }
     
     
-    .writetilemap: {
+    .draw: {
         ;deals with an instance of an object
         ;get object ID, get x and y pos, get tilemap pointer, draw
         ;argument: x=object id
         
-        txy
+        phy
+        phb
+        
         phk
         plb
         
-        lda !objxcoord,x
-        sta !localtempvar
+        ;set up draw loop variables
+        lda !objpal,x
+        sta !objdrawpalette
         
-        lda !objycoord,x
-        sta !localtempvar2
+        lda !objtilemapointer,x
+        sta !objdrawpointer     ;backup the tilemap pointer
         
-        lda !objsizex,x
-        sta !localtempvar3
+        lda !objysize,x
+        asl
+        sta !objdrawrows        ;backup number of rows to draw
         
-        lda #$0000
-        ldx !localtempvar2
-        -
+        lda !objypos,x
+        asl #5
         clc
-        adc #$0020
-        dex
-        bne -
+        adc !objxpos,x          ;index into tilemap array to start writing
         
-        clc
-        adc !localtempvar
-        tax
+        sta !objdrawanchor      ;objypos*32+objxpos
+        
+        lda !objxsize,x         ;length of written portion of each row
+        sta !objdrawrowlength
+        
+        ;32-objxsize = length of remaining row and start of next row
+        
+        lda #$0040
+        sec
+        sbc !objdrawrowlength
+        sta !objdrawnextline    ;length to add to go from end of a row
+                                ;to the start of the next row
+        
+        ;loop init
+        ldx !objdrawanchor
+        stz !rowcounter
+        stz !rowlengthcounter
+        
+        ..loop: {       ;for each row
+            lda (!objdrawpointer),y
+            ora !objdrawpalette                 ;palette selection
+            sta !objtilemapbuffer,x
+            
+            iny : iny
+            inx : inx
+            inc !rowlengthcounter
+            inc !rowlengthcounter
+            
+            lda !rowlengthcounter
+            cmp !objdrawrowlength
+            beq ..newrow
+            
+            -
+            
+            inc !rowcounter
+            lda !rowcounter
+            cmp !objdrawrows
+            beq .out
+            
+            jmp ..loop
+        }
+        
+        ..newrow: {     ;next row
+            txa
+            clc
+            adc !objdrawnextline
+            tax
+            
+            stz !rowlengthcounter
+            
+            bra -
+        }
+        
+        .out:
         
         
-        lda !objtilemapointer,y
-        sta !localtempvar2
         
-        ldy #$0000
-        --
-        lda [!localtempvar2],y
-        sta !objtilemapbuffer,x
-        iny : iny
-        inx : inx
-        cpy !localtempvar3
-        bne --
-        
-        rtl
+        plb
+        ply
+        rts
     }
     
-    .copytowram: {
-        ;copy from rom to wram to be dma'd to vram at a later time
-        ;takes argument:
-            ;x = object id (already loaded AND placed, previously)
-            
-        ;produces output:
-            ;reads tilemap rectangle and its size
-            ;write to the wram layer 1 tilemap buffer,
-            ;a rectangle of the correct size and location
-        phb
-        phk
-        plb
-        phx
-        phy
-        
-        
-        
-        ply
-        plx
-        plb
-        rtl
-    }
     
     .tilemap: {
         ..upload: {
@@ -299,7 +426,7 @@ obj: {
     .headers: {
         ;object types
         ..vent: {     ;tilemap pointer, xsize, ysize
-            dw #obj_tilemaps_vent,      $0006, $0002
+            dw #obj_tilemaps_vent,      $0006, $0003
         }
         
         ..candle: {
@@ -327,3 +454,5 @@ obj: {
     }
     
 }
+
+;warn pc
