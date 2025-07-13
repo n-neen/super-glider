@@ -64,8 +64,8 @@ obj: {
             
             lda !glidersuby
             clc
-            adc #$4000
-            sta !glidersuby         ;glidery +1.25
+            adc #$ff00
+            sta !glidersuby         ;glidery +almost2
             
             inc !glidery
             
@@ -131,6 +131,27 @@ obj: {
         stz !objxpos,x
         stz !objypos,x
         
+        rts
+    }
+    
+    .clearall: {
+        phb
+        
+        ldx #!objectarraysize
+        -
+        jsr obj_clear
+        dex : dex
+        bpl -
+        
+        pea $7f7f
+        plb : plb
+        ldx #$2000
+        --
+        stz $6000,x
+        dex : dex
+        bpl --
+        
+        plb
         rtl
     }
     
@@ -163,18 +184,6 @@ obj: {
         sta !objypos,y
         
         plb
-        rtl
-    }
-    
-    
-    .makedummy: {                   ;dummy vent
-        ;x = obj population pointer
-        txa
-        jsl obj_init
-        
-        ldx #objlist_dummy_list
-        ldy !nextobj
-        jsl obj_place
         rtl
     }
     
@@ -304,55 +313,160 @@ obj: {
         }
     }
     
-    
     .collision: {
+        
+        ;see defines.asm for hitbox bounds
+        
+        phx
+        phy
+        
+        ldx !gliderx
+        lda !glidery
+        clc
+        adc !kgliderupbound
+        tay
+        jsr obj_checktile       ;y up
+        
+        ldx !gliderx
+        lda !glidery
+        clc
+        adc !kgliderdownbound
+        tay
+        jsr obj_checktile       ;y down
+        
+        lda !gliderx
+        clc
+        adc !kgliderrightbound
+        tax
+        ldy !glidery
+        jsr obj_checktile       ;x right
+        
+        lda !gliderx
+        clc
+        adc !kgliderleftbound
+        tax
+        ldy !glidery
+        jsr obj_checktile       ;x left
+        
+        
+        ply
+        plx
         rtl
     }
     
-    .pointers: {
-        dw #obj_headers_vent,
-           #obj_headers_candle,
-           #obj_headers_fanR,
-           #obj_headers_table
+    .checktile: {
+        !tilemapx   =   !localtempvar
+        !tilemapy   =   !localtempvar2
+        
+        
+        txa
+        lsr #3
+        sta !tilemapx
+        
+        tya
+        lsr #3
+        sta !tilemapy
+        
+        lda !tilemapy
+        asl #5
+        clc
+        adc !tilemapx
+        asl
+        
+        tax
+        lda !objtilemapbuffer,x
+        and #$e3ff                      ;remove palette bits
+        bne +
+
+        
+        ++
+        
+        ;jsr ..hitboxdraw                ;debug routine to visualize
+        
+        
+        rts
+        
+        +
+        
+        lda !kgliderstatelostlife
+        sta !gliderstate
+        sta !glidernextstate
+        rts
+        
+        ..hitboxdraw: {
+            ;this doesnt work anymore
+            lda !objtilemapbuffer-2,x       ;hitbox draw
+            ora #$0008
+            sta !objtilemapbuffer-2,x
+        
+            lda !objtilemapbuffer,x         ;hitbox draw
+            ora #$0008
+            sta !objtilemapbuffer,x
+            
+            lda !objtilemapbuffer+2,x       ;hitbox draw
+            ora #$0008
+            sta !objtilemapbuffer+2,x
+            
+            lda !objtilemapbuffer+4,x       ;hitbox draw
+            ora #$0008
+            sta !objtilemapbuffer+4,x
+            rts
+        }
+    }
+    
+    .ptr: {
+        ..vent:         dw #obj_headers_vent
+        ..candle:       dw #obj_headers_candle
+        ..fanR:         dw #obj_headers_fanR
+        ..table:        dw obj_headers_table
     }
     
     .headers: {
         ;object types
-        ..vent: {     ;tilemap pointer, xsize, ysize
-            dw #obj_tilemaps_vent,      $0006, $0003
+        ..vent: {     ;tilemap pointer,     xsize, ysize
+            dw #obj_tilemaps_vent,          $0006, $0003
         }
         
         ..candle: {
-            dw #obj_tilemaps_candle,    $0002, $0003
+            dw #obj_tilemaps_candle,        $0004, $0004
         }
         
         ..fanR: {
-            dw #obj_tilemaps_fanR,      $0004, $0007
+            dw #obj_tilemaps_fanR,          $0004, $0007
         }
         
         ..table: {
-            dw #obj_tilemaps_table,     $0009, $000d
+            dw #obj_tilemaps_table,         $0009, $000d
+        }
+        
+        ..tallcandle: {
+            dw #obj_tilemaps_tallcandle,    $0002, $0008
         }
     }
     
     .tilemaps: {
         ..vent: {
-            incbin "./data/tilemaps/objects/floorvent.bin"
+            incbin "./data/tilemaps/objects/floorvent.map"
             dw $ffff
         }
         
         ..candle: {
-            ;incbin "./data/tilemaps/objects/candle.bin"
+            incbin "./data/tilemaps/objects/candle.map"
             dw $ffff
         }
         
         ..fanR: {
-            incbin "./data/tilemaps/objects/fanR.bin"
+            incbin "./data/tilemaps/objects/fanR.map"
             dw $ffff
         }
         
         ..table: {
-            incbin "./data/tilemaps/objects/table.bin"
+            incbin "./data/tilemaps/objects/table.map"
+            dw $ffff
+        }
+        
+        ..tallcandle: {
+            incbin "./data/tilemaps/objects/tallcandle.map"
             dw $ffff
         }
         
@@ -362,13 +476,13 @@ obj: {
 
 objdebug:
     .makeall: {                     ;obj index
-        jsr objdebug_makefan        ;0
+        jsr objdebug_maketallcan    ;0
         jsr objdebug_makevent       ;2
         jsr objdebug_maketable      ;4
         rtl
     }
     
-    .makefan: {
+    .maketallcan: {
         phb
         
         phk
@@ -376,18 +490,18 @@ objdebug:
         
         ldx #$0000
         
-        lda #obj_headers_fanR
+        lda #obj_headers_tallcandle
         sta !objID,x
         
-        lda obj_headers_fanR+2
+        lda obj_headers_tallcandle+2
         ;asl
         sta !objxsize,x
         
-        lda obj_headers_fanR+4
+        lda obj_headers_tallcandle+4
         asl
         sta !objysize,x
         
-        lda #obj_tilemaps_fanR
+        lda #obj_tilemaps_tallcandle
         sta !objtilemapointer,x
         
         lda #$0014
@@ -395,12 +509,12 @@ objdebug:
         asl
         sta !objxpos,x
         
-        lda #$000a
+        lda #$0009
         dec
         asl
         sta !objypos,x
         
-        lda #$1800
+        lda #$0c00
         sta !objpal,x
         
         ldx #$0000
@@ -474,7 +588,7 @@ objdebug:
         lda #obj_tilemaps_table
         sta !objtilemapointer,x
         
-        lda #$0011
+        lda #$0012
         dec
         asl
         sta !objxpos,x
@@ -484,7 +598,7 @@ objdebug:
         asl
         sta !objypos,x
         
-        lda #$1800
+        lda #$1000
         sta !objpal,x
         
         ldx #$0004

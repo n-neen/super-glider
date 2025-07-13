@@ -71,7 +71,7 @@ clear7f:
 --  stz $0000,x
     stz $8000,x
     dex : dex
-    bne --
+    bpl --
     
 
 init:
@@ -240,7 +240,8 @@ newgame: {
     jsl load_background     ;load obj tilemap for layer 1 (called background type 3 for now)
                             ;now that the wram buffer exists, this mainly just loads the graphics
     
-    jsl obj_tilemap_init
+    ;jsl obj_tilemap_init
+    jsl obj_clearall
     
     lda #$0000
     jsl load_sprite         ;load sprite data 0 (glider)

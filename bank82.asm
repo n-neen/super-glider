@@ -22,11 +22,14 @@ hightablejank: {
 game: {
     .play: {
         jsl getinput
+        
+        jsl obj_handle
+        jsl obj_collision
+        
         jsr glider_handle
         
         
         ;handle enemies
-        jsl obj_handle
         
         ;jsr glider_draw
         jsr glider_newdraw
@@ -192,7 +195,7 @@ glider: {
         sta !gliderlives
         
         ..spawn: {
-            lda #$0020
+            lda #$0030
             sta !gliderx            ;glider initial position
             sta !glidery
             lda !kliftstatedown
@@ -523,7 +526,8 @@ glider: {
     
     .lostlife: {
         dec !gliderlives
-        stz !gliderstate
+        ;stz !gliderstate
+        stz !glidernextstate
         jsl glider_init_spawn
         rts
     }
@@ -699,36 +703,6 @@ oamhighbits: {
     db $02, $08, $20, $80
     db $02, $08, $20, $80
     db $02, $08, $20, $80
-}
-
-;===========================================================================================
-;=============================    R O O M    L O A D I N G    ==============================
-;===========================================================================================
-
-
-
-room: {
-    .load: {
-    ;takes input:
-        ;room pointer
-    ;produces output:
-        ;load object list
-        ;write object tilemap buffer (layer 1)
-        ;load background (layer 2)
-        ;load enemies
-        ;load prize sprites
-    
-    ;load room ptr
-    ;load obj list
-    ;load objects [loop]
-    ;load enemy list
-    ;load enemies [loop]
-    
-    
-    
-    
-    rtl
-    }
 }
 
 incsrc "./data/sprites/spritemaps.asm"

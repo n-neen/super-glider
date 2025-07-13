@@ -65,8 +65,8 @@
 !roomptr            =       !housestart+2
 !roomobjlistptr     =       !housestart+4
 !roomenemylistptr   =       !housestart+6
-!roomprizelistptr   =       !housestart+8
-
+!roombounds         =       !housestart+8
+!roombg             =       !housestart+10
 
 
 
@@ -113,7 +113,12 @@
 !kgliderstateturnaround     =       #$0005
 !kgliderstatelostlife       =       #$0006
 !kgliderxsubspeed           =       #$ff00      ;subpixel speed
-!kgliderysubspeed           =       #$ac00
+!kgliderysubspeed           =       #$b000
+
+!kgliderupbound             =       #$fff8
+!kgliderdownbound           =       #$0010
+!kgliderleftbound           =       #$fff8
+!kgliderrightbound          =       #$0010
 
 !kgliderdirleft             =       #$0001      ;i guess dir = 0 isn't a thing huh
 !kgliderdirright            =       #$0002
