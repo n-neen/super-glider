@@ -328,7 +328,7 @@ obj: {
         lda !objtilemapbuffer,x
         and #$e3ff                      ;remove palette bits
         bne +
-
+        
         
         ++
         
@@ -371,10 +371,11 @@ obj: {
     
     
     .ptr: {
-        ..vent:         dw #obj_headers_vent
-        ..candle:       dw #obj_headers_candle
-        ..fanR:         dw #obj_headers_fanR
+        ..vent:         dw obj_headers_vent
+        ..candle:       dw obj_headers_candle
+        ..fanR:         dw obj_headers_fanR
         ..table:        dw obj_headers_table
+        ..shelf:        dw obj_headers_shelf
     }
     
     .headers: {
@@ -398,6 +399,10 @@ obj: {
         ..tallcandle: {
             dw #obj_tilemaps_tallcandle,    $0002, $0008, obj_routines_none
         }
+        
+        ..shelf: {
+            dw #obj_tilemaps_shelf,         $0008, $0002, obj_routines_none
+        }
     }
     
     .routines: {
@@ -408,7 +413,6 @@ obj: {
             
         ..vent: {
             ;x = object id
-            ;currently broken (scaling issue)
             !ventleft       =       !localtempvar2
             !ventright      =       !localtempvar3
             
@@ -483,20 +487,25 @@ obj: {
             dw $ffff
         }
         
+        ..shelf: {
+            incbin "./data/tilemaps/objects/shelf.map"
+            dw $ffff
+        }
+        
     }
     
 }
 
 objdebug:
     .makeall: {                     ;obj index
-        ;jsr objdebug_maketallcan    ;0
+        jsr objdebug_makeshelf      ;0
         jsr objdebug_maketable      ;4
         jsr objdebug_makevent       ;2
         jsr objdebug_makevent2      ;6
         rtl
     }
     
-    .maketallcan: {
+    .makeshelf: {
         phb
         
         phk
@@ -504,31 +513,31 @@ objdebug:
         
         ldx #$0000
         
-        lda #obj_headers_tallcandle
+        lda #obj_headers_shelf
         sta !objID,x
         
-        lda obj_headers_tallcandle+2
+        lda obj_headers_shelf+2
         ;asl
         sta !objxsize,x
         
-        lda obj_headers_tallcandle+4
+        lda obj_headers_shelf+4
         asl
         sta !objysize,x
         
-        lda #obj_tilemaps_tallcandle
+        lda #obj_tilemaps_shelf
         sta !objtilemapointer,x
         
-        lda #$0015
+        lda #$000c
         dec
         asl
         sta !objxpos,x
         
-        lda #$0009
+        lda #$0004
         dec
         asl
         sta !objypos,x
         
-        lda #$0c00
+        lda #$1400
         sta !objpal,x
         
         ldx #$0000

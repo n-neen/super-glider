@@ -113,7 +113,7 @@
 !kgliderstatetipright       =       #$0004
 !kgliderstateturnaround     =       #$0005
 !kgliderstatelostlife       =       #$0006
-!kgliderxsubspeed           =       #$ff00      ;subpixel speed
+!kgliderxsubspeed           =       #$ffff      ;subpixel speed
 !kgliderysubspeed           =       #$b000
 
 !kgliderupbound             =       #$fff8

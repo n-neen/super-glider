@@ -545,6 +545,7 @@ glider: {
         sec
         sbc !kgliderxsubspeed
         sta !glidersubx
+        
         lda !gliderx
         sbc #$0000
         sta !gliderx
