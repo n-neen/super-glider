@@ -90,6 +90,7 @@
 !objxpos            =       !objtilemapointer+!objectarraysize
 !objypos            =       !objxpos+!objectarraysize
 !objpal             =       !objypos+!objectarraysize
+!objroutineptr      =       !objpal+!objectarraysize
 
 
 ;arrays' ends       last define + !objectarraysize for total size

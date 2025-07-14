@@ -1,29 +1,6 @@
 lorom
 
 org $848000
-    
-;===========================================================================================
-;===================================  D E F I N E S  =======================================
-;===========================================================================================
-
-;24 words, 24 objects = 24 words, 48 bytes per array ($30)
-;!objectarraystart       =       $1000
-;!objectarraysize        =       $0030
-;!objID                  =       !objectarraystart
-;!objxsize               =       !objID+!objectarraysize
-;!objysize               =       !objxsize+!objectarraysize
-;!objtilemapointer       =       !objysize+!objectarraysize
-;!objxpos                =       !objtilemapointer+!objectarraysize
-;!objypos                =       !objxpos+!objectarraysize
-;arrays' ends                   +!objectarraysize
-
-;!localtempvar           =       $10
-;!localtempvar2          =       $12
-;!localtempvar3          =       $14
-
-
-
-;!objtilemapbuffer       =       $7f6000
 
 incsrc "./defines.asm"
 
@@ -31,46 +8,20 @@ incsrc "./defines.asm"
 ;=========================    R O O M   O B J E C T S   ====================================
 ;===========================================================================================
     
-;object header:
-    ;pointer to tilemap in $84
-    ;length of each row [x size]
-    ;number of rows     [y size]
-    
-;object instance additionally has:
-        ;origin coords in room (where to start writing tilemap update)
-    
+
 obj: {
     .handle: {
-        ;debug: just do the vent thing
-        ..vent: {
-            lda !gliderx            ;if gliderx is between $30-$50 [vent x +/- $10]
-            cmp #$0030
-            bmi +
-            cmp #$0050
-            bpl +
-            
-            
-            
-            lda !kliftstateup       ;then lift state = up
-            sta !gliderliftstate
-            
-            lda !framecounter       ;if frame %8
-            bit #$0008
-            bne +
-            
-            lda !glidery            ;if glidery < ceiling
-            cmp !kceiling+4
-            bpl +
-            
-            lda !glidersuby
-            clc
-            adc #$ff00
-            sta !glidersuby         ;glidery +almost2
-            
-            inc !glidery
-            
-        +   rtl
-        }
+        ldx #$0030
+        -
+        lda !objroutineptr,x
+        beq +
+        phx
+        jsr (!objroutineptr,x)
+        plx
+        +
+        dex : dex
+        bpl -
+        rtl
     }
     
     
@@ -414,6 +365,11 @@ obj: {
         }
     }
     
+    ;===========================================================================================
+    ;===============================  OBJECT DEFINITIONS  ======================================
+    ;===========================================================================================
+    
+    
     .ptr: {
         ..vent:         dw #obj_headers_vent
         ..candle:       dw #obj_headers_candle
@@ -424,24 +380,81 @@ obj: {
     .headers: {
         ;object types
         ..vent: {     ;tilemap pointer,     xsize, ysize
-            dw #obj_tilemaps_vent,          $0006, $0003
+            dw #obj_tilemaps_vent,          $0006, $0003, obj_routines_vent
         }
         
         ..candle: {
-            dw #obj_tilemaps_candle,        $0004, $0004
+            dw #obj_tilemaps_candle,        $0004, $0004, obj_routines_none 
         }
         
         ..fanR: {
-            dw #obj_tilemaps_fanR,          $0004, $0007
+            dw #obj_tilemaps_fanR,          $0004, $0007, obj_routines_none
         }
         
         ..table: {
-            dw #obj_tilemaps_table,         $0009, $000d
+            dw #obj_tilemaps_table,         $0009, $000d, obj_routines_none
         }
         
         ..tallcandle: {
-            dw #obj_tilemaps_tallcandle,    $0002, $0008
+            dw #obj_tilemaps_tallcandle,    $0002, $0008, obj_routines_none
         }
+    }
+    
+    .routines: {
+        ;used for vent handling
+        ;and  TODO: 
+            ;tile animations on candles
+            ;anything else an object might want to do
+            
+        ..vent: {
+            ;x = object id
+            ;currently broken (scaling issue)
+            !ventleft       =       !localtempvar2
+            !ventright      =       !localtempvar3
+            
+            lda !objxpos,x
+            asl #2
+            
+            sta !localtempvar
+            clc
+            adc #$0002
+            sta !ventleft
+            
+            lda !localtempvar
+            clc
+            adc #$001e
+            sta !ventright
+            
+            lda !gliderx            ;if gliderx is between $30-$50 [vent x +/- $10]
+            cmp !ventleft           ;left lift bound
+            bmi +
+            cmp !ventright          ;right lift bound
+            bpl +
+            
+            lda !kliftstateup       ;then lift state = up
+            sta !gliderliftstate
+            
+            lda !framecounter       ;if frame %8
+            bit #$0008
+            bne +
+            
+            lda !glidery            ;if glidery < ceiling
+            cmp !kceiling+4
+            bpl +
+            
+            lda !glidersuby
+            clc
+            adc #$ff00
+            sta !glidersuby         ;glidery +almost2
+            
+            inc !glidery
+            
+        +   rts
+        }
+        
+        
+        ..none: rts
+        
     }
     
     .tilemaps: {
@@ -476,9 +489,10 @@ obj: {
 
 objdebug:
     .makeall: {                     ;obj index
-        jsr objdebug_maketallcan    ;0
-        jsr objdebug_makevent       ;2
+        ;jsr objdebug_maketallcan    ;0
         jsr objdebug_maketable      ;4
+        jsr objdebug_makevent       ;2
+        jsr objdebug_makevent2      ;6
         rtl
     }
     
@@ -504,7 +518,7 @@ objdebug:
         lda #obj_tilemaps_tallcandle
         sta !objtilemapointer,x
         
-        lda #$0014
+        lda #$0015
         dec
         asl
         sta !objxpos,x
@@ -543,10 +557,13 @@ objdebug:
         asl
         sta !objysize,x
         
-        lda #obj_tilemaps_vent
+        lda obj_headers_vent
         sta !objtilemapointer,x
         
-        lda #$0006
+        lda obj_headers_vent+6
+        sta !objroutineptr,x
+        
+        lda #$0014
         dec
         asl
         sta !objxpos,x
@@ -560,6 +577,51 @@ objdebug:
         sta !objpal,x
         
         ldx #$0002
+        jsr obj_draw
+        
+        plb
+        rts
+    }
+    
+    .makevent2: {
+        phb
+        
+        phk
+        plb
+        
+        ldx #$0006
+        
+        lda #obj_headers_vent
+        sta !objID,x
+        
+        lda obj_headers_vent+2
+        ;asl
+        sta !objxsize,x
+        
+        lda obj_headers_vent+4
+        asl
+        sta !objysize,x
+        
+        lda obj_headers_vent
+        sta !objtilemapointer,x
+        
+        lda obj_headers_vent+6
+        sta !objroutineptr,x
+        
+        lda #$0004
+        dec
+        asl
+        sta !objxpos,x
+        
+        lda #$001a
+        dec
+        asl
+        sta !objypos,x
+        
+        lda #$1000
+        sta !objpal,x
+        
+        ldx #$0006
         jsr obj_draw
         
         plb
@@ -588,7 +650,7 @@ objdebug:
         lda #obj_tilemaps_table
         sta !objtilemapointer,x
         
-        lda #$0012
+        lda #$000c
         dec
         asl
         sta !objxpos,x
@@ -598,7 +660,7 @@ objdebug:
         asl
         sta !objypos,x
         
-        lda #$1000
+        lda #$1800
         sta !objpal,x
         
         ldx #$0004

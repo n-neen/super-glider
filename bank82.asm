@@ -23,8 +23,8 @@ game: {
     .play: {
         jsl getinput
         
-        jsl obj_handle
         jsl obj_collision
+        jsl obj_handle
         
         jsr glider_handle
         
