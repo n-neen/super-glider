@@ -376,6 +376,7 @@ obj: {
         ..fanR:         dw obj_headers_fanR
         ..table:        dw obj_headers_table
         ..shelf:        dw obj_headers_shelf
+        ..uostairs:     dw obj_headers_upstairs
     }
     
     .headers: {
@@ -402,6 +403,10 @@ obj: {
         
         ..shelf: {
             dw #obj_tilemaps_shelf,         $0008, $0002, obj_routines_none
+        }
+        
+        ..upstairs: {
+            dw #obj_tilemaps_upstairs,      $000c, $0014, obj_routines_none
         }
     }
     
@@ -492,17 +497,66 @@ obj: {
             dw $ffff
         }
         
+        ..upstairs: {
+            incbin "./data/tilemaps/objects/up_stairs.map"
+            dw $ffff
+        }
+        
     }
     
 }
 
 objdebug:
     .makeall: {                     ;obj index
-        jsr objdebug_makeshelf      ;0
-        jsr objdebug_maketable      ;4
-        jsr objdebug_makevent       ;2
+        ;jsr objdebug_makeshelf      ;0
+        ;jsr objdebug_maketable      ;4
+        ;jsr objdebug_makevent       ;2
         jsr objdebug_makevent2      ;6
+        jsr objdebug_makestairs      ;8
+        
         rtl
+    }
+    
+    .makestairs: {
+        phb
+        
+        phk
+        plb
+        
+        ldx #$0000
+        
+        lda #obj_headers_upstairs
+        sta !objID,x
+        
+        lda obj_headers_upstairs+2
+        ;asl
+        sta !objxsize,x
+        
+        lda obj_headers_upstairs+4
+        asl
+        sta !objysize,x
+        
+        lda #obj_tilemaps_upstairs
+        sta !objtilemapointer,x
+        
+        lda #$0010
+        dec
+        asl
+        sta !objxpos,x
+        
+        lda #$0005
+        dec
+        asl
+        sta !objypos,x
+        
+        lda #$0400
+        sta !objpal,x
+        
+        ldx #$0000
+        jsr obj_draw
+        
+        plb
+        rts
     }
     
     .makeshelf: {

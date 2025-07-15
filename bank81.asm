@@ -442,7 +442,7 @@ loadingtable: {
             %loadtablentry(#splashgfx,              $8000, !bg2start,        $00)     ;splash = 00
             %loadtablentry(#bg1gfx,                 $4000, !bg2start,        $01)     ;bg1    = 01
             %loadtablentry(#bg2gfx,                 $4000, !bg2start,        $02)     ;bg2    = 02
-            %loadtablentry(#objgfx,                 $2000, !bg1start,        $03)     ;obj    = 03              ;object layer
+            %loadtablentry(#objgfx,                 $4000, !bg1start,        $03)     ;obj    = 03              ;object layer
         }
         
         ..tilemaps: {
