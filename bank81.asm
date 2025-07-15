@@ -239,8 +239,8 @@ load: {
         asl #3          ;a = a * 8 (table entries are 8 bytes long)
         sta !dmaloadindex
         jsr load_background_gfx
-        jsr load_background_tilemap
         jsr load_background_palette
+        jsr load_background_tilemap
         
         plx
         plp
@@ -290,6 +290,8 @@ load: {
             lda.w loadingtable_bg_tilemaps,x
             sta !dmabaseaddr
             
+            jsr load_layertilemap_writebuffer
+
             jsl dma_vramtransfur
             
             rts
@@ -393,6 +395,60 @@ load: {
             rts
         }
     }
+    
+    .layertilemap: {
+        ..writebuffer: {
+            ;we still have the arguments:
+            ;!dmaargstart    =                   $80                     ;start of dma arguments
+            ;!dmasrcptr      =                   !dmaargstart+0          ;2
+            ;!dmasrcbank     =                   !dmaargstart+2          ;2
+            ;!dmasize        =                   !dmaargstart+4          ;2
+            ;!dmabaseaddr    =                   !dmaargstart+6          ;2
+            ;!dmaloadindex   =                   !dmaargstart+8          ;2
+            
+            !pushbank       =                   !localtempvar
+            !loadptr        =                   !localtempvar2
+            
+            phx
+            phy
+            phb
+            
+            pea $8181
+            plb : plb
+            
+            lda !dmaloadindex                       ;if background type = 0, exit
+            beq +
+            lsr                                     ;(index is normally *8 but it's *4 here
+            tax
+            
+            lda loadingtable_L2tilemaps,x
+            sta !loadptr
+            
+            lda loadingtable_L2tilemaps+2,x         ;set db to bank from table
+            xba
+            sta !pushbank
+            pei (!pushbank)
+            plb : plb
+            
+            ldy !loadptr
+            ldx #$0000
+            
+            -
+            lda $0000,y
+            sta !layer2tilemap,x
+            inx : inx
+            iny : iny
+            cpx #$0800
+            bne -
+            
+            jsl dma_vramtransfur
+            
+        +   plb
+            ply
+            plx
+            rts
+        }
+    }
 }
 
 processspritemap: {
@@ -439,25 +495,32 @@ loadingtable: {
     
     .bg: {
         ..gfx: {
-            %loadtablentry(#splashgfx,              $8000, !bg2start,        $00)     ;splash = 00
-            %loadtablentry(#bg1gfx,                 $4000, !bg2start,        $01)     ;bg1    = 01
-            %loadtablentry(#bg2gfx,                 $4000, !bg2start,        $02)     ;bg2    = 02
-            %loadtablentry(#objgfx,                 $4000, !bg1start,        $03)     ;obj    = 03              ;object layer
+            %loadtablentry(#objgfx,                 $4000, !bg1start,        $00)     ;obj    = 00              ;object layer
+            %loadtablentry(#splashgfx,              $8000, !bg2start,        $01)     ;splash = 01
+            %loadtablentry(#bg1gfx,                 $4000, !bg2start,        $02)     ;bg1    = 02
+            %loadtablentry(#bg2gfx,                 $4000, !bg2start,        $03)     ;bg2    = 03
         }
         
         ..tilemaps: {
-            %loadtablentry(#splashtilemap,          $0800, !bg2tilemap,      $00)     ;splash = 00
-            %loadtablentry(#bg1tilemap,             $0800, !bg2tilemap,      $01)     ;bg1    = 01
-            %loadtablentry(#bg2tilemap,             $0800, !bg2tilemap,      $02)     ;bg2    = 02
-            %loadtablentry(#objtilemap,             $0800, !objtilemapbuffer,$03)     ;obj    = 03              ;object layer
+            %loadtablentry(#objtilemap,             $0800, !objtilemap,      $00)     ;obj    = 00              ;object layer
+            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,      $01)     ;splash = 01
+            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,      $02)     ;bg1    = 02
+            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,      $03)     ;bg2    = 03
         }
         
         ..palettes: {
-            %loadtablentry(#splashpalette,          $0100, !palettes,        $00)     ;splash = 00
-            %loadtablentry(#testpalette,            $0100, !palettes,        $01)     ;bg1    = 01
-            %loadtablentry(#bg2palette,             $0100, !palettes,        $02)     ;bg2    = 02
-            %loadtablentry(#bg2palette,             $0100, !palettes,        $03)     ;obj    = 03              ;object layer
+            %loadtablentry(#bg2palette,             $0100, !palettes,        $00)     ;obj    = 00              ;object layer
+            %loadtablentry(#splashpalette,          $0100, !palettes,        $01)     ;splash = 01
+            %loadtablentry(#testpalette,            $0100, !palettes,        $02)     ;bg1    = 02
+            %loadtablentry(#bg2palette,             $0100, !palettes,        $03)     ;bg2    = 03
         }
+    }
+    
+    .L2tilemaps: {
+        dl !objtilemap                  : db $00
+        dl #splashtilemap               : db $01
+        dl #bg1tilemap                  : db $02
+        dl #bg2tilemap                  : db $03
     }
 }
 

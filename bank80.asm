@@ -177,8 +177,8 @@ splashsetup: {
     jsr waitfornmi
     jsr screenoff           ;enable forced blank to to the following dmas
     
-    lda #$0000              ;load gfx, tilemap, and palettes
-    jsl load_background     ;for background 00 (splash screen)
+    lda #$0001              ;load gfx, tilemap, and palettes
+    jsl load_background     ;for background 01 (splash screen)
     
     jsr screenon
     lda #$0001
@@ -233,14 +233,13 @@ newgame: {
     jsr waitfornmi
     jsr screenoff           ;enable forced blank to do the following loading
     
-    lda #$0002
-    jsl load_background     ;load background 2 (panneled room)
-    
     lda #$0003
-    jsl load_background     ;load obj tilemap for layer 1 (called background type 3 for now)
-                            ;now that the wram buffer exists, this mainly just loads the graphics
+    jsl load_background     ;load background 3 (panneled room)
     
-    ;jsl obj_tilemap_init
+    lda #$0000
+    jsl load_background     ;load obj tilemap for layer 1 (background 0)
+    
+    jsl obj_tilemap_init
     jsl obj_clearall
     
     lda #$0000
@@ -255,9 +254,9 @@ newgame: {
     
     jsl glider_init
     
-    jsr screenon
-    
     jsl objdebug_makeall
+    
+    jsr screenon
     
     lda #$0003
     sta !gamestate          ;advance to game state 3 (playgame)

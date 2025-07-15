@@ -190,7 +190,7 @@ obj: {
             cmp #$ffff
             beq .out
             ora !objdrawpalette                 ;palette selection
-            sta !objtilemapbuffer,x
+            sta !objtilemap,x
             
             iny : iny
             inx : inx
@@ -224,8 +224,6 @@ obj: {
         
         .out:
         
-        
-        
         plb
         ply
         rts
@@ -245,6 +243,7 @@ obj: {
             jsl dma_vramtransfur
             rtl
         }
+        
         
         ..init: {
             ;call from newgame
@@ -325,7 +324,7 @@ obj: {
         asl
         
         tax
-        lda !objtilemapbuffer,x
+        lda !objtilemap,x
         and #$e3ff                      ;remove palette bits
         bne +
         
@@ -346,21 +345,21 @@ obj: {
         
         ..hitboxdraw: {
             ;this doesnt work anymore
-            lda !objtilemapbuffer-2,x       ;hitbox draw
+            lda !objtilemap-2,x       ;hitbox draw
             ora #$0008
-            sta !objtilemapbuffer-2,x
+            sta !objtilemap-2,x
         
-            lda !objtilemapbuffer,x         ;hitbox draw
+            lda !objtilemap,x         ;hitbox draw
             ora #$0008
-            sta !objtilemapbuffer,x
+            sta !objtilemap,x
             
-            lda !objtilemapbuffer+2,x       ;hitbox draw
+            lda !objtilemap+2,x       ;hitbox draw
             ora #$0008
-            sta !objtilemapbuffer+2,x
+            sta !objtilemap+2,x
             
-            lda !objtilemapbuffer+4,x       ;hitbox draw
+            lda !objtilemap+4,x       ;hitbox draw
             ora #$0008
-            sta !objtilemapbuffer+4,x
+            sta !objtilemap+4,x
             rts
         }
     }
@@ -369,6 +368,8 @@ obj: {
     ;===============================  OBJECT DEFINITIONS  ======================================
     ;===========================================================================================
     
+    ;object property:
+    ;$8000 bit = draw on layer 2
     
     .ptr: {
         ..vent:         dw obj_headers_vent
@@ -376,39 +377,40 @@ obj: {
         ..fanR:         dw obj_headers_fanR
         ..table:        dw obj_headers_table
         ..shelf:        dw obj_headers_shelf
-        ..uostairs:     dw obj_headers_upstairs
+        ..upstairs:     dw obj_headers_upstairs
     }
     
     .headers: {
         ;object types
-        ..vent: {     ;tilemap pointer,     xsize, ysize
-            dw #obj_tilemaps_vent,          $0006, $0003, obj_routines_vent
+        ..vent: {     ;tilemap pointer,     xsize, ysize, routine,           properties
+            dw #obj_tilemaps_vent,          $0006, $0003, obj_routines_vent, $0000
         }
         
         ..candle: {
-            dw #obj_tilemaps_candle,        $0004, $0004, obj_routines_none 
+            dw #obj_tilemaps_candle,        $0004, $0004, obj_routines_none, $0000
         }
         
         ..fanR: {
-            dw #obj_tilemaps_fanR,          $0004, $0007, obj_routines_none
+            dw #obj_tilemaps_fanR,          $0004, $0007, obj_routines_none, $0000
         }
         
         ..table: {
-            dw #obj_tilemaps_table,         $0009, $000d, obj_routines_none
+            dw #obj_tilemaps_table,         $0009, $000d, obj_routines_none, $0000
         }
         
         ..tallcandle: {
-            dw #obj_tilemaps_tallcandle,    $0002, $0008, obj_routines_none
+            dw #obj_tilemaps_tallcandle,    $0002, $0008, obj_routines_none, $0000
         }
         
         ..shelf: {
-            dw #obj_tilemaps_shelf,         $0008, $0002, obj_routines_none
+            dw #obj_tilemaps_shelf,         $0008, $0002, obj_routines_none, $0000
         }
         
         ..upstairs: {
-            dw #obj_tilemaps_upstairs,      $000c, $0014, obj_routines_none
+            dw #obj_tilemaps_upstairs,      $000c, $0014, obj_routines_none, $8000
         }
     }
+    
     
     .routines: {
         ;used for vent handling
