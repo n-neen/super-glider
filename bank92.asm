@@ -11,9 +11,10 @@ org $928000
     testpalette:
         dw $5B9C, $2A16, $42D6, $57ff, $1084, $0150, $0008, $2108,
            $0420, $08a0, $439C, $0216, $2A10, $0000, $0000, $0000
-
-    incbin "./data/palettes/stairs.pal"
-        
+           
+    stairspalette:
+        incbin "./data/palettes/stairs.pal"
+    
     
         ;incbin "./data/palettes/palette0.bin"
         ;incbin "./data/palettes/palette1.bin"
@@ -26,13 +27,14 @@ org $928000
         
     splashpalette:
         incbin "./data/palettes/splash.pal"
-        
     bg2palette:
         incbin "./data/palettes/bg2.pal"
-        
-    stairspalette:
+    stairspalette2:
         incbin "./data/palettes/stairs.pal"
-
+    objpalette:
+        incbin "./data/palettes/obj.pal"
+    
+    
 ;===========================================================================================
 ;===============================   S P R I T E   D A T A   =================================
 ;===========================================================================================

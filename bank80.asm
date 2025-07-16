@@ -2,6 +2,8 @@ lorom
 
 org $808000
 
+incsrc "./defines.asm"
+
 ;===========================================================================================
 ;======================================  DEFINES  ==========================================
 ;===========================================================================================
@@ -28,6 +30,13 @@ org $808000
 !backgroundtype         =           $4a
 
 !spriteaddrshifted      =           !spritestart>>13
+
+!dmaargstart    =                   $80
+!dmasrcptr      =                   !dmaargstart+0          ;2
+!dmasrcbank     =                   !dmaargstart+2          ;2
+!dmasize        =                   !dmaargstart+4          ;2
+!dmabaseaddr    =                   !dmaargstart+6          ;2
+!dmaloadindex   =                   !dmaargstart+8          ;2
 
 
 ;===========================================================================================
@@ -241,6 +250,20 @@ newgame: {
     
     jsl obj_tilemap_init
     jsl obj_clearall
+    jsl objdebug_makeall
+    jsl layer2upload        ;this is the way to update layer 2 after writing objects on the tilemap
+    
+    ;turn screen off
+    ;load background
+    ;load object layer
+    ;load objects
+    ;draw objects (to allow layer 2 to be built from those objects which draw on it)
+    ;objects which can, will delete themselves after drawing
+    ;update layer 2 tilemap
+    ;turn screen on
+    
+    
+    
     
     lda #$0000
     jsl load_sprite         ;load sprite data 0 (glider)
@@ -254,7 +277,6 @@ newgame: {
     
     jsl glider_init
     
-    jsl objdebug_makeall
     
     jsr screenon
     
@@ -539,6 +561,7 @@ nmi: {
     inc !nmicounter
     rti
 }
+
 
 
 waitfornmi: {

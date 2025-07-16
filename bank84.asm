@@ -11,7 +11,7 @@ incsrc "./defines.asm"
 
 obj: {
     .handle: {
-        ldx #$0030
+        ldx #!objectarraysize
         -
         lda !objroutineptr,x
         beq +
@@ -73,7 +73,7 @@ obj: {
     
     .clear: {
         ;deals with an instance of an object. clears all array slots
-        ;argument: x = obj id to clear
+        ;argument: x = obj index
         
         stz !objID,x
         stz !objxsize,x
@@ -142,7 +142,7 @@ obj: {
     .draw: {
         ;deals with an instance of an object
         ;get object ID, get x and y pos, get tilemap pointer, draw
-        ;argument: x=object id
+        ;argument: x=object index
         
         phy
         phb
@@ -181,7 +181,20 @@ obj: {
                                 ;to the start of the next row
         
         ;loop init
+        
+        lda !objproperty,x      ;the $8000 bit of property is layer 2 select bit
+        bmi +
+        
+        lda !objdrawanchor      ;so if property word is negative (msb set)
+        clc                     ;so index starts at $7f0000 for layer 2
+        adc #$6000              ;or $7f6000 for layer 1
+        tax
+        bra ++
+        
+        +
+        
         ldx !objdrawanchor
+        ++
         stz !rowcounter
         stz !rowlengthcounter
         
@@ -190,7 +203,7 @@ obj: {
             cmp #$ffff
             beq .out
             ora !objdrawpalette                 ;palette selection
-            sta !objtilemap,x
+            sta $7f0000,x                       ;either $7f0000 or $7f6000 based on if the layer 2 select bit is on
             
             iny : iny
             inx : inx
@@ -378,6 +391,7 @@ obj: {
         ..table:        dw obj_headers_table
         ..shelf:        dw obj_headers_shelf
         ..upstairs:     dw obj_headers_upstairs
+        ..openwall:     dw obj_headers_openwall
     }
     
     .headers: {
@@ -408,6 +422,10 @@ obj: {
         
         ..upstairs: {
             dw #obj_tilemaps_upstairs,      $000c, $0014, obj_routines_none, $8000
+        }
+        
+        ..openwall: {
+            dw #obj_tilemaps_openwall,      $0004, $0020, obj_routines_none, $8000
         }
     }
     
@@ -504,19 +522,116 @@ obj: {
             dw $ffff
         }
         
+        ..openwall: {
+            incbin "./data/tilemaps/objects/openwall.map"
+            dw $ffff
+        }
+        
     }
     
 }
 
 objdebug:
     .makeall: {                     ;obj index
-        ;jsr objdebug_makeshelf      ;0
-        ;jsr objdebug_maketable      ;4
-        ;jsr objdebug_makevent       ;2
-        jsr objdebug_makevent2      ;6
+        ;jsr objdebug_makeshelf       ;0
+        jsr objdebug_makevent        ;2
+        jsr objdebug_maketable       ;4
+        jsr objdebug_makevent2       ;6
         jsr objdebug_makestairs      ;8
+        jsr objdebug_makefan         ;a
+        jsr objdebug_makeopenwall    ;c
         
         rtl
+    }
+    
+        .makefan: {
+        phb
+        
+        phk
+        plb
+        
+        ldx #$000a
+        
+        lda #obj_headers_fanR
+        sta !objID,x
+        
+        lda obj_headers_fanR+2
+        ;asl
+        sta !objxsize,x
+        
+        lda obj_headers_fanR+4
+        asl
+        sta !objysize,x
+        
+        lda #obj_tilemaps_fanR
+        sta !objtilemapointer,x
+        
+        lda #$0016
+        dec
+        asl
+        sta !objxpos,x
+        
+        lda #$0013
+        dec
+        asl
+        sta !objypos,x
+        
+        lda #$0800
+        sta !objpal,x
+        
+        lda obj_headers_fanR+8
+        sta !objproperty,x
+        
+        ldx #$000a
+        jsr obj_draw
+        
+        plb
+        rts
+    }
+    
+    .makeopenwall: {
+        phb
+        
+        phk
+        plb
+        
+        ldx #$000c
+        
+        lda #obj_headers_openwall
+        sta !objID,x
+        
+        lda obj_headers_openwall+2
+        ;asl
+        sta !objxsize,x
+        
+        lda obj_headers_openwall+4
+        asl
+        sta !objysize,x
+        
+        lda #obj_tilemaps_openwall
+        sta !objtilemapointer,x
+        
+        lda #$001d
+        dec
+        asl
+        sta !objxpos,x
+        
+        lda #$0001
+        dec
+        asl
+        sta !objypos,x
+        
+        lda #$0000
+        sta !objpal,x
+        
+        lda obj_headers_openwall+8
+        sta !objproperty,x
+        
+        ldx #$000c
+        jsr obj_draw
+        
+        plb
+        rts
     }
     
     .makestairs: {
@@ -553,6 +668,9 @@ objdebug:
         
         lda #$0400
         sta !objpal,x
+        
+        lda obj_headers_upstairs+8
+        sta !objproperty,x
         
         ldx #$0000
         jsr obj_draw
@@ -593,7 +711,7 @@ objdebug:
         asl
         sta !objypos,x
         
-        lda #$1400
+        lda #$0800
         sta !objpal,x
         
         ldx #$0000
@@ -628,7 +746,7 @@ objdebug:
         lda obj_headers_vent+6
         sta !objroutineptr,x
         
-        lda #$0014
+        lda #$0015
         dec
         asl
         sta !objxpos,x
@@ -638,7 +756,7 @@ objdebug:
         asl
         sta !objypos,x
         
-        lda #$1000
+        lda #$0800
         sta !objpal,x
         
         ldx #$0002
@@ -683,7 +801,7 @@ objdebug:
         asl
         sta !objypos,x
         
-        lda #$1000
+        lda #$0800
         sta !objpal,x
         
         ldx #$0006
@@ -725,7 +843,7 @@ objdebug:
         asl
         sta !objypos,x
         
-        lda #$1800
+        lda #$0800
         sta !objpal,x
         
         ldx #$0004

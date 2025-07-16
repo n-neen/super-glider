@@ -83,15 +83,15 @@
 
 !objectarraystart   =       $1000
 !objectarraysize    =       $0030
-!objID              =       !objectarraystart
-!objxsize           =       !objID+!objectarraysize
-!objysize           =       !objxsize+!objectarraysize
-!objtilemapointer   =       !objysize+!objectarraysize
-!objxpos            =       !objtilemapointer+!objectarraysize
-!objypos            =       !objxpos+!objectarraysize
-!objpal             =       !objypos+!objectarraysize
-!objroutineptr      =       !objpal+!objectarraysize
-
+!objID              =       !objectarraystart+4
+!objxsize           =       !objID+!objectarraysize+4
+!objysize           =       !objxsize+!objectarraysize+4
+!objtilemapointer   =       !objysize+!objectarraysize+4
+!objxpos            =       !objtilemapointer+!objectarraysize+4
+!objypos            =       !objxpos+!objectarraysize+4
+!objpal             =       !objypos+!objectarraysize+4
+!objroutineptr      =       !objpal+!objectarraysize+4
+!objproperty        =       !objroutineptr+!objectarraysize+4
 
 ;arrays' ends       last define + !objectarraysize for total size
 

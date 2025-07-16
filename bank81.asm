@@ -421,10 +421,10 @@ load: {
             lsr                                     ;(index is normally *8 but it's *4 here
             tax
             
-            lda loadingtable_L2tilemaps,x
+            lda loadingtable_layertilemaps,x
             sta !loadptr
             
-            lda loadingtable_L2tilemaps+2,x         ;set db to bank from table
+            lda loadingtable_layertilemaps+2,x         ;set db to bank from table
             xba
             sta !pushbank
             pei (!pushbank)
@@ -449,6 +449,20 @@ load: {
             rts
         }
     }
+}
+
+layer2upload: {
+    lda #$0000
+    sta !dmasrcptr
+    lda #$007f
+    sta !dmasrcbank
+    lda #$0800
+    sta !dmasize
+    lda #!bg2tilemap
+    sta !dmabaseaddr
+    
+    jsl dma_vramtransfur
+    rtl
 }
 
 processspritemap: {
@@ -516,7 +530,7 @@ loadingtable: {
         }
     }
     
-    .L2tilemaps: {
+    .layertilemaps: {
         dl !objtilemap                  : db $00
         dl #splashtilemap               : db $01
         dl #bg1tilemap                  : db $02

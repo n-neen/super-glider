@@ -27,15 +27,9 @@ game: {
         jsl obj_handle
         
         jsr glider_handle
-        
-        
-        ;handle enemies
-        
-        ;jsr glider_draw
         jsr glider_newdraw
-        jsr hightablejank
-        ;draw enemies
-        ;draw objects
+        
+        jsr hightablejank       ;fills oam buffer high table
         rtl
     }
     
