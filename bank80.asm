@@ -175,6 +175,7 @@ main: {
         dw #debug           ;5
         dw #loadroom        ;6
         dw #pause           ;7
+        dw #transition      ;8
     }
 }
 
@@ -244,7 +245,10 @@ newgame: {
     ;jsr waitfornmi
     ;jsr screenon
     
-    lda room_list+0         ;room = room 0
+    stz !roomindex
+    ldx !roomindex
+    
+    lda room_list,x         ;room = room 0
     sta !roomptr
     
     lda #$0006
@@ -255,6 +259,26 @@ newgame: {
     lda #$0005
     sta !gamestate          ;if [debug], goto debug setup mode
 +   rts
+}
+
+;===========================================================================================
+;============================== STATE 8:  ROOM TRANSITION  =================================
+;===========================================================================================
+
+transition: {
+    ;leave force blank on
+    jsr waitfornmi
+    jsr screenoff
+    
+    jsl room_transition
+    
+    ;jsr waitfornmi
+    ;jsr screenon
+    
+    lda !kstateloadroom
+    sta !gamestate
+    
+    rts
 }
 
 

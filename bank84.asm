@@ -81,6 +81,10 @@ obj: {
         stz !objtilemapointer,x
         stz !objxpos,x
         stz !objypos,x
+        stz !objpal,x
+        stz !objroutineptr,x
+        stz !objproperty,x
+        stz !objvariable,x
         
         rts
     }
@@ -481,7 +485,7 @@ obj: {
         ..table:        dw obj_headers_table
         ..shelf:        dw obj_headers_shelf
         ..upstairs:     dw obj_headers_upstairs
-        ;downstairs
+        ..dnstairs:     dw obj_headers_dnstairs
         ..openwall:     dw obj_headers_openwall
     }
     
@@ -517,12 +521,12 @@ obj: {
             dw #obj_tilemaps_upstairs,      $000c, $0014, obj_routines_upstairs,    $8000
         }
         
-        ;..dnstairs {
-        ;    dw #obj_tilemaps_dnstairs,      $000c, $0014, obj_routines_dnstairs,    $8000
-        ;}
+        ..dnstairs {
+            dw #obj_tilemaps_dnstairs,      $000c, $0014, obj_routines_dnstairs,    $8000
+        }
         
         ..openwall: {
-            dw #obj_tilemaps_openwall,      $0004, $0020, obj_routines_none,        $8000
+            dw #obj_tilemaps_openwall,      $0005, $0020, obj_routines_delete,      $8000
         }
     }
     
@@ -538,6 +542,11 @@ obj: {
         
         ..dnstairs {
             ;todo: initiate room transition downward
+            rts
+        }
+        
+        ..delete: {
+            
             rts
         }
         
@@ -572,26 +581,23 @@ obj: {
             lda !kliftstateup       ;then lift state = up
             sta !gliderliftstate
             
-            
             lda !glidersuby
             sec
-            sbc #$ff00
-            sta !glidersuby         ;glidery +almost2
-            lda !glidery
-            sbc #$0000
-            sta !glidery
-            
-            lda !framecounter       ;if frame %8
-            bit #$0010
-            bne +
-            
-            lda !glidersuby
-            sec
-            sbc #$4000
+            sbc #$1000
             sta !glidersuby
+            
             lda !glidery
-            adc #$0000
+            sbc #$0001
             sta !glidery
+            
+            lda !maincounter
+            bit #$0002
+            beq +
+            
+            lda !glidersuby
+            sec
+            sbc #$8000
+            sta !glidersuby
             
         +   rts
         }
@@ -634,6 +640,11 @@ obj: {
         
         ..upstairs: {
             incbin "./data/tilemaps/objects/up_stairs.map"
+            dw $ffff
+        }
+        
+        ..dnstairs: {
+            incbin "./data/tilemaps/objects/down_stairs.map"
             dw $ffff
         }
         

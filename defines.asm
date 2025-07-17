@@ -67,6 +67,10 @@
 !roomenemylistptr   =       !housestart+6
 !roombounds         =       !housestart+8
 !roombg             =       !housestart+10
+!roomtranstype      =       !housestart+12
+!roomx              =       !housestart+14
+!roomy              =       !housestart+16
+!roomindex          =       !housestart+18
 
 ;object ram
 !rowcounter         =       $06
@@ -115,8 +119,8 @@
 !kgliderstatetipright       =       #$0004
 !kgliderstateturnaround     =       #$0005
 !kgliderstatelostlife       =       #$0006
-!kgliderxsubspeed           =       #$ffff      ;subpixel speed
-!kgliderysubspeed           =       #$b000
+!kgliderxsubspeed           =       #$7f00      ;subpixel speed
+!kgliderysubspeed           =       #$c000
 
 !kgliderupbound             =       #$fff8
 !kgliderdownbound           =       #$0010
@@ -165,6 +169,7 @@
 !kstatedebug                =       #$0005
 !kstateloadroom             =       #$0006
 !kstatepause                =       #$0007
+!kstateroomtrans            =       #$0008
 
 !kpausewait                 =       #$0030
 
@@ -175,6 +180,11 @@
 !kroomenemylist             =       $0002
 !kroombgtype                =       $0004
 !kroombounds                =       $0006
+
+!kroomtranstyperight        =       #$0000
+!kroomtranstypeleft         =       #$0001
+!kroomtranstypeup           =       #$0002
+!kroomtranstypedown         =       #$0003
 
 ;object constants
 

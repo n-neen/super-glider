@@ -28,6 +28,7 @@ game: {
         
         jsr glider_handle
         jsr glider_newdraw
+        jsr glider_checktrans
         
         jsr hightablejank       ;fills oam buffer high table
         rtl
@@ -280,6 +281,38 @@ glider: {
         plb
         plx
         rts
+    }
+    
+    .checktrans: {
+        lda !gliderx
+        cmp !krightbound-2
+        bpl ..right
+        
+        lda !gliderx
+        cmp !kleftbound+2
+        bmi ..left
+        
+        rts
+        
+        ..right: {
+            lda !roombounds
+            bit #$0001
+            bne +
+            lda !kroomtranstyperight
+            sta !roomtranstype
+            jsr roomtransitionstart
+        +   rts
+        }
+        
+        ..left:
+            lda !roombounds
+            bit #$1000
+            bne +
+            lda !kroomtranstypeleft
+            sta !roomtranstype
+            jsr roomtransitionstart
+        +   rts
+        }
     }
     
     .newdraw: {
@@ -541,7 +574,7 @@ glider: {
         sta !glidersubx
         
         lda !gliderx
-        sbc #$0000
+        sbc #$0001
         sta !gliderx
         
         dec !glidermovetimer
@@ -549,6 +582,7 @@ glider: {
     +   
         rts
     
+        ;if hit left bound:
     ++  stz !glidernextstate
         stz !glidermovetimer
         rts
@@ -568,7 +602,7 @@ glider: {
         adc !kgliderxsubspeed
         sta !glidersubx
         lda !gliderx
-        adc #$0000
+        adc #$0001
         sta !gliderx
         
         dec !glidermovetimer
@@ -576,8 +610,9 @@ glider: {
     +   
         rts
     
+        ;if hit right bound:
     ++  stz !glidernextstate
-        
+        stz !gliderstate
         stz !glidermovetimer
         rts
     }
@@ -630,6 +665,11 @@ glider: {
     }
 }
 
+roomtransitionstart: {
+    lda !kstateroomtrans
+    sta !gamestate
+    rts
+}
 
 
 oamhighbytes: {
