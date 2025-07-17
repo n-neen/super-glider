@@ -14,7 +14,8 @@ org $928000
            
     stairspalette:
         incbin "./data/palettes/stairs.pal"
-    
+    objpalette:
+        incbin "./data/palettes/obj.pal"
     
         ;incbin "./data/palettes/palette0.bin"
         ;incbin "./data/palettes/palette1.bin"
@@ -31,7 +32,7 @@ org $928000
         incbin "./data/palettes/bg2.pal"
     stairspalette2:
         incbin "./data/palettes/stairs.pal"
-    objpalette:
+    ;objpalette:
         incbin "./data/palettes/obj.pal"
     
     

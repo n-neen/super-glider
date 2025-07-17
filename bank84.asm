@@ -106,38 +106,6 @@ obj: {
         rtl
     }
     
-    .place: {
-        ;deals with an instance of an object, called after it is init
-        ;get position in room, from room object list, and write it in the array
-        
-        
-        ;argument:
-        ;x = object population entry
-        ;y = what slot
-        
-        
-        phb
-        phx
-        
-        pea $8383                   ;db = 83
-        plb : plb
-        
-        lda $0000,x                 ;the pointer object header
-        tax
-        lda $840000,x               ;tilemap pointer
-        sta !objtilemapointer,y
-        plx
-        
-        lda $0002,x
-        sta !objxpos,y
-        
-        lda $0004,x
-        sta !objypos,y
-        
-        plb
-        rtl
-    }
-    
     
     .draw: {
         ;deals with an instance of an object
@@ -145,6 +113,7 @@ obj: {
         ;argument: x=object index
         
         phy
+        phx
         phb
         
         phk
@@ -181,6 +150,7 @@ obj: {
                                 ;to the start of the next row
         
         ;loop init
+        ldy #$0000
         
         lda !objproperty,x      ;the $8000 bit of property is layer 2 select bit
         bmi +
@@ -238,6 +208,7 @@ obj: {
         .out:
         
         plb
+        plx
         ply
         rts
     }
@@ -375,6 +346,125 @@ obj: {
             sta !objtilemap+4,x
             rts
         }
+        
+        
+    }
+    
+    .spawn: {
+        phb
+        phx
+        phy
+        
+        phk
+        plb
+        
+        ;x = object list entry
+        ;y = object index
+        
+        ;from object definition:
+        ;tilemap ptr, xsize, ysize, routine, properties
+        
+        phx
+        
+        lda $830000,x
+        tax
+        lda $840000,x
+        tax                 ;x = object type ptr
+        
+        lda $840002,x
+        sta !objxsize,y
+        
+        lda $840004,x
+        asl
+        sta !objysize,y
+        
+        lda $840006,x
+        sta !objroutineptr,y
+        
+        lda $840008,x
+        sta !objproperty,y
+        
+        lda $840000,x
+        sta !objtilemapointer,y
+        
+        plx
+        
+        ;from object instance:
+        ;obj ID, xpos, ypos, palette
+        
+        lda $830000,x
+        sta !objID,y
+        
+        lda $830002,x
+        dec
+        asl
+        sta !objxpos,y
+        
+        lda $830004,x
+        dec
+        asl
+        sta !objypos,y
+        
+        lda $830006,x
+        sta !objpal,y
+        
+        lda $830008,x
+        sta !objvariable,y
+        
+        ply
+        plx
+        plb
+        rts
+    }
+    
+    .spawnall: {
+        ;a = room object list ptr
+        ;x = room ptr
+        phx
+        phy
+        phb
+        
+        phk
+        plb
+        
+        tax
+        
+        ..loop:
+        lda $830000,x       ;object
+        cmp #$ffff
+        beq ..out           ;if object type = $ffff then we are done
+        
+        ldy #!objectarraysize+2
+        ;loop to check which slots are occupied
+        -
+        dey : dey
+        bmi ..out           ;if y goes negative we have no slots
+        lda !objID,y
+        bne -               ;if current objID is 0, we have an empty slot
+        
+        ;slot found:
+        
+        jsr obj_spawn   ;with y = object index
+                        ;and x = object list entry pointer
+        
+        phx
+        tyx
+        jsr obj_draw    ;draw object (oops gotta switch y to x here)
+        plx             ;because x = obj index in that routine
+        
+        txa
+        clc                         ;x=x+entrylength
+        adc !kobjectentrylength     ;to get next entry
+        tax
+        
+        jmp ..loop
+        
+        ..out:
+        
+        plb
+        ply
+        plx
+        rtl
     }
     
     ;===========================================================================================
@@ -391,51 +481,66 @@ obj: {
         ..table:        dw obj_headers_table
         ..shelf:        dw obj_headers_shelf
         ..upstairs:     dw obj_headers_upstairs
+        ;downstairs
         ..openwall:     dw obj_headers_openwall
     }
     
+    
+    
     .headers: {
         ;object types
-        ..vent: {     ;tilemap pointer,     xsize, ysize, routine,           properties
-            dw #obj_tilemaps_vent,          $0006, $0003, obj_routines_vent, $0000
+        ..vent: {     ;tilemap pointer,     xsize, ysize, routine,                  properties
+            dw #obj_tilemaps_vent,          $0006, $0003, obj_routines_vent,        $0000
         }
         
         ..candle: {
-            dw #obj_tilemaps_candle,        $0004, $0004, obj_routines_none, $0000
+            dw #obj_tilemaps_candle,        $0004, $0004, obj_routines_none,        $0000
         }
         
         ..fanR: {
-            dw #obj_tilemaps_fanR,          $0004, $0007, obj_routines_none, $0000
+            dw #obj_tilemaps_fanR,          $0004, $0007, obj_routines_none,        $0000
         }
         
         ..table: {
-            dw #obj_tilemaps_table,         $0009, $000d, obj_routines_none, $0000
+            dw #obj_tilemaps_table,         $0009, $000d, obj_routines_none,        $0000
         }
         
         ..tallcandle: {
-            dw #obj_tilemaps_tallcandle,    $0002, $0008, obj_routines_none, $0000
+            dw #obj_tilemaps_tallcandle,    $0002, $0008, obj_routines_none,        $0000
         }
         
         ..shelf: {
-            dw #obj_tilemaps_shelf,         $0008, $0002, obj_routines_none, $0000
+            dw #obj_tilemaps_shelf,         $0008, $0002, obj_routines_none,        $0000
         }
         
         ..upstairs: {
-            dw #obj_tilemaps_upstairs,      $000c, $0014, obj_routines_none, $8000
+            dw #obj_tilemaps_upstairs,      $000c, $0014, obj_routines_upstairs,    $8000
         }
         
+        ;..dnstairs {
+        ;    dw #obj_tilemaps_dnstairs,      $000c, $0014, obj_routines_dnstairs,    $8000
+        ;}
+        
         ..openwall: {
-            dw #obj_tilemaps_openwall,      $0004, $0020, obj_routines_none, $8000
+            dw #obj_tilemaps_openwall,      $0004, $0020, obj_routines_none,        $8000
         }
     }
     
     
     .routines: {
         ;used for vent handling
-        ;and  TODO: 
-            ;tile animations on candles
-            ;anything else an object might want to do
+        ;and eventually, stairs
             
+        ..upstairs {
+            ;todo: initiate room transition upward
+            rts
+        }
+        
+        ..dnstairs {
+            ;todo: initiate room transition downward
+            rts
+        }
+        
         ..vent: {
             ;x = object id
             !ventleft       =       !localtempvar2
@@ -460,23 +565,33 @@ obj: {
             cmp !ventright          ;right lift bound
             bpl +
             
+            lda !glidery            ;if glidery < vent height
+            cmp !objvariable,x
+            bmi +
+            
             lda !kliftstateup       ;then lift state = up
             sta !gliderliftstate
             
-            lda !framecounter       ;if frame %8
-            bit #$0008
-            bne +
-            
-            lda !glidery            ;if glidery < ceiling
-            cmp !kceiling+4
-            bpl +
             
             lda !glidersuby
-            clc
-            adc #$ff00
+            sec
+            sbc #$ff00
             sta !glidersuby         ;glidery +almost2
+            lda !glidery
+            sbc #$0000
+            sta !glidery
             
-            inc !glidery
+            lda !framecounter       ;if frame %8
+            bit #$0010
+            bne +
+            
+            lda !glidersuby
+            sec
+            sbc #$4000
+            sta !glidersuby
+            lda !glidery
+            adc #$0000
+            sta !glidery
             
         +   rts
         }
@@ -531,7 +646,7 @@ obj: {
     
 }
 
-objdebug:
+objdebug: {
     .makeall: {                     ;obj index
         ;jsr objdebug_makeshelf       ;0
         jsr objdebug_makevent        ;2

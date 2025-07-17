@@ -223,50 +223,16 @@ splash: {
 
 
 newgame: {
-;prospective outline of newgame
-    ;load house data
-    ;identify starting room
-    ;load starting room's data
-        ;starting room informs the following:
-        ;background palettes,
-        ;background graphics,
-        ;background tilemap
-        ;load objects
-        ;assemble object tilemap
-    ;load sprite graphics
-    ;load sprite palettes
-    ;load spritemaps
-    ;place glider
-    ;jsl gliderinit
     
     jsr waitfornmi
     jsr screenoff           ;enable forced blank to do the following loading
     
-    lda #$0003
-    jsl load_background     ;load background 3 (panneled room)
-    
     lda #$0000
-    jsl load_background     ;load obj tilemap for layer 1 (background 0)
-    
-    jsl obj_tilemap_init
-    jsl obj_clearall
-    jsl objdebug_makeall
-    jsl layer2upload        ;this is the way to update layer 2 after writing objects on the tilemap
-    
-    ;turn screen off
-    ;load background
-    ;load object layer
-    ;load objects
-    ;draw objects (to allow layer 2 to be built from those objects which draw on it)
-    ;objects which can, will delete themselves after drawing
-    ;update layer 2 tilemap
-    ;turn screen on
-    
-    
-    
+    jsl load_background     ;load data for layer 1 (object layer)
     
     lda #$0000
     jsl load_sprite         ;load sprite data 0 (glider)
+    jsl glider_init
     
     sep #$20
     lda #%00010011          ;main screen = sprites, L2, L1
@@ -275,13 +241,14 @@ newgame: {
     sta !bg1y
     rep #$20
     
-    jsl glider_init
+    ;jsr waitfornmi
+    ;jsr screenon
     
+    lda room_list+0         ;room = room 0
+    sta !roomptr
     
-    jsr screenon
-    
-    lda #$0003
-    sta !gamestate          ;advance to game state 3 (playgame)
+    lda #$0006
+    sta !gamestate          ;advance to game state 6 (load room)
     
     lda debugflag
     beq +
@@ -477,12 +444,24 @@ scroll: {
 }
 
 ;===========================================================================================
-;================================   STATE 5:  LOAD ROOM   ==================================
+;================================   STATE 6:  LOAD ROOM   ==================================
 ;===========================================================================================
 
 loadroom: {
+    ;turn screen off
+    ;load background
+    ;load object layer
+    ;load objects
+    ;draw objects (to allow layer 2 to be built from those objects which draw on it)
+    ;objects which can, will delete themselves after drawing
+    ;update layer 2 tilemap
+    ;turn screen on
+    
+    jsr waitfornmi
     jsr screenoff
+    
     jsl room_load
+    
     jsr waitfornmi
     jsr screenon
     

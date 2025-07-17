@@ -68,8 +68,6 @@
 !roombounds         =       !housestart+8
 !roombg             =       !housestart+10
 
-
-
 ;object ram
 !rowcounter         =       $06
 !objdrawpointer     =       $08
@@ -83,15 +81,17 @@
 
 !objectarraystart   =       $1000
 !objectarraysize    =       $0030
-!objID              =       !objectarraystart+4
-!objxsize           =       !objID+!objectarraysize+4
-!objysize           =       !objxsize+!objectarraysize+4
-!objtilemapointer   =       !objysize+!objectarraysize+4
-!objxpos            =       !objtilemapointer+!objectarraysize+4
-!objypos            =       !objxpos+!objectarraysize+4
-!objpal             =       !objypos+!objectarraysize+4
-!objroutineptr      =       !objpal+!objectarraysize+4
-!objproperty        =       !objroutineptr+!objectarraysize+4
+!objID              =       !objectarraystart+2
+!objxsize           =       !objID+!objectarraysize+2
+!objysize           =       !objxsize+!objectarraysize+2
+!objtilemapointer   =       !objysize+!objectarraysize+2
+!objxpos            =       !objtilemapointer+!objectarraysize+2
+!objypos            =       !objxpos+!objectarraysize+2
+!objpal             =       !objypos+!objectarraysize+2
+!objroutineptr      =       !objpal+!objectarraysize+2
+!objproperty        =       !objroutineptr+!objectarraysize+2
+!objvariable        =       !objproperty+!objectarraysize+2
+
 
 ;arrays' ends       last define + !objectarraysize for total size
 
@@ -99,7 +99,8 @@
 
 
 
-
+;if you ever want to change these, be prepared to change
+;all the non-automatic stuff like the object draw routine
 !objtilemap             =       $7f6000
 !layer2tilemap          =       $7f0000
 
@@ -166,3 +167,16 @@
 !kstatepause                =       #$0007
 
 !kpausewait                 =       #$0030
+
+;room loading constants:
+;how far into the room header are these things:
+
+!kroomobjlist               =       $0000
+!kroomenemylist             =       $0002
+!kroombgtype                =       $0004
+!kroombounds                =       $0006
+
+;object constants
+
+!kobjectentrylength         =       #$000a
+;length of one object list entry

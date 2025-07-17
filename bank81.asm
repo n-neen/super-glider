@@ -451,7 +451,7 @@ load: {
     }
 }
 
-layer2upload: {
+layer2draw: {
     lda #$0000
     sta !dmasrcptr
     lda #$007f
