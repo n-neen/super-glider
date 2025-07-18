@@ -53,7 +53,9 @@
 !glidersubx         =       !gliderramstart+20      ;subpixel x
 !glidersuby         =       !gliderramstart+22      ;subpixel y
 !gliderturntimer    =       !gliderramstart+24
-
+!gliderstairstimer  =       !gliderramstart+26
+!gliderstairstype   =       !gliderramstart+28
+!glidertranstimer   =       !gliderramstart+30
 
 ;start of oam table to dma at nmi. 544 bytes long
 !oambuffer          =       $500
@@ -189,6 +191,7 @@
 !kroomtranstypeleft         =       #$0001
 !kroomtranstypeup           =       #$0002
 !kroomtranstypedown         =       #$0003
+!ktranstimer                =       #$0038
 
 ;object constants
 

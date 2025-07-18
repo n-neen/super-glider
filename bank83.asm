@@ -64,6 +64,7 @@ room: {
         plb
         
         lda !roomtranstype
+        sta !gliderstairstype           ;save this
         asl
         tax
         jsr (room_transition_table,x)
@@ -71,6 +72,7 @@ room: {
         ldx !roomindex
         lda room_list,x
         sta !roomptr
+        
         
         plb
         rtl
@@ -92,6 +94,9 @@ room: {
             lda !kleftbound+7
             sta !gliderx
             
+            lda !ktranstimer
+            sta !glidertranstimer
+            
             rts
         }
         
@@ -104,6 +109,9 @@ room: {
             lda !krightbound-7
             sta !gliderx
             
+            lda !ktranstimer
+            sta !glidertranstimer
+            
             rts
         }
         
@@ -115,6 +123,11 @@ room: {
             
             lda !kfloor-$40
             sta !glidery
+            
+            lda !ktranstimer
+            sta !glidertranstimer
+            sta !gliderstairstimer
+            
             rts
         }
         
@@ -124,11 +137,16 @@ room: {
             sbc #$0040
             sta !roomindex
             
-            lda !kceiling+$30
+            lda !kceiling+$28
             sta !glidery
+            
+            lda !ktranstimer
+            sta !glidertranstimer
+            sta !gliderstairstimer
             
             rts
         }
+
     }
 
 
@@ -230,39 +248,6 @@ room: {
            room_entry_4d,
            room_entry_4e,
            room_entry_4f,
-           room_entry_40,
-           room_entry_41,
-           room_entry_42,
-           room_entry_43,
-           room_entry_44,
-           room_entry_45,
-           room_entry_46,
-           room_entry_47,
-           room_entry_48,
-           room_entry_49,
-           room_entry_4a,
-           room_entry_4b,
-           room_entry_4c,
-           room_entry_4d,
-           room_entry_4e,
-           room_entry_4f
-           
-        dw room_entry_50,       ;fourth floor
-           room_entry_51,
-           room_entry_52,
-           room_entry_53,
-           room_entry_54,
-           room_entry_55,
-           room_entry_56,
-           room_entry_57,
-           room_entry_58,
-           room_entry_59,
-           room_entry_5a,
-           room_entry_5b,
-           room_entry_5c,
-           room_entry_5d,
-           room_entry_5e,
-           room_entry_5f,
            room_entry_50,
            room_entry_51,
            room_entry_52,
@@ -280,7 +265,7 @@ room: {
            room_entry_5e,
            room_entry_5f
            
-        dw room_entry_60,       ;fifth floor
+        dw room_entry_60,       ;fourth floor
            room_entry_61,
            room_entry_62,
            room_entry_63,
@@ -296,39 +281,6 @@ room: {
            room_entry_6d,
            room_entry_6e,
            room_entry_6f,
-           room_entry_60,
-           room_entry_61,
-           room_entry_62,
-           room_entry_63,
-           room_entry_64,
-           room_entry_65,
-           room_entry_66,
-           room_entry_67,
-           room_entry_68,
-           room_entry_69,
-           room_entry_6a,
-           room_entry_6b,
-           room_entry_6c,
-           room_entry_6d,
-           room_entry_6e,
-           room_entry_6f
-           
-        dw room_entry_70,       ;sixth floor
-           room_entry_71,
-           room_entry_72,
-           room_entry_73,
-           room_entry_74,
-           room_entry_75,
-           room_entry_76,
-           room_entry_77,
-           room_entry_78,
-           room_entry_79,
-           room_entry_7a,
-           room_entry_7b,
-           room_entry_7c,
-           room_entry_7d,
-           room_entry_7e,
-           room_entry_7f,
            room_entry_70,
            room_entry_71,
            room_entry_72,
@@ -345,6 +297,7 @@ room: {
            room_entry_7d,
            room_entry_7e,
            room_entry_7f
+
     }
 
 

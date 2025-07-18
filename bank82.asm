@@ -298,6 +298,9 @@ glider: {
         rts
         
         ..right: {
+            lda !ktranstimer
+            beq .checktrans_ignore
+            
             lda !roombounds
             bit #$0001
             bne +
@@ -308,6 +311,9 @@ glider: {
         }
         
         ..left:
+            lda !ktranstimer
+            beq .checktrans_ignore
+            
             lda !roombounds
             bit #$1000
             bne +
@@ -315,6 +321,11 @@ glider: {
             sta !roomtranstype
             jsr roomtransitionstart
         +   rts
+        }
+        
+        ..ignore: {
+            stz !glidernextstate
+            rts
         }
     }
     
@@ -434,6 +445,56 @@ glider: {
         jml boot
     }
     
+    .stairslift: {
+        phb
+        
+        phk
+        plb
+        
+        dec !glidertranstimer
+        bmi +
+        
+        lda !gliderstairstype
+        asl
+        tax
+        
+        lda !glidery
+        clc
+        adc .stairslift_table,x
+        sta !glidery
+        
+        lda !gliderdir
+        asl
+        tax
+        lda .stairslift_htable,x
+        clc
+        adc !gliderx
+        sta !gliderx
+        
+        
+        -
+        plb
+        rts
+        
+        +
+        stz !gliderstairstimer
+        bra -
+        
+        ..table: {
+            ;according to:
+            ;!kroomtranstyperight        =       #$0000
+            ;!kroomtranstypeleft         =       #$0001
+            ;!kroomtranstypeup           =       #$0002
+            ;!kroomtranstypedown         =       #$0003
+            dw $0000, $0000, $fffc, $0002
+        }
+        
+        ..htable: {
+               ;right  left
+            dw $ffff, $ffff
+        }
+    }
+    
     .handle: {
         ;high level checks that need to be done regardless of glider state go here
         ;like falling (happens always unless on a vent)
@@ -445,6 +506,17 @@ glider: {
         beq glider_gameover
         
         jsr glider_turnaround_handletimer
+        
+        lda !glidertranstimer
+        beq +
+        dec !glidertranstimer
+        +
+        
+        lda !gliderstairstimer
+        beq ++
+        jsr glider_stairslift
+        ++
+        
         
         ..lift: {
             lda !gliderliftstate
@@ -753,3 +825,5 @@ oamhighbits: {
 }
 
 incsrc "./data/sprites/spritemaps.asm"
+
+;warn pc
