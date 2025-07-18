@@ -27,8 +27,8 @@ game: {
         jsl obj_handle
         
         jsr glider_handle
-        jsr glider_newdraw
         jsr glider_checktrans
+        jsr glider_newdraw
         
         jsr hightablejank       ;fills oam buffer high table
         rtl
@@ -147,8 +147,11 @@ getinput: {
         bit !kb
         beq ..nob
             ;if pressed go here
-            ldx !kgliderstateturnaround
-            stx !glidernextstate
+            ;ldx !kgliderstateturnaround
+            ;stx !glidernextstate
+            pha
+            jsr glider_turnaround
+            pla
         ..nob:
     }
     
@@ -328,6 +331,10 @@ glider: {
         
         phk
         plb
+        
+        lda !gamestate
+        cmp !kstateloadroom
+        beq +
         
         ldy #$0000
         
@@ -639,13 +646,16 @@ glider: {
         lda !gliderdir
         eor !kgliderdirleft             ;direction switch
         sta !gliderdir
+        ;sta !glidernextstate
         
         lda !kturnaroundcooldown
         sta !gliderturntimer
         
         +
-        stz !gliderstate
-        stz !glidernextstate
+        ;stz !gliderstate
+        ;lda !gliderdir
+        ;sta !gliderstate
+        ;stz !glidernextstate
         rts
         
         ..handletimer: {

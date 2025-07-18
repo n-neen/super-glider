@@ -536,13 +536,71 @@ obj: {
         ;and eventually, stairs
             
         ..upstairs {
-            ;todo: initiate room transition upward
-            rts
+            ;x = obj id
+            
+            lda !objxpos,x
+            asl #2
+            
+            sta !localtempvar
+            clc
+            adc #$0008
+            sta !stairleft
+            
+            lda !localtempvar
+            clc
+            adc #$0050
+            sta !stairright
+            
+            lda !gliderx
+            cmp !stairleft
+            bmi +
+            cmp !stairright
+            bpl +
+            
+            lda !glidery
+            cmp !kceiling+$a
+            bpl +
+            
+            lda !kroomtranstypeup
+            sta !roomtranstype
+            lda !kstateroomtrans
+            sta !gamestate
+            
+        +   rts
         }
         
         ..dnstairs {
-            ;todo: initiate room transition downward
-            rts
+            ;x = obj id
+            
+            lda !objxpos,x
+            asl #2
+            
+            sta !localtempvar
+            clc
+            adc #$0008
+            sta !stairleft
+            
+            lda !localtempvar
+            clc
+            adc #$0050
+            sta !stairright
+            
+            lda !gliderx
+            cmp !stairleft
+            bmi +
+            cmp !stairright
+            bpl +
+            
+            lda !glidery
+            cmp !kfloor-$28
+            bmi +
+            
+            lda !kroomtranstypedown
+            sta !roomtranstype
+            lda !kstateroomtrans
+            sta !gamestate
+            
+        +   rts
         }
         
         ..delete: {

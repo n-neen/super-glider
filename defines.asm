@@ -75,6 +75,10 @@
 ;object ram
 !rowcounter         =       $06
 !objdrawpointer     =       $08
+
+!stairleft          =       $0f00
+!stairright         =       $0f02
+
 !objdrawpalette     =       $0ff2
 !rowlengthcounter   =       $0ff4
 !objdrawnextline    =       $0ff6
