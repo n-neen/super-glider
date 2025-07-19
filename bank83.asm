@@ -441,6 +441,7 @@ room: {
             dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
             dw #obj_ptr_vent,       $0006, $001a,  $0800,   $0013
             dw #obj_ptr_vent,       $0012, $001a,  $0800,   $0020
+            dw #obj_ptr_vent,       $001a, $001a,  $0800,   $0020
             dw #obj_ptr_upstairs,   $000e, $0005,  $0400,   $0000
             dw $ffff
         }
@@ -448,17 +449,20 @@ room: {
         ..1: {
             dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
             dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
-            dw #obj_ptr_fanR,       $0012, $000f,  $0800,   $0013
-            dw #obj_ptr_vent,       $0004, $001a,  $0800,   $0013
-            dw #obj_ptr_upstairs,   $0010, $0005,  $0400,   $0000
-            dw #obj_ptr_vent,       $0012, $001a,  $0800,   $0033
+            dw #obj_ptr_fanR,       $0013, $000a,  $0800,   $0013
+            dw #obj_ptr_table,      $000d, $0011,  $0800,   $0000
+            dw #obj_ptr_vent,       $0003, $001a,  $0800,   $0013
+            dw #obj_ptr_vent,       $0016, $001a,  $0800,   $0033
+            dw #obj_ptr_ozma,       $0004, $0005,  $1000,   $0000
+            dw #obj_ptr_lamp,       $000c, $000b,  $1400,   $0000
             dw $ffff
         }
         
         ..2: {
             dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
-            dw #obj_ptr_vent,       $0006, $001a,  $0400,   $0013
+            dw #obj_ptr_vent,       $0006, $001a,  $0800,   $0013
             dw #obj_ptr_vent,       $0014, $001a,  $0800,   $0033
+            dw #obj_ptr_window,     $0008, $0008,  $0c00,   $0033
             dw $ffff
         }
         

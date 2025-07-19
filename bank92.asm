@@ -16,6 +16,9 @@ org $928000
         incbin "./data/palettes/stairs.pal"
     objpalette:
         incbin "./data/palettes/obj.pal"
+        incbin "./data/palettes/obj2.pal" 
+        incbin "./data/palettes/ozma.pal"
+        incbin "./data/palettes/lamp.pal"
     
         ;incbin "./data/palettes/palette0.bin"
         ;incbin "./data/palettes/palette1.bin"
@@ -32,9 +35,10 @@ org $928000
         incbin "./data/palettes/bg2.pal"
     stairspalette2:
         incbin "./data/palettes/stairs.pal"
-    ;objpalette:
         incbin "./data/palettes/obj.pal"
-    
+        incbin "./data/palettes/obj2.pal"
+        incbin "./data/palettes/ozma.pal"
+        incbin "./data/palettes/lamp.pal"
     
 ;===========================================================================================
 ;===============================   S P R I T E   D A T A   =================================

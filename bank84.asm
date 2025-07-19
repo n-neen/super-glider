@@ -487,6 +487,10 @@ obj: {
         ..upstairs:     dw obj_headers_upstairs
         ..dnstairs:     dw obj_headers_dnstairs
         ..openwall:     dw obj_headers_openwall
+        ..window:       dw obj_headers_window
+        ..ozma:         dw obj_headers_ozma
+        ..lamp:         dw obj_headers_lamp
+        
     }
     
     
@@ -527,6 +531,18 @@ obj: {
         
         ..openwall: {
             dw #obj_tilemaps_openwall,      $0005, $0020, obj_routines_delete,      $8000
+        }
+        
+        ..window: {
+            dw #obj_tilemaps_window,        $0006, $0008, obj_routines_delete,      $8000
+        }
+        
+        ..ozma: {
+            dw #obj_tilemaps_ozma,          $000c, $000b, obj_routines_delete,      $8000
+        }
+        
+        ..lamp: {
+            dw #obj_tilemaps_lamp,          $0004, $0005, obj_routines_delete,      $0000
         }
     }
     
@@ -641,11 +657,10 @@ obj: {
             
             lda !glidersuby
             sec
-            sbc #$1000
+            sbc #$9000
             sta !glidersuby
-            
             lda !glidery
-            sbc #$0001
+            sbc #$0000
             sta !glidery
             
             lda !maincounter
@@ -708,6 +723,21 @@ obj: {
         
         ..openwall: {
             incbin "./data/tilemaps/objects/openwall.map"
+            dw $ffff
+        }
+        
+        ..window: {
+            incbin "./data/tilemaps/objects/window.map"
+            dw $ffff
+        }
+        
+        ..ozma: {
+            incbin "./data/tilemaps/objects/ozma.map"
+            dw $ffff
+        }
+        
+        ..lamp: {
+            incbin "./data/tilemaps/objects/lamp.map"
             dw $ffff
         }
         
