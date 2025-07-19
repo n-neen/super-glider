@@ -482,7 +482,7 @@ obj: {
         ..vent:         dw obj_headers_vent
         ..candle:       dw obj_headers_candle
         ..fanR:         dw obj_headers_fanR
-        ..table:        dw obj_headers_table
+        ..fanL:         dw obj_headers_fanL
         ..shelf:        dw obj_headers_shelf
         ..upstairs:     dw obj_headers_upstairs
         ..dnstairs:     dw obj_headers_dnstairs
@@ -491,6 +491,8 @@ obj: {
         ..ozma:         dw obj_headers_ozma
         ..lamp:         dw obj_headers_lamp
         
+        ..table:        dw obj_headers_table
+        ..table2:       dw obj_headers_table2
     }
     
     
@@ -498,7 +500,7 @@ obj: {
     .headers: {
         ;object types
         ..vent: {     ;tilemap pointer,     xsize, ysize, routine,                  properties
-            dw #obj_tilemaps_vent,          $0006, $0003, obj_routines_vent,        $0000
+            dw #obj_tilemaps_vent,          $0006, $0003, obj_routines_vent,        $8000
         }
         
         ..candle: {
@@ -509,8 +511,8 @@ obj: {
             dw #obj_tilemaps_fanR,          $0004, $0007, obj_routines_none,        $0000
         }
         
-        ..table: {
-            dw #obj_tilemaps_table,         $0009, $000d, obj_routines_none,        $0000
+        ..fanL: {
+            dw #obj_tilemaps_fanL,          $0005, $0007, obj_routines_none,        $0000
         }
         
         ..tallcandle: {
@@ -543,6 +545,14 @@ obj: {
         
         ..lamp: {
             dw #obj_tilemaps_lamp,          $0004, $0005, obj_routines_delete,      $0000
+        }
+        
+        ..table: {
+            dw #obj_tilemaps_table,         $0009, $000d, obj_routines_none,        $0000
+        }
+        
+        ..table2: {
+            dw #obj_tilemaps_table2,        $000b, $0008, obj_routines_none,        $0000
         }
     }
     
@@ -686,6 +696,11 @@ obj: {
             dw $ffff
         }
         
+        ..table2: {
+            incbin "./data/tilemaps/objects/table2.map"
+            dw $ffff
+        }
+        
         ..candle: {
             incbin "./data/tilemaps/objects/candle.map"
             dw $ffff
@@ -693,6 +708,11 @@ obj: {
         
         ..fanR: {
             incbin "./data/tilemaps/objects/fanR.map"
+            dw $ffff
+        }
+        
+        ..fanL: {
+            incbin "./data/tilemaps/objects/fanL.map"
             dw $ffff
         }
         

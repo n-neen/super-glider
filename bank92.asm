@@ -8,31 +8,20 @@ org $928000
 ;===========================================================================================
 
 
-    testpalette:
-        dw $5B9C, $2A16, $42D6, $57ff, $1084, $0150, $0008, $2108,
-           $0420, $08a0, $439C, $0216, $2A10, $0000, $0000, $0000
-           
-    stairspalette:
+    bg2palette:
+        incbin "./data/palettes/bg2.pal" 
+    ;stairspalette:
         incbin "./data/palettes/stairs.pal"
-    objpalette:
+    ;objpalette:
         incbin "./data/palettes/obj.pal"
         incbin "./data/palettes/obj2.pal" 
         incbin "./data/palettes/ozma.pal"
         incbin "./data/palettes/lamp.pal"
-    
-        ;incbin "./data/palettes/palette0.bin"
-        ;incbin "./data/palettes/palette1.bin"
-        
-        ;dw $2940, $0000, $6739, $7ec7, $2108, $5ef7, $39ac, $24a4,
-        ;   $2529, $39ce, $4e73, $44c4, $7fff, $5294, $3c3c, $643c
-        ;   
-        ;dw $2940, $0000, $6739, $7ec7, $2108, $5ef7, $39ac, $24a4,
-        ;   $2529, $39ce, $4e73, $44c4, $7fff, $5294, $3c3c, $643c
         
     splashpalette:
         incbin "./data/palettes/splash.pal"
-    bg2palette:
-        incbin "./data/palettes/bg2.pal"
+    bg3palette:
+        incbin "./data/palettes/bg3.pal"
     stairspalette2:
         incbin "./data/palettes/stairs.pal"
         incbin "./data/palettes/obj.pal"
@@ -65,15 +54,14 @@ gliderdata:
 ;===============================      T I L E M A P S      =================================
 ;===========================================================================================
 
-
-bg1tilemap:
-    incbin "./data/tilemaps/bg1tilemap.bin"
-    
 splashtilemap:
     incbin "./data/tilemaps/splash.bin"
-        
+
 bg2tilemap:
-    incbin "./data/tilemaps/bg2tilemap.bin"
+    incbin "./data/tilemaps/bg2.map"
+    
+bg3tilemap:
+    incbin "./data/tilemaps/bg3.bin"
     
 objtilemap:
     incbin "./data/tilemaps/obj_initial_tilemap.bin"

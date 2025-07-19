@@ -511,8 +511,8 @@ loadingtable: {
         ..gfx: {
             %loadtablentry(#objgfx,                 $4000, !bg1start,        $00)     ;obj    = 00              ;object layer
             %loadtablentry(#splashgfx,              $8000, !bg2start,        $01)     ;splash = 01
-            %loadtablentry(#bg1gfx,                 $4000, !bg2start,        $02)     ;bg1    = 02
-            %loadtablentry(#bg2gfx,                 $4000, !bg2start,        $03)     ;bg2    = 03
+            %loadtablentry(#bg2gfx,                 $4000, !bg2start,        $02)     ;bg2    = 02
+            %loadtablentry(#bg3gfx,                 $4000, !bg2start,        $03)     ;bg3    = 03
         }
         
         ..tilemaps: {
@@ -523,18 +523,18 @@ loadingtable: {
         }
         
         ..palettes: {
-            %loadtablentry(#bg2palette,             $0100, !palettes,        $00)     ;obj    = 00              ;object layer
+            %loadtablentry(#bg3palette,             $0100, !palettes,        $00)     ;obj    = 00              ;object layer
             %loadtablentry(#splashpalette,          $0100, !palettes,        $01)     ;splash = 01
-            %loadtablentry(#testpalette,            $0100, !palettes,        $02)     ;bg1    = 02
-            %loadtablentry(#bg2palette,             $0100, !palettes,        $03)     ;bg2    = 03
+            %loadtablentry(#bg2palette,             $0100, !palettes,        $02)     ;bg1    = 02
+            %loadtablentry(#bg3palette,             $0100, !palettes,        $03)     ;bg3    = 03
         }
     }
     
     .layertilemaps: {
         dl !objtilemap                  : db $00
         dl #splashtilemap               : db $01
-        dl #bg1tilemap                  : db $02
-        dl #bg2tilemap                  : db $03
+        dl #bg2tilemap                  : db $02
+        dl #bg3tilemap                  : db $03
     }
 }
 
