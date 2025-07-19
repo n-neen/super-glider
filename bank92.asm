@@ -28,7 +28,13 @@ org $928000
         incbin "./data/palettes/obj2.pal"
         incbin "./data/palettes/ozma.pal"
         incbin "./data/palettes/lamp.pal"
-    
+        
+    bg4palette:
+        incbin "./data/palettes/bg4.pal"
+        incbin "./data/palettes/stairs.pal"
+        incbin "./data/palettes/obj.pal"
+        incbin "./data/palettes/obj2.pal"
+        
 ;===========================================================================================
 ;===============================   S P R I T E   D A T A   =================================
 ;===========================================================================================
@@ -65,5 +71,8 @@ bg3tilemap:
     
 objtilemap:
     incbin "./data/tilemaps/obj_initial_tilemap.bin"
-    
+
+bg4tilemap:
+    incbin "./data/tilemaps/bg4.map"
+
 ;warn pc

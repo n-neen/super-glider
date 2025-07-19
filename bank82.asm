@@ -9,9 +9,10 @@ org $828000
 hightablejank: {
     phx
     ldx #$0020
--   lda !oamhightable,x
-    ora #$aaaa
-    sta !oamhightable,x
+    lda #$aaaa
+-   sta !oamhightable,x
+    ;ora #$aaaa
+    ;sta !oamhightable,x
     dex : dex
     bpl -
     plx
@@ -193,8 +194,9 @@ glider: {
         sta !gliderlives
         
         ..spawn: {
-            lda #$0030
+            lda #$0040
             sta !gliderx            ;glider initial position
+            lda #$0030
             sta !glidery
             lda !kliftstatedown
             sta !gliderliftstate
@@ -486,7 +488,7 @@ glider: {
             ;!kroomtranstypeleft         =       #$0001
             ;!kroomtranstypeup           =       #$0002
             ;!kroomtranstypedown         =       #$0003
-            dw $0000, $0000, $fffc, $0002
+            dw $0000, $0000, $fffe, $0002
         }
         
         ..htable: {

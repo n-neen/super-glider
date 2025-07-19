@@ -136,6 +136,7 @@ init:
         rep #$20
         
         jsl dma_clearvram
+        jsl filloambuffer
         ;jsr hightablefill
         
     ;fall through to main
@@ -159,7 +160,7 @@ main: {
         tax
         jsr (main_statetable,x)
         
-        jsr debug_showcpu
+        ;jsr debug_showcpu
         jsr waitfornmi
         
         jmp .statehandle
@@ -242,13 +243,11 @@ newgame: {
     sta !bg1y
     rep #$20
     
-    ;jsr waitfornmi
-    ;jsr screenon
+    lda #$0020*2
+    sta !roomindex
+    tax
     
-    stz !roomindex
-    ldx !roomindex
-    
-    lda room_list,x         ;room = room 0
+    lda room_list,x         ;room = room $20
     sta !roomptr
     
     lda #$0006

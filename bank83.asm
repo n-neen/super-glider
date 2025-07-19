@@ -303,9 +303,9 @@ room: {
 
     .entry: {    ;objs            enemies            bg     bounds
         
-        ..0: dw  room_objlist_0,  room_enemylist_0,  $0003, $1000
-        ..1: dw  room_objlist_1,  room_enemylist_1,  $0002, $0000
-        ..2: dw  room_objlist_2,  room_enemylist_2,  $0003, $0001
+        ..0: dw  room_objlist_0,  room_enemylist_0,  $0004, $1000
+        ..1: dw  room_objlist_1,  room_enemylist_1,  $0004, $0000
+        ..2: dw  room_objlist_2,  room_enemylist_2,  $0004, $0001
         ..3: dw  room_objlist_3,  room_enemylist_3,  $0002, $0001
         ..4: dw  room_objlist_4,  room_enemylist_4,  $0002, $0001
         ..5: dw  room_objlist_5,  room_enemylist_5,  $0002, $0001
@@ -335,7 +335,7 @@ room: {
         ..1d: dw room_objlist_1d, room_enemylist_1d, $0002, $0001
         ..1e: dw room_objlist_1e, room_enemylist_1e, $0002, $0001
         ..1f: dw room_objlist_1f, room_enemylist_1f, $0002, $0001
-        ..20: dw room_objlist_20, room_enemylist_20, $0003, $1000
+        ..20: dw room_objlist_20, room_enemylist_20, $0002, $1000
         ..21: dw room_objlist_21, room_enemylist_21, $0003, $0000
         ..22: dw room_objlist_22, room_enemylist_22, $0003, $0001
         ..23: dw room_objlist_23, room_enemylist_23, $0002, $0001
@@ -463,8 +463,6 @@ room: {
             dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
             dw #obj_ptr_vent,       $0006, $001a,  $0000,   $0013
             dw #obj_ptr_vent,       $0014, $001a,  $0000,   $0033
-            dw #obj_ptr_window,     $0008, $0008,  $0c00,   $0033
-            dw #obj_ptr_ozma,       $0010, $0005,  $1000,   $0000
             dw $ffff
         }
         
@@ -585,18 +583,29 @@ room: {
             dw $ffff
         }
 
-        ..20: {
+        ..20: {     ;second floor
+            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
             dw #obj_ptr_dnstairs,   $0010, $0005,  $0400,   $0000
-            dw #obj_ptr_vent,       $0016, $001a,  $0000,   $0013
+            dw #obj_ptr_vent,       $0011, $001a,  $0000,   $0013
             dw #obj_ptr_table,      $0004, $0011,  $0800,   $0000
+            dw #obj_ptr_candle,     $0004, $000d,  $0800,   $0000
             dw $ffff
         }
 
         ..21: {
+            dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
+            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
+            dw #obj_ptr_vent,       $0008, $001a,  $0000,   $0013
+            dw #obj_ptr_window,     $0008, $0008,  $0c00,   $0033
+            dw #obj_ptr_ozma,       $0010, $0005,  $1000,   $0000
             dw $ffff
         }
 
         ..22: {
+            dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
+            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
+            dw #obj_ptr_vent,       $0008, $001a,  $0000,   $0013
+            dw #obj_ptr_window,     $0010, $0008,  $0c00,   $0033
             dw $ffff
         }
 

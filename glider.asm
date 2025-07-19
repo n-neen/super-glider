@@ -29,7 +29,9 @@ incsrc "./bank84.asm"           ;tile objects
 incsrc "./bank85.asm"           ;reserved for glider
 incsrc "./bank86.asm"           ;reserved for code
 
+
 ;data
+incsrc "./bank8f.asm"
 incsrc "./bank90.asm"           ;splash screen graphics
 incsrc "./bank91.asm"           ;reserved for data
 incsrc "./bank92.asm"           ;palettes, sprite data, background tilemaps

@@ -465,11 +465,21 @@ layer2draw: {
     rtl
 }
 
+filloambuffer: {
+    ;ok i guess
+    lda #$ffff
+    ldx #$0700
+    
+    -
+    sta !oambuffer,x
+    dex : dex
+    bpl -
+    rtl
+}
+
 processspritemap: {
-    ;takes arguments:
-    ;spritemap pointer
-    ;produces output:
-    ;a number of sprites based on the number of spritemap entries
+    ;yeah sure
+    ;lol
     
     rtl
 }
@@ -513,13 +523,15 @@ loadingtable: {
             %loadtablentry(#splashgfx,              $8000, !bg2start,        $01)     ;splash = 01
             %loadtablentry(#bg2gfx,                 $4000, !bg2start,        $02)     ;bg2    = 02
             %loadtablentry(#bg3gfx,                 $4000, !bg2start,        $03)     ;bg3    = 03
+            %loadtablentry(#bg4gfx,                 $4000, !bg2start,        $04)     ;bg4    = 04
         }
         
         ..tilemaps: {
             %loadtablentry(#objtilemap,             $0800, !objtilemap,      $00)     ;obj    = 00              ;object layer
             %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,      $01)     ;splash = 01
-            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,      $02)     ;bg1    = 02
-            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,      $03)     ;bg2    = 03
+            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,      $02)     ;bg2    = 02
+            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,      $03)     ;bg3    = 03
+            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,      $04)     ;bg4    = 04
         }
         
         ..palettes: {
@@ -527,6 +539,8 @@ loadingtable: {
             %loadtablentry(#splashpalette,          $0100, !palettes,        $01)     ;splash = 01
             %loadtablentry(#bg2palette,             $0100, !palettes,        $02)     ;bg1    = 02
             %loadtablentry(#bg3palette,             $0100, !palettes,        $03)     ;bg3    = 03
+            %loadtablentry(#bg4palette,             $0100, !palettes,        $04)     ;bg4    = 04
+            
         }
     }
     
@@ -535,6 +549,7 @@ loadingtable: {
         dl #splashtilemap               : db $01
         dl #bg2tilemap                  : db $02
         dl #bg3tilemap                  : db $03
+        dl #bg4tilemap                  : db $04
     }
 }
 
