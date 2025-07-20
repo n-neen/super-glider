@@ -29,6 +29,7 @@ obj: {
         ;creates instance of an object
         ;takes argument:
         ;a = object header pointer
+        ;x = 
         
         ;returns: next item slot in !nextobj
         
@@ -45,7 +46,7 @@ obj: {
         -
             dex : dex                   ;we want the zero flag from lda
             lda !objID,x                ;so the loop starts at ammount+2 (dex would affect zero flag)
-            bpl -
+            bmi -
             ;after we exit this loop, x will be the first available slot
         }
         pla
@@ -477,6 +478,7 @@ obj: {
     
     ;object property:
     ;$8000 bit = draw on layer 2
+    ;$4000     = dynamic size
     
     .ptr: {
         ..vent:         dw obj_headers_vent
@@ -493,6 +495,9 @@ obj: {
         
         ..table:        dw obj_headers_table
         ..table2:       dw obj_headers_table2
+        
+        ..tabletop:     dw obj_headers_tabletop
+        ..tablepole:    dw obj_headers_tablepole
     }
     
     
@@ -554,12 +559,29 @@ obj: {
         ..table2: {
             dw #obj_tilemaps_table2,        $000b, $0008, obj_routines_none,        $0000
         }
+        
+        ..tabletop: {
+            dw !objdyntilemap,              $0000, $0000, obj_routines_none,        $4000
+        }
+        
+        ..tablepole: {
+            dw !objdyntilemap2,             $0000, $0000, obj_routines_none,        $c000
+        }
+        
+        .tablebase: {
+            dw #obj_tilemaps_tablebase,     $0000, $0000, obj_routines_none,        $4000
+        }
     }
     
     
     .routines: {
         ;used for vent handling
         ;and eventually, stairs
+            
+        ..tablebase: {
+            
+            rts
+        }
             
         ..upstairs {
             ;x = obj id
@@ -758,6 +780,11 @@ obj: {
         
         ..lamp: {
             incbin "./data/tilemaps/objects/lamp.map"
+            dw $ffff
+        }
+        
+        ..tablebase: {
+            ;incbin "./data/tilemaps/objects/tablebase.map"
             dw $ffff
         }
         

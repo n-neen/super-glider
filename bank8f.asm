@@ -9,3 +9,5 @@ org $8f8000
     
     bg4gfx:
         incbin "./data/tiles/bg4.gfx"
+        
+    ;warn pc

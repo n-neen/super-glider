@@ -6,12 +6,15 @@
 ;that was used during left or right movement previously
 ;so maybe we check for 0 at the handler and do something special then?
 
+;i think the above is done
+;todo: confirm the above, and above the above
+
 spritemap: {
     .pointers: {
         ;see glider constants in defines.asm
-        ;these correspond to !gliderstate
+        ;these correspond to !gliderdir
         ;todo: make pose
-        dw .glider_right,            ;default state
+        dw .glider_right,   ;since we switched from state to dir, 0 is no longer possible
            .glider_left,
            .glider_right,           
            .glider_tipleft,         

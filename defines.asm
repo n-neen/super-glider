@@ -102,6 +102,11 @@
 !objproperty        =       !objroutineptr+!objectarraysize+2
 !objvariable        =       !objproperty+!objectarraysize+2
 
+!objdyntilemap      =       !objvariable+!objectarraysize+2
+!objdyntilemap2     =       !objdyntilemap+!objectarraysize+$100
+
+!objdynamicmap      =       $840000+!objdyntilemap
+!objdynamicmap2     =       $840000+!objdyntilemap2
 
 ;arrays' ends       last define + !objectarraysize for total size
 
@@ -191,7 +196,7 @@
 !kroomtranstypeleft         =       #$0001
 !kroomtranstypeup           =       #$0002
 !kroomtranstypedown         =       #$0003
-!ktranstimer                =       #$0038
+!ktranstimer                =       #$0030
 
 ;object constants
 

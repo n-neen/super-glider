@@ -580,13 +580,13 @@ glider: {
         ..bounds: {
             lda !gliderx            ;hit left bound = 1
             cmp !kleftbound
-            bne ++
+            bpl ++
             lda !khitboundleft
             sta !gliderhitbound
             bra +++
         ++
             cmp !krightbound        ;hit right bound = 2
-            bne +++
+            bmi +++
             lda !khitboundright
             sta !gliderhitbound
         +++
@@ -645,8 +645,8 @@ glider: {
         cmp !khitboundleft      ;left bound = 1
         beq ++
         
-        lda !glidermovetimer
-        beq +
+        ;lda !glidermovetimer
+        ;beq +
         
         ;the actual moving of left:
         lda !glidersubx
@@ -674,8 +674,8 @@ glider: {
         cmp !khitboundright     ;right bound = 2
         beq ++
         
-        lda !glidermovetimer
-        beq +
+        ;lda !glidermovetimer
+        ;beq +
         
         ;the actual moving of right:
         lda !glidersubx
