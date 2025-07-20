@@ -64,6 +64,7 @@ boot:
     lda #$0000
     tcd             ;clear dp register
     
+    ldy #$0000
 
 clear7e:
     pea $7e7e
@@ -249,6 +250,8 @@ newgame: {
     
     lda room_list,x         ;room = room $20
     sta !roomptr
+    
+    jsl obj_clearall
     
     lda #$0006
     sta !gamestate          ;advance to game state 6 (load room)

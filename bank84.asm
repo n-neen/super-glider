@@ -24,12 +24,26 @@ obj: {
         rtl
     }
     
+    .drawall: {
+        ldx #!objectarraysize
+        -
+        lda !objID,x
+        beq +
+        phx
+        jsr obj_draw
+        plx
+        
+        +
+        dex : dex
+        bpl -
+        rtl
+    }
+    
     
     .init: {
         ;creates instance of an object
         ;takes argument:
         ;a = object header pointer
-        ;x = 
         
         ;returns: next item slot in !nextobj
         
@@ -525,7 +539,7 @@ obj: {
         }
         
         ..shelf: {
-            dw #obj_tilemaps_shelf,         $0008, $0002, obj_routines_none,        $0000
+            dw !objdyntilemap,              $00ff, $0001, obj_routines_shelf,       $0000
         }
         
         ..upstairs: {
@@ -565,7 +579,7 @@ obj: {
         }
         
         ..tablepole: {
-            dw !objdyntilemap2,             $0000, $0000, obj_routines_none,        $c000
+            dw !objdyntilemap,              $0000, $0000, obj_routines_none,        $c000
         }
         
         .tablebase: {
@@ -575,16 +589,78 @@ obj: {
     
     
     .routines: {
-        ;used for vent handling
-        ;and eventually, stairs
+        
+        ..shelf: {
+            ;x = obj index
+            ;variable:
+            ;00aa
+            ;aa = x size
+            phb
+            phy
+            
+            phk
+            plb
+            
+            ldy #$0000
+            
+            lda !objvariable,x
+            and #$00ff
+            pha
+            clc
+            adc #$0004
+            sta !objxsize,x
+            pla
+            
+            asl
+            sta !localtempvar
+            
+            lda #$0002
+            sta !objdyntilemap
+            
+            lda #$0003
+            sta !objdyntilemap+2
+            
+            
+            lda #$0004
+            -
+            sta !objdyntilemap+4,y
+            iny : iny
+            cpy !localtempvar
+            bne -
+            
+            lda #$0003
+            sta !objdyntilemap+4,y
+            lda #$4002
+            sta !objdyntilemap+6,y
+            
+            lda #$ffff
+            sta !objdyntilemap+8,y
+            
+            jsr obj_draw
+            jsr obj_clear
+            
+            ply
+            plb
+            rts
+        }
             
         ..tablebase: {
+            lda obj_ptr_tabletop
+            jsl obj_init
+            jsl obj_spawn
             
+            lda obj_ptr_tablepole
+            jsl obj_init
+            jsl obj_spawn
+            rts
+        }
+        
+        ..tabletop: {
             rts
         }
             
         ..upstairs {
-            ;x = obj id
+            ;x = obj index
             
             lda !objxpos,x
             asl #2
@@ -618,7 +694,7 @@ obj: {
         }
         
         ..dnstairs {
-            ;x = obj id
+            ;x = obj index
             
             lda !objxpos,x
             asl #2
@@ -657,7 +733,7 @@ obj: {
         }
         
         ..vent: {
-            ;x = object id
+            ;x = object index
             !ventleft       =       !localtempvar2
             !ventright      =       !localtempvar3
             
@@ -748,10 +824,10 @@ obj: {
             dw $ffff
         }
         
-        ..shelf: {
-            incbin "./data/tilemaps/objects/shelf.map"
-            dw $ffff
-        }
+        ;..shelf: {
+        ;    incbin "./data/tilemaps/objects/shelf.map"
+        ;    dw $ffff
+        ;}
         
         ..upstairs: {
             incbin "./data/tilemaps/objects/up_stairs.map"
@@ -791,334 +867,6 @@ obj: {
     }
     
 }
-
-objdebug: {
-    .makeall: {                     ;obj index
-        ;jsr objdebug_makeshelf       ;0
-        jsr objdebug_makevent        ;2
-        jsr objdebug_maketable       ;4
-        jsr objdebug_makevent2       ;6
-        jsr objdebug_makestairs      ;8
-        jsr objdebug_makefan         ;a
-        jsr objdebug_makeopenwall    ;c
-        
-        rtl
-    }
-    
-        .makefan: {
-        phb
-        
-        phk
-        plb
-        
-        ldx #$000a
-        
-        lda #obj_headers_fanR
-        sta !objID,x
-        
-        lda obj_headers_fanR+2
-        ;asl
-        sta !objxsize,x
-        
-        lda obj_headers_fanR+4
-        asl
-        sta !objysize,x
-        
-        lda #obj_tilemaps_fanR
-        sta !objtilemapointer,x
-        
-        lda #$0016
-        dec
-        asl
-        sta !objxpos,x
-        
-        lda #$0013
-        dec
-        asl
-        sta !objypos,x
-        
-        lda #$0800
-        sta !objpal,x
-        
-        lda obj_headers_fanR+8
-        sta !objproperty,x
-        
-        ldx #$000a
-        jsr obj_draw
-        
-        plb
-        rts
-    }
-    
-    .makeopenwall: {
-        phb
-        
-        phk
-        plb
-        
-        ldx #$000c
-        
-        lda #obj_headers_openwall
-        sta !objID,x
-        
-        lda obj_headers_openwall+2
-        ;asl
-        sta !objxsize,x
-        
-        lda obj_headers_openwall+4
-        asl
-        sta !objysize,x
-        
-        lda #obj_tilemaps_openwall
-        sta !objtilemapointer,x
-        
-        lda #$001d
-        dec
-        asl
-        sta !objxpos,x
-        
-        lda #$0001
-        dec
-        asl
-        sta !objypos,x
-        
-        lda #$0000
-        sta !objpal,x
-        
-        lda obj_headers_openwall+8
-        sta !objproperty,x
-        
-        ldx #$000c
-        jsr obj_draw
-        
-        plb
-        rts
-    }
-    
-    .makestairs: {
-        phb
-        
-        phk
-        plb
-        
-        ldx #$0000
-        
-        lda #obj_headers_upstairs
-        sta !objID,x
-        
-        lda obj_headers_upstairs+2
-        ;asl
-        sta !objxsize,x
-        
-        lda obj_headers_upstairs+4
-        asl
-        sta !objysize,x
-        
-        lda #obj_tilemaps_upstairs
-        sta !objtilemapointer,x
-        
-        lda #$0010
-        dec
-        asl
-        sta !objxpos,x
-        
-        lda #$0005
-        dec
-        asl
-        sta !objypos,x
-        
-        lda #$0400
-        sta !objpal,x
-        
-        lda obj_headers_upstairs+8
-        sta !objproperty,x
-        
-        ldx #$0000
-        jsr obj_draw
-        
-        plb
-        rts
-    }
-    
-    .makeshelf: {
-        phb
-        
-        phk
-        plb
-        
-        ldx #$0000
-        
-        lda #obj_headers_shelf
-        sta !objID,x
-        
-        lda obj_headers_shelf+2
-        ;asl
-        sta !objxsize,x
-        
-        lda obj_headers_shelf+4
-        asl
-        sta !objysize,x
-        
-        lda #obj_tilemaps_shelf
-        sta !objtilemapointer,x
-        
-        lda #$000c
-        dec
-        asl
-        sta !objxpos,x
-        
-        lda #$0004
-        dec
-        asl
-        sta !objypos,x
-        
-        lda #$0800
-        sta !objpal,x
-        
-        ldx #$0000
-        jsr obj_draw
-        
-        plb
-        rts
-    }
-    
-    .makevent: {
-        phb
-        
-        phk
-        plb
-        
-        ldx #$0002
-        
-        lda #obj_headers_vent
-        sta !objID,x
-        
-        lda obj_headers_vent+2
-        ;asl
-        sta !objxsize,x
-        
-        lda obj_headers_vent+4
-        asl
-        sta !objysize,x
-        
-        lda obj_headers_vent
-        sta !objtilemapointer,x
-        
-        lda obj_headers_vent+6
-        sta !objroutineptr,x
-        
-        lda #$0015
-        dec
-        asl
-        sta !objxpos,x
-        
-        lda #$001a
-        dec
-        asl
-        sta !objypos,x
-        
-        lda #$0800
-        sta !objpal,x
-        
-        ldx #$0002
-        jsr obj_draw
-        
-        plb
-        rts
-    }
-    
-    .makevent2: {
-        phb
-        
-        phk
-        plb
-        
-        ldx #$0006
-        
-        lda #obj_headers_vent
-        sta !objID,x
-        
-        lda obj_headers_vent+2
-        ;asl
-        sta !objxsize,x
-        
-        lda obj_headers_vent+4
-        asl
-        sta !objysize,x
-        
-        lda obj_headers_vent
-        sta !objtilemapointer,x
-        
-        lda obj_headers_vent+6
-        sta !objroutineptr,x
-        
-        lda #$0004
-        dec
-        asl
-        sta !objxpos,x
-        
-        lda #$001a
-        dec
-        asl
-        sta !objypos,x
-        
-        lda #$0800
-        sta !objpal,x
-        
-        ldx #$0006
-        jsr obj_draw
-        
-        plb
-        rts
-    }
-    
-    .maketable: {
-        phb
-        
-        phk
-        plb
-        
-        ldx #$0004
-        
-        lda #obj_headers_table
-        sta !objID,x
-        
-        lda obj_headers_table+2
-        ;asl
-        sta !objxsize,x
-        
-        lda obj_headers_table+4
-        asl
-        sta !objysize,x
-        
-        lda #obj_tilemaps_table
-        sta !objtilemapointer,x
-        
-        lda #$000c
-        dec
-        asl
-        sta !objxpos,x
-        
-        lda #$0011
-        dec
-        asl
-        sta !objypos,x
-        
-        lda #$0800
-        sta !objpal,x
-        
-        ldx #$0004
-        jsr obj_draw
-        
-        plb
-        rts
-    }
-    
-}
-
-
-
-
 
 
 

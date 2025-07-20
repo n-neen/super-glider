@@ -102,11 +102,7 @@
 !objproperty        =       !objroutineptr+!objectarraysize+2
 !objvariable        =       !objproperty+!objectarraysize+2
 
-!objdyntilemap      =       !objvariable+!objectarraysize+2
-!objdyntilemap2     =       !objdyntilemap+!objectarraysize+$100
-
-!objdynamicmap      =       $840000+!objdyntilemap
-!objdynamicmap2     =       $840000+!objdyntilemap2
+!objdyntilemap      =       $a00
 
 ;arrays' ends       last define + !objectarraysize for total size
 
