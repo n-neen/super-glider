@@ -466,10 +466,10 @@ obj: {
         jsr obj_spawn   ;with y = object index
                         ;and x = object list entry pointer
         
-        phx
-        tyx
-        jsr obj_draw    ;draw object (oops gotta switch y to x here)
-        plx             ;because x = obj index in that routine
+        ;phx
+        ;tyx
+        ;jsr obj_draw    ;draw object (oops gotta switch y to x here)
+        ;plx             ;because x = obj index in that routine
         
         txa
         clc                         ;x=x+entrylength
@@ -539,7 +539,7 @@ obj: {
         }
         
         ..shelf: {
-            dw !objdyntilemap,              $00ff, $0001, obj_routines_shelf,       $0000
+            dw !objdyntilemap,              $0030, $0001, obj_routines_shelf,       $0000
         }
         
         ..upstairs: {
@@ -603,9 +603,13 @@ obj: {
             
             ldy #$0000
             
+            ;lda #!objdyntilemap
+            ;sta !objtilemapointer,x
+            
             lda !objvariable,x
-            and #$00ff
+            and #$001f
             pha
+            asl
             clc
             adc #$0004
             sta !objxsize,x
@@ -630,6 +634,7 @@ obj: {
             
             lda #$0003
             sta !objdyntilemap+4,y
+            
             lda #$4002
             sta !objdyntilemap+6,y
             

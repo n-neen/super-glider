@@ -468,7 +468,7 @@ layer2draw: {
 filloambuffer: {
     ;ok i guess
     lda #$ffff
-    ldx #$0700
+    ldx #$0240
     
     -
     sta !oambuffer,x

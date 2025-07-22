@@ -359,7 +359,7 @@ glider: {
         
         asl
         tax
-        lda spritemap_pointers,x
+        lda spritemap_pointers_glider,x
         tax                             ;x = spritemap pointer
         
         sep #$20

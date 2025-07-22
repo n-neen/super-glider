@@ -42,7 +42,7 @@ room: {
         sta !roomobjlistptr
         jsl obj_spawnall        ;make all objects from object list
         jsl obj_handle
-        ;jsl obj_drawall
+        jsl obj_drawall
         
         lda !kroombounds,x
         sta !roombounds
@@ -596,12 +596,12 @@ room: {
 
         ..21: {
             dw #obj_ptr_shelf,      $0010, $0011,  $0800,   $0008
+            dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
+            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
             dw #obj_ptr_shelf,      $0010, $0013,  $0800,   $0006
             dw #obj_ptr_shelf,      $0010, $0015,  $0800,   $0004
             dw #obj_ptr_shelf,      $0010, $0017,  $0800,   $0002
             
-            dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
-            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
             dw #obj_ptr_vent,       $0008, $001a,  $0000,   $0013
             dw #obj_ptr_window,     $0008, $0008,  $0c00,   $0033
             dw #obj_ptr_ozma,       $0010, $0005,  $1000,   $0000

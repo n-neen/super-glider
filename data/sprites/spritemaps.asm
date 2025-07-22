@@ -14,13 +14,20 @@ spritemap: {
         ;see glider constants in defines.asm
         ;these correspond to !gliderdir
         ;todo: make pose
-        dw .glider_right,   ;since we switched from state to dir, 0 is no longer possible
-           .glider_left,
-           .glider_right,           
-           .glider_tipleft,         
-           .glider_tipright,        
-           .glider_turnaround,      
-           .glider_lostlife         
+        ..glider:
+            dw spritemap_glider_right,   ;since we switched from state to dir, 0 is no longer possible
+               spritemap_glider_left,
+               spritemap_glider_right,
+               spritemap_glider_tipleft,
+               spritemap_glider_tipright,
+               spritemap_glider_turnaround,
+               spritemap_glider_lostlife
+           
+        ..balloon:
+            dw spritemap_balloon_1,
+               spritemap_balloon_2,
+               spritemap_balloon_3
+        
     }
     
     .glider: {
@@ -70,6 +77,20 @@ spritemap: {
         
         ..lostlife: {
             db $00
+        }
+    }
+    
+    .balloon: {
+        ..1: {
+            ;
+        }
+        
+        ..2: {
+            ;
+        }
+        
+        ..3: {
+            ;
         }
     }
 }
