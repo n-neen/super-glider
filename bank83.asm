@@ -30,24 +30,26 @@ room: {
         plb
         
         jsl obj_clearall
-        jsl obj_tilemap_init
+        ;jsl obj_tilemap_init
         
         ldx !roomptr
         
         lda !kroombgtype,x
         sta !roombg
-        jsl load_background     ;load background type from room header
+        jsl load_background
         
         lda !kroomobjlist,x
         sta !roomobjlistptr
-        jsl obj_spawnall        ;make all objects from object list
+        
+        jsl obj_spawnall
         jsl obj_handle
         jsl obj_drawall
         
         lda !kroombounds,x
         sta !roombounds
         
-        lda !kroomenemylist
+        
+        lda !kroomenemylist,x
         sta !roomenemylistptr
         
         jsl layer2draw          ;make sure to update layer 2 tilemap

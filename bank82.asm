@@ -306,10 +306,16 @@ glider: {
             lda !roombounds
             bit #$0001
             bne +
+            
             lda !kroomtranstyperight
             sta !roomtranstype
             jsr roomtransitionstart
-        +   rts
+            rts
+            
+            +
+            lda !khitboundright
+            sta !gliderhitbound
+            rts
         }
         
         ..left:
@@ -319,10 +325,16 @@ glider: {
             lda !roombounds
             bit #$1000
             bne +
+            
             lda !kroomtranstypeleft
             sta !roomtranstype
             jsr roomtransitionstart
-        +   rts
+            rts
+            
+            +
+            lda !khitboundleft
+            sta !gliderhitbound
+            rts
         }
         
         ..ignore: {
@@ -411,35 +423,6 @@ glider: {
         plx
         rts
         
-        
-        ..hightablebitwrite: {
-            ;parameters:
-            ;x = spritemap pointer
-            ;y = oam index
-            ;sep #$20
-            
-            ;returns:
-            ;a = oam high table bitmaks to write
-            
-            php
-            phy
-            phx
-            rep #$30
-            
-            lda oamhighbytes,y
-            and #$00ff
-            
-            
-            tay
-            lda !oamhightable,y
-            ora #$aaaa
-            sta !oamhightable,y
-            
-        +   plx
-            ply
-            plp
-            rts
-        }
     }
     
     
@@ -665,6 +648,7 @@ glider: {
     
         ;if hit left bound:
     ++  stz !glidernextstate
+        stz !gliderstate
         stz !glidermovetimer
         rts
     }
@@ -755,77 +739,19 @@ roomtransitionstart: {
     rts
 }
 
-
-oamhighbytes: {
-    db $00, $00, $00, $00
-    db $01, $01, $01, $01
-    db $02, $02, $02, $02
-    db $03, $03, $03, $03
-    db $04, $04, $04, $04
-    db $05, $05, $05, $05
-    db $06, $06, $06, $06
-    db $07, $07, $07, $07
-    db $08, $08, $08, $08
-    db $09, $09, $09, $09
-    db $0a, $0a, $0a, $0a
-    db $0b, $0b, $0b, $0b
-    db $0c, $0c, $0c, $0c
-    db $0d, $0d, $0d, $0d
-    db $0e, $0e, $0e, $0e
-    db $0f, $0f, $0f, $0f
-    db $10, $10, $10, $10
-    db $11, $11, $11, $11
-    db $12, $12, $12, $12
-    db $13, $13, $13, $13
-    db $14, $14, $14, $14
-    db $15, $15, $15, $15
-    db $16, $16, $16, $16
-    db $17, $17, $17, $17
-    db $18, $18, $18, $18
-    db $19, $19, $19, $19
-    db $1a, $1a, $1a, $1a
-    db $1b, $1b, $1b, $1b
-    db $1c, $1c, $1c, $1c
-    db $1d, $1d, $1d, $1d
-    db $1e, $1e, $1e, $1e
-    db $1f, $1f, $1f, $1f
-}
-
-oamhighbits: {
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-    db $02, $08, $20, $80
-}
-
 incsrc "./data/sprites/spritemaps.asm"
 
-;warn pc
+enemy: {
+    
+    .handle: {
+        rts
+    }
+    
+    .draw: {
+        rts
+    }
+    
+    .spawn: {
+        rts
+    }
+}

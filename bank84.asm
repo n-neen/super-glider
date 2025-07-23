@@ -11,6 +11,8 @@ incsrc "./defines.asm"
 
 obj: {
     .handle: {
+        phx
+        
         ldx #!objectarraysize
         -
         lda !objroutineptr,x
@@ -21,10 +23,14 @@ obj: {
         +
         dex : dex
         bpl -
+        
+        plx
         rtl
     }
     
     .drawall: {
+        phx
+        
         ldx #!objectarraysize
         -
         lda !objID,x
@@ -36,6 +42,8 @@ obj: {
         +
         dex : dex
         bpl -
+        
+        plx
         rtl
     }
     
@@ -46,6 +54,8 @@ obj: {
         ;a = object header pointer
         
         ;returns: next item slot in !nextobj
+        
+        ;this hasn't been used yet, so is untested!
         
         phx
         phy

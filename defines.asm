@@ -149,8 +149,8 @@
 ;room constants
 !kceiling                   =       #$0016
 !kfloor                     =       #$00c9
-!kleftbound                 =       #$0016
-!krightbound                =       #$00d8
+!kleftbound                 =       #$0018      ;18
+!krightbound                =       #$00d8      ;d8
 
 ;controller bit constants
 !kb                         =       #$8000
