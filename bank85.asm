@@ -19,4 +19,12 @@ prizedata:
     .palette:
         incbin "./data/sprites/prizes.pal"
 
+
+dartdata:
+    .graphics:
+        incbin "./data/sprites/dart.gfx"
+    .palette:
+        ;null. indicate size as 0 in loadingtable entry
+        ;or 1 i guess? lol
+
 print "bank $85 end: ", pc

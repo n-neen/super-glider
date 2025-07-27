@@ -234,13 +234,17 @@ newgame: {
     
     lda #$0000
     jsl load_sprite         ;load sprite data 0 (glider)
-    jsl glider_init
     
     lda #$0001
     jsl load_sprite         ;load sprite data 1 (balloon)
     
     lda #$0002
     jsl load_sprite         ;load sprite data 2 (prizes)
+    
+    lda #$0003
+    jsl load_sprite         ;load sprite data 2 (prizes)
+    
+    jsl glider_init
     
     sep #$20
     lda #%00010011          ;main screen = sprites, L2, L1
@@ -683,4 +687,12 @@ hightablefill: {
     rts
 }
 
+
 print "bank $80 end: ", pc
+
+
+;B80EndFree:
+;padbyte $FF
+;pad $80FFFF
+;.end:
+;print "Free $80 Bytes: ", hex(B80EndFree_end-B80EndFree)

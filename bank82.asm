@@ -1107,8 +1107,12 @@ enemy: {
     ;====================================== ENEMY DEFINITIONS =====================================
     
     .ptr: {
-        ..balloon: dw enemy_headers_balloon
-        ..paper:   dw enemy_headers_paper
+        ..balloon:      dw enemy_headers_balloon
+        ..paper:        dw enemy_headers_paper
+        ..clock:        dw enemy_headers_clock
+        ..battery:      dw enemy_headers_battery
+        ..bands:        dw enemy_headers_bands
+        ..dart:         dw enemy_headers_dart
     }
     
     
@@ -1118,6 +1122,15 @@ enemy: {
             dw spritemap_pointers_balloon,      $0010,      $0010,      enemy_init_none,            enemy_main_balloon,     enemy_touch_kill
         ..paper:
             dw spritemap_pointers_paper,        $0010,      $0008,      enemy_init_none,            enemy_main_none,        enemy_touch_paper
+        ..clock:
+            dw spritemap_pointers_clock,        $0010,      $0010,      enemy_init_none,            enemy_main_none,        enemy_touch_clock
+        ..battery:
+            dw spritemap_pointers_battery,      $0008,      $0010,      enemy_init_none,            enemy_main_none,        enemy_touch_battery
+        ..bands:
+            dw spritemap_pointers_bands,        $0010,      $0010,      enemy_init_none,            enemy_main_none,        enemy_touch_bands
+        ..dart:
+            dw spritemap_pointers_dart,         $0010,      $0030,      enemy_init_none,            enemy_main_dart,        enemy_touch_kill
+
     }
     
     
@@ -1139,12 +1152,22 @@ enemy: {
         ..none: {
             rts
         }
+        
+        ..dart: {
+            rts
+        }
     }
     
     
     .touch: {
         ..kill: {
             ;kill glider
+            rts
+        }
+        
+        ..clock: {
+            ;for extra glider paper:
+            ;give extra life then delete
             rts
         }
         

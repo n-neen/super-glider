@@ -31,9 +31,26 @@ spritemap: {
                spritemap_balloon_pop2
                
         ..paper:
-            dw spritemap_paper_1
-        
+            dw spritemap_paper
+            
+        ..clock:
+            dw spritemap_clock
+            
+        ..battery:
+            dw spritemap_battery
+            
+        ..bands:
+            dw spritemap_bands
+            
+        ..dart: {
+            dw spritemap_dart_left,
+               spritemap_dart_right,
+               spritemap_dart_lefthit,
+               spritemap_dart_righthit
+        }
     }
+    
+    
                 ;starting tile in vram
     .glider: {  ;$00
         ..idle: {
@@ -131,15 +148,63 @@ spritemap: {
     
     
     .paper: {   ;$90
-        ..1: {
-            db $06
-             ;  x    y    tile   properties
-            db $f0, $f8, $90,   %00110000,  %00000010
-            db $00, $f8, $92,   %00110000,  %00000010
-            db $10, $f8, $94,   %00110000,  %00000010
-            db $f0, $00, $a0,   %00110000,  %00000010
-            db $00, $00, $a2,   %00110000,  %00000010
-            db $10, $00, $a4,   %00110000,  %00000010
+        db $06
+        ;  x    y    tile   properties
+        db $f0, $f8, $90,   %00110000,  %00000010
+        db $00, $f8, $92,   %00110000,  %00000010
+        db $10, $f8, $94,   %00110000,  %00000010
+        db $f0, $00, $a0,   %00110000,  %00000010
+        db $00, $00, $a2,   %00110000,  %00000010
+        db $10, $00, $a4,   %00110000,  %00000010
+    }
+    
+    .clock: {
+        db $04
+        db $f8, $00, $98,   %00110000,  %00000010
+        db $08, $00, $9a,   %00110000,  %00000010
+        db $f8, $10, $b8,   %00110000,  %00000010
+        db $08, $10, $ba,   %00110000,  %00000010
+    }
+    
+    .battery: {
+        db $02
+        db $08, $00, $96,   %00110000,  %00000010
+        db $08, $08, $a6,   %00110000,  %00000010
+    }
+    
+    .bands: {
+        db $04
+        db $f8, $00, $9c,   %00110000,  %00000010
+        db $08, $00, $9e,   %00110000,  %00000010
+        db $f8, $08, $ac,   %00110000,  %00000010
+        db $08, $08, $ae,   %00110000,  %00000010
+
+    }
+    
+    .dart: {
+        ..left: {                      ;v --  the 1 bit here is for name select
+            db $08
+            db $f0, $00, $00,   %00110001,  %00000010
+            db $00, $00, $02,   %00110001,  %00000010
+            db $10, $00, $04,   %00110001,  %00000010
+            db $20, $00, $06,   %00110001,  %00000010
+            
+            db $f0, $08, $10,   %00110001,  %00000010
+            db $00, $08, $12,   %00110001,  %00000010
+            db $10, $08, $14,   %00110001,  %00000010
+            db $20, $08, $16,   %00110001,  %00000010
+        }
+        
+        ..right: {
+            ;right spritemap
+        }
+        
+        ..lefthit: {
+            ;after being hit by rubber band
+        }
+        
+        ..righthit: {
+            ;after being hit by rubber band
         }
     }
 }

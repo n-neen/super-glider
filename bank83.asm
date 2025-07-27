@@ -598,7 +598,6 @@ room: {
             dw #obj_ptr_dnstairs,   $0010, $0005,  $0400,   $0000
             dw #obj_ptr_vent,       $0011, $001a,  $0000,   $0013
             dw #obj_ptr_table,      $0004, $0011,  $0800,   $0000
-            dw #obj_ptr_candle,     $0004, $000d,  $0800,   $0000
             dw $ffff
         }
 
@@ -1129,10 +1128,14 @@ room: {
         
         ..20: {
             ;enemy type             x,        y,        pal bitmask,    properties (speed)
-            dw enemy_ptr_paper,     $0048,    $0070,    $0004,          $0000
             dw enemy_ptr_balloon,   $0058,    $0048,    $0002,          $1234
-            dw enemy_ptr_balloon,   $0038,    $0048,    $0002,          $0500
+            dw enemy_ptr_balloon,   $0038,    $0048,    $0002,          $031f
             dw enemy_ptr_balloon,   $0018,    $0028,    $0002,          $0cf0
+            dw enemy_ptr_clock,     $0048,    $0060,    $0004,          $0000
+            dw enemy_ptr_paper,     $0048,    $00c8,    $0004,          $0000
+            dw enemy_ptr_battery,   $002c,    $0068,    $0004,          $0000
+            dw enemy_ptr_bands,     $0020,    $0068,    $0004,          $0000
+            dw enemy_ptr_dart,      $0020,    $0040,    $0000,          $0000
             dw $ffff
         }
         

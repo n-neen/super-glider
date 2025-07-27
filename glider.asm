@@ -29,7 +29,7 @@ incsrc "./bank84.asm"           ;tile objects
 
 ;data
 
-incsrc "./bank85.asm"           ;sprite data (balloon)
+incsrc "./bank85.asm"           ;sprite data: balloon, prizes, dart
 incsrc "./bank86.asm"           ;
 incsrc "./bank87.asm"           ;
 incsrc "./bank88.asm"           ;
