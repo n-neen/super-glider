@@ -10,12 +10,13 @@ game: {
     .play: {
         jsl getinput
         
+        jsr glider_handle
+        jsr glider_draw
+        jsr glider_checktrans
+        
         jsl obj_collision
         jsl obj_handle
         
-        jsr glider_handle
-        jsr glider_checktrans
-        jsr glider_draw
         
         jsl enemy_top
         
@@ -349,7 +350,7 @@ glider: {
         phk
         plb
         
-        jsr ..cleartable
+        ;jsr ..cleartable
         
         ldy #$0000
         
@@ -744,7 +745,7 @@ roomtransitionstart: {
 
 enemy: {
     .top: {
-        jsr enemy_handle
+        ;jsr enemy_handle
         jsr enemy_drawall
         jsr enemy_collision
         
@@ -779,8 +780,6 @@ enemy: {
         
         phb
         phx
-        phy     ;no point in this is there? uhhhhhh
-                ;oh, the outer loop will need to retain enemy index (in spawnall)
         
         phk
         plb     ;db = $82
@@ -821,7 +820,7 @@ enemy: {
         lda $0004,x
         sta !enemyysize,y
         
-        lda $0006,x                 ;this shit is broke
+        lda $0006,x                 ;this shit is broke. but why?
         sta !enemyinitptr,y
         
         lda $0008,x
@@ -831,7 +830,6 @@ enemy: {
         sta !enemytouchptr,y
         
         +
-        ply
         plx
         plb
         rts
