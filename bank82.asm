@@ -783,7 +783,7 @@ enemy: {
                 ;oh, the outer loop will need to retain enemy index (in spawnall)
         
         phk
-        plb
+        plb     ;db = $82
         
         ;enemy data that's per instance
         ;comes from room's enemy list
@@ -807,6 +807,7 @@ enemy: {
         
         ;enemy data that is based on its definition
         ;enemyID is a pointer to its header
+        ;db = $82
         
         lda !enemyID,y
         tax

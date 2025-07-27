@@ -54,7 +54,7 @@ room: {
                                 ;since nmi does not
         
         jsl enemy_spawnall
-        jsl enemy_runinit
+        ;jsl enemy_runinit
         
         
         ply
