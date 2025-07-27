@@ -551,11 +551,13 @@ loadingtable: {
         ..gfx: {          ;long pointer,            size,  baseaddr,                unused
             %loadtablentry(#gliderdata_graphics,    $0a00, !spritestart,            $00)     ;glider  = 00
             %loadtablentry(#balloondata_graphics,   $0800, !spritestart+$0500,      $01)     ;balloon = 01
+            %loadtablentry(#prizedata_graphics,     $0900, !spritestart+$0900,      $02)     ;prizes  = 02
         }
         
         ..palettes: {
-           %loadtablentry(#gliderdata_palette,      $0020, !spritepalette,          $00)     ;glider = 00
-           %loadtablentry(#balloondata_palette,     $0020, !spritepalette+$0010,    $00)     ;glider = 00
+           %loadtablentry(#gliderdata_palette,      $0020, !spritepalette,          $00)     ;glider  = 00
+           %loadtablentry(#balloondata_palette,     $0020, !spritepalette+$0010,    $00)     ;balloon = 01
+           %loadtablentry(#prizedata_palette,       $0020, !spritepalette+$0020,    $00)     ;prizes  = 02
         }
     }
     

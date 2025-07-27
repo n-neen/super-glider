@@ -29,6 +29,9 @@ spritemap: {
                spritemap_balloon_3,
                spritemap_balloon_pop1,
                spritemap_balloon_pop2
+               
+        ..paper:
+            dw spritemap_paper_1
         
     }
                 ;starting tile in vram
@@ -87,7 +90,6 @@ spritemap: {
     .balloon: { ;$50
         ..1: {
             db $04
-            ;  x    y    tile   properties
             db $f8, $f8, $50,   %00110000,  %00000010
             db $00, $f8, $51,   %00110000,  %00001000
             db $f8, $08, $70,   %00110000,  %00100000
@@ -124,6 +126,20 @@ spritemap: {
             db $00, $f8, $5d,   %00110000,  %00001000
             db $f8, $08, $7c,   %00110000,  %00100000
             db $00, $08, $7d,   %00110000,  %10000000
+        }
+    }
+    
+    
+    .paper: {   ;$90
+        ..1: {
+            db $06
+             ;  x    y    tile   properties
+            db $f0, $f8, $90,   %00110000,  %00000010
+            db $00, $f8, $92,   %00110000,  %00000010
+            db $10, $f8, $94,   %00110000,  %00000010
+            db $f0, $00, $a0,   %00110000,  %00000010
+            db $00, $00, $a2,   %00110000,  %00000010
+            db $10, $00, $a4,   %00110000,  %00000010
         }
     }
 }

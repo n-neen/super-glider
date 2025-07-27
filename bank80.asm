@@ -239,6 +239,9 @@ newgame: {
     lda #$0001
     jsl load_sprite         ;load sprite data 1 (balloon)
     
+    lda #$0002
+    jsl load_sprite         ;load sprite data 2 (prizes)
+    
     sep #$20
     lda #%00010011          ;main screen = sprites, L2, L1
     sta $212c

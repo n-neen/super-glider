@@ -23,7 +23,7 @@ game: {
         
         jsl enemy_top
         
-        jsl oam_cleantable
+        ;jsl oam_cleantable
         jsl oam_hightablejank
         
         rtl
@@ -826,7 +826,7 @@ enemy: {
         lda $0004,x
         sta !enemyysize,y
         
-        lda $0006,x                 ;this shit is broke. but why?
+        lda $0006,x
         sta !enemyinitptr,y
         
         lda $0008,x
@@ -984,19 +984,19 @@ enemy: {
         lda $0000,y
         clc
         adc !localenemyx
-        sta !oambuffer,x
+        sta !oambuffer,x                ;x
         
         lda $0001,y
         clc
         adc !localenemyy
-        sta !oambuffer+1,x
+        sta !oambuffer+1,x              ;y
         
         lda $0002,y
-        sta !oambuffer+2,x
+        sta !oambuffer+2,x              ;tile
         
         lda $0003,y
         ora !localenemypal
-        sta !oambuffer+3,x
+        sta !oambuffer+3,x              ;properties
         
         ..nextsprite:
             ;x=x+4
@@ -1006,7 +1006,7 @@ enemy: {
             iny #5
             
             dec !numberofsprites
-            bpl enemy_draw_loop
+            bne enemy_draw_loop
         
         stx !oamentrypoint
         plx
@@ -1108,14 +1108,16 @@ enemy: {
     
     .ptr: {
         ..balloon: dw enemy_headers_balloon
+        ..paper:   dw enemy_headers_paper
     }
     
     
     .headers: {
-        ..balloon: {
-            ;spritemap ptr                      xsize,      ysize,      init routine,               main routine,           touch
-            dw spritemap_pointers_balloon,      $0008,      $0008,      enemy_init_none,            enemy_main_balloon,     enemy_touch_kill
-        }
+               ;spritemap ptr                   xsize,      ysize,      init routine,               main routine,           touch
+        ..balloon:
+            dw spritemap_pointers_balloon,      $0010,      $0010,      enemy_init_none,            enemy_main_balloon,     enemy_touch_kill
+        ..paper:
+            dw spritemap_pointers_paper,        $0010,      $0008,      enemy_init_none,            enemy_main_none,        enemy_touch_paper
     }
     
     
@@ -1133,12 +1135,22 @@ enemy: {
             jsr enemy_inst_checkheight
             rts
         }
+        
+        ..none: {
+            rts
+        }
     }
     
     
     .touch: {
         ..kill: {
             ;kill glider
+            rts
+        }
+        
+        ..paper: {
+            ;for extra glider paper:
+            ;give extra life then delete
             rts
         }
         

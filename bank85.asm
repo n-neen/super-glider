@@ -13,4 +13,10 @@ balloondata:
         incbin "./data/sprites/balloon.pal"
 
 
+prizedata:
+    .graphics:
+        incbin "./data/sprites/prizes.gfx"
+    .palette:
+        incbin "./data/sprites/prizes.pal"
+
 print "bank $85 end: ", pc
