@@ -214,7 +214,7 @@ oam: {
     .fillbuffer: {
         ;ok i guess
         lda #$ffff
-        ldx #$0220
+        ldx #$0230
         
         -
         sta !oambuffer,x
@@ -235,18 +235,19 @@ oam: {
     }
     
     .cleantable: {
-        lda #$0220
-        sec
-        sbc !oamentrypoint
-        lsr
-        tax
+        ;lda #$0220
+        ;sec
+        ;sbc !oamentrypoint
+        ;tax
+        
+        ldx !oamentrypoint
         
         -
         lda #$ffff
         sta !oambuffer,x
         inx : inx
         cpx #$0220
-        bmi -
+        bne -
         
         rtl
     }

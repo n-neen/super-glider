@@ -10,6 +10,10 @@ game: {
     .play: {
         jsl getinput
         
+        ;jsl oam_cleantable
+        ;jsl oam_fillbuffer
+        
+        
         jsr glider_handle
         jsr glider_draw
         jsr glider_checktrans
@@ -17,11 +21,10 @@ game: {
         jsl obj_collision
         jsl obj_handle
         
-        
         jsl enemy_top
         
-        jsl oam_hightablejank
         ;jsl oam_cleantable
+        jsl oam_hightablejank
         
         rtl
     }
@@ -355,8 +358,9 @@ glider: {
         ldy #$0000
         
         stz !oamhightableindex
-        ;stz !oamentrypoint
+        stz !oamentrypoint
         stz !spriteindex
+        stz !numberofsprites
         
         lda !gliderdir                ;see glider constants in defines.asm
         
@@ -416,7 +420,7 @@ glider: {
         
         ..cleartable: {
             stz !oamentrypoint
-            jsl oam_fillbuffer
+            jsl oam_cleantable
             rts
         }
     }
@@ -745,7 +749,7 @@ roomtransitionstart: {
 
 enemy: {
     .top: {
-        ;jsr enemy_handle
+        jsr enemy_handle
         jsr enemy_drawall
         jsr enemy_collision
         
@@ -788,8 +792,8 @@ enemy: {
         ;comes from room's enemy list
         
         lda $830000,x
-        cmp #$ffff          ;if enemy type = ffff, exit
-        beq +
+        cmp #$ffff          ;if enemy type = ffff, exit this entire process (up a level)
+        beq ..stop
         sta !enemyID,y
         
         lda $830002,x
@@ -809,6 +813,8 @@ enemy: {
         ;db = $82
         
         lda !enemyID,y
+        tax
+        lda $820000,x
         tax
         
         lda $0000,x
@@ -833,6 +839,13 @@ enemy: {
         plx
         plb
         rts
+        
+        ..stop: {
+            plx
+            plb
+            pla
+            jmp enemy_spawnall_out
+        }
     }
     
     
@@ -881,7 +894,7 @@ enemy: {
         plx
         +
         dex : dex
-        bne -
+        bpl -
         
         plx
         rts
@@ -949,8 +962,6 @@ enemy: {
         sta !localenemypal
         
         ;grab number of sprites
-        lda $0000,y
-        tay
         lda $0000,y
         tay
         
@@ -1063,7 +1074,7 @@ enemy: {
     
     .init: {
         ..balloon: {
-            dec !enemyy,x
+            ;
             rts
         }
     }
@@ -1071,7 +1082,7 @@ enemy: {
     
     .main: {
         ..balloon: {
-            ;brk #$00
+            dec !enemyy,x
             rts
         }
     }

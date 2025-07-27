@@ -53,8 +53,9 @@ room: {
         jsl layer2draw          ;make sure to update layer 2 tilemap
                                 ;since nmi does not
         
+        jsl enemy_clearall
         jsl enemy_spawnall
-        ;jsl enemy_runinit
+        jsl enemy_runinit
         
         
         ply
