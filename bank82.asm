@@ -1114,13 +1114,13 @@ enemy: {
     .headers: {
         ..balloon: {
             ;spritemap ptr                      xsize,      ysize,      init routine,               main routine,           touch
-            dw spritemap_pointers_balloon,      $0008,      $0008,      enemy_init_balloon,         enemy_main_balloon,     enemy_touch_kill
+            dw spritemap_pointers_balloon,      $0008,      $0008,      enemy_init_none,            enemy_main_balloon,     enemy_touch_kill
         }
     }
     
     
     .init: {
-        ..balloon: {
+        ..none: {
             ;
             rts
         }

@@ -161,7 +161,6 @@ main: {
         tax
         jsr (main_statetable,x)
         
-        ;jsr debug_showcpu
         jsr waitfornmi
         
         jmp .statehandle
@@ -325,7 +324,7 @@ gameover: {
 debug: {
     .showcpu: {
         jsr screenoff
-        nop #20
+        nop #40
         jsr screenon
         rts
     }
@@ -576,6 +575,8 @@ waitfornmi: {
     lda #$01
     sta !nmiflag
     rep #$20
+    
+    ;jsr debug_showcpu
     
     .waitloop: {
         lda !nmiflag

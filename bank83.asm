@@ -1130,6 +1130,7 @@ room: {
         ..20: {
             ;print "room $20 enemy list: ", pc
             ;enemy type             x,        y,        pal bitmask,    properties (speed)
+            dw enemy_ptr_balloon,   $0068,    $0048,    $0008,          $2234
             dw enemy_ptr_balloon,   $0058,    $0048,    $0002,          $0500
             dw enemy_ptr_balloon,   $0038,    $0028,    $0004,          $0800
             dw enemy_ptr_balloon,   $0018,    $0048,    $0008,          $c234
