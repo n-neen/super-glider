@@ -9,3 +9,4 @@ org $918000
 
 objgfx:
     incbin "./data/tiles/obj.gfx"
+    

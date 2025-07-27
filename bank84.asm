@@ -447,8 +447,9 @@ obj: {
     }
     
     .spawnall: {
-        ;a = room object list ptr
-        ;x = room ptr
+        
+        ;now only takes argument in !roomobjlistptr
+        
         phx
         phy
         phb
@@ -456,7 +457,7 @@ obj: {
         phk
         plb
         
-        tax
+        ldx !roomobjlistptr
         
         ..loop:
         lda $830000,x       ;object
@@ -885,4 +886,4 @@ obj: {
 
 
 
-;warn pc
+print "bank $84 end: ", pc

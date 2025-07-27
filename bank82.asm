@@ -5,20 +5,6 @@ org $828000
 ;===========================================================================================
 ;=================================    G A M E P L A Y    ===================================
 ;===========================================================================================
-
-hightablejank: {
-    phx
-    ldx #$0020
-    lda #$aaaa
--   sta !oamhightable,x
-    ;ora #$aaaa
-    ;sta !oamhightable,x
-    dex : dex
-    bpl -
-    plx
-    rts
-}
-
     
 game: {
     .play: {
@@ -29,9 +15,13 @@ game: {
         
         jsr glider_handle
         jsr glider_checktrans
-        jsr glider_newdraw
+        jsr glider_draw
         
-        jsr hightablejank       ;fills oam buffer high table
+        jsl enemy_top
+        
+        jsl oam_hightablejank
+        ;jsl oam_cleantable
+        
         rtl
     }
     
@@ -194,7 +184,7 @@ glider: {
         sta !gliderlives
         
         ..spawn: {
-            lda #$0040
+            lda #$0095
             sta !gliderx            ;glider initial position
             lda #$0030
             sta !glidery
@@ -204,7 +194,7 @@ glider: {
         rtl
     }
 
-    .draw: {
+    .olddraw: {
         ;todo: high table macro like this
        
         macro oambufferwrite(spriteindex,spritebyte)
@@ -278,17 +268,11 @@ glider: {
         rts
     }
     
-    .nodraw: {
-        lda !oamentrypointbckp
-        sta !oamentrypoint
-        rep #$20
-        plp
-        plb
-        plx
-        rts
-    }
     
     .checktrans: {
+        ;i guess this also does bounds now, probably want to remove the
+        ;original one in glider_handle?
+        
         lda !gliderx
         cmp !krightbound-2
         bpl ..right
@@ -343,12 +327,20 @@ glider: {
         }
     }
     
-    .newdraw: {
-        ;todo: read from spritemaps_glider in spritemaps.asm
-        ;prospective outline:
-        ;y = oam entry index
-        ;actually no, this drawing routine happens first
-        ;so we draw glider then save the starting index for the next objects drawn
+    .nodraw: {
+        stz !oamentrypoint
+        stz !oamentrypointbckp
+        rep #$20
+        plp
+        plb
+        plx
+        rts
+    }
+    
+    .draw: {
+        ;we draw glider then save the starting index for the next objects drawn
+        ;saved in !oamentrypoint for the next drawing routine to use
+        ;this is the raw index, not number of entries, so /4 to get number of entries
         
         phx
         phb
@@ -357,14 +349,12 @@ glider: {
         phk
         plb
         
-        lda !gamestate
-        cmp !kstateloadroom
-        beq +
+        jsr ..cleartable
         
         ldy #$0000
         
         stz !oamhightableindex
-        stz !oamentrypoint
+        ;stz !oamentrypoint
         stz !spriteindex
         
         lda !gliderdir                ;see glider constants in defines.asm
@@ -378,7 +368,7 @@ glider: {
         
         lda $0000,x                     ;number of sprites in spritemap
         sta !numberofsprites
-        beq +
+        beq glider_nodraw
         
         inx
         
@@ -423,6 +413,11 @@ glider: {
         plx
         rts
         
+        ..cleartable: {
+            stz !oamentrypoint
+            jsl oam_fillbuffer
+            rts
+        }
     }
     
     
@@ -739,19 +734,376 @@ roomtransitionstart: {
     rts
 }
 
-incsrc "./data/sprites/spritemaps.asm"
+
+;===========================================================================================
+;===================================    E N E M I E S    ===================================
+;===========================================================================================
+
+
+;====================================== ENEMY ROUTINES =====================================
 
 enemy: {
-    
-    .handle: {
-        rts
+    .top: {
+        jsr enemy_handle
+        jsr enemy_drawall
+        jsr enemy_collision
+        
+        rtl
     }
     
-    .draw: {
-        rts
+    
+    .runinit: {
+        phx
+        
+        ldx #!enemyarraysize
+        -
+        lda !enemyinitptr,x
+        beq +
+        phx
+        jsr (!enemyinitptr,x)
+        plx
+        +
+        dex : dex
+        bpl -
+        
+        plx
+        rtl
     }
+    
     
     .spawn: {
+        ;spawn single enemy from enemy population
+        ;write to enemy ram
+        ;x = room's enemy list pointer
+        ;y = enemy index
+        
+        phb
+        phx
+        phy     ;no point in this is there? uhhhhhh
+                ;oh, the outer loop will need to retain enemy index (in spawnall)
+        
+        phk
+        plb
+        
+        ;enemy data that's per instance
+        ;comes from room's enemy list
+        
+        lda $830000,x
+        cmp #$ffff          ;if enemy type = ffff, exit
+        beq +
+        sta !enemyID,y
+        
+        lda $830002,x
+        sta !enemyx,y
+        
+        lda $830004,x
+        sta !enemyy,y
+        
+        lda $830006,x
+        sta !enemypal,y
+        
+        lda $830008,x
+        sta !enemyproperty,y
+        
+        ;enemy data that is based on its definition
+        ;enemyID is a pointer to its header
+        
+        lda !enemyID,y
+        tax
+        
+        lda $0000,x
+        sta !enemyspritemapptr,y
+        
+        lda $0002,x
+        sta !enemyxsize,y
+        
+        lda $0004,x
+        sta !enemyysize,y
+        
+        lda $0006,x                 ;this shit is broke
+        sta !enemyinitptr,y
+        
+        lda $0008,x
+        sta !enemymainptr,y
+        
+        lda $000a,x
+        sta !enemytouchptr,y
+        
+        +
+        ply
+        plx
+        plb
         rts
     }
+    
+    
+    .spawnall: {
+        phb
+        phx
+        phy
+        
+        ;pea $8383
+        ;plb : plb
+        
+        ldx !roomptr
+        lda $830002,x
+        tax
+        
+        ldy #!enemyarraysize+2
+        -
+        dey : dey
+        bmi ..out                       ;if y goes negative we are out of slots
+        jsr enemy_spawn
+        
+        txa
+        clc
+        adc #$000a                      ;advance to next enemy entry: x = x + 10
+        tax
+        
+        jmp -
+        
+        ..out:
+        ply
+        plx
+        plb
+        rtl
+    }
+    
+    
+    .handle: {
+        phx
+        
+        ldx #!enemyarraysize
+        -
+        lda !enemymainptr,x
+        beq +
+        phx
+        jsr (!enemymainptr,x)
+        plx
+        +
+        dex : dex
+        bne -
+        
+        plx
+        rts
+    }
+    
+    
+    .drawall: {
+        phx
+        phy
+        
+        ldx #!enemyarraysize
+        -
+        jsr enemy_draw
+        +
+        dex : dex
+        bpl -
+        
+        ply
+        plx
+        rts
+    }
+    
+    
+    .draw: {
+        ;x = enemy index
+        !numberofsprites    =   !localtempvar
+        !localenemyx        =   !localtempvar2
+        !localenemyy        =   !localtempvar3
+        !localenemypal      =   !localtempvar4
+        
+        phb
+        phy
+        
+        phk         ;db = $82
+        plb
+        
+        stz !numberofsprites
+        
+        lda !enemyID,x
+        beq +
+        lda !enemyspritemapptr,x
+        beq +
+        tay
+        
+        ;this is actually going to always render the first spritemap
+        ;in the list unless the enemy does a
+        ;lda !enemyspritemapptr,x
+        ;inc : inc
+        ;sta !enemyspritemapptr,x
+        ;to advance animation frames
+        ;maybe this is fine?
+        ;we'd need to set initial spritemap list index in enemy init i guess
+        ;if you don't want to use the first one first
+        ;so maybe put the first one first?
+        ;ok buddy
+        
+        ;back these up because we need x and y for the oam table write
+        lda !enemyx,x
+        sta !localenemyx
+        
+        lda !enemyy,x
+        sta !localenemyy
+        
+        lda !enemypal,x
+        sta !localenemypal
+        
+        ;grab number of sprites
+        lda $0000,y
+        tay
+        lda $0000,y
+        tay
+        
+        sep #$20
+        lda $0000,y
+        sta !numberofsprites
+        beq +                       ;if no sprites to draw, exit
+        iny
+        
+        phx
+        ldx !oamentrypoint
+        
+        ;write oam table
+        ;y now lines up with spritemap bytes
+        ;y=spritemap pointer
+        ;x=oam buffer index
+        
+        ..loop:
+        
+        lda $0000,y
+        clc
+        adc !localenemyx
+        sta !oambuffer,x
+        
+        lda $0001,y
+        clc
+        adc !localenemyy
+        sta !oambuffer+1,x
+        
+        lda $0002,y
+        sta !oambuffer+2,x
+        
+        lda $0003,y
+        ora !localenemypal
+        sta !oambuffer+3,x
+        
+        ..nextsprite:
+            ;x=x+4
+            ;y=y+5
+            
+            inx #4
+            iny #5
+            
+            dec !numberofsprites
+            bpl enemy_draw_loop
+        
+        stx !oamentrypoint
+        plx
+        +
+        rep #$20
+        ply
+        plb
+        rts
+    }
+    
+    
+    .clearall: {
+        ldx #!enemyarraysize
+        
+        -
+        jsr enemy_clear
+        dex : dex
+        bpl -
+        
+        rtl
+    }
+    
+    
+    .clear: {
+        ;x = enemy index
+        
+        stz !enemyID,x
+        stz !enemyx,x
+        stz !enemyy,x
+        stz !enemysubx,x
+        stz !enemysuby,x
+        stz !enemyinitptr,x
+        stz !enemymainptr,x
+        stz !enemytouchptr,x
+        stz !enemyproperty,x
+        stz !enemypal,x
+        stz !enemyspritemapptr,x
+        stz !enemyxsize,x
+        stz !enemyysize,x
+
+        rts
+    }
+    
+    
+    .collision: {
+        ;read from xsize and ysize below in enemy_headers
+        ;determine if hit occured
+        rts
+    }
+    
+    ;====================================== ENEMY DEFINITIONS =====================================
+    
+    .ptr: {
+        ..balloon: dw enemy_headers_balloon
+    }
+    
+    
+    .headers: {
+        ..balloon: {
+            ;spritemap ptr                      xsize,      ysize,      init routine,               main routine,           touch
+            dw spritemap_pointers_balloon,      $0008,      $0008,      enemy_init_balloon,         enemy_main_balloon,     enemy_touch_kill
+        }
+    }
+    
+    
+    .init: {
+        ..balloon: {
+            dec !enemyy,x
+            rts
+        }
+    }
+    
+    
+    .main: {
+        ..balloon: {
+            ;brk #$00
+            rts
+        }
+    }
+    
+    
+    .touch: {
+        ..kill: {
+            ;kill glider
+            rts
+        }
+        
+        ..points: {
+            ;for clock sprites:
+            ;give points, delete sprite
+            rts
+        }
+        
+        ..battery: {
+            ;for battery sprite:
+            ;add to battery ammo, delete sprite
+            rts
+        }
+        
+        ..bands: {
+            ;for rubber band ammo sprite:
+            ;add to band ammo, delete sprite
+            rts
+        }
+    }
 }
+
+incsrc "./data/sprites/spritemaps.asm"
+
+print "bank $82 end: ", pc

@@ -17,6 +17,7 @@ incsrc "./defines.asm"
 !nmiflag                =           $22
 !nmicounter             =           $24
 !framecounter           =           $26
+!lagcounter             =           $28
 
 !bg1x                   =           $40
 !bg1y                   =           $42
@@ -137,8 +138,7 @@ init:
         rep #$20
         
         jsl dma_clearvram
-        jsl filloambuffer
-        ;jsr hightablefill
+        jsl oam_fillbuffer
         
     ;fall through to main
 
@@ -236,6 +236,9 @@ newgame: {
     lda #$0000
     jsl load_sprite         ;load sprite data 0 (glider)
     jsl glider_init
+    
+    lda #$0001
+    jsl load_sprite         ;load sprite data 1 (balloon)
     
     sep #$20
     lda #%00010011          ;main screen = sprites, L2, L1
@@ -532,39 +535,37 @@ pause: {
 
 
 nmi: {
-    php
     phb
-    phd
     pha
     phx
     phy
     
     phk         ;db=80
     plb
-    lda #$0000
-    tcd
     
     sep #$10
     ldx $4210
     ldx !nmiflag
-    beq .return
+    rep #$10
+    beq .lag
     
     jsl oam_write               ;dma from wram buffer to oam
     jsl obj_tilemap_upload
-    jsr updateppuregisters      ;read wram buffer and write register
+    ;jsr updateppuregisters      ;read wram buffer and write register
     jsr readcontroller
     stz !nmiflag
     
     .return
-    rep #$30
     ply
     plx
     pla
-    pld
     plb
-    plp
     inc !nmicounter
     rti
+    
+    .lag
+    inc !lagcounter
+    bra .return
 }
 
 
@@ -678,4 +679,4 @@ hightablefill: {
     rts
 }
 
-;warn pc
+print "bank $80 end: ", pc

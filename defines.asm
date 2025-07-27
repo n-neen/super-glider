@@ -52,10 +52,28 @@
 !glidernextstate    =       !gliderramstart+18      ;next movement state
 !glidersubx         =       !gliderramstart+20      ;subpixel x
 !glidersuby         =       !gliderramstart+22      ;subpixel y
-!gliderturntimer    =       !gliderramstart+24
-!gliderstairstimer  =       !gliderramstart+26
-!gliderstairstype   =       !gliderramstart+28
-!glidertranstimer   =       !gliderramstart+30
+!gliderturntimer    =       !gliderramstart+24      ;unimplemented
+!gliderstairstimer  =       !gliderramstart+26      
+!gliderstairstype   =       !gliderramstart+28      
+!glidertranstimer   =       !gliderramstart+30      
+
+
+;enemy ram
+!enemystart         =       $280
+!enemyarraysize     =       $0020
+!enemyID            =       !enemystart
+!enemyx             =       !enemyID+!enemyarraysize
+!enemyy             =       !enemyx+!enemyarraysize
+!enemysubx          =       !enemyy+!enemyarraysize
+!enemysuby          =       !enemysubx+!enemyarraysize
+!enemyinitptr       =       !enemysuby+!enemyarraysize
+!enemymainptr       =       !enemyinitptr+!enemyarraysize
+!enemytouchptr      =       !enemymainptr+!enemyarraysize
+!enemyproperty      =       !enemytouchptr+!enemyarraysize
+!enemypal           =       !enemyproperty+!enemyarraysize
+!enemyspritemapptr  =       !enemypal+!enemyarraysize
+!enemyxsize         =       !enemyspritemapptr+!enemyarraysize
+!enemyysize         =       !enemyxsize+!enemyarraysize
 
 ;start of oam table to dma at nmi. 544 bytes long
 !oambuffer          =       $500

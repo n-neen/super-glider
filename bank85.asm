@@ -1,8 +1,15 @@
 lorom
 
 ;===========================================================================================
-;=========================    G L I D E R    R O U T I N E S   =============================
+;===============================    E N E M Y   D A T A   ==================================
 ;===========================================================================================
 
 org $858000
-    db "currently reserved for glider gameplay routines"
+
+balloondata:
+    .graphics:
+        incbin "./data/sprites/balloon.gfx"
+    .palette:
+        incbin "./data/sprites/balloon.pal"
+
+

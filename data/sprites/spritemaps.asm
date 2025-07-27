@@ -26,18 +26,22 @@ spritemap: {
         ..balloon:
             dw spritemap_balloon_1,
                spritemap_balloon_2,
-               spritemap_balloon_3
+               spritemap_balloon_3,
+               spritemap_balloon_pop1,
+               spritemap_balloon_pop2
         
     }
-    
-    .glider: {
+                ;starting tile in vram
+    .glider: {  ;$00
         ..idle: {
             db $00
         }
         
         ..right: {
+            ;number of entries
             db $03
             ;  x,   y,   tile,  properties, high table bits (size select) (unused)
+            ;                           1 <-- that bit is for selecting the second page
             db $f0, $00, $00,   %00110000,  %00000010
             db $00, $00, $02,   %00110000,  %00001000
             db $10, $00, $04,   %00110000,  %00100000
@@ -80,17 +84,47 @@ spritemap: {
         }
     }
     
-    .balloon: {
+    .balloon: { ;$50
         ..1: {
-            ;
+            print "balloon spritemap first entry ",  pc
+            db $04
+            ;  x    y    tile   properties
+            db $f8, $f8, $50,   %00110000,  %00000010
+            db $00, $f8, $51,   %00110000,  %00001000
+            db $f8, $08, $70,   %00110000,  %00100000
+            db $00, $08, $71,   %00110000,  %10000000
         }
         
         ..2: {
-            ;
+            db $04
+            db $f8, $f8, $53,   %00110000,  %00000010
+            db $00, $f8, $54,   %00110000,  %00001000
+            db $f8, $08, $73,   %00110000,  %00100000
+            db $00, $08, $74,   %00110000,  %10000000
         }
         
         ..3: {
-            ;
+            db $04
+            db $f8, $f8, $56,   %00110000,  %00000010
+            db $00, $f8, $57,   %00110000,  %00001000
+            db $f8, $08, $76,   %00110000,  %00100000
+            db $00, $08, $77,   %00110000,  %10000000
+        }
+        
+        ..pop1: {
+            db $04
+            db $f8, $f8, $59,   %00110000,  %00000010
+            db $00, $f8, $5a,   %00110000,  %00001000
+            db $f8, $08, $79,   %00110000,  %00100000
+            db $00, $08, $7a,   %00110000,  %10000000
+        }
+        
+        ..pop2: {
+            db $04
+            db $f8, $f8, $5c,   %00110000,  %00000010
+            db $00, $f8, $5d,   %00110000,  %00001000
+            db $f8, $08, $7c,   %00110000,  %00100000
+            db $00, $08, $7d,   %00110000,  %10000000
         }
     }
 }

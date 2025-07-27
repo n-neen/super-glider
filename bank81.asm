@@ -210,7 +210,55 @@ oam: {
         rtl
     }
     
+    
+    .fillbuffer: {
+        ;ok i guess
+        lda #$ffff
+        ldx #$0220
+        
+        -
+        sta !oambuffer,x
+        dex : dex
+        bpl -
+        rtl
+    }    
+
+    .hightablejank: {
+        phx
+        ldx #$0020
+        lda #$aaaa
+    -   sta !oamhightable,x
+        dex : dex
+        bpl -
+        plx
+        rtl
+    }
+    
+    .cleantable: {
+        lda #$0220
+        sec
+        sbc !oamentrypoint
+        lsr
+        tax
+        
+        -
+        lda #$ffff
+        sta !oambuffer,x
+        inx : inx
+        cpx #$0220
+        bmi -
+        
+        rtl
+    }
+
 }
+
+
+
+
+
+
+
 
 
 ;===========================================================================================
@@ -465,24 +513,6 @@ layer2draw: {
     rtl
 }
 
-filloambuffer: {
-    ;ok i guess
-    lda #$ffff
-    ldx #$0240
-    
-    -
-    sta !oambuffer,x
-    dex : dex
-    bpl -
-    rtl
-}
-
-processspritemap: {
-    ;yeah sure
-    ;lol
-    
-    rtl
-}
 
 
 tablepointers: {            ;not actually used in this refactored routine
@@ -508,38 +538,40 @@ endmacro
 
 loadingtable: {
     .sprites: {
-        ..gfx: {          ;long pointer,            size,  baseaddr,         unused
-            %loadtablentry(#gliderdata_graphics,    $1000, !spritestart,     $00)     ;glider = 00
+        ..gfx: {          ;long pointer,            size,  baseaddr,                unused
+            %loadtablentry(#gliderdata_graphics,    $0a00, !spritestart,            $00)     ;glider  = 00
+            %loadtablentry(#balloondata_graphics,   $0800, !spritestart+$0500,      $01)     ;balloon = 01
         }
         
         ..palettes: {
-           %loadtablentry(#gliderdata_palette,      $0080, !spritepalette,   $00)     ;glider = 00
+           %loadtablentry(#gliderdata_palette,      $0020, !spritepalette,          $00)     ;glider = 00
+           %loadtablentry(#balloondata_palette,     $0020, !spritepalette+$0010,    $00)     ;glider = 00
         }
     }
     
     .bg: {
         ..gfx: {
-            %loadtablentry(#objgfx,                 $4000, !bg1start,        $00)     ;obj    = 00              ;object layer
-            %loadtablentry(#splashgfx,              $8000, !bg2start,        $01)     ;splash = 01
-            %loadtablentry(#bg2gfx,                 $4000, !bg2start,        $02)     ;bg2    = 02
-            %loadtablentry(#bg3gfx,                 $4000, !bg2start,        $03)     ;bg3    = 03
-            %loadtablentry(#bg4gfx,                 $4000, !bg2start,        $04)     ;bg4    = 04
+            %loadtablentry(#objgfx,                 $4000, !bg1start,               $00)     ;obj    = 00              ;object layer
+            %loadtablentry(#splashgfx,              $8000, !bg2start,               $01)     ;splash = 01
+            %loadtablentry(#bg2gfx,                 $4000, !bg2start,               $02)     ;bg2    = 02
+            %loadtablentry(#bg3gfx,                 $4000, !bg2start,               $03)     ;bg3    = 03
+            %loadtablentry(#bg4gfx,                 $4000, !bg2start,               $04)     ;bg4    = 04
         }
         
         ..tilemaps: {
-            %loadtablentry(#objtilemap,             $0800, !objtilemap,      $00)     ;obj    = 00              ;object layer
-            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,      $01)     ;splash = 01
-            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,      $02)     ;bg2    = 02
-            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,      $03)     ;bg3    = 03
-            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,      $04)     ;bg4    = 04
-        }
-        
-        ..palettes: {
-            %loadtablentry(#bg3palette,             $0100, !palettes,        $00)     ;obj    = 00              ;object layer
-            %loadtablentry(#splashpalette,          $0100, !palettes,        $01)     ;splash = 01
-            %loadtablentry(#bg2palette,             $0100, !palettes,        $02)     ;bg1    = 02
-            %loadtablentry(#bg3palette,             $0100, !palettes,        $03)     ;bg3    = 03
-            %loadtablentry(#bg4palette,             $0100, !palettes,        $04)     ;bg4    = 04
+            %loadtablentry(#objtilemap,             $0800, !objtilemap,             $00)     ;obj    = 00              ;object layer
+            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $01)     ;splash = 01
+            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $02)     ;bg2    = 02
+            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $03)     ;bg3    = 03
+            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $04)     ;bg4    = 04
+        }       
+                
+        ..palettes: {       
+            %loadtablentry(#bg3palette,             $0100, !palettes,               $00)     ;obj    = 00              ;object layer
+            %loadtablentry(#splashpalette,          $0100, !palettes,               $01)     ;splash = 01
+            %loadtablentry(#bg2palette,             $0100, !palettes,               $02)     ;bg1    = 02
+            %loadtablentry(#bg3palette,             $0100, !palettes,               $03)     ;bg3    = 03
+            %loadtablentry(#bg4palette,             $0100, !palettes,               $04)     ;bg4    = 04
             
         }
     }
@@ -553,28 +585,12 @@ loadingtable: {
     }
 }
 
-;===========================================================================================
-;==========================  M A T H   R O U T I N E S  ====================================
-;===========================================================================================
 
-multiply: {
-    ;takes arguments:
-    ;x and y: numbers to multiply
-    ;x=length of row
-    ;y=number of rows
-    
-    ;returns:
-    ;answer in !multresult
-    
-    tax
-    stx $10
-    
--   clc
-    adc $10
-    dey
-    bne -
-    
-    sta !multresult
-    
-    rtl
-}
+
+
+
+
+
+
+
+print "bank $81 end: ", pc

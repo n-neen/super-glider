@@ -36,24 +36,26 @@ room: {
         
         lda !kroombgtype,x
         sta !roombg
-        jsl load_background
+        jsl load_background     ;relies on contents of A
         
         lda !kroomobjlist,x
         sta !roomobjlistptr
         
-        jsl obj_spawnall
-        jsl obj_handle
-        jsl obj_drawall
-        
         lda !kroombounds,x
         sta !roombounds
-        
         
         lda !kroomenemylist,x
         sta !roomenemylistptr
         
+        jsl obj_spawnall
+        jsl obj_handle
+        jsl obj_drawall
         jsl layer2draw          ;make sure to update layer 2 tilemap
                                 ;since nmi does not
+        
+        jsl enemy_spawnall
+        jsl enemy_runinit
+        
         
         ply
         plx
@@ -77,6 +79,9 @@ room: {
         lda room_list,x
         sta !roomptr
         
+        jsl enemy_clearall
+        stz !oamentrypoint
+        jsl oam_cleantable
         
         plb
         rtl
@@ -993,135 +998,521 @@ room: {
 
 
     .enemylist: {
-        ..0: dw $ffff
-        ..1: dw $ffff
-        ..2: dw $ffff
-        ..3: dw $ffff
-        ..4: dw $ffff
-        ..5: dw $ffff
-        ..6: dw $ffff
-        ..7: dw $ffff
-        ..8: dw $ffff
-        ..9: dw $ffff
-        ..a: dw $ffff
-        ..b: dw $ffff
-        ..c: dw $ffff
-        ..d: dw $ffff
-        ..e: dw $ffff
-        ..f: dw $ffff
-        ..10: dw $ffff
-        ..11: dw $ffff
-        ..12: dw $ffff
-        ..13: dw $ffff
-        ..14: dw $ffff
-        ..15: dw $ffff
-        ..16: dw $ffff
-        ..17: dw $ffff
-        ..18: dw $ffff
-        ..19: dw $ffff
-        ..1a: dw $ffff
-        ..1b: dw $ffff
-        ..1c: dw $ffff
-        ..1d: dw $ffff
-        ..1e: dw $ffff
-        ..1f: dw $ffff
-        ..20: dw $ffff
-        ..21: dw $ffff
-        ..22: dw $ffff
-        ..23: dw $ffff
-        ..24: dw $ffff
-        ..25: dw $ffff
-        ..26: dw $ffff
-        ..27: dw $ffff
-        ..28: dw $ffff
-        ..29: dw $ffff
-        ..2a: dw $ffff
-        ..2b: dw $ffff
-        ..2c: dw $ffff
-        ..2d: dw $ffff
-        ..2e: dw $ffff
-        ..2f: dw $ffff
-        ..30: dw $ffff
-        ..31: dw $ffff
-        ..32: dw $ffff
-        ..33: dw $ffff
-        ..34: dw $ffff
-        ..35: dw $ffff
-        ..36: dw $ffff
-        ..37: dw $ffff
-        ..38: dw $ffff
-        ..39: dw $ffff
-        ..3a: dw $ffff
-        ..3b: dw $ffff
-        ..3c: dw $ffff
-        ..3d: dw $ffff
-        ..3e: dw $ffff
-        ..3f: dw $ffff
-        ..40: dw $ffff
-        ..41: dw $ffff
-        ..42: dw $ffff
-        ..43: dw $ffff
-        ..44: dw $ffff
-        ..45: dw $ffff
-        ..46: dw $ffff
-        ..47: dw $ffff
-        ..48: dw $ffff
-        ..49: dw $ffff
-        ..4a: dw $ffff
-        ..4b: dw $ffff
-        ..4c: dw $ffff
-        ..4d: dw $ffff
-        ..4e: dw $ffff
-        ..4f: dw $ffff
-        ..50: dw $ffff
-        ..51: dw $ffff
-        ..52: dw $ffff
-        ..53: dw $ffff
-        ..54: dw $ffff
-        ..55: dw $ffff
-        ..56: dw $ffff
-        ..57: dw $ffff
-        ..58: dw $ffff
-        ..59: dw $ffff
-        ..5a: dw $ffff
-        ..5b: dw $ffff
-        ..5c: dw $ffff
-        ..5d: dw $ffff
-        ..5e: dw $ffff
-        ..5f: dw $ffff
-        ..60: dw $ffff
-        ..61: dw $ffff
-        ..62: dw $ffff
-        ..63: dw $ffff
-        ..64: dw $ffff
-        ..65: dw $ffff
-        ..66: dw $ffff
-        ..67: dw $ffff
-        ..68: dw $ffff
-        ..69: dw $ffff
-        ..6a: dw $ffff
-        ..6b: dw $ffff
-        ..6c: dw $ffff
-        ..6d: dw $ffff
-        ..6e: dw $ffff
-        ..6f: dw $ffff
-        ..70: dw $ffff
-        ..71: dw $ffff
-        ..72: dw $ffff
-        ..73: dw $ffff
-        ..74: dw $ffff
-        ..75: dw $ffff
-        ..76: dw $ffff
-        ..77: dw $ffff
-        ..78: dw $ffff
-        ..79: dw $ffff
-        ..7a: dw $ffff
-        ..7b: dw $ffff
-        ..7c: dw $ffff
-        ..7d: dw $ffff
-        ..7e: dw $ffff
-        ..7f: dw $ffff
+        ..0: {
+            dw $ffff
+        }
+        
+        ..1: {
+            dw $ffff
+        }
+        
+        ..2: {
+            dw $ffff
+        }
+        
+        ..3: {
+            dw $ffff
+        }
+        
+        ..4: {
+            dw $ffff
+        }
+        
+        ..5: {
+            dw $ffff
+        }
+        
+        ..6: {
+            dw $ffff
+        }
+        
+        ..7: {
+            dw $ffff
+        }
+        
+        ..8: {
+            dw $ffff
+        }
+        
+        ..9: {
+            dw $ffff
+        }
+        
+        ..a: {
+            dw $ffff
+        }
+        
+        ..b: {
+            dw $ffff
+        }
+        
+        ..c: {
+            dw $ffff
+        }
+        
+        ..d: {
+            dw $ffff
+        }
+        
+        ..e: {
+            dw $ffff
+        }
+        
+        ..f: {
+            dw $ffff
+        }
+        
+        ..10: {
+            dw $ffff
+        }
+        
+        ..11: {
+            dw $ffff
+        }
+        
+        ..12: {
+            dw $ffff
+        }
+        
+        ..13: {
+            dw $ffff
+        }
+        
+        ..14: {
+            dw $ffff
+        }
+        
+        ..15: {
+            dw $ffff
+        }
+        
+        ..16: {
+            dw $ffff
+        }
+        
+        ..17: {
+            dw $ffff
+        }
+        
+        ..18: {
+            dw $ffff
+        }
+        
+        ..19: {
+            dw $ffff
+        }
+        
+        ..1a: {
+            dw $ffff
+        }
+        
+        ..1b: {
+            dw $ffff
+        }
+        
+        ..1c: {
+            dw $ffff
+        }
+        
+        ..1d: {
+            dw $ffff
+        }
+        
+        ..1e: {
+            dw $ffff
+        }
+        
+        ..1f: {
+            dw $ffff
+        }
+        
+        ..20: {
+            ;print "room $20 enemy list: ", pc
+            ;enemy type             x,        y,        pal bitmask,    properties (speed)
+            dw enemy_ptr_balloon,   $0048,    $0048,    $0202,          $0000
+            dw $ffff
+        }
+        
+        ..21: {
+            dw $ffff
+        }
+        
+        ..22: {
+            dw $ffff
+        }
+        
+        ..23: {
+            dw $ffff
+        }
+        
+        ..24: {
+            dw $ffff
+        }
+        
+        ..25: {
+            dw $ffff
+        }
+        
+        ..26: {
+            dw $ffff
+        }
+        
+        ..27: {
+            dw $ffff
+        }
+        
+        ..28: {
+            dw $ffff
+        }
+        
+        ..29: {
+            dw $ffff
+        }
+        
+        ..2a: {
+            dw $ffff
+        }
+        
+        ..2b: {
+            dw $ffff
+        }
+        
+        ..2c: {
+            dw $ffff
+        }
+        
+        ..2d: {
+            dw $ffff
+        }
+        
+        ..2e: {
+            dw $ffff
+        }
+        
+        ..2f: {
+            dw $ffff
+        }
+        
+        ..30: {
+            dw $ffff
+        }
+        
+        ..31: {
+            dw $ffff
+        }
+        
+        ..32: {
+            dw $ffff
+        }
+        
+        ..33: {
+            dw $ffff
+        }
+        
+        ..34: {
+            dw $ffff
+        }
+        
+        ..35: {
+            dw $ffff
+        }
+        
+        ..36: {
+            dw $ffff
+        }
+        
+        ..37: {
+            dw $ffff
+        }
+        
+        ..38: {
+            dw $ffff
+        }
+        
+        ..39: {
+            dw $ffff
+        }
+        
+        ..3a: {
+            dw $ffff
+        }
+        
+        ..3b: {
+            dw $ffff
+        }
+        
+        ..3c: {
+            dw $ffff
+        }
+        
+        ..3d: {
+            dw $ffff
+        }
+        
+        ..3e: {
+            dw $ffff
+        }
+        
+        ..3f: {
+            dw $ffff
+        }
+        
+        ..40: {
+            dw $ffff
+        }
+        
+        ..41: {
+            dw $ffff
+        }
+        
+        ..42: {
+            dw $ffff
+        }
+        
+        ..43: {
+            dw $ffff
+        }
+        
+        ..44: {
+            dw $ffff
+        }
+        
+        ..45: {
+            dw $ffff
+        }
+        
+        ..46: {
+            dw $ffff
+        }
+        
+        ..47: {
+            dw $ffff
+        }
+        
+        ..48: {
+            dw $ffff
+        }
+        
+        ..49: {
+            dw $ffff
+        }
+        
+        ..4a: {
+            dw $ffff
+        }
+        
+        ..4b: {
+            dw $ffff
+        }
+        
+        ..4c: {
+            dw $ffff
+        }
+        
+        ..4d: {
+            dw $ffff
+        }
+        
+        ..4e: {
+            dw $ffff
+        }
+        
+        ..4f: {
+            dw $ffff
+        }
+        
+        ..50: {
+            dw $ffff
+        }
+        
+        ..51: {
+            dw $ffff
+        }
+        
+        ..52: {
+            dw $ffff
+        }
+        
+        ..53: {
+            dw $ffff
+        }
+        
+        ..54: {
+            dw $ffff
+        }
+        
+        ..55: {
+            dw $ffff
+        }
+        
+        ..56: {
+            dw $ffff
+        }
+        
+        ..57: {
+            dw $ffff
+        }
+        
+        ..58: {
+            dw $ffff
+        }
+        
+        ..59: {
+            dw $ffff
+        }
+        
+        ..5a: {
+            dw $ffff
+        }
+        
+        ..5b: {
+            dw $ffff
+        }
+        
+        ..5c: {
+            dw $ffff
+        }
+        
+        ..5d: {
+            dw $ffff
+        }
+        
+        ..5e: {
+            dw $ffff
+        }
+        
+        ..5f: {
+            dw $ffff
+        }
+        
+        ..60: {
+            dw $ffff
+        }
+        
+        ..61: {
+            dw $ffff
+        }
+        
+        ..62: {
+            dw $ffff
+        }
+        
+        ..63: {
+            dw $ffff
+        }
+        
+        ..64: {
+            dw $ffff
+        }
+        
+        ..65: {
+            dw $ffff
+        }
+        
+        ..66: {
+            dw $ffff
+        }
+        
+        ..67: {
+            dw $ffff
+        }
+        
+        ..68: {
+            dw $ffff
+        }
+        
+        ..69: {
+            dw $ffff
+        }
+        
+        ..6a: {
+            dw $ffff
+        }
+        
+        ..6b: {
+            dw $ffff
+        }
+        
+        ..6c: {
+            dw $ffff
+        }
+        
+        ..6d: {
+            dw $ffff
+        }
+        
+        ..6e: {
+            dw $ffff
+        }
+        
+        ..6f: {
+            dw $ffff
+        }
+        
+        ..70: {
+            dw $ffff
+        }
+        
+        ..71: {
+            dw $ffff
+        }
+        
+        ..72: {
+            dw $ffff
+        }
+        
+        ..73: {
+            dw $ffff
+        }
+        
+        ..74: {
+            dw $ffff
+        }
+        
+        ..75: {
+            dw $ffff
+        }
+        
+        ..76: {
+            dw $ffff
+        }
+        
+        ..77: {
+            dw $ffff
+        }
+        
+        ..78: {
+            dw $ffff
+        }
+        
+        ..79: {
+            dw $ffff
+        }
+        
+        ..7a: {
+            dw $ffff
+        }
+        
+        ..7b: {
+            dw $ffff
+        }
+        
+        ..7c: {
+            dw $ffff
+        }
+        
+        ..7d: {
+            dw $ffff
+        }
+        
+        ..7e: {
+            dw $ffff
+        }
+        
+        ..7f: {
+            dw $ffff
+        }
     }
 }
 
-;warn pc
+print "bank $83 end: ", pc
