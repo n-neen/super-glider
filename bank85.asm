@@ -13,3 +13,4 @@ balloondata:
         incbin "./data/sprites/balloon.pal"
 
 
+print "bank $85 end: ", pc

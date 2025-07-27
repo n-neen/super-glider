@@ -21,22 +21,26 @@ incsrc "./defines.asm"
 ;===========================================================================================
 
 ;code
-incsrc "./bank80.asm"           ;boot, main, interrupts
+incsrc "./bank80.asm"           ;boot, main, interrupts, top level routines
 incsrc "./bank81.asm"           ;dma, graphics and palette loading
-incsrc "./bank82.asm"           ;gameplay
-incsrc "./bank83.asm"           ;house, rooms definitions
+incsrc "./bank82.asm"           ;gameplay, enemies, spritemaps
+incsrc "./bank83.asm"           ;house, rooms definitions, room transitions
 incsrc "./bank84.asm"           ;tile objects
-incsrc "./bank85.asm"           ;reserved for glider
-incsrc "./bank86.asm"           ;reserved for code
-
 
 ;data
-incsrc "./bank8f.asm"
-incsrc "./bank90.asm"           ;splash screen graphics
-incsrc "./bank91.asm"           ;reserved for data
-incsrc "./bank92.asm"           ;palettes, sprite data, background tilemaps
-incsrc "./bank93.asm"           ;bg01 graphics
-incsrc "./bank94.asm"           ;bg02 graphics
+
+incsrc "./bank85.asm"           ;sprite data (balloon)
+incsrc "./bank86.asm"           ;
+incsrc "./bank87.asm"           ;
+incsrc "./bank88.asm"           ;
+incsrc "./bank89.asm"           ;
+incsrc "./bank8a.asm"           ;splash screen graphics
+incsrc "./bank8b.asm"           ;palettes, sprite data, background tilemaps
+incsrc "./bank8c.asm"           ;background graphics
+incsrc "./bank8d.asm"           ;background graphics
+incsrc "./bank8e.asm"           ;tile object graphics
+incsrc "./bank8f.asm"           ;background graphics
+
 
 
 

@@ -1,6 +1,6 @@
 lorom
 
-org $918000
+org $8e8000
     ;splash screen data
 
 ;===========================================================================================
@@ -10,3 +10,4 @@ org $918000
 objgfx:
     incbin "./data/tiles/obj.gfx"
     
+print "bank $8e end: ", pc

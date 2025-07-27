@@ -1,6 +1,6 @@
 lorom
 
-org $928000
+org $8b8000
 
 
 ;===========================================================================================
@@ -76,4 +76,8 @@ objtilemap:
 bg4tilemap:
     incbin "./data/tilemaps/bg4.map"
 
-;warn pc
+
+
+
+
+print "bank $8b end: ", pc

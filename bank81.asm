@@ -211,6 +211,15 @@ oam: {
     }
     
     
+    ;i really need to get a handle on the following three routines
+    ;and what the hell i mean to do with them
+    ;ideally, we:
+    ;clear oam
+    ;write oam buffer in this order:
+    ;   -glider
+    ;   -enemies, in list order
+    ;then, the remainder of the table is cleared
+    
     .fillbuffer: {
         ;ok i guess
         lda #$ffff
