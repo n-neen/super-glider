@@ -86,7 +86,6 @@ spritemap: {
     
     .balloon: { ;$50
         ..1: {
-            print "balloon spritemap first entry ",  pc
             db $04
             ;  x    y    tile   properties
             db $f8, $f8, $50,   %00110000,  %00000010

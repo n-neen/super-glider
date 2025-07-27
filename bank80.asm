@@ -551,7 +551,7 @@ nmi: {
     
     jsl oam_write               ;dma from wram buffer to oam
     jsl obj_tilemap_upload
-    ;jsr updateppuregisters      ;read wram buffer and write register
+    jsr updateppuregisters      ;read wram buffer and write register
     jsr readcontroller
     stz !nmiflag
     

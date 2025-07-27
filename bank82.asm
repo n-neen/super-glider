@@ -23,7 +23,7 @@ game: {
         
         jsl enemy_top
         
-        ;jsl oam_cleantable
+        jsl oam_cleantable
         jsl oam_hightablejank
         
         rtl
@@ -1057,6 +1057,53 @@ enemy: {
         rts
     }
     
+    
+    .inst: {
+        ..moveup: {
+            ;x = enemy index
+            
+            !speed      =   !localtempvar
+            !subspeed   =   !localtempvar2
+            
+            lda !enemyproperty,x        ;top nibble = left of decimal
+            and #$f000
+            xba
+            lsr #4
+            sta !speed
+            
+            lda !enemyproperty,x        ;bottom 3 nibbles = right of decimal
+            and #$0fff
+            asl #4
+            sta !subspeed
+            
+            ;enemy y - s.bbb0
+            
+            lda !enemysuby,x
+            sec
+            sbc !subspeed
+            sta !enemysuby,x
+            
+            lda !enemyy,x
+            sbc !speed
+            sta !enemyy,x
+            
+            rts
+        }
+        
+        ..checkheight: {
+            ;x = enemy index
+            
+            lda !enemyy,x
+            cmp !kceiling-5
+            bmi +
+            rts
+            +
+            lda !kfloor+12
+            sta !enemyy,x
+            rts
+        }
+    }
+    
     ;====================================== ENEMY DEFINITIONS =====================================
     
     .ptr: {
@@ -1082,7 +1129,8 @@ enemy: {
     
     .main: {
         ..balloon: {
-            dec !enemyy,x
+            jsr enemy_inst_moveup
+            jsr enemy_inst_checkheight
             rts
         }
     }
