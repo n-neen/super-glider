@@ -8,22 +8,20 @@ org $828000
     
 game: {
     .play: {
+        jsl oam_fillbuffer
         jsl getinput
         
-        ;jsl oam_cleantable
-        ;jsl oam_fillbuffer
+        jsl obj_handle
+        jsl obj_collision
         
+        jsl enemy_top
         
         jsr glider_handle
         jsr glider_draw
         jsr glider_checktrans
         
         jsl obj_collision
-        jsl obj_handle
         
-        jsl enemy_top
-        
-        ;jsl oam_cleantable
         jsl oam_hightablejank
         
         rtl
@@ -751,9 +749,107 @@ enemy: {
     .top: {
         jsr enemy_handle
         jsr enemy_drawall
+        jsr enemy_collision_calchitbox
         jsr enemy_collision
         
         rtl
+    }
+    
+    
+    .collision: {
+        phx
+        
+        ldx #!enemyarraysize
+        -
+        lda !enemyID,x
+        beq +
+        jsr enemy_collision_check       ;must preserve x
+        bcc +                           ;carry clear = no collision
+        jsr (!enemytouchptr,x)
+        +
+        dex : dex
+        bpl -
+        
+        plx
+        rts
+        
+        ..calchitbox: {
+            ;!gliderhitboxleft   ;glider x position - hitbox size
+            ;!gliderhitboxright  ;glider x position + hitbox size
+            ;!gliderhitboxtop    ;glider y position - hitbox size
+            ;!gliderhitboxbottom ;glider y position + hitbox size
+            
+            ;!kgliderupbound
+            ;!kgliderdownbound
+            ;!kgliderleftbound
+            ;!kgliderrightbound
+            
+            lda !gliderx            ;hitbox left edge
+            clc
+            adc !kgliderleftbound-!kgliderenemybox
+            sta !gliderhitboxleft
+            
+            lda !gliderx            ;hitbox right edge
+            clc
+            adc !kgliderrightbound+!kgliderenemybox
+            sta !gliderhitboxright
+            
+            lda !glidery            ;hitbox top edge
+            clc
+            adc !kgliderupbound-!kgliderenemybox
+            sta !gliderhitboxtop
+            
+            lda !glidery            ;hitbox bottom edge
+            clc
+            adc !kgliderdownbound+!kgliderenemybox
+            sta !gliderhitboxbottom
+            
+            rts
+        }
+        
+        
+        ..check: {
+            ;x = enemy index
+            ;x must be preserved for the outer loop
+            ;enemyx and y are radii
+            
+            ;currently only works vertically, not when moving left or right
+            ;similar to the object collision, strangely...
+            
+            
+            lda !enemyx,x           ;right bound: xpos+xsize
+            clc
+            adc !enemyxsize,x
+            cmp !gliderhitboxright
+            bmi ++
+            
+            lda !enemyx,x           ;left bound: xpos-xsize
+            sec
+            sbc !enemyxsize,x
+            cmp !gliderhitboxleft
+            bpl ++
+            
+            lda !enemyy,x           ;up bound: ypos-ysize
+            sec
+            sbc !enemyysize,x
+            cmp !gliderhitboxtop
+            bpl ++
+            
+            lda !enemyy,x           ;down bound: ypos+ysize
+            clc
+            adc !enemyysize,x
+            cmp !gliderhitboxbottom
+            bmi ++
+            
+            
+            +
+            sec     ;collision
+            rts
+            
+            ++
+            clc     ;no collision
+            rts
+        }
     }
     
     
@@ -907,6 +1003,14 @@ enemy: {
         
         ldx #!enemyarraysize
         -
+        lda !enemyx,x
+        cmp #$0100
+        bpl +
+        
+        lda !enemyy,x
+        cmp #$0100
+        bpl +
+        
         jsr enemy_draw
         +
         dex : dex
@@ -1051,13 +1155,6 @@ enemy: {
     }
     
     
-    .collision: {
-        ;read from xsize and ysize below in enemy_headers
-        ;determine if hit occured
-        rts
-    }
-    
-    
     .inst: {
         ..moveup: {
             ;x = enemy index
@@ -1119,17 +1216,17 @@ enemy: {
     .headers: {
                ;spritemap ptr                   xsize,      ysize,      init routine,               main routine,           touch
         ..balloon:
-            dw spritemap_pointers_balloon,      $0010,      $0010,      enemy_init_none,            enemy_main_balloon,     enemy_touch_kill
+            dw spritemap_pointers_balloon,      $0030,      $0028,      enemy_init_none,            enemy_main_balloon,     enemy_touch_kill
         ..paper:
             dw spritemap_pointers_paper,        $0010,      $0008,      enemy_init_none,            enemy_main_none,        enemy_touch_paper
         ..clock:
-            dw spritemap_pointers_clock,        $0010,      $0010,      enemy_init_none,            enemy_main_none,        enemy_touch_clock
+            dw spritemap_pointers_clock,        $0030,      $0020,      enemy_init_none,            enemy_main_none,        enemy_touch_clock
         ..battery:
             dw spritemap_pointers_battery,      $0008,      $0010,      enemy_init_none,            enemy_main_none,        enemy_touch_battery
         ..bands:
             dw spritemap_pointers_bands,        $0010,      $0010,      enemy_init_none,            enemy_main_none,        enemy_touch_bands
         ..dart:
-            dw spritemap_pointers_dart,         $0010,      $0030,      enemy_init_none,            enemy_main_dart,        enemy_touch_kill
+            dw spritemap_pointers_dart,         $0040,      $0020,      enemy_init_none,            enemy_main_dart,        enemy_touch_kill
 
     }
     
@@ -1161,13 +1258,15 @@ enemy: {
     
     .touch: {
         ..kill: {
-            ;kill glider
+            lda !kgliderstatelostlife
+            sta !glidernextstate
             rts
         }
         
         ..clock: {
-            ;for extra glider paper:
-            ;give extra life then delete
+            ;todo: add points
+            
+            jsr enemy_clear
             rts
         }
         

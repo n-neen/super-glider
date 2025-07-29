@@ -221,7 +221,10 @@ oam: {
     ;then, the remainder of the table is cleared
     
     .fillbuffer: {
+    
         ;ok i guess
+        phx
+        
         lda #$ffff
         ldx #$0230
         
@@ -229,6 +232,8 @@ oam: {
         sta !oambuffer,x
         dex : dex
         bpl -
+        
+        plx
         rtl
     }    
 

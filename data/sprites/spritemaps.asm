@@ -48,6 +48,10 @@ spritemap: {
                spritemap_dart_lefthit,
                spritemap_dart_righthit
         }
+        
+        ..null: {
+            dw spritemap_null
+        }
     }
     
     
@@ -206,5 +210,10 @@ spritemap: {
         ..righthit: {
             ;after being hit by rubber band
         }
+    }
+    
+    .null: {
+        db $01
+        db $00, $00, $00,   %00110001,  %00000010
     }
 }

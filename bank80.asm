@@ -689,10 +689,3 @@ hightablefill: {
 
 
 print "bank $80 end: ", pc
-
-
-;B80EndFree:
-;padbyte $FF
-;pad $80FFFF
-;.end:
-;print "Free $80 Bytes: ", hex(B80EndFree_end-B80EndFree)
