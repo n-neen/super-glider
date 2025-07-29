@@ -8,6 +8,8 @@ org $828000
     
 game: {
     .play: {
+        stz !batterybool        ;find a better place to do this
+        
         jsl oam_fillbuffer
         jsl getinput
         
@@ -151,8 +153,9 @@ getinput: {
     .y: {
         bit !ky
         beq ..noy
-            ;if pressed go here
-            ;current plan: use battery
+            pha
+            jsr glider_battery
+            pla
         ..noy:
     }
     
@@ -196,77 +199,20 @@ glider: {
         rtl
     }
 
-    .olddraw: {
-        ;todo: high table macro like this
-       
-        macro oambufferwrite(spriteindex,spritebyte)
-            !kspriteentrylength     =   $0004
-            sta !oambuffer+(!kspriteentrylength*<spriteindex>)+<spritebyte>
-        endmacro
+    .battery: {
+        lda !gliderbatterytime
+        beq +
         
+        lda !kbatteryon
+        sta !batterybool
         
+        ;dec !gliderbatterytime
+        bmi ++
         
-        sep #$20
+        rts
         
-        ;=========================================================glider sprite 1
-        
-        lda !gliderx                    ;x position
-        clc
-        adc #$f0
-        %oambufferwrite(0, 0)
-        
-        lda !glidery                    ;y position
-        %oambufferwrite(0, 1)
-        
-        lda #$00                        ;tile index
-        %oambufferwrite(0, 2)
-        
-        lda #%00110000                  ;properties (tile flip, priority, palette)
-        %oambufferwrite(0, 3)
-        
-        lda !oambuffer+$200
-        ora #%00000010                  ;high table (size select)
-        sta !oambuffer+$200
-        
-        ;=========================================================glider sprite 2
-        
-        lda !gliderx
-        %oambufferwrite(1, 0)
-        
-        lda !glidery
-        %oambufferwrite(1, 1)
-        
-        lda #$02
-        %oambufferwrite(1, 2)
-        
-        lda #%00110000
-        %oambufferwrite(1, 3)
-        
-        lda !oambuffer+$200
-        ora #%00001000
-        sta !oambuffer+$200
-        
-        ;=========================================================glider sprite 3
-        
-        lda !gliderx
-        clc
-        adc #$10
-        %oambufferwrite(2, 0)
-        
-        lda !glidery
-        %oambufferwrite(2, 1)
-        
-        lda #$04
-        %oambufferwrite(2, 2)
-        
-        lda #%00110000
-        %oambufferwrite(2, 3)
-        
-        lda !oambuffer+$200
-        ora #%00100000
-        sta !oambuffer+$200
-        
-        rep #$20
+    ++  stz !gliderbatterytime
+    +   stz !batterybool
         rts
     }
     
@@ -485,6 +431,7 @@ glider: {
         ;or pose update
         ;then go to state handler
         
+        
         lda !gliderlives
         beq glider_gameover
         
@@ -639,6 +586,16 @@ glider: {
         sbc #$0001
         sta !gliderx
         
+        lda !batterybool
+        beq +++
+        ;if battery being used:
+        
+        dec !gliderx
+        dec !gliderx
+        dec !gliderx
+        dec !gliderbatterytime
+        
+        +++
         dec !glidermovetimer
         beq ++
     +   
@@ -668,6 +625,16 @@ glider: {
         adc #$0001
         sta !gliderx
         
+        lda !batterybool
+        beq +++
+        ;if battery being used:
+        
+        inc !gliderx
+        inc !gliderx
+        inc !gliderx
+        dec !gliderbatterytime
+        
+        +++
         dec !glidermovetimer
         beq ++
     +   
@@ -1218,11 +1185,11 @@ enemy: {
         ..balloon:
             dw spritemap_pointers_balloon,      $0030,      $0028,      enemy_init_none,            enemy_main_balloon,     enemy_touch_kill
         ..paper:
-            dw spritemap_pointers_paper,        $0010,      $0008,      enemy_init_none,            enemy_main_none,        enemy_touch_paper
+            dw spritemap_pointers_paper,        $0038,      $0028,      enemy_init_none,            enemy_main_none,        enemy_touch_paper
         ..clock:
             dw spritemap_pointers_clock,        $0030,      $0020,      enemy_init_none,            enemy_main_none,        enemy_touch_clock
         ..battery:
-            dw spritemap_pointers_battery,      $0008,      $0010,      enemy_init_none,            enemy_main_none,        enemy_touch_battery
+            dw spritemap_pointers_battery,      $0020,      $0030,      enemy_init_none,            enemy_main_none,        enemy_touch_battery
         ..bands:
             dw spritemap_pointers_bands,        $0010,      $0010,      enemy_init_none,            enemy_main_none,        enemy_touch_bands
         ..dart:
@@ -1264,27 +1231,28 @@ enemy: {
         }
         
         ..clock: {
-            ;todo: add points
-            
+            lda !enemyproperty,x
+            clc
+            adc !points
+            sta !points
             jsr enemy_clear
             rts
         }
         
         ..paper: {
-            ;for extra glider paper:
-            ;give extra life then delete
+            inc !gliderlives
+            jsr enemy_clear
             rts
         }
         
-        ..points: {
-            ;for clock sprites:
-            ;give points, delete sprite
-            rts
-        }
         
         ..battery: {
-            ;for battery sprite:
-            ;add to battery ammo, delete sprite
+            lda !enemyproperty,x
+            clc
+            adc !gliderbatterytime
+            sta !gliderbatterytime
+            
+            jsr enemy_clear
             rts
         }
         

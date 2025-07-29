@@ -1131,9 +1131,9 @@ room: {
             dw enemy_ptr_balloon,   $0058,    $0048,    $0002,          $1234
             dw enemy_ptr_balloon,   $0038,    $0048,    $0002,          $031f
             dw enemy_ptr_balloon,   $0018,    $0028,    $0002,          $0cf0
-            dw enemy_ptr_clock,     $0048,    $0060,    $0004,          $0000
+            dw enemy_ptr_clock,     $0048,    $0060,    $0004,          $01f4
             ;dw enemy_ptr_clock,     $0048,    $0060,    $0004,          $0000
-            ;dw enemy_ptr_paper,     $0048,    $00c8,    $0004,          $0000
+            dw enemy_ptr_paper,     $0048,    $0068,    $0004,          $0000
             ;dw enemy_ptr_battery,   $002c,    $0068,    $0004,          $0000
             ;dw enemy_ptr_bands,     $0020,    $0068,    $0004,          $0000
             ;dw enemy_ptr_dart,      $0048,    $0048,    $0000,          $0000
@@ -1141,8 +1141,8 @@ room: {
         }
         
         ..21: {
-            dw enemy_ptr_clock,     $0070,    $0060,    $0004,          $0000
             dw enemy_ptr_balloon,   $0078,    $0028,    $0002,          $0f80
+            dw enemy_ptr_battery,   $0070,    $0060,    $0004,          $0064
             dw $ffff
         }
         

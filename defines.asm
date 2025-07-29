@@ -60,6 +60,9 @@
 !gliderhitboxright  =       !gliderramstart+34      ;glider x position + hitbox size
 !gliderhitboxtop    =       !gliderramstart+36      ;glider y position - hitbox size
 !gliderhitboxbottom =       !gliderramstart+38      ;glider y position + hitbox size
+!points             =       !gliderramstart+40
+!gliderbatterytime  =       !gliderramstart+42
+!batterybool        =       !gliderramstart+44      ;boolean: zero or nonzero
 
 
 ;enemy ram
@@ -151,6 +154,9 @@
 !kgliderxsubspeed           =       #$7f00      ;subpixel speed
 !kgliderysubspeed           =       #$a000
 
+!kbatteryon                 =       #$0001
+!kbatteryoff                =       #$0000
+
 !kgliderupbound             =       #$fff8      ;for object collision
 !kgliderdownbound           =       #$0010
 !kgliderleftbound           =       #$fff0
@@ -158,7 +164,7 @@
 
 !kgliderenemybox            =       $0008      ;amount to increase for enemy-glider collision only
 
-!kgliderdirleft             =       #$0001      ;i guess dir = 0 isn't a thing huh
+!kgliderdirleft             =       #$0001     ;i guess dir = 0 isn't a thing huh
 !kgliderdirright            =       #$0002
 
 !kliftstateidle             =       #$0000
