@@ -358,6 +358,10 @@ obj: {
         
         ..hitboxdraw: {
             ;this doesnt work anymore
+            ;because it draws tiles on layer 1
+            ;which kill you
+            ;lol
+            
             lda !objtilemap-2,x       ;hitbox draw
             ora #$0008
             sta !objtilemap-2,x

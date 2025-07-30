@@ -1193,14 +1193,30 @@ enemy: {
         ..bands:
             dw spritemap_pointers_bands,        $0010,      $0010,      enemy_init_none,            enemy_main_none,        enemy_touch_bands
         ..dart:
-            dw spritemap_pointers_dart,         $0040,      $0020,      enemy_init_none,            enemy_main_dart,        enemy_touch_kill
-
+            dw spritemap_pointers_dart,         $0040,      $0020,      enemy_init_dart,            enemy_main_dart,        enemy_touch_kill
     }
     
     
     .init: {
         ..none: {
             ;
+            rts
+        }
+        
+        ..dart: {
+            lda !enemyproperty,x
+            bmi +
+            ; if not $8000 bit, it's a left dart
+            lda #spritemap_pointers_dart+0
+            sta !enemyspritemapptr,x
+            
+            rts
+            
+            +
+            ;if $8000 bit, it's a right dart
+            lda #spritemap_pointers_dart+2
+            sta !enemyspritemapptr,x
+            
             rts
         }
     }
@@ -1218,6 +1234,32 @@ enemy: {
         }
         
         ..dart: {
+            lda !enemyproperty,x
+            bmi +
+            
+            ;left dart
+            
+            lda !enemyx,x
+            dec : dec
+            and #$00ff
+            sta !enemyx,x
+            
+            ;lda !kdartsubspeed         ;do somethin like that eventually
+            ;jsr enemy_inst_moveleft
+            
+            rts
+            
+            ;right dart
+            +
+            
+            lda !enemyx,x
+            inc : inc
+            and #$00ff
+            sta !enemyx,x
+            
+            ;lda !kdartsubspeed
+            ;jsr enemy_inst_moveright
+            
             rts
         }
     }

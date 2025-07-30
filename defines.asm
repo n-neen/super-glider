@@ -230,3 +230,7 @@
 ;length of one object list entry
 
 
+;enemy constants
+
+!kdartsubspeed              =       #$8000
+!kdartspeed                 =       #$0001
