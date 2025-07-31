@@ -12,3 +12,20 @@ room format is established.
 objects which modify the room tilemap have been implemented. 
 room transitions are working. 
 enemy subsystem has been started and is partially working.
+
+
+controls:
+
+dpad: left and right to move. up and down not used
+
+x: unimplemented (will fire rubber bands)
+
+b: turn glider around
+
+y: hold and press left or right to use battery
+
+debug controls (to be removed at release):
+
+a: hold to keep glider vertically in place (ignore gravity)
+
+l and r: l sets lift state to falling, r sets lift to rising
