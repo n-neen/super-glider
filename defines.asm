@@ -63,12 +63,13 @@
 !points             =       !gliderramstart+40
 !gliderbatterytime  =       !gliderramstart+42
 !batterybool        =       !gliderramstart+44      ;boolean: zero or nonzero
+!iframecounter      =       !gliderramstart+46
 
 
 ;enemy ram
 !enemystart         =       $280
-!enemyarraysize     =       $0020
-!enemyID            =       !enemystart
+!enemyarraysize     =       $0028                   ;half of this is the number of enemy slots. initially this was $20 ($10 slots)
+!enemyID            =       !enemystart             ;expanding to $30 runs into the oam table
 !enemyx             =       !enemyID+!enemyarraysize+2
 !enemyy             =       !enemyx+!enemyarraysize+2
 !enemysubx          =       !enemyy+!enemyarraysize+2
@@ -154,6 +155,8 @@
 !kgliderstatelostlife       =       #$0006
 !kgliderxsubspeed           =       #$7f00      ;subpixel speed
 !kgliderysubspeed           =       #$a000
+
+!kglideriframes             =       #$0060
 
 !kbatteryon                 =       #$0001
 !kbatteryoff                =       #$0000

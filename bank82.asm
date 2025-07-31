@@ -297,7 +297,9 @@ glider: {
         phk
         plb
         
-        ;jsr ..cleartable
+        lda !iframecounter
+        bit #$0001
+        bne +
         
         ldy #$0000
         
@@ -436,6 +438,13 @@ glider: {
         ;or pose update
         ;then go to state handler
         
+        lda !iframecounter
+        beq ..nodec
+        
+        dec
+        sta !iframecounter
+        
+        ..nodec:
         
         lda !gliderlives
         beq glider_gameover
@@ -566,8 +575,11 @@ glider: {
     }
     
     .lostlife: {
+        
+        lda !kglideriframes
+        sta !iframecounter
+        
         dec !gliderlives
-        ;stz !gliderstate
         stz !glidernextstate
         jsl glider_init_spawn
         rts
@@ -731,6 +743,9 @@ enemy: {
     .collision: {
         phx
         
+        lda !iframecounter
+        bne ++
+        
         ldx #!enemyarraysize
         -
         lda !enemyID,x
@@ -742,6 +757,7 @@ enemy: {
         dex : dex
         bpl -
         
+        ++
         plx
         rts
         
@@ -1195,7 +1211,7 @@ enemy: {
         ..clock:
             dw spritemap_pointers_clock,        $0030,      $0020,      enemy_init_none,            enemy_main_none,        enemy_touch_clock
         ..battery:
-            dw spritemap_pointers_battery,      $0020,      $0030,      enemy_init_none,            enemy_main_none,        enemy_touch_battery
+            dw spritemap_pointers_battery,      $0030,      $0028,      enemy_init_none,            enemy_main_none,        enemy_touch_battery
         ..bands:
             dw spritemap_pointers_bands,        $0010,      $0010,      enemy_init_none,            enemy_main_none,        enemy_touch_bands
         ..dart:
