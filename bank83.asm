@@ -91,7 +91,21 @@ room: {
             dw room_transition_right,
                room_transition_left,
                room_transition_up,
-               room_transition_down
+               room_transition_down,
+               room_transition_duct
+        }
+        
+        ..duct: {
+            lda !kceiling+$10
+            sta !glidery
+            
+            lda !ductoutputxpos
+            sta !gliderx
+            
+            lda !ktranstimer
+            sta !glidertranstimer
+            sta !gliderstairstimer
+            rts
         }
         
         ..right: {
@@ -999,6 +1013,8 @@ room: {
 
     .enemylist: {
         ..0: {
+            ;enemy type             x,        y,        pal bitmask,    properties
+            dw enemy_ptr_duct,      $0020,    $0008,    $8004,          $9021
             dw $ffff
         }
         
@@ -1132,16 +1148,17 @@ room: {
             dw enemy_ptr_balloon,   $0058,    $0048,    $0002,          $1234
             dw enemy_ptr_balloon,   $0038,    $0048,    $0002,          $031f
             dw enemy_ptr_balloon,   $0018,    $0028,    $0002,          $0cf0
-            dw enemy_ptr_clock,     $0048,    $0060,    $0004,          $01f4
-            dw enemy_ptr_paper,     $0038,    $0070,    $0004,          $0000
+            dw enemy_ptr_clock,     $0048,    $0060,    $0006,          $01f4
+            dw enemy_ptr_paper,     $0038,    $0070,    $0006,          $0000
             ;dw enemy_ptr_battery,   $002c,    $0068,    $0004,          $0000
             ;dw enemy_ptr_bands,     $0020,    $0068,    $0004,          $0000
             dw $ffff
         }
         
         ..21: {
-            dw enemy_ptr_balloon,   $0078,    $0028,    $0002,          $0f80
-            dw enemy_ptr_battery,   $0070,    $0060,    $0004,          $0064
+            dw enemy_ptr_balloon,   $0060,    $0028,    $0002,          $0f80
+            dw enemy_ptr_battery,   $0070,    $0070,    $0006,          $0064
+            dw enemy_ptr_duct,      $0090,    $0008,    $8004,          $2000
             dw $ffff
         }
         

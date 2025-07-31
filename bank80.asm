@@ -242,7 +242,7 @@ newgame: {
     jsl load_sprite         ;load sprite data 2 (prizes)
     
     lda #$0003
-    jsl load_sprite         ;load sprite data 2 (prizes)
+    jsl load_sprite         ;load sprite data 3 (dart)
     
     jsl glider_init
     
@@ -256,7 +256,6 @@ newgame: {
     lda #$0020*2
     sta !roomindex
     tax
-    
     lda room_list,x         ;room = room $20
     sta !roomptr
     

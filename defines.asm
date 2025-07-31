@@ -98,6 +98,7 @@
 !roomx              =       !housestart+14
 !roomy              =       !housestart+16
 !roomindex          =       !housestart+18
+!ductoutputxpos     =       !housestart+20
 
 ;object ram
 !rowcounter         =       $06
@@ -222,6 +223,7 @@
 !kroomtranstypeleft         =       #$0001
 !kroomtranstypeup           =       #$0002
 !kroomtranstypedown         =       #$0003
+!kroomtranstypeduct         =       #$0004
 !ktranstimer                =       #$0030
 
 ;object constants

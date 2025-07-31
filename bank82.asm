@@ -392,6 +392,10 @@ glider: {
         adc .stairslift_table,x
         sta !glidery
         
+        lda !gliderstairstype       ;if duct, skip the horizontal
+        cmp !kroomtranstypeduct     ;so we go straight down
+        beq ++
+        
         lda !gliderdir
         asl
         tax
@@ -399,7 +403,7 @@ glider: {
         clc
         adc !gliderx
         sta !gliderx
-        
+        ++
         
         -
         plb
@@ -415,7 +419,8 @@ glider: {
             ;!kroomtranstypeleft         =       #$0001
             ;!kroomtranstypeup           =       #$0002
             ;!kroomtranstypedown         =       #$0003
-            dw $0000, $0000, $fffe, $0002
+            ;!kroomtranstypeduct         =       #$0004
+            dw $0000, $0000, $fffe, $0002, $0001
         }
         
         ..htable: {
@@ -1177,6 +1182,7 @@ enemy: {
         ..battery:      dw enemy_headers_battery
         ..bands:        dw enemy_headers_bands
         ..dart:         dw enemy_headers_dart
+        ..duct:         dw enemy_headers_duct
     }
     
     
@@ -1194,12 +1200,35 @@ enemy: {
             dw spritemap_pointers_bands,        $0010,      $0010,      enemy_init_none,            enemy_main_none,        enemy_touch_bands
         ..dart:
             dw spritemap_pointers_dart,         $0040,      $0020,      enemy_init_dart,            enemy_main_dart,        enemy_touch_kill
+        ..duct:
+            dw spritemap_pointers_duct,         $0030,      $0028,      enemy_init_duct,            enemy_main_none,        enemy_touch_duct
     }
     
     
     .init: {
         ..none: {
             ;
+            rts
+        }
+        
+        ..duct: {
+            ;the enemy palette bitmask needs to be renamed
+            ;the top byte isn't used by the spritemap loading routine at all,
+            ;so can be used for any purpose
+            ;here we only use the top bit
+            
+            lda !enemypal,x
+            bmi +
+            ;if not $8000 bit, it's a floor duct
+            lda #spritemap_pointers_duct+0
+            sta !enemyspritemapptr,x
+            rts
+            
+            +
+            ;if $8000 bit, it's a ceiling duct
+            lda #spritemap_pointers_duct+2
+            sta !enemyspritemapptr,x
+            
             rts
         }
         
@@ -1269,6 +1298,25 @@ enemy: {
         ..kill: {
             lda !kgliderstatelostlife
             sta !glidernextstate
+            rts
+        }
+        
+        ..duct: {
+            lda !kroomtranstypeduct
+            sta !roomtranstype
+            
+            lda !enemyproperty,x        ;low byte = room index to go to
+            and #$00ff
+            asl
+            sta !roomindex
+            
+            lda !enemyproperty,x        ;high byte = x output position
+            and #$ff00                  ;(y will always be near ceiling)
+            xba
+            sta !ductoutputxpos
+            
+            lda !kstateroomtrans
+            sta !gamestate
             rts
         }
         

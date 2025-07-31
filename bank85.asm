@@ -24,7 +24,11 @@ dartdata:
     .graphics:
         incbin "./data/sprites/dart.gfx"
     .palette:
+        dw $7fff
         ;null. indicate size as 0 in loadingtable entry
         ;or 1 i guess? lol
+        ;ok so here's what you do:
+        ;loading table entry has a size of 1
+        ;and you target a sprite palette's transparent color
 
 print "bank $85 end: ", pc

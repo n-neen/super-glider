@@ -225,7 +225,7 @@ oam: {
         ;ok i guess
         phx
         
-        lda #$ffff
+        lda #$cfff
         ldx #$0230
         
         -
@@ -257,7 +257,7 @@ oam: {
         ldx !oamentrypoint
         
         -
-        lda #$ffff
+        lda #$0000
         sta !oambuffer,x
         inx : inx
         cpx #$0220
@@ -563,7 +563,7 @@ loadingtable: {
         ..palettes: {
            %loadtablentry(#gliderdata_palette,      $0020, !spritepalette,          $00)     ;glider  = 00
            %loadtablentry(#balloondata_palette,     $0020, !spritepalette+$0010,    $01)     ;balloon = 01
-           %loadtablentry(#prizedata_palette,       $0020, !spritepalette+$0020,    $02)     ;prizes  = 02
+           %loadtablentry(#prizedata_palette,       $0040, !spritepalette+$0020,    $02)     ;prizes  = 02
            %loadtablentry(#dartdata_palette,        $0001, !spritepalette+$0000,    $03)     ;dart    = 03
         }
     }
