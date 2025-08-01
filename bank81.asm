@@ -561,10 +561,10 @@ loadingtable: {
         }
         
         ..palettes: {
-           %loadtablentry(#gliderdata_palette,      $0020, !spritepalette,          $00)     ;glider  = 00
-           %loadtablentry(#balloondata_palette,     $0020, !spritepalette+$0010,    $01)     ;balloon = 01
-           %loadtablentry(#prizedata_palette,       $0040, !spritepalette+$0020,    $02)     ;prizes  = 02
-           %loadtablentry(#dartdata_palette,        $0001, !spritepalette+$0000,    $03)     ;dart    = 03
+           %loadtablentry(#gliderdata_palette,      $0020, !spritepalette+$0070,    $00)     ;glider  = 00      ;sprite line 7
+           %loadtablentry(#balloondata_palette,     $0020, !spritepalette+$0010,    $01)     ;balloon = 01      ;sprite line 1
+           %loadtablentry(#prizedata_palette,       $0040, !spritepalette+$0020,    $02)     ;prizes  = 02      ;sprite line 2
+           %loadtablentry(#gliderdata_palette,      $0020, !spritepalette+$0000,    $03)     ;dart    = 03      ;sprite line 0
         }
     }
     

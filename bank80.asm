@@ -246,12 +246,7 @@ newgame: {
     
     jsl glider_init
     
-    sep #$20
-    lda #%00010011          ;main screen = sprites, L2, L1
-    sta $212c
-    lda #$ff
-    sta !bg1y
-    rep #$20
+    jsr layerinit
     
     lda #$0020*2
     sta !roomindex
@@ -269,6 +264,38 @@ newgame: {
     lda #$0005
     sta !gamestate          ;if [debug], goto debug setup mode
 +   rts
+}
+
+
+layerinit: {
+    ;!mainscreenlayers   =       $b0     ;$212c
+    ;!subscreenlayers    =       $b1     ;$212d
+    ;!colormathlayers    =       $b2     ;$2131
+    ;!colormathbackdrop  =       $b3     ;$2132
+    ;!colormathenable    =       $b4     ;$2130
+    
+    
+    sep #$20
+    
+    lda #%00010011          ;main screen = sprites, L2,1
+    sta $212c
+    sta !mainscreenlayers
+    
+    lda #%00000000          ;sub screen = 
+    sta !subscreenlayers
+    
+    lda #%00000000
+    sta !colormathlayers
+    
+    lda #%00000000
+    sta !colormathenable
+    
+    
+    lda #$ff
+    sta !bg1y
+    
+    rep #$20
+    rts
 }
 
 ;===========================================================================================
@@ -308,6 +335,32 @@ playgame: {
         lda #$0004
         sta !gamestate      ;advance gamestate from 3 (playgame) to 4 (endgame)
         rts
+}
+
+iframecolormath: {
+    lda !iframecounter
+    beq +
+    
+    sep #$20
+    lda #%00000011          ;main screen = sprites, L2,1
+    sta $212c
+    sta !mainscreenlayers
+    
+    lda #%00010001          ;sub screen = sprites
+    sta !subscreenlayers
+    
+    lda #%00010010
+    sta !colormathlayers
+    
+    lda #%00000011
+    sta !colormathenable
+    rep #$20
+    
+    rtl
+    
+    +
+    jsr layerinit
+    rtl
 }
 
 
@@ -633,6 +686,12 @@ readcontroller: {
 
 
 updateppuregisters: { ;transfer wram mirrors to their registers
+    ;!mainscreenlayers   =       $b0     ;$212c
+    ;!subscreenlayers    =       $b1     ;$212d
+    ;!colormathlayers    =       $b2     ;$2131
+    ;!colormathbackdrop  =       $b3     ;$2132
+    ;!colormathenable    =       $b4     ;$2130
+    
     sep #$20
     
     lda !bg1x
@@ -648,6 +707,27 @@ updateppuregisters: { ;transfer wram mirrors to their registers
     lda !bg2y
     sta $2110
     sta $2110
+    
+    lda !gamestate
+    cmp !kstateplaygame8
+    bne +
+    
+    lda !mainscreenlayers
+    sta $212c
+    
+    lda !subscreenlayers
+    sta $212d
+    
+    lda !colormathlayers
+    sta $2131
+    
+    lda !colormathbackdrop
+    sta $2132
+    
+    lda !colormathenable
+    sta $2130
+    
+    +
     
     rep #$20
     rts

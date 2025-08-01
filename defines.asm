@@ -28,6 +28,13 @@
 !localtempvar4      =       $16
 !pausecounter       =       $18
 
+;one byte color math ppu register mirrors
+!mainscreenlayers   =       $b0     ;$212c
+!subscreenlayers    =       $b1     ;$212d
+!colormathlayers    =       $b2     ;$2131
+!colormathbackdrop  =       $b3     ;$2132
+!colormathenable    =       $b4     ;$2130
+
 !oamentrypointbckp  =       $ec
 !oamentrypoint      =       $ee
 !numberofsprites    =       $f0                     ;used by oam routine
@@ -206,6 +213,7 @@
 !kstatesplash               =       #$0001
 !kstatenewgame              =       #$0002
 !kstateplaygame             =       #$0003
+!kstateplaygame8            =       #$03
 !kstategameover             =       #$0004
 !kstatedebug                =       #$0005
 !kstateloadroom             =       #$0006

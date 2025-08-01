@@ -24,6 +24,8 @@ game: {
         
         jsl obj_collision
         
+        ;jsl iframecolormath        ;to be a toggle in main menu, someday
+        
         jsl oam_hightablejank
         
         rtl
@@ -297,7 +299,7 @@ glider: {
         phk
         plb
         
-        lda !iframecounter
+        lda !iframecounter             ;traditional iframes
         bit #$0001
         bne +
         
