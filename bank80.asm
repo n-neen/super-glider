@@ -246,7 +246,10 @@ newgame: {
     
     jsl glider_init
     
-    jsr layerinit
+    stz !colormathmode
+    jsl handlecolormath
+    
+    jsr fixlayerscroll
     
     lda #$0020*2
     sta !roomindex
@@ -267,36 +270,15 @@ newgame: {
 }
 
 
-layerinit: {
-    ;!mainscreenlayers   =       $b0     ;$212c
-    ;!subscreenlayers    =       $b1     ;$212d
-    ;!colormathlayers    =       $b2     ;$2131
-    ;!colormathbackdrop  =       $b3     ;$2132
-    ;!colormathenable    =       $b4     ;$2130
-    
-    
+fixlayerscroll: {
     sep #$20
-    
-    lda #%00010011          ;main screen = sprites, L2,1
-    sta $212c
-    sta !mainscreenlayers
-    
-    lda #%00000000          ;sub screen = 
-    sta !subscreenlayers
-    
-    lda #%00000000
-    sta !colormathlayers
-    
-    lda #%00000000
-    sta !colormathenable
-    
-    
-    lda #$ff
-    sta !bg1y
-    
+    lda #$ff                ;set layer y scrolls to -1
+    sta !bg1y               ;because of course lol
+    sta !bg2y
     rep #$20
     rts
 }
+
 
 ;===========================================================================================
 ;============================== STATE 8:  ROOM TRANSITION  =================================
@@ -337,32 +319,125 @@ playgame: {
         rts
 }
 
-iframecolormath: {
-    lda !iframecounter
-    beq +
+
+handlecolormath: {
+    lda !colormathmode
+    asl
+    tax
     
     sep #$20
-    lda #%00000011          ;main screen = sprites, L2,1
-    sta $212c
-    sta !mainscreenlayers
-    
-    lda #%00010001          ;sub screen = sprites
-    sta !subscreenlayers
-    
-    lda #%00010010
-    sta !colormathlayers
-    
-    lda #%00000011
-    sta !colormathenable
+    jsr (colormathmode_table,x)
     rep #$20
     
     rtl
-    
-    +
-    jsr layerinit
-    rtl
 }
 
+
+colormathmode: {
+    .table: {
+        dw  .normal,             ;0
+            .lightsout,          ;1
+            .iframes,            ;2
+            .coolmode            ;3
+    }
+    
+    
+    .normal: {
+        lda #%00010011          ;main screen = sprites, L2,1
+        sta !mainscreenlayers
+        
+        lda #%00000000          ;sub screen = nothing
+        sta !subscreenlayers
+        
+        lda #%00000000          ;color math off
+        sta !colormathlayers
+        
+        lda #%00000000
+        sta !colormathenable
+
+        rts
+    }
+    
+    
+    .coolmode: {
+        ;tbd
+        rts
+    }
+    
+    
+    .lightsout: {
+        lda #%00010011          ;main screen
+        sta !mainscreenlayers
+        
+        lda #%00000000          ;sub screen
+        sta !subscreenlayers
+        
+        lda #%10100011          ;color math layers
+        sta !colormathlayers
+        
+        lda #%00000011
+        sta !colormathenable
+        
+        ;0-1f
+        lda #$0f
+        sta !subscreenbackdropblue
+        
+        lda #$05
+        sta !subscreenbackdropred
+        
+        lda #$0a
+        sta !subscreenbackdropgreen
+        
+        rts
+        rts
+    }
+    
+
+    .iframes: {
+        lda #%00010011          ;main screen = sprites, 2, 1
+        sta !mainscreenlayers
+        
+        lda #%00000011          ;sub screen = sprites
+        sta !subscreenlayers
+        
+        lda #%01110000          ;color math layers = sprites
+        sta !colormathlayers
+        
+        lda #%00000011
+        sta !colormathenable
+        
+        
+        lda #$00
+        sta !subscreenbackdropblue
+        
+        lda #$00
+        sta !subscreenbackdropred
+        
+        lda #$1f
+        sta !subscreenbackdropgreen
+        
+        rts
+    }
+}
+
+
+iframecolormath: {
+    ;todo: implement an option
+    ;to have either style of iframes
+    rtl
+    
+    
+    lda !iframecounter
+    beq +
+    
+    lda !kcolormathiframes
+    sta !colormathmode
+    rtl
+    
+    +
+    stz !colormathmode
+    rtl
+}
 
 ;===========================================================================================
 ;================================== STATE 4:  GAMEOVER  ====================================
@@ -726,6 +801,22 @@ updateppuregisters: { ;transfer wram mirrors to their registers
     
     lda !colormathenable
     sta $2130
+    
+    lda !colormathbackdrop
+    ora !subscreenbackdropred
+    ora #%00100000
+    sta !colormathbackdrop
+    
+    lda !colormathbackdrop
+    ora !subscreenbackdropgreen
+    ora #%01000000
+    sta !colormathbackdrop
+    
+    lda !colormathbackdrop
+    ora !subscreenbackdropblue
+    ora #%10000000
+    sta !colormathbackdrop
+    
     
     +
     

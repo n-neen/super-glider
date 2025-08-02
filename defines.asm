@@ -29,11 +29,16 @@
 !pausecounter       =       $18
 
 ;one byte color math ppu register mirrors
-!mainscreenlayers   =       $b0     ;$212c
-!subscreenlayers    =       $b1     ;$212d
-!colormathlayers    =       $b2     ;$2131
-!colormathbackdrop  =       $b3     ;$2132
-!colormathenable    =       $b4     ;$2130
+!mainscreenlayers       =       $b0     ;$212c
+!subscreenlayers        =       $b1     ;$212d
+!colormathlayers        =       $b2     ;$2131
+!colormathbackdrop      =       $b3     ;$2132
+!colormathenable        =       $b4     ;$2130
+!colormathmode          =       $b5
+!subscreenbackdropred   =       $b7
+!subscreenbackdropgreen =       $b8
+!subscreenbackdropblue  =       $b9
+
 
 !oamentrypointbckp  =       $ec
 !oamentrypoint      =       $ee
@@ -247,3 +252,10 @@
 
 !kdartsubspeed              =       #$8000
 !kdartspeed                 =       #$0001
+
+;color math constants
+
+!kcolormathnormal           =       #$0000
+!kcolormathlightsout        =       #$0001
+!kcolormathiframes          =       #$0002
+!kcolormathcool             =       #$0003

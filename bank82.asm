@@ -24,7 +24,8 @@ game: {
         
         jsl obj_collision
         
-        ;jsl iframecolormath        ;to be a toggle in main menu, someday
+        jsl iframecolormath
+        jsl handlecolormath
         
         jsl oam_hightablejank
         
@@ -135,8 +136,10 @@ getinput: {
     .x: {
         bit !kx
         beq ..nox
-            ;if pressed go here
-            ;current plan: fire bands
+            pha
+            lda !kcolormathlightsout
+            sta !colormathmode
+            pla
         ..nox:
     }
     

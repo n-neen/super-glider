@@ -18,7 +18,7 @@ controls:
 
 dpad: left and right to move. up and down not used
 
-x: unimplemented (will fire rubber bands)
+x: currently turns off lights. this is just for testing. will eventually fire rubber bands
 
 b: turn glider around
 
