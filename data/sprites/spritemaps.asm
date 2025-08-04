@@ -9,6 +9,8 @@
 ;i think the above is done
 ;todo: confirm the above, and above the above
 
+;print "spritemaps: ", pc
+
 spritemap: {
     .pointers: {
         ;see glider constants in defines.asm
@@ -39,8 +41,8 @@ spritemap: {
         ..battery:
             dw spritemap_battery
             
-        ..bands:
-            dw spritemap_bands
+        ..bandspack:
+            dw spritemap_bandspack
             
         ..dart: {
             dw spritemap_dart_left,
@@ -56,6 +58,12 @@ spritemap: {
         ..duct: {
             dw spritemap_duct_floor,
                spritemap_duct_ceiling
+        }
+        
+        ..band: {
+            dw spritemap_band_1,
+               spritemap_band_2,
+               spritemap_band_3
         }
     }
     
@@ -181,7 +189,7 @@ spritemap: {
         db $00, $00, $a6,   %00110000,  %00000010
     }
     
-    .bands: {
+    .bandspack: {
         db $04
         db $f8, $00, $9c,   %00110000,  %00000010
         db $08, $00, $9e,   %00110000,  %00000010
@@ -243,6 +251,23 @@ spritemap: {
             db $f0, $00, $e0,   %00110000,  %00000010
             db $00, $00, $e2,   %00110000,  %00000010
             db $10, $00, $e4,   %00110000,  %00000010
+        }
+    }
+    
+    .band: {
+        ..1: {
+            db $01
+            db $00, $00, $0c,   %00110000,  %00000010
+        }
+        
+        ..2: {
+            db $01
+            db $00, $00, $0e,   %00110000,  %00000010
+        }
+        
+        ..3: {
+            db $01
+            db $00, $00, $2c,   %00110000,  %00000010
         }
     }
 }

@@ -1021,7 +1021,7 @@ room: {
         }
         
         ..1: {
-            ;dw enemy_ptr_dart,      $0000,    $0038,    $0000,          $0000
+            dw enemy_ptr_bandspack, $0040,    $0058,    $0000,          $0000
             dw $ffff
         }
         

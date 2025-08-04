@@ -29,6 +29,7 @@
 !pausecounter       =       $18
 
 ;one byte color math ppu register mirrors
+;and related schtuffe
 !mainscreenlayers       =       $b0     ;$212c
 !subscreenlayers        =       $b1     ;$212d
 !colormathlayers        =       $b2     ;$2131
@@ -38,6 +39,7 @@
 !subscreenbackdropred   =       $b7
 !subscreenbackdropgreen =       $b8
 !subscreenbackdropblue  =       $b9
+!colormathmodebackup    =       $ba
 
 
 !oamentrypointbckp  =       $ec
@@ -65,23 +67,35 @@
 !glidersubx         =       !gliderramstart+20      ;subpixel x
 !glidersuby         =       !gliderramstart+22      ;subpixel y
 !gliderturntimer    =       !gliderramstart+24      ;unimplemented
-!gliderstairstimer  =       !gliderramstart+26      
-!gliderstairstype   =       !gliderramstart+28      
-!glidertranstimer   =       !gliderramstart+30      
-!gliderhitboxleft   =       !gliderramstart+32      ;glider x position - hitbox size
-!gliderhitboxright  =       !gliderramstart+34      ;glider x position + hitbox size
-!gliderhitboxtop    =       !gliderramstart+36      ;glider y position - hitbox size
-!gliderhitboxbottom =       !gliderramstart+38      ;glider y position + hitbox size
-!points             =       !gliderramstart+40
-!gliderbatterytime  =       !gliderramstart+42
-!batterybool        =       !gliderramstart+44      ;boolean: zero or nonzero
-!iframecounter      =       !gliderramstart+46
+!gliderstairstimer  =       !gliderramstart+26      ;timer for extra lift after stairs
+!gliderstairstype   =       !gliderramstart+28      ;direction for lift of above
+!glidertranstimer   =       !gliderramstart+30      ;
 
+!hitboxleft         =       !gliderramstart+32      ;glider x position - hitbox size
+!hitboxright        =       !gliderramstart+34      ;glider x position + hitbox size
+!hitboxtop          =       !gliderramstart+36      ;glider y position - hitbox size
+!hitboxbottom       =       !gliderramstart+38      ;glider y position + hitbox size
+
+!points             =       !gliderramstart+40      ;number go up
+!gliderbatterytime  =       !gliderramstart+42      ;number of frames
+!batteryactive      =       !gliderramstart+44      ;boolean: zero or nonzero
+!iframecounter      =       !gliderramstart+46      ;
+
+!glideryspeed       =       !gliderramstart+48
+!gliderysubspeed    =       !gliderramstart+50
+!gliderxspeed       =       !gliderramstart+52
+!gliderxsubspeed    =       !gliderramstart+54
+
+!coolmode           =       !gliderramstart+56      ;boolean zero or nonzero
+
+!bandsammo          =       !gliderramstart+58
+!fireband           =       !gliderramstart+60      ;flag to fire band at next opportunity
+!bandtimer          =       !gliderramstart+62
 
 ;enemy ram
 !enemystart         =       $280
-!enemyarraysize     =       $0028                   ;half of this is the number of enemy slots. initially this was $20 ($10 slots)
-!enemyID            =       !enemystart             ;expanding to $30 runs into the oam table
+!enemyarraysize     =       $0028
+!enemyID            =       !enemystart
 !enemyx             =       !enemyID+!enemyarraysize+2
 !enemyy             =       !enemyx+!enemyarraysize+2
 !enemysubx          =       !enemyy+!enemyarraysize+2
@@ -95,23 +109,26 @@
 !enemyxsize         =       !enemyspritemapptr+!enemyarraysize+2
 !enemyysize         =       !enemyxsize+!enemyarraysize+2
 
+
 ;start of oam table to dma at nmi. 544 bytes long
-!oambuffer          =       $500
-!oamhightable       =       !oambuffer+$200
+!oambuffer               =      $500
+!oamhightable            =      !oambuffer+$200
 ;end: $720
 
-!housestart         =       $800
-!houseptr           =       !housestart
-!roomptr            =       !housestart+2
-!roomobjlistptr     =       !housestart+4
-!roomenemylistptr   =       !housestart+6
-!roombounds         =       !housestart+8
-!roombg             =       !housestart+10
-!roomtranstype      =       !housestart+12
-!roomx              =       !housestart+14
-!roomy              =       !housestart+16
-!roomindex          =       !housestart+18
-!ductoutputxpos     =       !housestart+20
+!housestart              =      $800
+!houseptr                =      !housestart
+!roomptr                 =      !housestart+2
+!roomobjlistptr          =      !housestart+4
+!roomenemylistptr        =      !housestart+6
+!roombounds              =      !housestart+8
+!roombg                  =      !housestart+10
+!roomtranstype           =      !housestart+12
+!roomx                   =      !housestart+14
+!roomy                   =      !housestart+16
+!roomindex               =      !housestart+18
+!ductoutputxpos          =      !housestart+20
+
+!enemydynamicspawnslot   =      $0880
 
 ;object ram
 !rowcounter         =       $06
@@ -165,13 +182,28 @@
 !kgliderstatetipright       =       #$0004
 !kgliderstateturnaround     =       #$0005
 !kgliderstatelostlife       =       #$0006
-!kgliderxsubspeed           =       #$7f00      ;subpixel speed
-!kgliderysubspeed           =       #$a000
+
+;changed to use dynamic gravity. this get used to
+;initialize that value at newgame but from then on it uses !gliderysubspeed
+
+!kgliderxspeeddefault       =       #$0001
+!kgliderxsubspeeddefault    =       #$7f00
+!kglideryspeeddefault       =       #$0000
+!kgliderysubspeeddefault    =       #$a000
+
 
 !kglideriframes             =       #$0060
 
 !kbatteryon                 =       #$0001
 !kbatteryoff                =       #$0000
+
+!kbandammoamount            =       #$0008
+!kbandtimerlength           =       #$0008
+!kbandxspeed                =       #$0002
+!kbandxsubspeed             =       #$8000
+!kbandyspeed                =       #$0000
+!kbandysubspeed             =       #$2e00
+!kbandspalette              =       #$0002
 
 !kgliderupbound             =       #$fff8      ;for object collision
 !kgliderdownbound           =       #$0010
@@ -258,4 +290,4 @@
 !kcolormathnormal           =       #$0000
 !kcolormathlightsout        =       #$0001
 !kcolormathiframes          =       #$0002
-!kcolormathcool             =       #$0003
+!kcolormathcoolmode         =       #$0003

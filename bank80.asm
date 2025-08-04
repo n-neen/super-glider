@@ -247,6 +247,7 @@ newgame: {
     jsl glider_init
     
     stz !colormathmode
+    stz !colormathmodebackup
     jsl handlecolormath
     
     jsr fixlayerscroll
@@ -360,7 +361,28 @@ colormathmode: {
     
     
     .coolmode: {
-        ;tbd
+        lda #%00000000          ;main screen
+        sta !mainscreenlayers
+        
+        lda #%00010011          ;sub screen
+        sta !subscreenlayers
+        
+        lda #%10111111          ;color math layers
+        sta !colormathlayers
+        
+        lda #%00000011
+        sta !colormathenable
+        
+        ;0-1f
+        lda #$09
+        sta !subscreenbackdropblue
+        
+        lda #$05
+        sta !subscreenbackdropred
+        
+        lda #$10
+        sta !subscreenbackdropgreen
+        
         rts
     }
     
@@ -379,16 +401,15 @@ colormathmode: {
         sta !colormathenable
         
         ;0-1f
-        lda #$0f
+        lda #$13
         sta !subscreenbackdropblue
         
-        lda #$05
+        lda #$16
         sta !subscreenbackdropred
         
-        lda #$0a
+        lda #$15
         sta !subscreenbackdropgreen
         
-        rts
         rts
     }
     
@@ -400,24 +421,50 @@ colormathmode: {
         lda #%00000011          ;sub screen = sprites
         sta !subscreenlayers
         
-        lda #%01110000          ;color math layers = sprites
+        lda #%00110000          ;color math layers = sprites
         sta !colormathlayers
         
         lda #%00000011
         sta !colormathenable
         
         
-        lda #$00
+        lda #$10
         sta !subscreenbackdropblue
         
-        lda #$00
+        lda #$08
         sta !subscreenbackdropred
         
-        lda #$1f
+        lda #$00
         sta !subscreenbackdropgreen
         
         rts
     }
+}
+
+coolmode: {
+    lda !coolmode
+    beq +
+    
+    lda !kcolormathcoolmode
+    sta !colormathmode
+    
+    lda #$ffff
+    sta !glideryspeed
+    
+    lda #$2000
+    sta !gliderysubspeed
+    
+    rtl
+    
++   stz !colormathmode
+    
+    lda !kglideryspeeddefault
+    sta !glideryspeed
+    
+    lda !kgliderysubspeeddefault
+    sta !gliderysubspeed
+    
+    rtl
 }
 
 
@@ -435,7 +482,8 @@ iframecolormath: {
     rtl
     
     +
-    stz !colormathmode
+    lda !colormathmodebackup
+    sta !colormathmode
     rtl
 }
 
@@ -802,20 +850,20 @@ updateppuregisters: { ;transfer wram mirrors to their registers
     lda !colormathenable
     sta $2130
     
-    lda !colormathbackdrop
+    lda #$00
     ora !subscreenbackdropred
     ora #%00100000
-    sta !colormathbackdrop
+    sta $2132
     
-    lda !colormathbackdrop
+    lda #$00
     ora !subscreenbackdropgreen
     ora #%01000000
-    sta !colormathbackdrop
+    sta $2132
     
-    lda !colormathbackdrop
+    lda #$00
     ora !subscreenbackdropblue
     ora #%10000000
-    sta !colormathbackdrop
+    sta $2132
     
     
     +

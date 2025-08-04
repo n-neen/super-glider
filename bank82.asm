@@ -8,7 +8,7 @@ org $828000
     
 game: {
     .play: {
-        stz !batterybool        ;find a better place to do this
+        stz !batteryactive      ;find a better place to do this
         
         jsl oam_fillbuffer
         jsl getinput
@@ -18,11 +18,15 @@ game: {
         
         jsl enemy_top
         
+        jsr bands_handle
+        
         jsr glider_handle
         jsr glider_draw
         jsr glider_checktrans
         
         jsl obj_collision
+        
+        jsl coolmode
         
         jsl iframecolormath
         jsl handlecolormath
@@ -74,7 +78,7 @@ getinput: {
     .sl: {
         bit !ksl
         beq ..nosl
-            ;if select pressed go here
+            stz !coolmode
         ..nosl:
     }
     
@@ -137,8 +141,17 @@ getinput: {
         bit !kx
         beq ..nox
             pha
-            lda !kcolormathlightsout
-            sta !colormathmode
+            
+            lda !fireband
+            bne +
+            
+            ldx #$0001
+            stx !fireband
+            
+            ldx !kbandtimerlength
+            stx !bandtimer
+            
+            +
             pla
         ..nox:
     }
@@ -193,11 +206,25 @@ glider: {
         lda #$0004
         sta !gliderlives
         
+        lda !kgliderysubspeeddefault
+        sta !gliderysubspeed
+        
+        lda !kglideryspeeddefault
+        sta !glideryspeed
+        
+        lda !kgliderxsubspeeddefault
+        sta !gliderxsubspeed
+        
+        lda !kgliderxspeeddefault
+        sta !gliderxspeed
+        
+        
         ..spawn: {
             lda #$0095
             sta !gliderx            ;glider initial position
             lda #$0030
             sta !glidery
+            
             lda !kliftstatedown
             sta !gliderliftstate
         }
@@ -209,7 +236,7 @@ glider: {
         beq +
         
         lda !kbatteryon
-        sta !batterybool
+        sta !batteryactive
         
         ;dec !gliderbatterytime
         bmi ++
@@ -217,7 +244,7 @@ glider: {
         rts
         
     ++  stz !gliderbatterytime
-    +   stz !batterybool
+    +   stz !batteryactive
         rts
     }
     
@@ -295,6 +322,7 @@ glider: {
         ;saved in !oamentrypoint for the next drawing routine to use
         ;this is the raw index, not number of entries, so /4 to get number of entries
         
+        phy
         phx
         phb
         php
@@ -346,15 +374,12 @@ glider: {
         iny
         
         lda $0003,x                     ;properties
+        ;ora !gliderpalette             ;to be used in future, for foil powerup
         sta !oambuffer,y
         iny
+
+        inx #5                          ;x = x + 5 (next sprite entry)
         
-        ;jsr .newdraw_hightablebitwrite
-        
-        txa
-        clc
-        adc #$05                        ;x = x + 5 (next sprite entry)
-        tax
         
         inc !spriteindex
         dec !numberofsprites
@@ -367,6 +392,7 @@ glider: {
         plp
         plb
         plx
+        ply
         rts
         
         ..cleartable: {
@@ -488,10 +514,10 @@ glider: {
                 ;the actual going of up:
                 lda !glidersuby
                 sec
-                sbc !kgliderysubspeed
+                sbc !gliderysubspeed
                 sta !glidersuby
                 lda !glidery
-                sbc #$0000
+                sbc !glideryspeed
                 sta !glidery
                 
                 
@@ -504,10 +530,10 @@ glider: {
                 
                 lda !glidersuby
                 clc
-                adc !kgliderysubspeed
+                adc !gliderysubspeed
                 sta !glidersuby
                 lda !glidery
-                adc #$0000
+                adc !glideryspeed
                 sta !glidery
                 
                 bra ..bounds
@@ -601,19 +627,19 @@ glider: {
         ;the actual moving of left:
         lda !glidersubx
         sec
-        sbc !kgliderxsubspeed
+        sbc !gliderxsubspeed
         sta !glidersubx
         
         lda !gliderx
-        sbc #$0001
+        sbc !gliderxspeed
         sta !gliderx
         
-        lda !batterybool
+        lda !batteryactive
         beq +++
         ;if battery being used:
         
         dec !gliderx
-        dec !gliderx
+        dec !gliderx                ;todo: make this not bad
         dec !gliderx
         dec !gliderbatterytime
         
@@ -641,18 +667,18 @@ glider: {
         ;the actual moving of right:
         lda !glidersubx
         clc
-        adc !kgliderxsubspeed
+        adc !gliderxsubspeed
         sta !glidersubx
         lda !gliderx
-        adc #$0001
+        adc !gliderxspeed
         sta !gliderx
         
-        lda !batterybool
+        lda !batteryactive
         beq +++
         ;if battery being used:
         
         inc !gliderx
-        inc !gliderx
+        inc !gliderx                ;todo: make this not bad
         inc !gliderx
         dec !gliderbatterytime
         
@@ -720,6 +746,7 @@ glider: {
     }
 }
 
+
 roomtransitionstart: {
     lda !kstateroomtrans
     sta !gamestate
@@ -727,653 +754,248 @@ roomtransitionstart: {
 }
 
 
-;===========================================================================================
-;===================================    E N E M I E S    ===================================
-;===========================================================================================
-
-
-;====================================== ENEMY ROUTINES =====================================
-
-enemy: {
-    .top: {
-        jsr enemy_handle
-        jsr enemy_drawall
-        jsr enemy_collision_calchitbox
-        jsr enemy_collision
-        
-        rtl
-    }
-    
-    
-    .collision: {
+bands: {
+    .handle: {
+        ;identify which enemy slots have bands in them
+        ;handle enemy->band collision
+        ;movement is handled in the enemy's main routine
         phx
         
-        lda !iframecounter
-        bne ++
+        jsr bands_fire
+        jsr bands_dotimer
         
         ldx #!enemyarraysize
         -
         lda !enemyID,x
-        beq +
-        jsr enemy_collision_check       ;must preserve x
-        bcc +                           ;carry clear = no collision
-        jsr (!enemytouchptr,x)
+        cmp #enemy_ptr_band
+        bne +                   ;if enemy is a rubber band
+        phx                    
+        jsr bands_calchitbox
+        jsr bands_collision     ;do collision checks on all other enemies
+        plx
         +
         dex : dex
         bpl -
         
-        ++
         plx
         rts
-        
-        ..calchitbox: {
-            ;!gliderhitboxleft   ;glider x position - hitbox size
-            ;!gliderhitboxright  ;glider x position + hitbox size
-            ;!gliderhitboxtop    ;glider y position - hitbox size
-            ;!gliderhitboxbottom ;glider y position + hitbox size
-            
-            ;!kgliderupbound
-            ;!kgliderdownbound
-            ;!kgliderleftbound
-            ;!kgliderrightbound
-            
-            lda !gliderx            ;hitbox left edge
-            clc
-            adc !kgliderleftbound-!kgliderenemybox
-            sta !gliderhitboxleft
-            
-            lda !gliderx            ;hitbox right edge
-            clc
-            adc !kgliderrightbound+!kgliderenemybox
-            sta !gliderhitboxright
-            
-            lda !glidery            ;hitbox top edge
-            clc
-            adc !kgliderupbound-!kgliderenemybox
-            sta !gliderhitboxtop
-            
-            lda !glidery            ;hitbox bottom edge
-            clc
-            adc !kgliderdownbound+!kgliderenemybox
-            sta !gliderhitboxbottom
-            
-            rts
-        }
-        
-        
-        ..check: {
-            ;x = enemy index
-            ;x must be preserved for the outer loop
-            ;enemyx and y are radii
-            
-            ;currently only works vertically, not when moving left or right
-            ;similar to the object collision, strangely...
-            
-            
-            lda !enemyx,x           ;right bound: xpos+xsize
-            clc
-            adc !enemyxsize,x
-            cmp !gliderhitboxright
-            bmi ++
-            
-            lda !enemyx,x           ;left bound: xpos-xsize
-            sec
-            sbc !enemyxsize,x
-            cmp !gliderhitboxleft
-            bpl ++
-            
-            lda !enemyy,x           ;up bound: ypos-ysize
-            sec
-            sbc !enemyysize,x
-            cmp !gliderhitboxtop
-            bpl ++
-            
-            lda !enemyy,x           ;down bound: ypos+ysize
-            clc
-            adc !enemyysize,x
-            cmp !gliderhitboxbottom
-            bmi ++
-            
-            
-            +
-            sec     ;collision
-            rts
-            
-            ++
-            clc     ;no collision
-            rts
-        }
     }
     
-    
-    .runinit: {
-        phx
+    .checkbounds: {
+        ;called from enemy main
+        lda !enemyx,x
+        cmp !kleftbound-5
+        bmi +
         
-        ldx #!enemyarraysize
-        -
-        lda !enemyinitptr,x
-        beq +
-        phx
-        jsr (!enemyinitptr,x)
-        plx
+        lda !enemyx,x
+        cmp !krightbound+5
+        bpl +
+        
+        lda !enemyy,x
+        cmp !kceiling-5
+        bmi +
+        
+        lda !enemyy,x
+        cmp !kfloor+5
+        bpl +
+        
+        rts
+        
         +
-        dex : dex
-        bpl -
-        
-        plx
-        rtl
+        jsr enemy_clear
+        rts
     }
     
     
-    .spawn: {
-        ;spawn single enemy from enemy population
-        ;write to enemy ram
-        ;x = room's enemy list pointer
-        ;y = enemy index
-        
-        phb
+    .animate: {
+        ;called from enemy main
         phx
+        phb
         
         phk
-        plb     ;db = $82
+        plb
         
-        ;enemy data that's per instance
-        ;comes from room's enemy list
+        lda !framecounter
+        bit #$0002
+        bne +
         
-        lda $830000,x
-        cmp #$ffff          ;if enemy type = ffff, exit this entire process (up a level)
-        beq ..stop
-        sta !enemyID,y
+        lda !enemyx,x
+        and #$0002
         
-        lda $830002,x
-        sta !enemyx,y
+        tay
+        lda bands_animationtable,y
+        sta !enemyspritemapptr,x
         
-        lda $830004,x
-        sta !enemyy,y
+    +   plb
+        plx
+        rts
+    }
+    
+    .animationtable: {
+        dw spritemap_pointers_band,
+           spritemap_pointers_band+2,
+           spritemap_pointers_band+4
+    }
+    
+    
+    .dotimer: {
+        lda !bandtimer
+        beq +
         
-        lda $830006,x
-        sta !enemypal,y
+        dec !bandtimer
         
-        lda $830008,x
-        sta !enemyproperty,y
+        +
+        rts
+    }
+    
+    .drop: {
         
-        ;enemy data that is based on its definition
-        ;enemyID is a pointer to its header
-        ;db = $82
+        lda !enemysuby,x
+        clc
+        adc !kbandysubspeed
+        sta !enemysuby,x
         
+        lda !enemyy,x
+        adc !kbandyspeed
+        sta !enemyy,x
+        
+        
+        rts
+    }
+    
+    
+    .fire: {
+        phy
+        
+        lda !fireband
+        beq +
+        lda !bandtimer
+        bne +
+        
+        stz !fireband
+        
+        lda #enemy_ptr_band
+        sta !enemydynamicspawnslot
+        
+        lda !gliderx
+        sta !enemydynamicspawnslot+2
+        
+        lda !glidery
+        sta !enemydynamicspawnslot+4
+        
+        lda !kbandspalette
+        sta !enemydynamicspawnslot+6
+        
+        lda !gliderdir
+        xba
+        asl #7
+        sta !enemydynamicspawnslot+8
+        
+        ldy #!enemyarraysize
+        -
         lda !enemyID,y
-        tax
-        lda $820000,x
-        tax
+        beq ++
         
-        lda $0000,x
-        sta !enemyspritemapptr,y
-        
-        lda $0002,x
-        sta !enemyxsize,y
-        
-        lda $0004,x
-        sta !enemyysize,y
-        
-        lda $0006,x
-        sta !enemyinitptr,y
-        
-        lda $0008,x
-        sta !enemymainptr,y
-        
-        lda $000a,x
-        sta !enemytouchptr,y
-        
-        +
-        plx
-        plb
-        rts
-        
-        ..stop: {
-            plx
-            plb
-            pla
-            jmp enemy_spawnall_out
-        }
-    }
-    
-    
-    .spawnall: {
-        phb
-        phx
-        phy
-        
-        ;pea $8383
-        ;plb : plb
-        
-        ldx !roomptr
-        lda $830002,x
-        tax
-        
-        ldy #!enemyarraysize+2
-        -
         dey : dey
-        bmi ..out                       ;if y goes negative we are out of slots
-        jsr enemy_spawn
+        bpl -
         
-        txa
+        
+        ++
+        ldx #!enemydynamicspawnslot
+        jsr enemy_spawn                 ;y = enemy index of open slot
+        
+    +   ply
+        rts
+    }
+    
+    
+    .calchitbox: {
+        ;x = enemy id of rubber band
+        
+        lda !enemyx,x           ;hitbox left edge
+        sec
+        sbc !enemyxsize,x
+        sta !hitboxleft
+        
+        lda !enemyx,x           ;hitbox right edge
         clc
-        adc #$000a                      ;advance to next enemy entry: x = x + 10
-        tax
+        adc !enemyxsize,x
+        sta !hitboxright
         
-        jmp -
+        lda !enemyy,x           ;hitbox top edge
+        sec
+        sbc !enemyysize,x
+        sta !hitboxtop
         
-        ..out:
-        ply
-        plx
-        plb
-        rtl
-    }
-    
-    
-    .handle: {
-        phx
+        lda !enemyy,x           ;hitbox bottom edge
+        clc
+        adc !enemyysize,x
+        sta !hitboxbottom
         
-        ldx #!enemyarraysize
-        -
-        lda !enemymainptr,x
-        beq +
-        phx
-        jsr (!enemymainptr,x)
-        plx
-        +
-        dex : dex
-        bpl -
-        
-        plx
         rts
     }
     
-    
-    .drawall: {
-        phx
-        phy
+    .collision: {
+        ;x = id of band, but we don't need it here, because the
+        ;band's hitbox is now in !hitboxleft,right,up,down variables
+        ;so we call enemy_collision_check
+        ;with x = non-band enemy to check
+        ;and hitbox variables for the band
         
         ldx #!enemyarraysize
         -
-        lda !enemyx,x
-        cmp #$0100
-        bpl +
-        
-        lda !enemyy,x
-        cmp #$0100
-        bpl +
-        
-        jsr enemy_draw
-        +
-        dex : dex
-        bpl -
-        
-        ply
-        plx
-        rts
-    }
-    
-    
-    .draw: {
-        ;x = enemy index
-        !numberofsprites    =   !localtempvar
-        !localenemyx        =   !localtempvar2
-        !localenemyy        =   !localtempvar3
-        !localenemypal      =   !localtempvar4
-        
-        phb
-        phy
-        
-        phk         ;db = $82
-        plb
-        
-        stz !numberofsprites
-        
         lda !enemyID,x
+        beq +                       ;if enemy slot used
+        cmp #enemy_ptr_band         ;or if it is a band
         beq +
-        lda !enemyspritemapptr,x
-        beq +
-        tay
-        
-        ;this is actually going to always render the first spritemap
-        ;in the list unless the enemy does a
-        ;lda !enemyspritemapptr,x
-        ;inc : inc
-        ;sta !enemyspritemapptr,x
-        ;to advance animation frames
-        ;maybe this is fine?
-        ;we'd need to set initial spritemap list index in enemy init i guess
-        ;if you don't want to use the first one first
-        ;so maybe put the first one first?
-        ;ok buddy
-        
-        ;back these up because we need x and y for the oam table write
-        lda !enemyx,x
-        sta !localenemyx
-        
-        lda !enemyy,x
-        sta !localenemyy
-        
-        lda !enemypal,x
-        sta !localenemypal
-        
-        ;grab number of sprites
-        lda $0000,y
-        tay
-        
-        sep #$20
-        lda $0000,y
-        sta !numberofsprites
-        beq +                       ;if no sprites to draw, exit
-        iny
-        
-        phx
-        ldx !oamentrypoint
-        
-        ;write oam table
-        ;y now lines up with spritemap bytes
-        ;y=spritemap pointer
-        ;x=oam buffer index
-        
-        ..loop:
-        
-        lda $0000,y
-        clc
-        adc !localenemyx
-        sta !oambuffer,x                ;x
-        
-        lda $0001,y
-        clc
-        adc !localenemyy
-        sta !oambuffer+1,x              ;y
-        
-        lda $0002,y
-        sta !oambuffer+2,x              ;tile
-        
-        lda $0003,y
-        ora !localenemypal
-        sta !oambuffer+3,x              ;properties
-        
-        ..nextsprite:
-            ;x=x+4
-            ;y=y+5
-            
-            inx #4
-            iny #5
-            
-            dec !numberofsprites
-            bne enemy_draw_loop
-        
-        stx !oamentrypoint
+        phx                     
+        jsr enemy_collision_check   ;do collision checks
         plx
+        bcc +
+        jsr enemy_clear             ;if carry set, delete enemy band collided with
         +
-        rep #$20
-        ply
-        plb
-        rts
-    }
-    
-    
-    .clearall: {
-        ldx #!enemyarraysize
-        
-        -
-        jsr enemy_clear
         dex : dex
         bpl -
         
-        rtl
-    }
-    
-    
-    .clear: {
-        ;x = enemy index
         
-        stz !enemyID,x
-        stz !enemyx,x
-        stz !enemyy,x
-        stz !enemysubx,x
-        stz !enemysuby,x
-        stz !enemyinitptr,x
-        stz !enemymainptr,x
-        stz !enemytouchptr,x
-        stz !enemyproperty,x
-        stz !enemypal,x
-        stz !enemyspritemapptr,x
-        stz !enemyxsize,x
-        stz !enemyysize,x
-
         rts
     }
     
     
-    .inst: {
-        ..moveup: {
-            ;x = enemy index
-            
-            !speed      =   !localtempvar
-            !subspeed   =   !localtempvar2
-            
-            lda !enemyproperty,x        ;top nibble = left of decimal
-            and #$f000
-            xba
-            lsr #4
-            sta !speed
-            
-            lda !enemyproperty,x        ;bottom 3 nibbles = right of decimal
-            and #$0fff
-            asl #4
-            sta !subspeed
-            
-            ;enemy y - s.bbb0
-            
-            lda !enemysuby,x
+    .move: {
+        ;called from enemy's main routine
+        ;in enemies.asm
+        ;for moving a single instance of rubber band
+        ;x = enemy index
+        
+        ..left: {
+            lda !enemysubx,x
             sec
-            sbc !subspeed
-            sta !enemysuby,x
-            
-            lda !enemyy,x
-            sbc !speed
-            sta !enemyy,x
-            
-            rts
-        }
-        
-        ..checkheight: {
-            ;x = enemy index
-            
-            lda !enemyy,x
-            cmp !kceiling-5
-            bmi +
-            rts
-            +
-            lda !kfloor+12
-            sta !enemyy,x
-            rts
-        }
-    }
-    
-    ;====================================== ENEMY DEFINITIONS =====================================
-    
-    .ptr: {
-        ..balloon:      dw enemy_headers_balloon
-        ..paper:        dw enemy_headers_paper
-        ..clock:        dw enemy_headers_clock
-        ..battery:      dw enemy_headers_battery
-        ..bands:        dw enemy_headers_bands
-        ..dart:         dw enemy_headers_dart
-        ..duct:         dw enemy_headers_duct
-    }
-    
-    
-    .headers: {
-               ;spritemap ptr                   xsize,      ysize,      init routine,               main routine,           touch
-        ..balloon:
-            dw spritemap_pointers_balloon,      $0030,      $0028,      enemy_init_none,            enemy_main_balloon,     enemy_touch_kill
-        ..paper:
-            dw spritemap_pointers_paper,        $0038,      $0028,      enemy_init_none,            enemy_main_none,        enemy_touch_paper
-        ..clock:
-            dw spritemap_pointers_clock,        $0030,      $0020,      enemy_init_none,            enemy_main_none,        enemy_touch_clock
-        ..battery:
-            dw spritemap_pointers_battery,      $0030,      $0028,      enemy_init_none,            enemy_main_none,        enemy_touch_battery
-        ..bands:
-            dw spritemap_pointers_bands,        $0010,      $0010,      enemy_init_none,            enemy_main_none,        enemy_touch_bands
-        ..dart:
-            dw spritemap_pointers_dart,         $0040,      $0020,      enemy_init_dart,            enemy_main_dart,        enemy_touch_kill
-        ..duct:
-            dw spritemap_pointers_duct,         $0030,      $0028,      enemy_init_duct,            enemy_main_none,        enemy_touch_duct
-    }
-    
-    
-    .init: {
-        ..none: {
-            ;
-            rts
-        }
-        
-        ..duct: {
-            ;the enemy palette bitmask needs to be renamed
-            ;the top byte isn't used by the spritemap loading routine at all,
-            ;so can be used for any purpose
-            ;here we only use the top bit
-            
-            lda !enemypal,x
-            bmi +
-            ;if not $8000 bit, it's a floor duct
-            lda #spritemap_pointers_duct+0
-            sta !enemyspritemapptr,x
-            rts
-            
-            +
-            ;if $8000 bit, it's a ceiling duct
-            lda #spritemap_pointers_duct+2
-            sta !enemyspritemapptr,x
-            
-            rts
-        }
-        
-        ..dart: {
-            lda !enemyproperty,x
-            bmi +
-            ; if not $8000 bit, it's a left dart
-            lda #spritemap_pointers_dart+0
-            sta !enemyspritemapptr,x
-            
-            rts
-            
-            +
-            ;if $8000 bit, it's a right dart
-            lda #spritemap_pointers_dart+2
-            sta !enemyspritemapptr,x
-            
-            rts
-        }
-    }
-    
-    
-    .main: {
-        ..balloon: {
-            jsr enemy_inst_moveup
-            jsr enemy_inst_checkheight
-            rts
-        }
-        
-        ..none: {
-            rts
-        }
-        
-        ..dart: {
-            lda !enemyproperty,x
-            bmi +
-            
-            ;left dart
+            sbc !kbandxsubspeed
+            sta !enemysubx,x
             
             lda !enemyx,x
-            dec : dec
-            and #$00ff
+            sbc !kbandxspeed
             sta !enemyx,x
-            
-            ;lda !kdartsubspeed         ;do somethin like that eventually
-            ;jsr enemy_inst_moveleft
-            
             rts
-            
-            ;right dart
-            +
+        }
+        
+        ..right: {
+            lda !enemysubx,x
+            clc
+            adc !kbandxsubspeed
+            sta !enemysubx,x
             
             lda !enemyx,x
-            inc : inc
-            and #$00ff
+            adc !kbandxspeed
             sta !enemyx,x
-            
-            ;lda !kdartsubspeed
-            ;jsr enemy_inst_moveright
-            
-            rts
-        }
-    }
-    
-    
-    .touch: {
-        ..kill: {
-            lda !kgliderstatelostlife
-            sta !glidernextstate
-            rts
-        }
-        
-        ..duct: {
-            lda !kroomtranstypeduct
-            sta !roomtranstype
-            
-            lda !enemyproperty,x        ;low byte = room index to go to
-            and #$00ff
-            asl
-            sta !roomindex
-            
-            lda !enemyproperty,x        ;high byte = x output position
-            and #$ff00                  ;(y will always be near ceiling)
-            xba
-            sta !ductoutputxpos
-            
-            lda !kstateroomtrans
-            sta !gamestate
-            rts
-        }
-        
-        ..clock: {
-            lda !enemyproperty,x
-            clc
-            adc !points
-            sta !points
-            jsr enemy_clear
-            rts
-        }
-        
-        ..paper: {
-            inc !gliderlives
-            jsr enemy_clear
-            rts
-        }
-        
-        
-        ..battery: {
-            lda !enemyproperty,x
-            clc
-            adc !gliderbatterytime
-            sta !gliderbatterytime
-            
-            jsr enemy_clear
-            rts
-        }
-        
-        ..bands: {
-            ;for rubber band ammo sprite:
-            ;add to band ammo, delete sprite
             rts
         }
     }
 }
+
+
+incsrc "./enemies.asm"
 
 incsrc "./data/sprites/spritemaps.asm"
 
