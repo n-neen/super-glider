@@ -11,14 +11,14 @@ game engine is coming along.
 room format is established. 
 objects which modify the room tilemap have been implemented. 
 room transitions are working. 
-enemy subsystem has been started and is partially working.
+enemy system is implemented. 
 
 
 controls:
 
 dpad: left and right to move. up and down not used
 
-x: currently turns off lights. this is just for testing. will eventually fire rubber bands
+x: fire rubber bands
 
 b: turn glider around
 
