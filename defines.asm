@@ -108,6 +108,7 @@
 !enemyspritemapptr  =       !enemypal+!enemyarraysize+2
 !enemyxsize         =       !enemyspritemapptr+!enemyarraysize+2
 !enemyysize         =       !enemyxsize+!enemyarraysize+2
+!enemyshotptr       =       !enemyysize+!enemyarraysize+2
 
 
 ;start of oam table to dma at nmi. 544 bytes long
@@ -191,7 +192,6 @@
 !kglideryspeeddefault       =       #$0000
 !kgliderysubspeeddefault    =       #$a000
 
-
 !kglideriframes             =       #$0060
 
 !kbatteryon                 =       #$0001
@@ -199,11 +199,14 @@
 
 !kbandammoamount            =       #$0008
 !kbandtimerlength           =       #$0008
+
 !kbandxspeed                =       #$0002
 !kbandxsubspeed             =       #$8000
 !kbandyspeed                =       #$0000
 !kbandysubspeed             =       #$2e00
+
 !kbandspalette              =       #$0002
+!kbandhitboxoffset          =       #$0000
 
 !kgliderupbound             =       #$fff8      ;for object collision
 !kgliderdownbound           =       #$0010

@@ -195,6 +195,9 @@ enemy: {
         lda $000a,x
         sta !enemytouchptr,y
         
+        lda $000c,x
+        sta !enemyshotptr,y
+        
         +
         plx
         plb
@@ -419,7 +422,7 @@ enemy: {
     }
     
     
-    .inst: {
+    .instruction: {
         ..moveup: {
             ;x = enemy index
             
@@ -463,6 +466,109 @@ enemy: {
             sta !enemyy,x
             rts
         }
+        
+        
+        ..band: {
+            ...move: {
+                ;called from enemy's main routine
+                ;in enemies.asm
+                ;for moving a single instance of rubber band
+                ;x = enemy index
+                
+                ....left: {
+                    lda !enemysubx,x
+                    sec
+                    sbc !kbandxsubspeed
+                    sta !enemysubx,x
+                    
+                    lda !enemyx,x
+                    sbc !kbandxspeed
+                    sta !enemyx,x
+                    rts
+                }
+                
+                ....right: {
+                    lda !enemysubx,x
+                    clc
+                    adc !kbandxsubspeed
+                    sta !enemysubx,x
+                    
+                    lda !enemyx,x
+                    adc !kbandxspeed
+                    sta !enemyx,x
+                    rts
+                }
+            }
+            
+            
+            ...checkbounds: {
+                lda !enemyx,x
+                cmp !kleftbound-5
+                bmi +
+                
+                lda !enemyx,x
+                cmp !krightbound+5
+                bpl +
+                
+                lda !enemyy,x
+                cmp !kceiling-5
+                bmi +
+                
+                lda !enemyy,x
+                cmp !kfloor+5
+                bpl +
+                
+                rts
+                
+                +
+                jsr enemy_clear
+                rts
+            }
+            
+            ...drop: {
+                lda !enemysuby,x
+                clc
+                adc !kbandysubspeed
+                sta !enemysuby,x
+                
+                lda !enemyy,x
+                adc !kbandyspeed
+                sta !enemyy,x
+                
+                
+                rts
+            }
+            
+            
+            ...animate: {
+                phx
+                phb
+                
+                phk
+                plb
+                
+                lda !framecounter
+                bit #$0002
+                bne +
+                
+                lda !enemyx,x
+                and #$0002
+                
+                tay
+                lda enemy_instruction_band_animate_table,y
+                sta !enemyspritemapptr,x
+                
+            +   plb
+                plx
+                rts
+                
+                ....table: {
+                    dw spritemap_pointers_band,
+                       spritemap_pointers_band+2,
+                       spritemap_pointers_band+4
+                }
+            }
+        }
     }
     
     ;====================================== ENEMY DEFINITIONS =====================================
@@ -480,23 +586,23 @@ enemy: {
     
     
     .headers: {
-               ;spritemap ptr                   xsize,      ysize,      init routine,               main routine,           touch
+               ;spritemap ptr                   xsize,      ysize,      init routine,               main routine,           touch,                      shot
         ..balloon:
-            dw spritemap_pointers_balloon,      $0030,      $0028,      enemy_init_none,            enemy_main_balloon,     enemy_touch_kill
+            dw spritemap_pointers_balloon,      $0030,      $0028,      enemy_init_none,            enemy_main_balloon,     enemy_touch_kill,           enemy_shot_balloon
         ..paper:
-            dw spritemap_pointers_paper,        $0048,      $0028,      enemy_init_none,            enemy_main_none,        enemy_touch_paper
+            dw spritemap_pointers_paper,        $0048,      $0028,      enemy_init_none,            enemy_main_none,        enemy_touch_paper,          $0000
         ..clock:
-            dw spritemap_pointers_clock,        $0040,      $0020,      enemy_init_none,            enemy_main_none,        enemy_touch_clock
+            dw spritemap_pointers_clock,        $0040,      $0020,      enemy_init_none,            enemy_main_none,        enemy_touch_clock,          $0000
         ..battery:
-            dw spritemap_pointers_battery,      $0040,      $0028,      enemy_init_none,            enemy_main_none,        enemy_touch_battery
+            dw spritemap_pointers_battery,      $0040,      $0028,      enemy_init_none,            enemy_main_none,        enemy_touch_battery,        $0000
         ..bandspack:
-            dw spritemap_pointers_bandspack,    $0030,      $0030,      enemy_init_none,            enemy_main_none,        enemy_touch_bandspack
+            dw spritemap_pointers_bandspack,    $0030,      $0030,      enemy_init_none,            enemy_main_none,        enemy_touch_bandspack,      $0000
         ..dart:
-            dw spritemap_pointers_dart,         $0040,      $0020,      enemy_init_dart,            enemy_main_dart,        enemy_touch_kill
+            dw spritemap_pointers_dart,         $0040,      $0020,      enemy_init_dart,            enemy_main_dart,        enemy_touch_kill,           enemy_shot_dart
         ..duct:
-            dw spritemap_pointers_duct,         $0030,      $0028,      enemy_init_duct,            enemy_main_none,        enemy_touch_duct
+            dw spritemap_pointers_duct,         $0030,      $0028,      enemy_init_duct,            enemy_main_none,        enemy_touch_duct,           $0000
         ..band:
-            dw spritemap_pointers_band,         $0050,      $0050,      enemy_init_band,            enemy_main_band,        enemy_touch_none
+            dw spritemap_pointers_band,         $0020,      $0020,      enemy_init_band,            enemy_main_band,        enemy_touch_none,           $0000
             
     }
     
@@ -553,17 +659,34 @@ enemy: {
     }
     
     
+    .shot: {
+        ..balloon: {
+            ;todo: change spritemap to punctured balloon
+            ;set ai to fall to ground
+            jsr enemy_clear
+            rts
+        }
+        
+        ..dart: {
+            ;todo: change spritemap to crumpled dart
+            ;set ai to fall to ground
+            jsr enemy_clear
+            rts
+        }
+    }
+    
+    
     .main: {
         ..balloon: {
-            jsr enemy_inst_moveup
-            jsr enemy_inst_checkheight
+            jsr enemy_instruction_moveup
+            jsr enemy_instruction_checkheight
             rts
         }
         
         ..band: {
-            jsr bands_checkbounds
-            jsr bands_drop
-            jsr bands_animate
+            jsr enemy_instruction_band_checkbounds
+            jsr enemy_instruction_band_drop
+            jsr enemy_instruction_band_animate
             
             
             lda !enemyproperty,x
@@ -571,13 +694,13 @@ enemy: {
             
             ;no $8000 bit = left band
             lda !kbandxspeed
-            jsr bands_move_left
+            jsr enemy_instruction_band_move_left
             rts
             
             ;$8000 bit = right band
             +
             lda !kbandxspeed
-            jsr bands_move_right
+            jsr enemy_instruction_band_move_right
             rts
         }
         

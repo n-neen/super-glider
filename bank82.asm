@@ -31,6 +31,7 @@ game: {
         jsl iframecolormath
         jsl handlecolormath
         
+        
         jsl oam_hightablejank
         
         rtl
@@ -755,86 +756,32 @@ roomtransitionstart: {
 
 
 bands: {
+    ;these are the generic rubber band routines
+    ;for the movment and logic, etc of an individual
+    ;rubber band, see enemy_instruction_band label
+    
     .handle: {
         ;identify which enemy slots have bands in them
         ;handle enemy->band collision
         ;movement is handled in the enemy's main routine
         phx
         
-        jsr bands_fire
         jsr bands_dotimer
+        jsr bands_fire
         
         ldx #!enemyarraysize
         -
         lda !enemyID,x
         cmp #enemy_ptr_band
         bne +                   ;if enemy is a rubber band
-        phx                    
         jsr bands_calchitbox
         jsr bands_collision     ;do collision checks on all other enemies
-        plx
         +
         dex : dex
         bpl -
         
         plx
         rts
-    }
-    
-    .checkbounds: {
-        ;called from enemy main
-        lda !enemyx,x
-        cmp !kleftbound-5
-        bmi +
-        
-        lda !enemyx,x
-        cmp !krightbound+5
-        bpl +
-        
-        lda !enemyy,x
-        cmp !kceiling-5
-        bmi +
-        
-        lda !enemyy,x
-        cmp !kfloor+5
-        bpl +
-        
-        rts
-        
-        +
-        jsr enemy_clear
-        rts
-    }
-    
-    
-    .animate: {
-        ;called from enemy main
-        phx
-        phb
-        
-        phk
-        plb
-        
-        lda !framecounter
-        bit #$0002
-        bne +
-        
-        lda !enemyx,x
-        and #$0002
-        
-        tay
-        lda bands_animationtable,y
-        sta !enemyspritemapptr,x
-        
-    +   plb
-        plx
-        rts
-    }
-    
-    .animationtable: {
-        dw spritemap_pointers_band,
-           spritemap_pointers_band+2,
-           spritemap_pointers_band+4
     }
     
     
@@ -848,24 +795,10 @@ bands: {
         rts
     }
     
-    .drop: {
-        
-        lda !enemysuby,x
-        clc
-        adc !kbandysubspeed
-        sta !enemysuby,x
-        
-        lda !enemyy,x
-        adc !kbandyspeed
-        sta !enemyy,x
-        
-        
-        rts
-    }
-    
     
     .fire: {
         phy
+        phx
         
         lda !fireband
         beq +
@@ -904,7 +837,8 @@ bands: {
         ldx #!enemydynamicspawnslot
         jsr enemy_spawn                 ;y = enemy index of open slot
         
-    +   ply
+    +   plx
+        ply
         rts
     }
     
@@ -913,23 +847,23 @@ bands: {
         ;x = enemy id of rubber band
         
         lda !enemyx,x           ;hitbox left edge
-        sec
-        sbc !enemyxsize,x
+        clc
+        adc #$ffe0
         sta !hitboxleft
         
         lda !enemyx,x           ;hitbox right edge
         clc
-        adc !enemyxsize,x
+        adc #$0020
         sta !hitboxright
         
         lda !enemyy,x           ;hitbox top edge
-        sec
-        sbc !enemyysize,x
+        clc
+        adc #$ffe0
         sta !hitboxtop
         
         lda !enemyy,x           ;hitbox bottom edge
         clc
-        adc !enemyysize,x
+        adc #$0018
         sta !hitboxbottom
         
         rts
@@ -940,58 +874,32 @@ bands: {
         ;band's hitbox is now in !hitboxleft,right,up,down variables
         ;so we call enemy_collision_check
         ;with x = non-band enemy to check
-        ;and hitbox variables for the band
+        ;and hitbox variables set for the band
+        phx
         
         ldx #!enemyarraysize
         -
         lda !enemyID,x
         beq +                       ;if enemy slot used
-        cmp #enemy_ptr_band         ;or if it is a band
+        cmp #enemy_ptr_band         ;and if it is not a band
         beq +
-        phx                     
         jsr enemy_collision_check   ;do collision checks
-        plx
         bcc +
-        jsr enemy_clear             ;if carry set, delete enemy band collided with
-        +
+        lda !enemyshotptr,x
+        beq +
+        jsr (!enemyshotptr,x)       ;if carry set, collision happened
+        +                           ;run enemy shot routine
         dex : dex
         bpl -
         
-        
+        plx
         rts
+
     }
     
     
-    .move: {
-        ;called from enemy's main routine
-        ;in enemies.asm
-        ;for moving a single instance of rubber band
-        ;x = enemy index
-        
-        ..left: {
-            lda !enemysubx,x
-            sec
-            sbc !kbandxsubspeed
-            sta !enemysubx,x
-            
-            lda !enemyx,x
-            sbc !kbandxspeed
-            sta !enemyx,x
-            rts
-        }
-        
-        ..right: {
-            lda !enemysubx,x
-            clc
-            adc !kbandxsubspeed
-            sta !enemysubx,x
-            
-            lda !enemyx,x
-            adc !kbandxspeed
-            sta !enemyx,x
-            rts
-        }
-    }
+    
+    
 }
 
 
