@@ -139,6 +139,7 @@ init:
         
         jsl dma_clearvram
         jsl oam_fillbuffer
+        jsl dma_clearcgram
         
     ;fall through to main
 

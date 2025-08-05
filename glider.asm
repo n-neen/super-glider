@@ -1,6 +1,16 @@
 lorom
 
 ;'-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,._;
+;    ___________      ___      ___      __________    __________     __________            ;
+;    \   _______\     \  \     \  \    \    ____  \   \   ______\    \   ____  \           ;
+;     \  \             \  \     \  \    \   \___\  \   \  \           \  \   \  \          ;
+;      \  \________     \  \     \  \    \   _______\   \  \_______    \  \   \__\         ;
+;       \_________ \     \  \     \  \    \  \           \  _______\    \  \               ;
+;                 \ \     \  \     \  \    \  \           \  \           \  \              ;
+;         _________\ \     \  \_____\  \    \  \           \  \_______    \  \             ;
+;         \___________\     \___________\    \__\           \_________\    \__\            ;
+;                                                                                          ;
+;                                                                                          ;
 ;              XXXXXXXXX   X           X   XXXXXXXX     XXXXXXX    XXXXXX                  ;
 ;              X           X           X   X       X    X          X     X                 ;
 ;              X           X           X   X        X   X          X     X                 ;   
@@ -10,6 +20,7 @@ lorom
 ;              X       X   X           X   X        X   X          X    X                  ;
 ;              X       X   X           X   X       X    X          X     X                 ;
 ;              XXXXXXXXX   XXXXXXXXX   X   XXXXXXXX     XXXXXXX    X      X                ;
+;                                                                                          ;
 ;'-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,._;
 
 incsrc "./defines.asm"
@@ -28,8 +39,29 @@ incsrc "./bank82.asm"           ;gameplay, enemies, spritemaps
 incsrc "./bank83.asm"           ;house, rooms definitions, room transitions
 incsrc "./bank84.asm"           ;tile objects
 
-;data
+;prospective outline for
+;file restructure:
 
+;org $808000
+;   incsrc "./src/main.asm"
+;org $818000
+;   inscrc "./src/loading.asm"
+;org $828000
+;   inscrc "./src/gameplay.asm"
+;   incsrc "./src/glider.asm"
+;   inscrc "./src/enemies.asm"
+;   incsrc "./data/sprites/spritemaps.asm"
+;org $838000
+;   incsrc "./src/room_transitions.asm"
+;org $848000
+;   incsrc "./src/room_objects.asm"
+;   incsrc "./src/room_objects_definitions.asm"
+
+;data banks could probably be left as is?
+;feels kinda messy
+
+
+;data
 incsrc "./bank85.asm"           ;sprite data: balloon, prizes, dart
 incsrc "./bank86.asm"           ;
 incsrc "./bank87.asm"           ;

@@ -168,6 +168,43 @@ dma: {
             dw $0000
         }
     }
+    
+    
+    .clearcgram: {
+        phx
+        
+        sep #$10                    ;width  register
+        
+        ldx.b #$00                  ;1      cgadd
+        stx $2121
+
+        ldx #%00011001              ;1      transfur mode: write twice
+        stx $4300
+        
+        ldx #$22                    ;1      register dest (cgram write)
+        stx $4301
+        
+        lda.w #..fillword           ;2      source addr
+        sta $4302
+        
+        ldx #$81                    ;1      source bank
+        stx $4304
+        
+        lda #$0400                  ;2      transfur size
+        sta $4305
+        
+        ldx #$01                    ;1      enable transfur on dma channel 0
+        stx $420b
+        
+        rep #$10
+        
+        plx
+        rtl
+        
+        ..fillword: {
+            dw $3800
+        }
+    }
 }
 
 
@@ -219,6 +256,14 @@ oam: {
     ;   -glider
     ;   -enemies, in list order
     ;then, the remainder of the table is cleared
+    
+    ;the above was written in desperation
+    ;the bug i was chasing was the
+    ;txa : adc #$05 : tax
+    ;in the glider draw routine
+    ;X/Y were in 16 bit mode and A in 8 bit mode
+    ;so the upper byte of A corrupted X
+    ;the solution was to inx #5
     
     .fillbuffer: {
     
