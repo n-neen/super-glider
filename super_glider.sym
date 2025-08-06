@@ -897,7 +897,7 @@
 
 [source files]
 0000 93301dbc c:/users/keenan/desktop/glider pro snes/snes/src/main.asm
-0001 009c6b0c c:/users/keenan/desktop/glider pro snes/snes/src/loading.asm
+0001 60b58c9e c:/users/keenan/desktop/glider pro snes/snes/src/loading.asm
 0002 7ef946c4 c:/users/keenan/desktop/glider pro snes/snes/src/room.asm
 0003 8134e794 c:/users/keenan/desktop/glider pro snes/snes/src/gameplay.asm
 0004 9f4e6cdd c:/users/keenan/desktop/glider pro snes/snes/src/glider.asm
@@ -911,11 +911,11 @@
 000c 50e9b8f3 c:/users/keenan/desktop/glider pro snes/snes/data/inc/bank8c.asm
 000d 38c9be9e c:/users/keenan/desktop/glider pro snes/snes/data/inc/bank8d.asm
 000e 4a3b4e64 c:/users/keenan/desktop/glider pro snes/snes/data/inc/bank8e.asm
-000f 70c6afcc c:/users/keenan/desktop/glider pro snes/snes/data/inc/bank8f.asm
-0010 4518c48c c:/users/keenan/desktop/glider pro snes/snes/super_glider.asm
+000f f0ec726c c:/users/keenan/desktop/glider pro snes/snes/data/inc/bank8f.asm
+0010 993b00bd c:/users/keenan/desktop/glider pro snes/snes/super_glider.asm
 
 [rom checksum]
-b971ba94
+3259b320
 
 [addr-to-line mapping]
 80:8000 0000:0000002d
@@ -3788,15 +3788,16 @@ b971ba94
 8d:8000 000d:0000000b
 8e:8000 000e:0000000b
 8f:8000 000f:0000000c
-80:ffc0 0010:00000054
-80:ffd5 0010:00000055
-80:ffd6 0010:00000056
-80:ffd7 0010:00000057
-80:ffd8 0010:00000058
-80:ffd9 0010:00000059
-80:ffda 0010:0000005a
-80:ffdb 0010:0000005b
-80:ffdc 0010:0000005c
-80:ffde 0010:0000005d
-80:ffe0 0010:00000062
-80:fff0 0010:00000065
+8f:ffff 000f:00000010
+80:ffc0 0010:00000053
+80:ffd5 0010:00000054
+80:ffd6 0010:00000055
+80:ffd7 0010:00000056
+80:ffd8 0010:00000057
+80:ffd9 0010:00000058
+80:ffda 0010:00000059
+80:ffdb 0010:0000005a
+80:ffdc 0010:0000005b
+80:ffde 0010:0000005c
+80:ffe0 0010:00000061
+80:fff0 0010:00000064

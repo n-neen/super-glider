@@ -80,7 +80,7 @@ incsrc "./data/inc/bank8f.asm"           ;background graphics
 
 
 org $80ffc0                             ;game header
-    db "glider pro           "          ;cartridge name
+    db "super glider         "          ;cartridge name
     db $30                              ;fastrom, lorom
     db $02                              ;rom + ram + sram
     db $12                              ;rom size = 4mb

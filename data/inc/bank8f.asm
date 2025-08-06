@@ -11,4 +11,8 @@ org $8f8000
 bg4gfx:
     incbin "./data/tiles/bg4.gfx"
         
+
+org $8fffff
+    db $FF
+    
 print "bank $8f end: ", pc

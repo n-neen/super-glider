@@ -29,7 +29,7 @@ lorom
 !dmabankword        =   !dmabanklong<<8
 !dmabankshort       =   !dmabanklong>>16
       
-      
+
 dma: {
     .vramtransfur: {        ;for dma channel 0
     
