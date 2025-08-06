@@ -417,6 +417,8 @@ enemy: {
         stz !enemyspritemapptr,x
         stz !enemyxsize,x
         stz !enemyysize,x
+        stz !enemyshotptr,x
+        stz !enemytimer,x
 
         rts
     }

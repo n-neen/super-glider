@@ -1,4 +1,9 @@
 
+;===========================================================================================
+;=====================================  B A N D S  =========================================
+;===========================================================================================
+
+
 !bandsbanklong        =   bands&$ff0000
 !bandsbankword        =   !bandsbanklong<<8
 !bandsbankshort       =   !bandsbanklong>>16
@@ -16,17 +21,13 @@ bands: {
         
         jsr bands_dotimer
         jsr bands_fire
+        jsr bands_find
         
-        ldx #!enemyarraysize
-        -
-        lda !enemyID,x
-        cmp #enemy_ptr_band
-        bne +                   ;if enemy is a rubber band
-        jsr bands_calchitbox
-        jsr bands_collision     ;do collision checks on all other enemies
-        +
-        dex : dex
-        bpl -
+        ;collision happens like this:
+        ;find band enemies in enemy array
+        ;for each band found, calculate its hitbox and do collision
+        ;for each collision check, check enemy array for nonempty, nonband slots
+        ;then perform collision checks on each found
         
         plx
         rts
@@ -43,12 +44,26 @@ bands: {
         rts
     }
     
+    .find: {
+        ldx #!enemyarraysize
+        -
+        lda !enemyID,x
+        cmp #enemy_ptr_band
+        bne +                   ;if enemy is a rubber band
+        jsr bands_calchitbox
+        jsr bands_collision     ;do collision checks on all other enemies
+        +
+        dex : dex
+        bpl -
+        rts
+    }
+    
     
     .fire: {
         phy
         phx
         
-        lda !fireband
+        lda !fireband                   ;todo: make firing them not bad
         beq +
         lda !bandtimer
         bne +
@@ -82,7 +97,7 @@ bands: {
         
         
         ++
-        ldx #!enemydynamicspawnslot
+        ldx #!enemydynamicspawnslot     ;x = pointer to enemy population entry in ram
         jsr enemy_spawn                 ;y = enemy index of open slot
         
     +   plx

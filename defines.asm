@@ -93,7 +93,7 @@
 !bandtimer          =       !gliderramstart+62
 
 ;enemy ram
-!enemystart         =       $280
+!enemystart         =       $270
 !enemyarraysize     =       $0028
 !enemyID            =       !enemystart
 !enemyx             =       !enemyID+!enemyarraysize+2
@@ -109,6 +109,7 @@
 !enemyxsize         =       !enemyspritemapptr+!enemyarraysize+2
 !enemyysize         =       !enemyxsize+!enemyarraysize+2
 !enemyshotptr       =       !enemyysize+!enemyarraysize+2
+!enemytimer         =       !enemyshotptr+!enemyarraysize+2
 
 
 ;start of oam table to dma at nmi. 544 bytes long
