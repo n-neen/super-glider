@@ -1,8 +1,5 @@
 lorom
 
-org $808000
-
-incsrc "./defines.asm"
 
 ;===========================================================================================
 ;======================================  DEFINES  ==========================================
@@ -135,6 +132,10 @@ init:
         sta $210e
         sta !bg1y
         sta !bg2y
+        stz !bg2x
+        stz !bg2x
+        stz !bg1x
+        stz !bg1x
         rep #$20
         
         jsl dma_clearvram
@@ -181,6 +182,7 @@ main: {
     }
 }
 
+
 ;===========================================================================================
 ;================================ STATE 0:  SPLASHSETUP  ===================================
 ;===========================================================================================
@@ -205,7 +207,7 @@ splashsetup: {
 
 
 splash: {
-
+    
     waitforstart: {
         jsr waitfornmi
         lda !controller
@@ -276,6 +278,8 @@ fixlayerscroll: {
     sep #$20
     lda #$ff                ;set layer y scrolls to -1
     sta !bg1y               ;because of course lol
+    sta !bg1y               ;because of course lol
+    sta !bg2y
     sta !bg2y
     rep #$20
     rts
@@ -906,5 +910,3 @@ hightablefill: {
     rts
 }
 
-
-print "bank $80 end: ", pc

@@ -1,8 +1,5 @@
 lorom
 
-org $818000
-
-
 ;===========================================================================================
 ;===================================  D E F I N E S  =======================================
 ;===========================================================================================
@@ -28,6 +25,11 @@ org $818000
     ;dma_loadpalettes
     
     
+!dmabanklong        =   dma&$ff0000
+!dmabankword        =   !dmabanklong<<8
+!dmabankshort       =   !dmabanklong>>16
+      
+      
 dma: {
     .vramtransfur: {        ;for dma channel 0
     
@@ -96,11 +98,6 @@ dma: {
         lda.b !dmabaseaddr          ;1      cgadd
         sta $2121
         
-        rep #$20
-        
-        ;lda !dmabaseaddr           ;2      dest base addr
-        ;sta $2116
-        
         sep #$20
         lda #$02                    ;1      transfur mode: write twice
         sta $4300
@@ -153,7 +150,7 @@ dma: {
         sta $4305
         
         sep #$20
-        lda #$81                    ;1      source bank
+        lda.b #!dmabankshort        ;1      source bank
         sta $4304
 
         
@@ -187,7 +184,7 @@ dma: {
         lda.w #..fillword           ;2      source addr
         sta $4302
         
-        ldx #$81                    ;1      source bank
+        ldx.b #!dmabankshort        ;1      source bank
         stx $4304
         
         lda #$0400                  ;2      transfur size
@@ -341,7 +338,7 @@ load: {
         phx
         
         phk
-        plb             ;bank = $81
+        plb
         
         rep #$30
         asl #3          ;a = a * 8 (table entries are 8 bytes long)
@@ -441,7 +438,7 @@ load: {
         phx
         
         phk
-        plb             ;bank = $81
+        plb
     
         rep #$30
         asl #3          ;a = a * 8 (table entries are 8 bytes long
@@ -521,7 +518,7 @@ load: {
             phy
             phb
             
-            pea $8181
+            pea.w !dmabankshort
             plb : plb
             
             lda !dmaloadindex                       ;if background type = 0, exit
@@ -532,7 +529,7 @@ load: {
             lda loadingtable_layertilemaps,x
             sta !loadptr
             
-            lda loadingtable_layertilemaps+2,x         ;set db to bank from table
+            lda loadingtable_layertilemaps+2,x      ;set db to bank from table
             xba
             sta !pushbank
             pei (!pushbank)
@@ -648,13 +645,3 @@ loadingtable: {
         dl #bg4tilemap                  : db $04
     }
 }
-
-
-
-
-
-
-
-
-
-print "bank $81 end: ", pc

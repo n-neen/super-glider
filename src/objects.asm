@@ -1,12 +1,13 @@
 lorom
 
-org $848000
-
-incsrc "./defines.asm"
 
 ;===========================================================================================
 ;=========================    R O O M   O B J E C T S   ====================================
 ;===========================================================================================
+    
+!objbanklong        =   obj&$ff0000
+!objbankword        =   !objbanklong<<8
+!objbankshort       =   !objbanklong>>16
     
 
 obj: {
@@ -399,25 +400,25 @@ obj: {
         
         phx
         
-        lda $830000,x
+        lda.l !roombanklong,x
         tax
-        lda $840000,x
+        lda.l !objbanklong,x
         tax                 ;x = object type ptr
         
-        lda $840002,x
+        lda.l !objbanklong+2,x
         sta !objxsize,y
         
-        lda $840004,x
+        lda.l !objbanklong+4,x
         asl
         sta !objysize,y
         
-        lda $840006,x
+        lda.l !objbanklong+6,x
         sta !objroutineptr,y
         
-        lda $840008,x
+        lda.l !objbanklong+8,x
         sta !objproperty,y
         
-        lda $840000,x
+        lda.l !objbanklong,x
         sta !objtilemapointer,y
         
         plx
@@ -425,23 +426,23 @@ obj: {
         ;from object instance:
         ;obj ID, xpos, ypos, palette
         
-        lda $830000,x
+        lda.l !roombanklong,x
         sta !objID,y
         
-        lda $830002,x
+        lda.l !roombanklong+2,x
         dec
         asl
         sta !objxpos,y
         
-        lda $830004,x
+        lda.l !roombanklong+4,x
         dec
         asl
         sta !objypos,y
         
-        lda $830006,x
+        lda.l !roombanklong+6,x
         sta !objpal,y
         
-        lda $830008,x
+        lda.l !roombanklong+8,x
         sta !objvariable,y
         
         ply
@@ -464,9 +465,9 @@ obj: {
         ldx !roomobjlistptr
         
         ..loop:
-        lda $830000,x       ;object
+        lda.l !roombanklong,x       ;object
         cmp #$ffff
-        beq ..out           ;if object type = $ffff then we are done
+        beq ..out                   ;if object type = $ffff then we are done
         
         ldy #!objectarraysize+2
         ;loop to check which slots are occupied
@@ -887,7 +888,3 @@ obj: {
     }
     
 }
-
-
-
-print "bank $84 end: ", pc

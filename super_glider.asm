@@ -24,7 +24,6 @@ lorom
 ;'-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,._;
 
 incsrc "./defines.asm"
-incsrc "./macros.asm"
 
 ;===========================================================================================
 ;===================================               =========================================
@@ -32,47 +31,43 @@ incsrc "./macros.asm"
 ;===================================               =========================================
 ;===========================================================================================
 
-;code
-incsrc "./bank80.asm"           ;boot, main, interrupts, top level routines
-incsrc "./bank81.asm"           ;dma, graphics and palette loading
-incsrc "./bank82.asm"           ;gameplay, enemies, spritemaps
-incsrc "./bank83.asm"           ;house, rooms definitions, room transitions
-incsrc "./bank84.asm"           ;tile objects
-
-;prospective outline for
-;file restructure:
-
-;org $808000
-;   incsrc "./src/main.asm"
-;org $818000
-;   inscrc "./src/loading.asm"
-;org $828000
-;   inscrc "./src/gameplay.asm"
-;   incsrc "./src/glider.asm"
-;   inscrc "./src/enemies.asm"
-;   incsrc "./data/sprites/spritemaps.asm"
-;org $838000
-;   incsrc "./src/room_transitions.asm"
-;org $848000
-;   incsrc "./src/room_objects.asm"
-;   incsrc "./src/room_objects_definitions.asm"
-
-;data banks could probably be left as is?
-;feels kinda messy
-
-
+org $808000
+    incsrc "./src/main.asm"
+    incsrc "./src/loading.asm"
+    print "bank $80 end: ", pc
+    
+org $818000
+    incsrc "./src/room.asm"
+    print "bank $82 end: ", pc
+    
+org $828000
+    incsrc "./src/gameplay.asm"
+    incsrc "./src/glider.asm"
+    incsrc "./src/bands.asm"
+    incsrc "./src/enemies.asm"
+    incsrc "./data/sprites/spritemaps.asm"
+    print "bank $81 end: ", pc
+    
+org $838000
+    incsrc "./src/objects.asm"
+    print "bank $83 end: ", pc
+    
+org $848000
+    ;incsrc "./somecode.asm"
+    print "bank $84 end: ", pc
+    
 ;data
-incsrc "./bank85.asm"           ;sprite data: balloon, prizes, dart
-incsrc "./bank86.asm"           ;
-incsrc "./bank87.asm"           ;
-incsrc "./bank88.asm"           ;
-incsrc "./bank89.asm"           ;
-incsrc "./bank8a.asm"           ;splash screen graphics
-incsrc "./bank8b.asm"           ;palettes, sprite data, background tilemaps
-incsrc "./bank8c.asm"           ;background graphics
-incsrc "./bank8d.asm"           ;background graphics
-incsrc "./bank8e.asm"           ;tile object graphics
-incsrc "./bank8f.asm"           ;background graphics
+incsrc "./data/inc/bank85.asm"           ;sprite data: balloon, prizes, dart
+incsrc "./data/inc/bank86.asm"           ;
+incsrc "./data/inc/bank87.asm"           ;
+incsrc "./data/inc/bank88.asm"           ;
+incsrc "./data/inc/bank89.asm"           ;
+incsrc "./data/inc/bank8a.asm"           ;splash screen graphics
+incsrc "./data/inc/bank8b.asm"           ;palettes, sprite data, background tilemaps
+incsrc "./data/inc/bank8c.asm"           ;background graphics
+incsrc "./data/inc/bank8d.asm"           ;background graphics
+incsrc "./data/inc/bank8e.asm"           ;tile object graphics
+incsrc "./data/inc/bank8f.asm"           ;background graphics
 
 
 

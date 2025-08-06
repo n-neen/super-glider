@@ -2,6 +2,9 @@
 ;===================================    E N E M I E S    ===================================
 ;===========================================================================================
 
+!enemybanklong        =   enemy&$ff0000
+!enemybankword        =   !enemybanklong<<8
+!enemybankshort       =   !enemybanklong>>16
 
 ;====================================== ENEMY ROUTINES =====================================
 
@@ -151,21 +154,21 @@ enemy: {
         ;enemy data that's per instance
         ;comes from room's enemy list
         
-        lda $830000,x
+        lda.l !roombanklong,x
         cmp #$ffff          ;if enemy type = ffff, exit this entire process (up a level)
         beq ..stop
         sta !enemyID,y
         
-        lda $830002,x
+        lda.l !roombanklong+2,x
         sta !enemyx,y
         
-        lda $830004,x
+        lda.l !roombanklong+4,x
         sta !enemyy,y
         
-        lda $830006,x
+        lda.l !roombanklong+6,x
         sta !enemypal,y
         
-        lda $830008,x
+        lda.l !roombanklong+8,x
         sta !enemyproperty,y
         
         ;enemy data that is based on its definition
@@ -174,7 +177,7 @@ enemy: {
         
         lda !enemyID,y
         tax
-        lda $820000,x
+        lda.l !enemybanklong,x
         tax
         
         lda $0000,x
@@ -217,11 +220,8 @@ enemy: {
         phx
         phy
         
-        ;pea $8383
-        ;plb : plb
-        
         ldx !roomptr
-        lda $830002,x
+        lda.l !roombanklong+2,x
         tax
         
         ldy #!enemyarraysize+2

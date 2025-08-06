@@ -1,2 +1,0 @@
-"E:\Program Files (x86)\Emulators\super metroid\asar\asar.exe" --symbols=wla --symbols-path="C:\Users\keenan\Desktop\glider pro snes\snes\glider.sym" -v -wnoWfeature_deprecated --no-title-check --fix-checksum=off "C:\Users\keenan\Desktop\glider pro snes\snes\glider.asm"
-pause
