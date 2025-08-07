@@ -11,19 +11,20 @@ lorom
 ;         \___________\     \___________\    \__\           \_________\    \__\            ;
 ;                                                                                          ;
 ;                                                                                          ;
-;              XXXXXXXXX   X           X   XXXXXXXX     XXXXXXX    XXXXXX                  ;
-;              X           X           X   X       X    X          X     X                 ;
-;              X           X           X   X        X   X          X     X                 ;   
-;              X           X           X   X        X   X          X   X                   ;
-;              X           X           X   X        X   XXXXXX     XXXX                    ;
-;              X    XXXX   X           X   X        X   X          X   X                   ;
-;              X       X   X           X   X        X   X          X    X                  ;
-;              X       X   X           X   X       X    X          X     X                 ;
-;              XXXXXXXXX   XXXXXXXXX   X   XXXXXXXX     XXXXXXX    X      X                ;
+;           __________       ___             ___      __             ______      _______   ;
+;         /  ________/      /  /            /  /     /\ \           / ____/     /  ___  \  ;
+;        /  /              /  /            /  /     / /\ \         / /         /  /   \  \ ;
+;       /  /              /  /            /  /     / /  \ \       / /___      /  /    /  / ;
+;      /  /     ___      /  /            /  /     / /    \ \     / ____/     /  /____/  /  ;
+;     /  /      \  \    /  /            /  /     / /     / /    / /         /   _    __/   ;
+;    /  /       /  /   /  /            /  /     / /     / /    / /         /  /  \  \      ;
+;   /  /_______/  /   /  /________    /  /     / /_____/ /    / /____     /  /    \  \     ;
+;  /_____________/   /___________/   /__/     /_________/    /______/    /__/      \__\    ;
+;                                                                                          ;
 ;                                                                                          ;
 ;'-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,.__.,~-''-~,._;
 
-incsrc "./defines.asm"
+incsrc "./src/defines.asm"
 
 ;===========================================================================================
 ;===================================               =========================================
@@ -38,7 +39,7 @@ org $808000
     
 org $818000
     incsrc "./src/room.asm"
-    print "bank $82 end: ", pc
+    print "bank $81 end: ", pc
     
 org $828000
     incsrc "./src/gameplay.asm"
@@ -46,28 +47,27 @@ org $828000
     incsrc "./src/bands.asm"
     incsrc "./src/enemies.asm"
     incsrc "./data/sprites/spritemaps.asm"
-    print "bank $81 end: ", pc
+    print "bank $82 end: ", pc
     
 org $838000
     incsrc "./src/objects.asm"
     print "bank $83 end: ", pc
     
-org $848000
-    ;incsrc "./somecode.asm"
-    print "bank $84 end: ", pc
+
     
 ;data
-incsrc "./data/inc/bank85.asm"           ;sprite data: balloon, prizes, dart
-incsrc "./data/inc/bank86.asm"           ;
-incsrc "./data/inc/bank87.asm"           ;
-incsrc "./data/inc/bank88.asm"           ;
-incsrc "./data/inc/bank89.asm"           ;
-incsrc "./data/inc/bank8a.asm"           ;splash screen graphics
-incsrc "./data/inc/bank8b.asm"           ;palettes, sprite data, background tilemaps
-incsrc "./data/inc/bank8c.asm"           ;background graphics
-incsrc "./data/inc/bank8d.asm"           ;background graphics
-incsrc "./data/inc/bank8e.asm"           ;tile object graphics
-incsrc "./data/inc/bank8f.asm"           ;background graphics
+incsrc "./data/inc/bank84.asm"          ;hud data
+incsrc "./data/inc/bank85.asm"          ;sprite data: balloon, prizes, dart
+incsrc "./data/inc/bank86.asm"          ;
+incsrc "./data/inc/bank87.asm"          ;
+incsrc "./data/inc/bank88.asm"          ;
+incsrc "./data/inc/bank89.asm"          ;
+incsrc "./data/inc/bank8a.asm"          ;splash screen graphics
+incsrc "./data/inc/bank8b.asm"          ;palettes, sprite data, background tilemaps
+incsrc "./data/inc/bank8c.asm"          ;background graphics
+incsrc "./data/inc/bank8d.asm"          ;background graphics
+incsrc "./data/inc/bank8e.asm"          ;tile object graphics
+incsrc "./data/inc/bank8f.asm"          ;background graphics
 
 
 

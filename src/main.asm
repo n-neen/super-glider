@@ -24,6 +24,9 @@ lorom
 !bg2y                   =           $46
 !bg2tilemapshifted      =           !bg2tilemap>>8
 
+!bg3tilemapshifted      =           !bg3tilemap>>8
+
+
 !backgroundupdateflag   =           $48
 !backgroundtype         =           $4a
 
@@ -109,13 +112,13 @@ init:
         sep #$20
         lda #$80            ;enable nmi
         sta $4200
-        lda #%00010010      ;main screen = sprites, L2
+        lda #%00010110      ;main screen = sprites, L2
         sta $212c
         
         lda.b #!spriteaddrshifted   ;sprite size: 8x8 + 16x16; base address c000
         sta $2101
         
-        lda #$01                    ;drawing mode
+        lda #$09                    ;drawing mode
         sta $2105
         
         lda.b #!bg1tilemapshifted   ;bg1 tilemap base address
@@ -124,12 +127,20 @@ init:
         lda #$02                    ;bg2/1 tiles base address (nibble apiece)
         sta $210b
         
-        lda.b #!bg2tilemapshifted
+        lda.b #!bg2tilemapshifted   ;bg2 tilemap base address
         sta $2108
         
-        lda #$ff                    ;gotta set the bg1 scroll
+        lda.b #!bg3tilemapshifted   ;bg3 tilemap base address
+        sta $2109
+        
+        lda.b #!bg3start>>12        ;bg3 tiles base address
+        sta $210c
+        
+        lda #$ff                    ;gotta set the bg scroll
         sta $210e                   ;to -1 because of course we do
         sta $210e
+        sta $2112
+        sta $2112
         sta !bg1y
         sta !bg2y
         stz !bg2x
@@ -231,6 +242,10 @@ newgame: {
     
     jsr waitfornmi
     jsr screenoff           ;enable forced blank to do the following loading
+    
+    jsr hud_copytilemaptobuffer
+    jsr hud_uploadgfx
+    jsr hud_uploadtilemap
     
     lda #$0000
     jsl load_background     ;load data for layer 1 (object layer)
@@ -349,7 +364,7 @@ colormathmode: {
     
     
     .normal: {
-        lda #%00010011          ;main screen = sprites, L2,1
+        lda #%00010111          ;main screen = sprites, L2,1
         sta !mainscreenlayers
         
         lda #%00000000          ;sub screen = nothing
@@ -366,7 +381,7 @@ colormathmode: {
     
     
     .coolmode: {
-        lda #%00000000          ;main screen
+        lda #%00000100          ;main screen
         sta !mainscreenlayers
         
         lda #%00010011          ;sub screen
@@ -393,7 +408,7 @@ colormathmode: {
     
     
     .lightsout: {
-        lda #%00010011          ;main screen
+        lda #%00010111          ;main screen
         sta !mainscreenlayers
         
         lda #%00000000          ;sub screen
@@ -420,7 +435,7 @@ colormathmode: {
     
 
     .iframes: {
-        lda #%00010011          ;main screen = sprites, 2, 1
+        lda #%00010111          ;main screen = sprites, 2, 1
         sta !mainscreenlayers
         
         lda #%00000011          ;sub screen = sprites
@@ -910,3 +925,63 @@ hightablefill: {
     rts
 }
 
+hud: {
+    .copytilemaptobuffer: {
+        ;copy the initial hud tilemap to the wram buffer
+        phx
+        phb
+        
+        pea $8484
+        plb : plb
+        
+        ldx #$0800
+        
+        -
+        lda.w hud_data_tilemap,x
+        sta.l !hudtilemaplong,x
+        dex : dex
+        bpl -
+        
+        plb
+        plx
+        rts
+    }
+    
+    .uploadgfx: {
+        ;load graphics from rom to vram
+        
+        lda.w #hud_data_gfx
+        sta !dmasrcptr
+        
+        lda #$0084
+        sta !dmasrcbank
+        
+        lda #$0500
+        sta !dmasize
+        
+        lda.w #!bg3start
+        sta !dmabaseaddr
+        
+        jsl dma_vramtransfur
+        rts
+    }
+    
+    .uploadtilemap: {
+        ;upload tilemap from wram buffer to vram
+        
+        lda.w #!hudtilemapshort
+        sta !dmasrcptr
+        
+        lda #$007f
+        sta !dmasrcbank
+        
+        lda #$0800
+        sta !dmasize
+        
+        lda.w #!bg3tilemap
+        sta !dmabaseaddr
+        
+        jsl dma_vramtransfur
+        rts
+    }
+}

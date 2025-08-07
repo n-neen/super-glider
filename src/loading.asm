@@ -267,7 +267,7 @@ oam: {
         ;ok i guess
         phx
         
-        lda #$cfff
+        lda #$e0e0
         ldx #$0230
         
         -

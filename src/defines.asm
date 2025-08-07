@@ -12,7 +12,10 @@
 !spritestart        =       $c000           ;sprite gfx
 
 !bg2start           =       $0000
-!bg2tilemap         =       $7000
+!bg2tilemap         =       $6800
+
+!bg3start           =       $7000
+!bg3tilemap         =       $7800
 
 
 ;=====================================   C G  R A M   ======================================
@@ -173,6 +176,8 @@
 !objtilemap             =       $7f6000
 !layer2tilemap          =       $7f0000
 
+!hudtilemaplong         =       $7f4000
+!hudtilemapshort        =       $4000
 
 ;====================================   CONSTANTS   =======================================
 
