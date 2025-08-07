@@ -43,6 +43,8 @@
 !subscreenbackdropgreen =       $b8
 !subscreenbackdropblue  =       $b9
 !colormathmodebackup    =       $ba
+!hudupdateflag          =       $bc     ;booleans, zero or nonzero
+!objupdateflag          =       $be     ;signals to nmi handler to dma to vram
 
 
 !oamentrypointbckp  =       $ec

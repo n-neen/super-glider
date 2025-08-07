@@ -1,0 +1,35 @@
+enemy setup
+
+balloon: {
+    property = speed
+        XYYY, where
+        X = pixels per frame
+        YYY = 0.YYY0
+        
+    palette bitmask high byte (properties 2)
+        timer for respawn
+        ff00 = 00ff frames
+}
+        
+duct: {
+    palette bitmask high byte (properties 2)
+        $8000 bit = floor or ceiling duct
+        
+    property
+        00ff
+        low byte = room index to travel to
+        
+        ff00
+        high byte = output x position
+}
+        
+battery: {
+    property
+        amount of battery time
+}
+        
+
+        
+        
+dart:
+    unfinished, todo

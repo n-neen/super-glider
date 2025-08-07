@@ -244,7 +244,15 @@ obj: {
     }
     
     .tilemap: {
+        ..requestupdate: {
+            lda #$0001
+            sta !objupdateflag
+        }
+        
         ..upload: {
+            lda !objupdateflag
+            beq +
+            
             lda #$6000
             sta !dmasrcptr
             lda #$007f
@@ -255,7 +263,8 @@ obj: {
             sta !dmabaseaddr
             
             jsl dma_vramtransfur
-            rtl
+            stz !objupdateflag
+        +   rtl
         }
         
         

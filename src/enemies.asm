@@ -425,50 +425,70 @@ enemy: {
     
     
     .instruction: {
-        ..moveup: {
-            ;x = enemy index
+        ..balloon: {
+            ...moveup: {
+                ;x = enemy index
+                
+                !speed      =   !localtempvar
+                !subspeed   =   !localtempvar2
+                
+                lda !enemyproperty,x        ;top nibble = left of decimal
+                and #$f000
+                xba
+                lsr #4
+                sta !speed
+                
+                lda !enemyproperty,x        ;bottom 3 nibbles = right of decimal
+                and #$0fff
+                asl #4
+                sta !subspeed
+                
+                ;enemy y - s.bbb0
+                
+                lda !enemysuby,x
+                sec
+                sbc !subspeed
+                sta !enemysuby,x
+                
+                lda !enemyy,x
+                sbc !speed
+                sta !enemyy,x
+                
+                rts
+            }
             
-            !speed      =   !localtempvar
-            !subspeed   =   !localtempvar2
+            ...checkheight: {
+                ;x = enemy index
+                
+                lda !enemyy,x
+                cmp !kceiling-5
+                bmi +
+                rts
+                +
+                lda !kfloor+32
+                sta !enemyy,x
+                
+                lda !enemypal,x
+                and #$ff00
+                xba
+                sta !enemytimer,x
+                
+                lda #enemy_instruction_balloon_wait
+                sta !enemymainptr,x
+                
+                rts
+            }
             
-            lda !enemyproperty,x        ;top nibble = left of decimal
-            and #$f000
-            xba
-            lsr #4
-            sta !speed
-            
-            lda !enemyproperty,x        ;bottom 3 nibbles = right of decimal
-            and #$0fff
-            asl #4
-            sta !subspeed
-            
-            ;enemy y - s.bbb0
-            
-            lda !enemysuby,x
-            sec
-            sbc !subspeed
-            sta !enemysuby,x
-            
-            lda !enemyy,x
-            sbc !speed
-            sta !enemyy,x
-            
-            rts
+            ...wait: {
+                dec !enemytimer,x
+                bpl +
+                
+                lda #enemy_main_balloon
+                sta !enemymainptr,x
+                
+            +   rts
+            }
         }
-        
-        ..checkheight: {
-            ;x = enemy index
-            
-            lda !enemyy,x
-            cmp !kceiling-5
-            bmi +
-            rts
-            +
-            lda !kfloor+12
-            sta !enemyy,x
-            rts
-        }
-        
         
         ..band: {
             ...move: {
@@ -680,8 +700,8 @@ enemy: {
     
     .main: {
         ..balloon: {
-            jsr enemy_instruction_moveup
-            jsr enemy_instruction_checkheight
+            jsr enemy_instruction_balloon_moveup
+            jsr enemy_instruction_balloon_checkheight
             rts
         }
         
@@ -694,12 +714,12 @@ enemy: {
             lda !enemyproperty,x
             bpl +
             
-            ;no $8000 bit = left band
+            ;$8000 bit = left band
             lda !kbandxspeed
             jsr enemy_instruction_band_move_left
             rts
             
-            ;$8000 bit = right band
+            ;no $8000 bit = right band
             +
             lda !kbandxspeed
             jsr enemy_instruction_band_move_right

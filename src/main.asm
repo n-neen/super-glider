@@ -754,6 +754,9 @@ nmi: {
     jsl obj_tilemap_upload
     jsr updateppuregisters      ;read wram buffer and write register
     jsr readcontroller
+    jsr hud_uploadtilemappartial
+    
+    
     stz !nmiflag
     
     .return
@@ -983,5 +986,35 @@ hud: {
         
         jsl dma_vramtransfur
         rts
+    }
+    
+    .requestupdate: {
+        lda #$0001
+        sta !hudupdateflag
+        rts
+    }
+    
+    .uploadtilemappartial: {
+        ;upload tilemap from wram buffer to vram
+        
+        lda !hudupdateflag
+        beq +
+        
+        lda.w #!hudtilemapshort
+        sta !dmasrcptr
+        
+        lda #$007f
+        sta !dmasrcbank
+        
+        lda #$0100
+        sta !dmasize
+        
+        lda.w #!bg3tilemap
+        sta !dmabaseaddr
+        
+        jsl dma_vramtransfur
+        stz !hudupdateflag
+        
+    +   rts
     }
 }

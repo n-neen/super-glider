@@ -52,6 +52,7 @@ room: {
         jsl obj_spawnall
         jsl obj_handle
         jsl obj_drawall
+        jsl obj_tilemap_requestupdate
         jsl layer2draw          ;make sure to update layer 2 tilemap
                                 ;since nmi does not
         
@@ -1149,9 +1150,9 @@ room: {
         
         ..20: {
             ;enemy type             x,        y,        pal bitmask,    properties (speed)
-            dw enemy_ptr_balloon,   $0058,    $0048,    $0002,          $1234
-            dw enemy_ptr_balloon,   $0038,    $0048,    $0002,          $031f
-            dw enemy_ptr_balloon,   $0018,    $0028,    $0002,          $0cf0
+            dw enemy_ptr_balloon,   $0058,    $0048,    $f002,          $1234
+            dw enemy_ptr_balloon,   $0038,    $0048,    $8002,          $031f
+            dw enemy_ptr_balloon,   $0018,    $0028,    $1002,          $0cf0
             dw enemy_ptr_clock,     $0048,    $0060,    $0006,          $01f4
             dw enemy_ptr_paper,     $0038,    $0070,    $0006,          $0000
             ;dw enemy_ptr_battery,   $002c,    $0068,    $0004,          $0000
