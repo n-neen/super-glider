@@ -176,7 +176,10 @@
 ;if you ever want to change these, be prepared to change
 ;all the non-automatic stuff like the object draw routine
 !objtilemap             =       $7f6000
+!objtilemapshort        =       $6000
+
 !layer2tilemap          =       $7f0000
+!layer2tilemapshort     =       $0000
 
 !hudtilemaplong         =       $7f4000
 !hudtilemapshort        =       $4000
@@ -212,6 +215,9 @@
 !kbandxsubspeed             =       #$8000
 !kbandyspeed                =       #$0000
 !kbandysubspeed             =       #$2e00
+
+!kbatteryhudiconspot        =       $0066   ;lacks # so can be used with math
+!kbandshudiconspot          =       $0068
 
 !kbandspalette              =       #$0002
 !kbandhitboxoffset          =       #$0000

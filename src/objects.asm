@@ -126,7 +126,7 @@ obj: {
         
         pea $7f7f
         plb : plb
-        ldx #$2000
+        ldx #$0800
         --
         stz $6000,x
         dex : dex

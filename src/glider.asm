@@ -14,7 +14,7 @@ glider: {
         ;call glider_init on newgame
         ;call glider_init_spawn on death to reset
         
-        lda #$0004
+        lda #$0007
         sta !gliderlives
         
         lda !kgliderysubspeeddefault
@@ -421,7 +421,13 @@ glider: {
         lda !kglideriframes
         sta !iframecounter
         
-        dec !gliderlives
+        lda !gliderlives
+        sed
+        sec
+        sbc #$0001
+        cld
+        sta !gliderlives
+        
         stz !glidernextstate
         jsl glider_init_spawn
         rts

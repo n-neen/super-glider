@@ -263,6 +263,7 @@ newgame: {
     jsl load_sprite         ;load sprite data 3 (dart)
     
     jsl glider_init
+    jsl hud_updatelives
     
     stz !colormathmode
     stz !colormathmodebackup
@@ -928,13 +929,14 @@ hightablefill: {
     rts
 }
 
+
 hud: {
     .copytilemaptobuffer: {
         ;copy the initial hud tilemap to the wram buffer
         phx
         phb
         
-        pea $8484
+        pea $8484       ;todo: fix hardcoded data bank
         plb : plb
         
         ldx #$0800
@@ -1016,5 +1018,125 @@ hud: {
         stz !hudupdateflag
         
     +   rts
+    }
+    
+    
+    .updatelives: {
+        lda !gliderlives
+        ldx #$007a
+        jsl hud_drawthreedigitnumber
+        rtl
+    }
+    
+    
+    .drawthreedigitnumber: {
+        ;x = index into hud tilemap (one word per tile)
+        ;a = number to draw
+        ;number must be bcd
+        
+        phb
+        
+        phk
+        plb
+        
+        pha
+        pha
+        and #$000f
+        asl
+        tay
+        
+        lda hud_charactertable,y
+        sta !hudtilemaplong,x
+        
+        pla
+        and #$00f0
+        lsr #3
+        tay
+        
+        lda hud_charactertable,y
+        sta !hudtilemaplong-2,x
+        
+        pla
+        and #$0f00
+        xba
+        asl
+        tay
+        
+        lda hud_charactertable,y
+        sta !hudtilemaplong-4,x
+        
+        lda #$0001
+        sta !hudupdateflag
+        
+        plb
+        rtl
+    }
+    
+    
+    .drawbattery: {
+        ;battery $382a
+        ;$74
+        lda #$382a
+        sta !hudtilemaplong+!kbatteryhudiconspot
+        rts
+    }
+    
+    
+    .drawbands: {
+        ;band $382b
+        ;$76
+        lda #$382b
+        sta !hudtilemaplong+!kbandshudiconspot
+        rts
+    }
+    
+    
+    .cleartile: {
+        ;x=tile index
+        lda #$380a
+        sta !hudtilemaplong,x
+        rts
+    }
+    
+    
+    .handleicons: {
+        lda !gliderbatterytime
+        bne +
+        ;if 0:
+        ldx #!kbatteryhudiconspot
+        jsr hud_cleartile
+        bra ++
+        
+        ;else:
+    +   jsr hud_drawbattery
+    
+        ++
+        lda !bandsammo
+        bne +
+        ;if 0:
+        ldx #!kbandshudiconspot
+        jsr hud_cleartile
+        bra ++
+        
+        ;else:
+    +   jsr hud_drawbands
+    
+        ++
+        rtl
+    }
+    
+    
+    .charactertable: {
+        dw $3800,       ;0
+           $3801,       ;1
+           $3802,       ;2
+           $3803,       ;3
+           $3804,       ;4
+           $3805,       ;5
+           $3806,       ;6
+           $3807,       ;7
+           $3808,       ;8
+           $3809        ;9
+           ;blank tile $380a
     }
 }

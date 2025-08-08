@@ -268,7 +268,7 @@ oam: {
         phx
         
         lda #$e0e0
-        ldx #$0230
+        ldx #$0200
         
         -
         sta !oambuffer,x

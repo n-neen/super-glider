@@ -69,6 +69,7 @@ bands: {
         bne +
         
         stz !fireband
+        dec !bandsammo
         
         lda #enemy_ptr_band
         sta !enemydynamicspawnslot

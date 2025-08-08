@@ -32,6 +32,7 @@ game: {
         jsl iframecolormath
         jsl handlecolormath
         
+        jsr handlehud
         
         jsl oam_hightablejank
         
@@ -56,6 +57,14 @@ game: {
         pla
         rts
     }
+}
+
+
+
+handlehud: {
+    jsl hud_updatelives
+    jsl hud_handleicons
+    rts
 }
 
 noinput: {

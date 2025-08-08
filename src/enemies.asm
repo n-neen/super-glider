@@ -11,7 +11,7 @@
 enemy: {
     .top: {
         jsr enemy_handle
-        jsr enemy_drawall
+        jsl enemy_drawall
         jsr enemy_collision_calchitbox
         jsr enemy_collision
         
@@ -285,7 +285,7 @@ enemy: {
         
         ply
         plx
-        rts
+        rtl
     }
     
     
@@ -802,7 +802,13 @@ enemy: {
         }
         
         ..paper: {
-            inc !gliderlives
+            sed
+            lda !gliderlives
+            clc
+            adc #$0001
+            sta !gliderlives
+            cld
+            
             jsr enemy_clear
             rts
         }
