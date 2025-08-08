@@ -457,6 +457,30 @@ enemy: {
                 rts
             }
             
+            ...falling: {
+                lda !enemyy,x
+                inc
+                sta !enemyy,x
+                cmp !kfloor+32
+                bpl +
+                
+                rts
+                
+                +
+                
+                lda !enemypal,x
+                and #$ff00
+                xba
+                sta !enemytimer,x
+                
+                lda #enemy_instruction_balloon_wait
+                sta !enemymainptr,x
+                
+                lda #spritemap_pointers_balloon+0
+                sta !enemyspritemapptr,x
+                rts
+            }
+            
             ...checkheight: {
                 ;x = enemy index
                 
@@ -685,7 +709,11 @@ enemy: {
         ..balloon: {
             ;todo: change spritemap to punctured balloon
             ;set ai to fall to ground
-            jsr enemy_clear
+            lda #spritemap_pointers_balloon+6
+            sta !enemyspritemapptr,x
+            
+            lda #enemy_instruction_balloon_falling
+            sta !enemymainptr,x
             rts
         }
         

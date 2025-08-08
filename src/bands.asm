@@ -63,6 +63,8 @@ bands: {
         phy
         phx
         
+        lda !bandsammo
+        beq +
         lda !fireband                   ;todo: make firing them not bad
         beq +
         lda !bandtimer

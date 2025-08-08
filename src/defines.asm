@@ -175,13 +175,13 @@
 
 ;if you ever want to change these, be prepared to change
 ;all the non-automatic stuff like the object draw routine
-!objtilemap             =       $7f6000
+!objtilemap             =       $7f6000     ;this one still has some hardcoded short pointers somewhere
 !objtilemapshort        =       $6000
 
-!layer2tilemap          =       $7f0000
+!layer2tilemap          =       $7f0000     ;this one might
 !layer2tilemapshort     =       $0000
 
-!hudtilemaplong         =       $7f4000
+!hudtilemaplong         =       $7f4000     ;this one doesn't
 !hudtilemapshort        =       $4000
 
 ;====================================   CONSTANTS   =======================================
@@ -208,7 +208,7 @@
 !kbatteryon                 =       #$0001
 !kbatteryoff                =       #$0000
 
-!kbandammoamount            =       #$0008
+!kbandammoamount            =       #$0010
 !kbandtimerlength           =       #$0008
 
 !kbandxspeed                =       #$0002

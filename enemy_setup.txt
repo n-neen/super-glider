@@ -1,5 +1,7 @@
 enemy setup
 
+if shot pointer = 0 then it is ignored
+
 balloon: {
     property = speed
         XYYY, where
