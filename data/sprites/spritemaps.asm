@@ -65,6 +65,10 @@ spritemap: {
                spritemap_band_2,
                spritemap_band_3
         }
+        
+        ..lightswitch: {
+            dw spritemap_lightswitch
+        }
     }
     
     
@@ -269,5 +273,11 @@ spritemap: {
             db $01
             db $00, $00, $2c,   %00110000,  %00000010
         }
+    }
+    
+    .lightswitch: {
+        db $02
+        db $00, $00, $cc,   %00110000,  %00000010
+        db $00, $08, $dc,   %00110000,  %00000010
     }
 }

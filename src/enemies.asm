@@ -425,6 +425,7 @@ enemy: {
     
     
     .instruction: {
+        
         ..balloon: {
             ...moveup: {
                 ;x = enemy index
@@ -628,6 +629,7 @@ enemy: {
         ..dart:         dw enemy_headers_dart
         ..duct:         dw enemy_headers_duct
         ..band:         dw enemy_headers_band
+        ..lightswitch:  dw enemy_headers_lightswitch
     }
     
     
@@ -649,7 +651,8 @@ enemy: {
             dw spritemap_pointers_duct,         $0030,      $0028,      enemy_init_duct,            enemy_main_none,        enemy_touch_duct,           $0000
         ..band:
             dw spritemap_pointers_band,         $0020,      $0020,      enemy_init_band,            enemy_main_band,        enemy_touch_none,           $0000
-            
+        ..lightswitch:
+            dw spritemap_pointers_lightswitch,  $0030,      $0020,      enemy_init_none,            enemy_main_lightswitch, enemy_touch_lightswitch,    enemy_touch_lightswitch
     }
     
     
@@ -706,6 +709,7 @@ enemy: {
     
     
     .shot: {
+        
         ..balloon: {
             ;todo: change spritemap to punctured balloon
             ;set ai to fall to ground
@@ -727,6 +731,13 @@ enemy: {
     
     
     .main: {
+        ..lightswitch: {
+            lda !enemytimer,x
+            beq +
+            dec !enemytimer,x
+        +   rts
+        }
+        
         ..balloon: {
             jsr enemy_instruction_balloon_moveup
             jsr enemy_instruction_balloon_checkheight
@@ -793,6 +804,21 @@ enemy: {
     .touch: {
         ..none: {
             rts
+        }
+        
+        ..lightswitch: {
+            ;turn off or on the lights
+            lda !enemytimer,x
+            bne +
+            
+            lda #$0030
+            sta !enemytimer,x
+            
+            lda !colormathmode
+            eor #$0001
+            sta !colormathmode
+            
+        +   rts
         }
         
         ..kill: {

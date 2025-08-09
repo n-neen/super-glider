@@ -1149,12 +1149,13 @@ room: {
         }
         
         ..20: {
-            ;enemy type             x,        y,        pal bitmask,    properties (speed)
-            dw enemy_ptr_balloon,   $0058,    $0048,    $f002,          $1234
-            dw enemy_ptr_balloon,   $0038,    $0048,    $8002,          $031f
-            dw enemy_ptr_balloon,   $0018,    $0028,    $1002,          $0cf0
-            dw enemy_ptr_clock,     $0048,    $0060,    $0006,          $01f4
-            dw enemy_ptr_paper,     $0038,    $0070,    $0006,          $0000
+            ;enemy type                 x,        y,        pal bitmask,    properties (speed)
+            dw enemy_ptr_balloon,       $0058,    $0048,    $f002,          $1234
+            dw enemy_ptr_balloon,       $0038,    $0048,    $8002,          $031f
+            dw enemy_ptr_balloon,       $0018,    $0028,    $1002,          $0cf0
+            dw enemy_ptr_clock,         $0048,    $0060,    $0006,          $01f4
+            dw enemy_ptr_paper,         $0038,    $0070,    $0006,          $0000
+            dw enemy_ptr_lightswitch,   $0060,    $0060,    $0004,          $0000
             ;dw enemy_ptr_battery,   $002c,    $0068,    $0004,          $0000
             ;dw enemy_ptr_bands,     $0020,    $0068,    $0004,          $0000
             dw $ffff
