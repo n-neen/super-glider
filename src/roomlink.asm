@@ -14,7 +14,18 @@
 ;cccc   = enemy property
 
 ;in room loading, after enemies are loaded, do:
-jsl link_handler
+;jsl link_handler
+
+;enemies which use this will:
+
+;lda !enemyproperty,x
+;tay                         ;y = room/enemy index target for link data
+;lda #$0000                  ;a = enemy data for target
+;jsl link_make
+;
+;rts
+
+
 
 
 

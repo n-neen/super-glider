@@ -835,10 +835,12 @@ enemy: {
         }
         
         ..longswitch: {
+            ;unimplemented
+            
             ;x = enemy index
             
-            lda !enemyproperty,x        ;property = room/enemy index target for link data
-            tay                         ;y = ^
+            lda !enemyproperty,x
+            tay                         ;y = room/enemy index target for link data
             lda #$0000                  ;a = enemy data for target
             jsl link_make
             
