@@ -3,7 +3,7 @@
 ;===========================================================================================
 
 !enemybanklong        =   enemy&$ff0000
-!enemybankword        =   !enemybanklong<<8
+!enemybankword        =   !enemybanklong>>8
 !enemybankshort       =   !enemybanklong>>16
 
 ;====================================== ENEMY ROUTINES =====================================
@@ -31,6 +31,8 @@ enemy: {
         beq +
         jsr enemy_collision_check       ;must preserve x
         bcc +                           ;carry clear = no collision
+        lda !enemytouchptr,x
+        beq +
         jsr (!enemytouchptr,x)
         +
         dex : dex
@@ -425,6 +427,10 @@ enemy: {
     
     
     .instruction: {
+        ..off: {
+            ;do something like wait to be reactivated
+            rts
+        }
         
         ..balloon: {
             ...moveup: {
@@ -618,6 +624,19 @@ enemy: {
         }
     }
     
+    
+    .shutoff: {
+        ;x = enemy index
+        
+        ;lda #enemy_instruction_off
+        stz !enemyinitptr,x
+        stz !enemymainptr,x
+        stz !enemytouchptr,x
+        stz !enemyshotptr,x
+        
+        rts
+    }
+    
     ;====================================== ENEMY DEFINITIONS =====================================
     
     .ptr: {
@@ -634,33 +653,29 @@ enemy: {
     
     
     .headers: {
-               ;spritemap ptr                   xsize,      ysize,      init routine,               main routine,           touch,                      shot
+               ;spritemap ptr                   xsize,      ysize,      init routine,       main routine,           touch,                      shot
         ..balloon:
-            dw spritemap_pointers_balloon,      $0030,      $0028,      enemy_init_none,            enemy_main_balloon,     enemy_touch_kill,           enemy_shot_balloon
+            dw spritemap_pointers_balloon,      $0030,      $0028,      $0000,              enemy_main_balloon,     enemy_touch_kill,           enemy_shot_balloon
         ..paper:
-            dw spritemap_pointers_paper,        $0048,      $0028,      enemy_init_none,            enemy_main_none,        enemy_touch_paper,          $0000
+            dw spritemap_pointers_paper,        $0048,      $0028,      $0000,              $0000,                  enemy_touch_paper,          $0000
         ..clock:
-            dw spritemap_pointers_clock,        $0040,      $0020,      enemy_init_none,            enemy_main_none,        enemy_touch_clock,          $0000
+            dw spritemap_pointers_clock,        $0040,      $0020,      $0000,              $0000,                  enemy_touch_clock,          $0000
         ..battery:
-            dw spritemap_pointers_battery,      $0040,      $0028,      enemy_init_none,            enemy_main_none,        enemy_touch_battery,        $0000
+            dw spritemap_pointers_battery,      $0040,      $0028,      $0000,              $0000,                  enemy_touch_battery,        $0000
         ..bandspack:
-            dw spritemap_pointers_bandspack,    $0030,      $0030,      enemy_init_none,            enemy_main_none,        enemy_touch_bandspack,      $0000
+            dw spritemap_pointers_bandspack,    $0030,      $0030,      $0000,              $0000,                  enemy_touch_bandspack,      $0000
         ..dart:
-            dw spritemap_pointers_dart,         $0040,      $0020,      enemy_init_dart,            enemy_main_dart,        enemy_touch_kill,           enemy_shot_dart
+            dw spritemap_pointers_dart,         $0040,      $0020,      enemy_init_dart,    enemy_main_dart,        enemy_touch_kill,           enemy_shot_dart
         ..duct:
-            dw spritemap_pointers_duct,         $0030,      $0028,      enemy_init_duct,            enemy_main_none,        enemy_touch_duct,           $0000
+            dw spritemap_pointers_duct,         $0030,      $0028,      enemy_init_duct,    $0000,                  enemy_touch_duct,           $0000
         ..band:
-            dw spritemap_pointers_band,         $0020,      $0020,      enemy_init_band,            enemy_main_band,        enemy_touch_none,           $0000
+            dw spritemap_pointers_band,         $0020,      $0020,      $0000,              enemy_main_band,        $0000,                      $0000
         ..lightswitch:
-            dw spritemap_pointers_lightswitch,  $0030,      $0020,      enemy_init_none,            enemy_main_lightswitch, enemy_touch_lightswitch,    enemy_touch_lightswitch
+            dw spritemap_pointers_lightswitch,  $0030,      $0020,      $0000,              enemy_main_lightswitch, enemy_touch_lightswitch,    enemy_touch_lightswitch
     }
     
     
     .init: {
-        ..none: {
-            rts
-        }
-        
         ..band: {
             ;use glider direction to determine band direction
             ;at the time it is spawned
@@ -765,10 +780,6 @@ enemy: {
             rts
         }
         
-        ..none: {
-            rts
-        }
-        
         ..dart: {
             lda !enemyproperty,x
             bmi +
@@ -802,10 +813,6 @@ enemy: {
     
     
     .touch: {
-        ..none: {
-            rts
-        }
-        
         ..lightswitch: {
             ;turn off or on the lights
             lda !enemytimer,x
@@ -824,6 +831,17 @@ enemy: {
         ..kill: {
             lda !kgliderstatelostlife
             sta !glidernextstate
+            rts
+        }
+        
+        ..longswitch: {
+            ;x = enemy index
+            
+            lda !enemyproperty,x        ;property = room/enemy index target for link data
+            tay                         ;y = ^
+            lda #$0000                  ;a = enemy data for target
+            jsl link_make
+            
             rts
         }
         

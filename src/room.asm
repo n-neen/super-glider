@@ -8,7 +8,7 @@ lorom
 ;===========================================================================================
 
 !roombanklong        =   room&$ff0000
-!roombankword        =   !roombanklong<<8
+!roombankword        =   !roombanklong>>8
 !roombankshort       =   !roombanklong>>16
 
 room: {

@@ -6,7 +6,7 @@ lorom
 ;===========================================================================================
     
 !objbanklong        =   obj&$ff0000
-!objbankword        =   !objbanklong<<8
+!objbankword        =   !objbanklong>>8
 !objbankshort       =   !objbanklong>>16
     
 

@@ -1,6 +1,6 @@
 enemy setup
 
-if shot pointer = 0 then it is ignored
+if any enemy routine pointer = 0 then it is ignored
 
 balloon: {
     property = speed
@@ -12,7 +12,7 @@ balloon: {
         timer for respawn
         ff00 = 00ff frames
 }
-        
+
 duct: {
     palette bitmask high byte (properties 2)
         $8000 bit = floor or ceiling duct
@@ -24,14 +24,14 @@ duct: {
         ff00
         high byte = output x position
 }
-        
+
 battery: {
     property
         amount of battery time
 }
-        
 
-        
-        
+
+
+
 dart:
     unfinished, todo

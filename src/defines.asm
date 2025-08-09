@@ -184,6 +184,22 @@
 !hudtilemaplong         =       $7f4000     ;this one doesn't
 !hudtilemapshort        =       $4000
 
+;inter-room data table defines
+
+!roomlinktablelong      =       $7ea000
+!roomlinktableshort     =       $a000
+!roomlinktablebank      =       $7e
+!kroomlinkarraylength   =       $0080       ;sneaky constant!
+
+;longs
+!linktargetlong         =       !roomlinktablelong
+!linkdatalong           =       !roomlinktablelong+2
+
+;shorts
+!linktargetshort        =       !roomlinktableshort
+!linkdatashort          =       !roomlinktableshort+2
+
+
 ;====================================   CONSTANTS   =======================================
 
 ;glider constants

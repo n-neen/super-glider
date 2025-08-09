@@ -4,7 +4,7 @@
 ;===========================================================================================
 
 !gliderbanklong        =   glider&$ff0000
-!gliderbankword        =   !gliderbanklong<<8
+!gliderbankword        =   !gliderbanklong>>8
 !gliderbankshort       =   !gliderbanklong>>16
 
 glider: {

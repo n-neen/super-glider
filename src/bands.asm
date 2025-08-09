@@ -5,7 +5,7 @@
 
 
 !bandsbanklong        =   bands&$ff0000
-!bandsbankword        =   !bandsbanklong<<8
+!bandsbankword        =   !bandsbanklong>>8
 !bandsbankshort       =   !bandsbanklong>>16
 
 bands: {

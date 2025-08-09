@@ -26,7 +26,7 @@ lorom
     
     
 !dmabanklong        =   dma&$ff0000
-!dmabankword        =   !dmabanklong<<8
+!dmabankword        =   !dmabanklong>>8
 !dmabankshort       =   !dmabanklong>>16
       
 

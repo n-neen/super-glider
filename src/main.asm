@@ -958,7 +958,7 @@ hud: {
         lda.w #hud_data_gfx
         sta !dmasrcptr
         
-        lda #$0084
+        lda #$0084              ;hardcoded bank
         sta !dmasrcbank
         
         lda #$0500

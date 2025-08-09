@@ -3,7 +3,7 @@
 ;===========================================================================================
 
 !gamebanklong        =   game&$ff0000
-!gamebankword        =   !gamebanklong<<8
+!gamebankword        =   !gamebanklong>>8
 !gamebankshort       =   !gamebanklong>>16
 
 
