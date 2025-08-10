@@ -31,6 +31,10 @@ room: {
         phk
         plb
         
+        sep #$20
+        stz $4200               ;disable interrupts
+        rep #$20
+        
         jsl obj_clearall
         ;jsl obj_tilemap_init
         
@@ -60,6 +64,12 @@ room: {
         jsl enemy_spawnall
         jsl enemy_runinit
         
+        jsl link_handle
+                
+        sep #$20
+        lda #$80
+        sta $4200               ;enable interrupts
+        rep #$20
         
         ply
         plx
@@ -1018,13 +1028,13 @@ room: {
 
     .enemylist: {
         ..0: {
-            ;enemy type             x,        y,        pal bitmask,    properties
-            dw enemy_ptr_duct,      $0020,    $0008,    $8004,          $9021
+            ;enemy type             x,        y,        pal/prop2,      properties,     property3
+            dw enemy_ptr_duct,      $0020,    $0008,    $8004,          $9021,          $0000
             dw $ffff
         }
         
         ..1: {
-            dw enemy_ptr_bandspack, $0040,    $0058,    $0000,          $0000
+            dw enemy_ptr_bandspack, $0040,    $0058,    $0000,          $0000,          $0000
             dw $ffff
         }
         
@@ -1149,22 +1159,23 @@ room: {
         }
         
         ..20: {
-            ;enemy type                 x,        y,        pal bitmask,    properties (speed)
-            dw enemy_ptr_balloon,       $0058,    $0048,    $f002,          $1234
-            dw enemy_ptr_balloon,       $0038,    $0048,    $8002,          $031f
-            dw enemy_ptr_balloon,       $0018,    $0028,    $1002,          $0cf0
-            dw enemy_ptr_clock,         $0048,    $0060,    $0006,          $01f4
-            dw enemy_ptr_paper,         $0038,    $0070,    $0006,          $0000
-            dw enemy_ptr_lightswitch,   $0060,    $0060,    $0004,          $0000
-            ;dw enemy_ptr_battery,   $002c,    $0068,    $0004,          $0000
-            ;dw enemy_ptr_bands,     $0020,    $0068,    $0004,          $0000
+            ;enemy type                 x,        y,        property2,      property,       property3
+            ;dw enemy_ptr_balloon,       $0058,    $0048,    $f002,          $1234,          $0000
+            dw enemy_ptr_balloon,       $0038,    $0048,    $1002,          $031f,          $0000
+            ;dw enemy_ptr_balloon,       $0018,    $0028,    $1002,          $0cf0,          $0000
+            dw enemy_ptr_clock,         $0048,    $0060,    $0006,          $01f4,          $0000
+            dw enemy_ptr_paper,         $0038,    $0070,    $0006,          $0000,          $0000
+            dw enemy_ptr_lightswitch,   $0060,    $0060,    $0004,          $0000,          $0000
+            ;dw enemy_ptr_battery,      $002c,    $0068,    $0004,          $0000,          $0000
+            ;dw enemy_ptr_bands,        $0020,    $0068,    $0004,          $0000,          $0000
             dw $ffff
         }
         
         ..21: {
-            dw enemy_ptr_balloon,   $0060,    $0028,    $0002,          $0f80
-            dw enemy_ptr_battery,   $0070,    $0070,    $0006,          $0064
-            dw enemy_ptr_duct,      $0090,    $0008,    $8004,          $2000
+            dw enemy_ptr_balloon,       $0060,    $0028,    $0002,          $0f80,          $0000
+            dw enemy_ptr_battery,       $0070,    $0070,    $0006,          $0064,          $0000
+            dw enemy_ptr_duct,          $0090,    $0008,    $8004,          $2000,          $0000
+            dw enemy_ptr_switch,        $0060,    $0060,    $0200,          $4000,          $2028
             dw $ffff
         }
         

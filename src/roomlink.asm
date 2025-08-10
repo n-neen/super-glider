@@ -10,8 +10,13 @@
 ;aabb, cccc
 
 ;aa     = link target room
-;bb     = link target enemy index
-;cccc   = enemy property
+;bb     = link target index
+;       $01 bit of bb = select enemy (00) or object (01)
+
+;enemy and object slot indices are always even numbers
+;so just mask this bit out at the time you use that byte
+
+;cccc   = enemy/object property
 
 ;in room loading, after enemies are loaded, do:
 ;jsl link_handler
@@ -20,18 +25,18 @@
 
 ;lda !enemyproperty,x
 ;tay                         ;y = room/enemy index target for link data
-;lda #$0000                  ;a = enemy data for target
+;lda #$data                 ;a = enemy data for target
+;lda #$data|#$0001          ;a = room object data for target
 ;jsl link_make
 ;
 ;rts
 
 
-
-
-
 link: {
-    .handler: {
+    .handle: {
         phb
+        phx
+        phy
         
         pea.w !roomlinktablebank
         plb : plb
@@ -39,16 +44,28 @@ link: {
         ldx #!kroomlinkarraylength
         -
         lda !linktargetshort,x
-        beq +
-        jsr link_handler_checkroom
-        bcc +
-        ;if carry set, we found an entry that pertains to this room
-        jsr link_handler_checkenemy
-        +
+        beq ++
+        jsr link_handle_checkroom
+        bcc ++
+        
+        ..slotfound: {
+            ;if carry set, we found an entry that pertains to this room
+            lda !linktargetshort,x
+            bit #$0001                      ;if #$0001 bit, this is for a room object
+            bne +
+            jsr link_handle_checkenemy     ;if not, it's for an enemy
+            bra ++
+            +
+            jsr link_handle_checkobject
+        }
+        
+        ++
         dex : dex
         bpl -
         
-        
+        ply
+        plx
+        plb
         rtl
         
         ..checkroom: {
@@ -56,6 +73,7 @@ link: {
             
             and #$ff00
             xba
+            asl
             cmp !roomindex
             beq +
             
@@ -72,6 +90,7 @@ link: {
         ..checkenemy: {
             ;x = index into room link table
             phx
+            phy
             
             lda !linktargetlong,x
             and #$00ff                  ;y = enemy index in this room
@@ -83,18 +102,48 @@ link: {
             
             sta !enemyproperty,y
             
+            ply
             plx
             rts
             
-        +   plx
+        +   ply
+            plx
             jsr link_clear              ;if they are the same, link is not necessary
             
+            rts
+        }
+        
+        ..checkobject: {
+            ;x = index into room link table
+            phx
+            phy
+            
+            lda !linktargetlong,x
+            and #$00fe
+            tay
+            
+            lda !linkdatalong,x
+            cmp !objproperty,y
+            beq +
+            
+            sta !objproperty,y
+            
+            ply
+            plx
+            rts
+            
+            
+        +   ply
+            plx
+            jsr link_clear
             rts
         }
     }
     
     .clearall: {
+        ;call during newgame
         phb
+        phx
         
         pea.w !roomlinktablebank
         plb : plb
@@ -106,6 +155,7 @@ link: {
         dex : dex
         bpl -
         
+        plx
         plb
         rtl
     }
@@ -114,15 +164,10 @@ link: {
     .clear: {
         ;x = link index
         
-        phb
-        
-        pea.w !roomlinktablebank
-        plb : plb
-        
-        stz !linktargetshort,x
-        stz !linkdatashort,x
-        
-        plb
+        lda #$0000
+        sta !linktargetlong,x
+        sta !linkdatalong,x
+
         rts
     }
     
@@ -142,7 +187,7 @@ link: {
         ldx #!kroomlinkarraylength
         -
         lda !linktargetshort,x
-        beq +
+        bne +
         
         ;slot found
         lda !localtempvar
@@ -156,8 +201,18 @@ link: {
         +
         dex : dex
         bpl -
+        bmi +++
         
         ++
+        ;returns with y = index of slot created
+        txy
+        plx
+        plb
+        rtl
+        
+        +++
+        ;ran out of slots
+        ;i guess we do something about that
         plx
         plb
         rtl

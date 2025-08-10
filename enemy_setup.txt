@@ -30,6 +30,26 @@ battery: {
         amount of battery time
 }
 
+switch: {
+    properties2 (enemypal)
+        $1000 bit = boolean for not hitting constantly (once per room)
+        $0200 bit = spritemap selection
+    property
+        data for target (its property)
+    property3
+        target for switch:
+            aabb, where
+            aa = room index
+            bb = enemy or object target
+                $01 bit of bb = select object (0 = enemy)
+                all indices are even numbers so if it's odd, it's object index+1
+    enemyvariable
+        spritemap select
+            0000 = on
+            0002 = off
+
+
+}
 
 
 

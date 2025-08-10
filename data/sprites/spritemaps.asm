@@ -11,6 +11,11 @@
 
 ;print "spritemaps: ", pc
 
+!spritemapbanklong        =   spritemap&$ff0000
+!spritemapbankword        =   !spritemapbanklong>>8
+!spritemapbankshort       =   !spritemapbanklong>>16
+
+
 spritemap: {
     .pointers: {
         ;see glider constants in defines.asm
@@ -68,6 +73,11 @@ spritemap: {
         
         ..lightswitch: {
             dw spritemap_lightswitch
+        }
+        
+        ..switch: {
+            dw spritemap_switch_on,
+               spritemap_switch_off
         }
     }
     
@@ -279,5 +289,20 @@ spritemap: {
         db $02
         db $00, $00, $cc,   %00110000,  %00000010
         db $00, $08, $dc,   %00110000,  %00000010
+    }
+    
+    .switch: {
+        ..on: {
+            db $02
+            db $00, $fb, $d7,   %00111000,  %00000010
+            db $00, $04, $e7,   %00111000,  %00000010
+        }
+        
+        ..off: {
+            db $02
+            db $00, $fb, $d9,   %00111000,  %00000010
+            db $00, $04, $e9,   %00111000,  %00000010
+        }
+        
     }
 }

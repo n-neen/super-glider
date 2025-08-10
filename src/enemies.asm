@@ -168,10 +168,13 @@ enemy: {
         sta !enemyy,y
         
         lda.l !roombanklong+6,x
-        sta !enemypal,y
+        sta !enemyproperty2,y
         
         lda.l !roombanklong+8,x
         sta !enemyproperty,y
+        
+        lda.l !roombanklong+10,x
+        sta !enemyproperty3,y
         
         ;enemy data that is based on its definition
         ;enemyID is a pointer to its header
@@ -234,7 +237,7 @@ enemy: {
         
         txa
         clc
-        adc #$000a                      ;advance to next enemy entry: x = x + 10
+        adc !kenemyentrylength          ;advance to next enemy entry: x = x + 10
         tax
         
         jmp -
@@ -296,7 +299,7 @@ enemy: {
         !numberofsprites    =   !localtempvar
         !localenemyx        =   !localtempvar2
         !localenemyy        =   !localtempvar3
-        !localenemypal      =   !localtempvar4
+        !localenemyproperty2      =   !localtempvar4
         
         phb
         phy
@@ -331,8 +334,8 @@ enemy: {
         lda !enemyy,x
         sta !localenemyy
         
-        lda !enemypal,x
-        sta !localenemypal
+        lda !enemyproperty2,x
+        sta !localenemyproperty2
         
         ;grab number of sprites
         lda $0000,y
@@ -368,7 +371,7 @@ enemy: {
         sta !oambuffer+2,x              ;tile
         
         lda $0003,y
-        ora !localenemypal
+        ora !localenemyproperty2
         sta !oambuffer+3,x              ;properties
         
         ..nextsprite:
@@ -415,12 +418,14 @@ enemy: {
         stz !enemymainptr,x
         stz !enemytouchptr,x
         stz !enemyproperty,x
-        stz !enemypal,x
+        stz !enemyproperty2,x
         stz !enemyspritemapptr,x
         stz !enemyxsize,x
         stz !enemyysize,x
         stz !enemyshotptr,x
         stz !enemytimer,x
+        stz !enemyvariable,x
+        stz !enemyproperty3,x
 
         rts
     }
@@ -475,7 +480,7 @@ enemy: {
                 
                 +
                 
-                lda !enemypal,x
+                lda !enemyproperty2,x
                 and #$ff00
                 xba
                 sta !enemytimer,x
@@ -499,7 +504,7 @@ enemy: {
                 lda !kfloor+32
                 sta !enemyy,x
                 
-                lda !enemypal,x
+                lda !enemyproperty2,x
                 and #$ff00
                 xba
                 sta !enemytimer,x
@@ -649,29 +654,33 @@ enemy: {
         ..duct:         dw enemy_headers_duct
         ..band:         dw enemy_headers_band
         ..lightswitch:  dw enemy_headers_lightswitch
+        ..switch:       dw enemy_headers_switch
     }
     
     
     .headers: {
-               ;spritemap ptr                   xsize,      ysize,      init routine,       main routine,           touch,                      shot
+               ;spritemap ptr                   xsize,      ysize,      init routine,       main routine,               touch,                      shot
         ..balloon:
-            dw spritemap_pointers_balloon,      $0030,      $0028,      $0000,              enemy_main_balloon,     enemy_touch_kill,           enemy_shot_balloon
+            dw spritemap_pointers_balloon,      $0030,      $0028,      $0000,              enemy_main_balloon,         enemy_touch_kill,           enemy_shot_balloon
         ..paper:
-            dw spritemap_pointers_paper,        $0048,      $0028,      $0000,              $0000,                  enemy_touch_paper,          $0000
+            dw spritemap_pointers_paper,        $0048,      $0028,      $0000,              $0000,                      enemy_touch_paper,          $0000
         ..clock:
-            dw spritemap_pointers_clock,        $0040,      $0020,      $0000,              $0000,                  enemy_touch_clock,          $0000
+            dw spritemap_pointers_clock,        $0040,      $0020,      $0000,              $0000,                      enemy_touch_clock,          $0000
         ..battery:
-            dw spritemap_pointers_battery,      $0040,      $0028,      $0000,              $0000,                  enemy_touch_battery,        $0000
+            dw spritemap_pointers_battery,      $0040,      $0028,      $0000,              $0000,                      enemy_touch_battery,        $0000
         ..bandspack:
-            dw spritemap_pointers_bandspack,    $0030,      $0030,      $0000,              $0000,                  enemy_touch_bandspack,      $0000
+            dw spritemap_pointers_bandspack,    $0030,      $0030,      $0000,              $0000,                      enemy_touch_bandspack,      $0000
         ..dart:
-            dw spritemap_pointers_dart,         $0040,      $0020,      enemy_init_dart,    enemy_main_dart,        enemy_touch_kill,           enemy_shot_dart
+            dw spritemap_pointers_dart,         $0040,      $0020,      enemy_init_dart,    enemy_main_dart,            enemy_touch_kill,           enemy_shot_dart
         ..duct:
-            dw spritemap_pointers_duct,         $0030,      $0028,      enemy_init_duct,    $0000,                  enemy_touch_duct,           $0000
+            dw spritemap_pointers_duct,         $0030,      $0028,      enemy_init_duct,    $0000,                      enemy_touch_duct,           $0000
         ..band:
-            dw spritemap_pointers_band,         $0020,      $0020,      $0000,              enemy_main_band,        $0000,                      $0000
+            dw spritemap_pointers_band,         $0020,      $0020,      $0000,              enemy_main_band,            $0000,                      $0000
         ..lightswitch:
-            dw spritemap_pointers_lightswitch,  $0030,      $0020,      $0000,              enemy_main_lightswitch, enemy_touch_lightswitch,    enemy_touch_lightswitch
+            dw spritemap_pointers_lightswitch,  $0030,      $0020,      $0000,              enemy_main_switchcommon,    enemy_touch_lightswitch,    enemy_touch_lightswitch
+        ..switch:
+            dw spritemap_pointers_switch,       $0030,      $0020,      $0000,              enemy_main_switch,          enemy_touch_switch,         enemy_touch_switch
+            
     }
     
     
@@ -689,7 +698,7 @@ enemy: {
             ;so can be used for any purpose
             ;here we only use the top bit
             
-            lda !enemypal,x
+            lda !enemyproperty2,x
             bmi +
             ;if not $8000 bit, it's a floor duct
             lda #spritemap_pointers_duct+0
@@ -746,11 +755,31 @@ enemy: {
     
     
     .main: {
-        ..lightswitch: {
+        ..switchcommon: {
             lda !enemytimer,x
             beq +
             dec !enemytimer,x
         +   rts
+        }
+        
+        ..switch: {
+            phb
+            
+            pea.w !spritemapbankword
+            plb : plb
+            
+            lda !enemyproperty2,x
+            and #$0f00
+            xba
+            clc
+            adc #spritemap_pointers_switch
+            
+            sta !enemyspritemapptr,x
+            
+            jsr enemy_main_switchcommon
+            
+            plb
+            rts
         }
         
         ..balloon: {
@@ -834,17 +863,28 @@ enemy: {
             rts
         }
         
-        ..longswitch: {
-            ;unimplemented
-            
+        ..switch: {
             ;x = enemy index
+            lda !enemytimer,x
+            bne +
+            lda !enemyproperty2,x
+            and #$f000
+            bne +
             
-            lda !enemyproperty,x
+            lda !enemyproperty3,x
             tay                         ;y = room/enemy index target for link data
-            lda #$0000                  ;a = enemy data for target
+            lda !enemyproperty,x        ;a = enemy data for target
             jsl link_make
             
-            rts
+            lda !enemyproperty2,x
+            ora #$1000                  ;#$10 bit of high byte of prop2 = flag for not doing this again
+            sta !enemyproperty2,x
+            
+            lda !enemyproperty2,x
+            eor #$0200                  ;spritemap selection
+            sta !enemyproperty2,x
+            
+        +   rts
         }
         
         ..duct: {

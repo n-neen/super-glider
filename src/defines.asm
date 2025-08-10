@@ -58,7 +58,8 @@
 !multresult         =       $102
 
 ;glider ram
-!gliderramstart     =       $0200                   ;base address
+!gliderramstart     =       $0180                   ;base address
+print "glider ram start: ", hex(!gliderramstart)
 !gliderx            =       !gliderramstart         ;x coord
 !glidery            =       !gliderramstart+2       ;y coord
 !gliderstate        =       !gliderramstart+4       ;movement state
@@ -96,9 +97,11 @@
 !bandsammo          =       !gliderramstart+58
 !fireband           =       !gliderramstart+60      ;flag to fire band at next opportunity
 !bandtimer          =       !gliderramstart+62
+print "glider ram end: ", hex(!bandtimer)
 
 ;enemy ram
-!enemystart         =       $270
+!enemystart         =       $200
+print "enemy ram start: ", hex(!enemystart)
 !enemyarraysize     =       $0028
 !enemyID            =       !enemystart
 !enemyx             =       !enemyID+!enemyarraysize+2
@@ -109,12 +112,18 @@
 !enemymainptr       =       !enemyinitptr+!enemyarraysize+2
 !enemytouchptr      =       !enemymainptr+!enemyarraysize+2
 !enemyproperty      =       !enemytouchptr+!enemyarraysize+2
-!enemypal           =       !enemyproperty+!enemyarraysize+2
-!enemyspritemapptr  =       !enemypal+!enemyarraysize+2
+!enemyproperty2     =       !enemyproperty+!enemyarraysize+2        ;high byte = properties 2, low byte = palette bitmask
+!enemyspritemapptr  =       !enemyproperty2+!enemyarraysize+2
 !enemyxsize         =       !enemyspritemapptr+!enemyarraysize+2
 !enemyysize         =       !enemyxsize+!enemyarraysize+2
 !enemyshotptr       =       !enemyysize+!enemyarraysize+2
 !enemytimer         =       !enemyshotptr+!enemyarraysize+2
+!enemyvariable      =       !enemytimer+!enemyarraysize+2
+!enemyproperty3     =       !enemyvariable+!enemyarraysize+2
+print "enemy ram end: ", hex(!enemyproperty3+!enemyarraysize+2)
+
+;length of data in room file for each enemy entry
+!kenemyentrylength  =       #$000c
 
 
 ;start of oam table to dma at nmi. 544 bytes long
@@ -188,16 +197,16 @@
 
 !roomlinktablelong      =       $7ea000
 !roomlinktableshort     =       $a000
-!roomlinktablebank      =       $7e
-!kroomlinkarraylength   =       $0080       ;sneaky constant!
+!roomlinktablebank      =       !roomlinktablelong&$ff0000>>8
+!kroomlinkarraylength   =       $0100       ;sneaky constant!
 
 ;longs
 !linktargetlong         =       !roomlinktablelong
-!linkdatalong           =       !roomlinktablelong+2
+!linkdatalong           =       !roomlinktablelong+!kroomlinkarraylength
 
 ;shorts
 !linktargetshort        =       !roomlinktableshort
-!linkdatashort          =       !roomlinktableshort+2
+!linkdatashort          =       !roomlinktableshort+!kroomlinkarraylength
 
 
 ;====================================   CONSTANTS   =======================================
@@ -324,3 +333,10 @@
 !kcolormathlightsout        =       #$0001
 !kcolormathiframes          =       #$0002
 !kcolormathcoolmode         =       #$0003
+
+
+;module label-derived defines
+
+!spritemapbanklong        =   spritemap&$ff0000
+!spritemapbankword        =   !spritemapbanklong>>8
+!spritemapbankshort       =   !spritemapbanklong>>16

@@ -279,6 +279,8 @@ newgame: {
     
     jsl obj_clearall
     
+    jsl link_clearall
+    
     lda #$0006
     sta !gamestate          ;advance to game state 6 (load room)
     
@@ -783,6 +785,7 @@ waitfornmi: {
     rep #$20
     
     ;jsr debug_showcpu
+    ;wai
     
     .waitloop: {
         lda !nmiflag
