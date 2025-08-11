@@ -99,6 +99,8 @@ link: {
             lda !linkdatalong,x         ;if link data is different, use that instead
             cmp !enemyproperty,y
             beq +
+            cmp #$ffff                  ;if link data = $ffff, delete
+            beq +
             
             sta !enemyproperty,y
             
@@ -172,9 +174,10 @@ link: {
     }
     
     .make: {
-        
         ;y = room/enemy link target
         ;a = enemy data for link (property field)
+        
+        !linkdataargument     =       !localtempvar
         
         phb
         phx
@@ -182,7 +185,9 @@ link: {
         pea.w !roomlinktablebank
         plb : plb
         
-        sta !localtempvar
+        sta !linkdataargument
+
+        jsr link_make_checkfordupes
         
         ldx #!kroomlinkarraylength
         -
@@ -190,31 +195,53 @@ link: {
         bne +
         
         ;slot found
-        lda !localtempvar
+        lda !linkdataargument
         sta !linkdatashort,x
         
         tya
         sta !linktargetshort,x
         
-        bra ++
+        bra ..return
         
         +
         dex : dex
         bpl -
-        bmi +++
+        bmi ++
         
-        ++
+        
+        ..return:
         ;returns with y = index of slot created
         txy
         plx
         plb
         rtl
         
-        +++
+        ++
         ;ran out of slots
         ;i guess we do something about that
         plx
         plb
         rtl
+        
+        ..checkfordupes: {
+            ;check table for any target entries which have this value
+            ;if we one, delete it and abort back a level
+            !linktargetargument     =   !localtempvar2
+            
+            sty !linktargetargument
+            
+            ldx #!kroomlinkarraylength
+            -
+            lda !linktargetshort,x
+            cmp !linktargetargument
+            bne +
+            jsr link_clear
+            pla : jmp link_make_return
+            +
+            dex : dex
+            bpl -
+            
+            rts
+        }
     }
 }

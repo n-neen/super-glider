@@ -867,18 +867,13 @@ enemy: {
             ;x = enemy index
             lda !enemytimer,x
             bne +
-            lda !enemyproperty2,x
-            and #$f000
-            bne +
+            lda #$0030
+            sta !enemytimer,x
             
             lda !enemyproperty3,x
             tay                         ;y = room/enemy index target for link data
             lda !enemyproperty,x        ;a = enemy data for target
             jsl link_make
-            
-            lda !enemyproperty2,x
-            ora #$1000                  ;#$10 bit of high byte of prop2 = flag for not doing this again
-            sta !enemyproperty2,x
             
             lda !enemyproperty2,x
             eor #$0200                  ;spritemap selection
