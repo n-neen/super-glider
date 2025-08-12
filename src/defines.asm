@@ -208,6 +208,11 @@ print "enemy ram end: ", hex(!enemyproperty3+!enemyarraysize+2)
 !linktargetshort        =       !roomlinktableshort
 !linkdatashort          =       !roomlinktableshort+!kroomlinkarraylength
 
+;item collected bit array
+!itembitarraylong       =       $7ed000
+!itembitarrayshort      =       $d000
+!itembitarraybank       =       $7e
+
 
 ;====================================   CONSTANTS   =======================================
 

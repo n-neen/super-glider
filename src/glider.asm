@@ -125,7 +125,7 @@ glider: {
         plp
         plb
         plx
-        rts
+        rtl
     }
     
     .draw: {
@@ -204,7 +204,7 @@ glider: {
         plb
         plx
         ply
-        rts
+        rtl
         
         ..cleartable: {
             stz !oamentrypoint

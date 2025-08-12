@@ -48,7 +48,13 @@ switch: {
             0000 = on
             0002 = off
 
+}
 
+all prizes: {
+    property3:
+        item index bit
+        each room gets one word, so a room can only have 16 prizes
+        each item gets one bit and it must be unique
 }
 
 

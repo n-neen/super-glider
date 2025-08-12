@@ -44,6 +44,8 @@ lorom
 ;======================================  B O O T  ==========================================
 ;===========================================================================================
 
+!showcpuflag  =   #$0000
+
 debugflag:
     dw $0000
 
@@ -271,8 +273,9 @@ newgame: {
     
     jsr fixlayerscroll
     
-    lda #$0020*2
+    lda #$0020
     sta !roomindex
+    asl
     tax
     lda room_list,x         ;room = room $20
     sta !roomptr
@@ -784,8 +787,10 @@ waitfornmi: {
     sta !nmiflag
     rep #$20
     
-    ;jsr debug_showcpu
-    ;wai
+    lda !showcpuflag
+    beq +
+    jsr debug_showcpu
+    +
     
     .waitloop: {
         lda !nmiflag

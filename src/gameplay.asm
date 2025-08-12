@@ -12,6 +12,7 @@ game: {
         stz !batteryactive      ;find a better place to do this
         
         jsl oam_fillbuffer
+        jsl oam_hightablejank
         jsl getinput
         
         jsl obj_handle
@@ -22,7 +23,7 @@ game: {
         jsr bands_handle
         
         jsr glider_handle
-        jsr glider_draw
+        jsl glider_draw
         jsr glider_checktrans
         
         jsl obj_collision
@@ -34,7 +35,7 @@ game: {
         
         jsr handlehud
         
-        jsl oam_hightablejank
+
         
         rtl
     }

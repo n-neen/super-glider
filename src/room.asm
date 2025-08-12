@@ -59,10 +59,13 @@ room: {
         jsl obj_tilemap_requestupdate
         jsl layer2draw          ;make sure to update layer 2 tilemap
                                 ;since nmi does not
-        
+                                
+        jsl oam_fillbuffer
+        jsl glider_draw
         jsl enemy_clearall
         jsl enemy_spawnall
         jsl enemy_runinit
+        
         
         jsl link_handle
                 
@@ -89,7 +92,9 @@ room: {
         tax
         jsr (room_transition_table,x)
         
-        ldx !roomindex
+        lda !roomindex
+        asl
+        tax
         lda room_list,x
         sta !roomptr
         
@@ -125,7 +130,7 @@ room: {
             ;also this will determine output position
             lda !roomindex
             clc
-            adc #$0002
+            adc #$0001
             sta !roomindex
             
             lda !kleftbound+7
@@ -140,7 +145,7 @@ room: {
         ..left: {
             lda !roomindex
             sec
-            sbc #$0002
+            sbc #$0001
             sta !roomindex
             
             lda !krightbound-7
@@ -155,7 +160,7 @@ room: {
         ..up: {
             lda !roomindex
             clc
-            adc #$0040
+            adc #$0020
             sta !roomindex
             
             lda !kfloor-$40
@@ -171,7 +176,7 @@ room: {
         ..down: {
             lda !roomindex
             sec
-            sbc #$0040
+            sbc #$0020
             sta !roomindex
             
             lda !kceiling+$28
@@ -1034,7 +1039,7 @@ room: {
         }
         
         ..1: {
-            dw enemy_ptr_bandspack, $0040,    $0058,    $0000,          $0000,          $0000
+            dw enemy_ptr_bandspack, $0040,    $0058,    $0000,          $0000,          $0001
             dw $ffff
         }
         
@@ -1163,17 +1168,17 @@ room: {
             ;dw enemy_ptr_balloon,       $0058,    $0048,    $f002,          $1234,          $0000
             dw enemy_ptr_balloon,       $0038,    $0048,    $1002,          $031f,          $0000
             ;dw enemy_ptr_balloon,       $0018,    $0028,    $1002,          $0cf0,          $0000
-            dw enemy_ptr_clock,         $0048,    $0060,    $0006,          $01f4,          $0000
-            dw enemy_ptr_paper,         $0038,    $0070,    $0006,          $0000,          $0000
+            dw enemy_ptr_clock,         $0048,    $0060,    $0006,          $01f4,          $0001
+            dw enemy_ptr_paper,         $0038,    $0070,    $0006,          $0000,          $0002
             dw enemy_ptr_lightswitch,   $0060,    $0060,    $0004,          $0000,          $0000
-            ;dw enemy_ptr_battery,      $002c,    $0068,    $0004,          $0000,          $0000
+            dw enemy_ptr_battery,       $002c,    $0068,    $0004,          $0000,          $0004
             ;dw enemy_ptr_bands,        $0020,    $0068,    $0004,          $0000,          $0000
             dw $ffff
         }
         
         ..21: {
             dw enemy_ptr_balloon,       $0060,    $0028,    $0002,          $0f80,          $0000
-            dw enemy_ptr_battery,       $0070,    $0070,    $0006,          $0064,          $0000
+            dw enemy_ptr_battery,       $0070,    $0070,    $0006,          $0064,          $0001
             dw enemy_ptr_duct,          $0090,    $0008,    $8004,          $2000,          $0000
             dw enemy_ptr_switch,        $0060,    $0060,    $0200,          $4000,          $2028
             dw $ffff

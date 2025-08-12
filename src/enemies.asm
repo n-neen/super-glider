@@ -663,13 +663,13 @@ enemy: {
         ..balloon:
             dw spritemap_pointers_balloon,      $0030,      $0028,      $0000,              enemy_main_balloon,         enemy_touch_kill,           enemy_shot_balloon
         ..paper:
-            dw spritemap_pointers_paper,        $0048,      $0028,      $0000,              $0000,                      enemy_touch_paper,          $0000
+            dw spritemap_pointers_paper,        $0048,      $0028,      enemy_init_prize,   $0000,                      enemy_touch_paper,          $0000
         ..clock:
-            dw spritemap_pointers_clock,        $0040,      $0020,      $0000,              $0000,                      enemy_touch_clock,          $0000
+            dw spritemap_pointers_clock,        $0040,      $0020,      enemy_init_prize,   $0000,                      enemy_touch_clock,          $0000
         ..battery:
-            dw spritemap_pointers_battery,      $0040,      $0028,      $0000,              $0000,                      enemy_touch_battery,        $0000
+            dw spritemap_pointers_battery,      $0040,      $0028,      enemy_init_prize,   $0000,                      enemy_touch_battery,        $0000
         ..bandspack:
-            dw spritemap_pointers_bandspack,    $0030,      $0030,      $0000,              $0000,                      enemy_touch_bandspack,      $0000
+            dw spritemap_pointers_bandspack,    $0030,      $0030,      enemy_init_prize,   $0000,                      enemy_touch_bandspack,      $0000
         ..dart:
             dw spritemap_pointers_dart,         $0040,      $0020,      enemy_init_dart,    enemy_main_dart,            enemy_touch_kill,           enemy_shot_dart
         ..duct:
@@ -690,6 +690,16 @@ enemy: {
             ;at the time it is spawned
             ;uhh actually this won't run because it's not during room load
             rts
+        }
+        
+        ..prize: {
+            lda !enemyproperty3,x
+            jsl itembit_check
+            bcc +
+            
+            jsr enemy_clear
+            
+        +   rts
         }
         
         ..duct: {
@@ -885,7 +895,6 @@ enemy: {
         ..duct: {
             lda !enemyproperty,x        ;low byte = room index to go to
             and #$00ff
-            asl
             sta !roomindex
             
             lda !enemyproperty,x        ;high byte = x output position
@@ -906,6 +915,10 @@ enemy: {
             clc
             adc !points
             sta !points
+            
+            lda !enemyproperty3,x
+            jsl itembit_set
+            
             jsr enemy_clear
             rts
         }
@@ -918,6 +931,9 @@ enemy: {
             sta !gliderlives
             cld
             
+            lda !enemyproperty3,x
+            jsl itembit_set
+            
             jsr enemy_clear
             rts
         }
@@ -929,6 +945,9 @@ enemy: {
             adc !gliderbatterytime
             sta !gliderbatterytime
             
+            lda !enemyproperty3,x
+            jsl itembit_set
+            
             jsr enemy_clear
             rts
         }
@@ -938,6 +957,9 @@ enemy: {
             clc
             adc !kbandammoamount
             sta !bandsammo
+            
+            lda !enemyproperty3,x
+            jsl itembit_set
             
             jsr enemy_clear
             rts

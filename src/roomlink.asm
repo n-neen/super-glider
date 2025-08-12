@@ -73,7 +73,6 @@ link: {
             
             and #$ff00
             xba
-            asl
             cmp !roomindex
             beq +
             
@@ -243,5 +242,56 @@ link: {
             
             rts
         }
+    }
+}
+
+itembit: {
+    !itembit        =       !localtempvar
+    
+    .check: {
+        ;argument:
+        ;a = item index bit
+        
+        ;returns:
+        ;carry set = item collected
+        ;carry clear = item not collected
+        phx
+        
+        sta !itembit
+        
+        lda !roomindex
+        asl
+        tax
+        
+        lda.l !itembitarraylong,x
+        bit !itembit
+        bne +
+        
+        clc
+        plx
+        rtl
+        
+        +
+        sec
+        plx
+        rtl
+    }
+    
+    .set: {
+        ;argument:
+        ;a = item index bit
+        phx
+        
+        sta !itembit
+        
+        lda !roomindex
+        asl
+        tax
+        lda.l !itembitarraylong,x
+        ora !itembit
+        sta.l !itembitarraylong,x
+        
+        plx
+        rtl
     }
 }
