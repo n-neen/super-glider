@@ -51,7 +51,7 @@ link: {
         ..slotfound: {
             ;if carry set, we found an entry that pertains to this room
             lda !linktargetshort,x
-            bit #$0001                      ;if #$0001 bit, this is for a room object
+            bit #$0001                     ;if #$0001 bit, this is for a room object
             bne +
             jsr link_handle_checkenemy     ;if not, it's for an enemy
             bra ++
@@ -87,58 +87,106 @@ link: {
         }
         
         ..checkenemy: {
+            !enemypropertypointer       =       !localtempvar
+            
             ;x = index into room link table
             phx
             phy
+            phb
+            
+            phk
+            plb
             
             lda !linktargetlong,x
-            and #$00ff                  ;y = enemy index in this room
+            and #$003e                  ;y = enemy index in this room
             tay
             
+            phx
+            lda !linktargetlong,x
+            and #$00c0
+            lsr #5
+            tax
+            lda link_handle_checkenemy_table,x
+            sta !enemypropertypointer
+            plx
+            
             lda !linkdatalong,x         ;if link data is different, use that instead
-            cmp !enemyproperty,y
+            cmp (!enemypropertypointer),y
             beq +
             cmp #$ffff                  ;if link data = $ffff, delete
             beq +
             
-            sta !enemyproperty,y
+            sta (!enemypropertypointer),y
             
+            plb
             ply
             plx
             rts
             
-        +   ply
+        +   plb
+            ply
             plx
             jsr link_clear              ;if they are the same, link is not necessary
             
             rts
+            
+            
+            ...table: {
+                dw !enemyproperty,
+                   !enemyproperty2,
+                   !enemyproperty3
+            }
         }
         
         ..checkobject: {
             ;x = index into room link table
+            !objpropertypointer     =   !localtempvar
+            
             phx
             phy
+            phb
+            
+            phk
+            plb
             
             lda !linktargetlong,x
-            and #$00fe
+            and #$003e
             tay
             
+            phx
+            lda !linktargetlong,x
+            and #$00c0
+            lsr #5
+            tax
+            lda link_handle_checkobject_table,x
+            sta !objpropertypointer
+            plx
+            
             lda !linkdatalong,x
-            cmp !objproperty,y
+            cmp (!objpropertypointer),y
             beq +
             
-            sta !objproperty,y
+            sta (!objpropertypointer),y
             
+            plb
             ply
             plx
             rts
             
             
-        +   ply
+        +   plb
+            ply
             plx
             jsr link_clear
             rts
+            
+            ...table: {
+                dw !objvariable,
+                   !objproperty,
+                   !objpal
+            }
         }
+        
     }
     
     .clearall: {
@@ -244,6 +292,7 @@ link: {
         }
     }
 }
+
 
 itembit: {
     !itembit        =       !localtempvar

@@ -31,19 +31,35 @@ battery: {
 }
 
 switch: {
-    properties2 (enemypal)
-        $1000 bit = boolean for not hitting constantly (once per room)
-        $0200 bit = spritemap selection
     property
         data for target (its property)
+    property2 (enemypal)
+        $0200 bit = spritemap selection
     property3
-        target for switch:
-            aabb, where
-            aa = room index
-            bb = enemy or object target
-                $01 bit of bb = select object (0 = enemy)
-                all indices are even numbers so if it's odd, it's object index+1
-    enemyvariable
+        %rrrrrrrrssiiiiit
+         8421842184218421
+         000000000000
+         00000000
+         0000
+         
+        r = room index of target
+        s = property select of target
+        t = type select: enemy (0) or object(1)
+        i = index of target
+        
+        table for s:
+        
+        for objects:
+            dw !objvariable,        0       00
+               !objproperty,        2       40
+               !objpal              4       80
+               
+        for enemies:
+            dw !enemyproperty,      0       00
+               !enemyproperty2,     2       40
+               !enemyproperty3      4       80
+
+    enemyvariable:
         spritemap select
             0000 = on
             0002 = off
@@ -51,6 +67,7 @@ switch: {
 }
 
 all prizes: {
+    (battery, extra life, clock, bands, foil)
     property3:
         item index bit
         each room gets one word, so a room can only have 16 prizes
@@ -61,3 +78,15 @@ all prizes: {
 
 dart:
     unfinished, todo
+    
+    
+    
+roomlink: {
+    %rrrrrrrrssiiiiit, $dddd
+    
+    r = room index of target
+    s = property select of target
+    t = type select (enemy or object)
+    
+    d = data to write
+}

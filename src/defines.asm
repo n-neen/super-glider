@@ -213,6 +213,12 @@ print "enemy ram end: ", hex(!enemyproperty3+!enemyarraysize+2)
 !itembitarrayshort      =       $d000
 !itembitarraybank       =       $7e
 
+!klinkselectobj         =       #$0001
+!klinkselectenemy       =       #$0000
+!klinkproperty1         =       $0000
+!klinkproperty2         =       $0040
+!klinkproperty3         =       $0080
+
 
 ;====================================   CONSTANTS   =======================================
 

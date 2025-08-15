@@ -481,13 +481,11 @@ room: {
                 ;!kobjectentrylength in defines.asm!
     .objlist: { ;obj type           x      y       palette  variable
         ..0: {                                              ;like room ptr for stairs, or vent height
-            
-            
-            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
-            dw #obj_ptr_vent,       $0006, $001a,  $0000,   $0013
-            dw #obj_ptr_vent,       $0012, $001a,  $0000,   $0020
-            dw #obj_ptr_vent,       $001a, $001a,  $0000,   $0020
-            dw #obj_ptr_upstairs,   $000e, $0005,  $0400,   $0000
+            dw #obj_ptr_vent,       $0006, $001a,  $0000,   $0050           ;30
+            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000           ;2e
+            dw #obj_ptr_vent,       $0012, $001a,  $0000,   $0020           ;2c
+            dw #obj_ptr_vent,       $001a, $001a,  $0000,   $0020           ;2a
+            dw #obj_ptr_upstairs,   $000e, $0005,  $0400,   $0000           ;28
             dw $ffff
         }
         
@@ -1033,13 +1031,13 @@ room: {
 
     .enemylist: {
         ..0: {
-            ;enemy type             x,        y,        pal/prop2,      properties,     property3
-            dw enemy_ptr_duct,      $0020,    $0008,    $8004,          $9021,          $0000
-            dw $ffff
-        }
-        
-        ..1: {
-            dw enemy_ptr_bandspack, $0040,    $0058,    $0000,          $0000,          $0001
+            ;enemy type             x,        y,         property,     prop2,           property3
+            dw enemy_ptr_duct,      $0020,    $0008,     $9021,        $8004,           $0000
+            dw $ffff                                                 
+        }                                                            
+                                                                     
+        ..1: {                                                       
+            dw enemy_ptr_bandspack, $0040,    $0058,     $0000,        $0000,           $0001
             dw $ffff
         }
         
@@ -1164,23 +1162,22 @@ room: {
         }
         
         ..20: {
-            ;enemy type                 x,        y,        property2,      property,       property3
-            ;dw enemy_ptr_balloon,       $0058,    $0048,    $f002,          $1234,          $0000
-            dw enemy_ptr_balloon,       $0038,    $0048,    $1002,          $031f,          $0000
-            ;dw enemy_ptr_balloon,       $0018,    $0028,    $1002,          $0cf0,          $0000
-            dw enemy_ptr_clock,         $0048,    $0060,    $0006,          $01f4,          $0001
-            dw enemy_ptr_paper,         $0038,    $0070,    $0006,          $0000,          $0002
-            dw enemy_ptr_lightswitch,   $0060,    $0060,    $0004,          $0000,          $0000
-            dw enemy_ptr_battery,       $002c,    $0068,    $0004,          $0000,          $0004
-            ;dw enemy_ptr_bands,        $0020,    $0068,    $0004,          $0000,          $0000
-            dw $ffff
-        }
-        
-        ..21: {
-            dw enemy_ptr_balloon,       $0060,    $0028,    $0002,          $0f80,          $0000
-            dw enemy_ptr_battery,       $0070,    $0070,    $0006,          $0064,          $0001
-            dw enemy_ptr_duct,          $0090,    $0008,    $8004,          $2000,          $0000
-            dw enemy_ptr_switch,        $0060,    $0060,    $0200,          $4000,          $2028
+            ;enemy type                 x,        y,       property,    property2,         property3
+            dw enemy_ptr_balloon,       $0058,    $0048,   $1234,       $f002,             $0000
+            dw enemy_ptr_balloon,       $0038,    $0048,   $031f,       $1002,             $0000
+            dw enemy_ptr_balloon,       $0018,    $0028,   $0cf0,       $1002,             $0000
+            dw enemy_ptr_clock,         $0048,    $0060,   $01f4,       $0006,             $0001
+            dw enemy_ptr_paper,         $0038,    $0070,   $0000,       $0006,             $0002
+            dw enemy_ptr_lightswitch,   $0060,    $0060,   $0000,       $0004,             $0000
+            dw enemy_ptr_switch,        $0060,    $0040,   $0013,       $0200,             $0030|$0001      ;room 0, object $30
+            dw $ffff                                      
+        }                                                 
+                                                          
+        ..21: {                                           
+            dw enemy_ptr_balloon,       $0060,    $0028,   $0f80,       $0002,             $0000
+            dw enemy_ptr_battery,       $0070,    $0070,   $0064,       $0006,             $0001
+            dw enemy_ptr_duct,          $0090,    $0008,   $2000,       $8004,             $0000
+            dw enemy_ptr_switch,        $0060,    $0060,   $4000,       $0200,             $2028
             dw $ffff
         }
         

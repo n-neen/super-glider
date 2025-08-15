@@ -168,10 +168,10 @@ enemy: {
         sta !enemyy,y
         
         lda.l !roombanklong+6,x
-        sta !enemyproperty2,y
+        sta !enemyproperty,y
         
         lda.l !roombanklong+8,x
-        sta !enemyproperty,y
+        sta !enemyproperty2,y
         
         lda.l !roombanklong+10,x
         sta !enemyproperty3,y
