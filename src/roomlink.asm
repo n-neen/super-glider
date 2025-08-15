@@ -7,16 +7,20 @@
 ;!roomlinktablebank      =       $7e
 
 ;entry:
-;aabb, cccc
 
-;aa     = link target room
-;bb     = link target index
-;       $01 bit of bb = select enemy (00) or object (01)
+;        %rrrrrrrrssiiiiit, $dddd
+;         8421842184218421
+;         000000000000
+;         00000000
+;         0000
+;         
+;        r = room index of target
+;        s = property select of target
+;        t = type select: enemy (0) or object(1)
+;        i = index of target
+;
+;        d = data for target
 
-;enemy and object slot indices are always even numbers
-;so just mask this bit out at the time you use that byte
-
-;cccc   = enemy/object property
 
 ;in room loading, after enemies are loaded, do:
 ;jsl link_handler
@@ -24,7 +28,7 @@
 ;enemies which use this will:
 
 ;lda !enemyproperty,x
-;tay                         ;y = room/enemy index target for link data
+;tay                        ;y = room/enemy index target for link data
 ;lda #$data                 ;a = enemy data for target
 ;lda #$data|#$0001          ;a = room object data for target
 ;jsl link_make

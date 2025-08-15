@@ -889,6 +889,18 @@ enemy: {
             eor #$0200                  ;spritemap selection
             sta !enemyproperty2,x
             
+            ;make table entry which keeps switch switched
+            stx !localtempvar
+            lda !roomindex
+            ;asl
+            xba
+            ora !localtempvar           ;y = target for this room, this enemy
+            ora #$0040
+            tay
+            
+            lda !enemyproperty2,x
+            jsl link_make
+            
         +   rts
         }
         
