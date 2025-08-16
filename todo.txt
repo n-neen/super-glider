@@ -1,0 +1,32 @@
+todo: {
+    enemies: {
+        drip
+        dart
+        basketball
+        toaster
+        copter
+        the cat
+    }
+    
+    objects: {
+        tv
+        microwave
+        filing cabinet
+        hip-pole lamp
+    }
+    
+    backgrounds: {
+        swinger's room
+        unfinished room
+        many-windowed room
+        bathroom
+        library
+    }
+    
+    other: {
+        end of game, stars
+        OR
+        end of game, window
+    }
+}
+

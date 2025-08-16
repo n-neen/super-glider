@@ -437,6 +437,89 @@ enemy: {
             rts
         }
         
+        ..drip: {
+            ...wait: {
+                lda !enemytimer,x
+                beq +
+                dec !enemytimer,x
+                rts
+                
+                +
+                
+                lda #enemy_instruction_drip_prepare
+                sta !enemymainptr,x
+                rts
+            }
+            
+            ...prepare: {
+                lda !framecounter
+                bit #$0001
+                bne ++
+                
+                
+                ;lda !framecounter
+                and #$0018
+                lsr #2
+                beq +
+                ;asl
+                clc
+                adc #spritemap_pointers_drip
+                sta !enemyspritemapptr,x
+                
+                ++
+                rts
+                
+                +
+                
+                lda #spritemap_pointers_drip
+                sta !enemyspritemapptr,x
+                
+                lda #enemy_instruction_drip_drop
+                sta !enemymainptr,x
+                rts
+            }
+            
+            ...drop: {
+                phy
+                
+                lda #enemy_instruction_drip_wait
+                sta !enemymainptr,x
+                
+                lda !enemyproperty,x
+                sta !enemytimer,x
+                
+                lda #enemy_ptr_drop
+                sta !enemydynamicspawnslot
+                
+                lda !enemyx,x
+                sta !enemydynamicspawnslot+2
+                
+                lda !enemyy,x
+                sta !enemydynamicspawnslot+4
+                
+                lda #$0002
+                sta !enemydynamicspawnslot+8
+                
+                ldy #!enemyarraysize
+                -
+                lda !enemyID,y
+                beq +
+                
+                dey : dey
+                bpl -
+                bmi ++
+                
+                +
+                
+                ldx #!enemydynamicspawnslot
+                jsr enemy_spawn
+                
+                ++
+                ply
+                rts
+            }
+        }
+        
         ..balloon: {
             ...moveup: {
                 ;x = enemy index
@@ -519,7 +602,7 @@ enemy: {
                 dec !enemytimer,x
                 bpl +
                 
-                lda #enemy_main_balloon
+                lda #enemy_instruction_drip_drop
                 sta !enemymainptr,x
                 
             +   rts
@@ -656,7 +739,7 @@ enemy: {
         ..lightswitch:  dw enemy_headers_lightswitch
         ..switch:       dw enemy_headers_switch
         ..drip:         dw enemy_headers_drip
-        
+        ..drop:         dw enemy_headers_drop
         ;todo: drip
         ;todo: basketball
         ;todo: foil
@@ -687,12 +770,20 @@ enemy: {
         ..switch:
             dw spritemap_pointers_switch,       $0030,      $0020,      $0000,              enemy_main_switch,          enemy_touch_switch,         enemy_touch_switch
         ..drip:
-            dw spritemap_pointers_drip,         $0018,      $0018,      $0000,              enemy_main_drip,            enemy_touch_drip,           $0000
+            dw spritemap_pointers_drip,         $0018,      $0018,      enemy_init_drip,    enemy_main_drip,            enemy_touch_drip,           $0000
+        ..drop:
+            dw spritemap_pointers_drip+8,       $0028,      $0020,      $0000,              enemy_main_drop,            enemy_touch_drip,           $0000
             
     }
     
     
     .init: {
+        ..drip: {
+            lda !enemyproperty,x
+            sta !enemytimer,x
+            rts
+        }
+        
         ..band: {
             ;use glider direction to determine band direction
             ;at the time it is spawned
@@ -773,8 +864,62 @@ enemy: {
     
     
     .main: {
+        ..drop: {
+            
+            lda !enemyproperty,x
+            bne +
+            
+            lda !enemytimer,x
+            inc
+            sta !enemytimer,x
+            cmp #$000a
+            bmi +++
+            
+            sta !enemyproperty,x
+            lda #spritemap_pointers_drip+10
+            sta !enemyspritemapptr,x
+            
+            +
+            
+            lda !framecounter
+            and #$0008
+            lsr #2
+            clc
+            adc #spritemap_pointers_drip+10
+            sta !enemyspritemapptr,x
+            
+            lda !enemysuby,x
+            
+            clc
+            adc #$8000
+            sta !enemysuby,x
+            
+            lda !enemyy,x
+            adc #$0002
+            sta !enemyy,x
+            
+            cmp !kfloor
+            bpl ++
+            
+            +++
+            rts
+            
+            ++
+            jsr enemy_clear
+            
+            rts
+            
+            ...frames: {
+                dw #spritemap_pointers_drip+8
+                dw #spritemap_pointers_drip+10
+                dw #spritemap_pointers_drip+12
+            }
+        }
+        
+        
         ..drip: {
-            ;todo: drop the drip
+            lda #enemy_instruction_drip_wait
+            sta !enemymainptr,x
             rts
         }
         
@@ -867,6 +1012,8 @@ enemy: {
     .touch: {
         ..drip: {
             ;todo: kill, or, if on fire, put out fire
+            
+            jsr enemy_touch_kill
             rts
         }
         

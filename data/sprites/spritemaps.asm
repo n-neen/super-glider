@@ -86,13 +86,13 @@ spritemap: {
                spritemap_drip_2,
                spritemap_drip_3,
                spritemap_drip_4,
-               spritemap_drip_5
+               spritemap_drip_5,
+               spritemap_drip_6
         }
     }
     
     
-                ;starting tile in vram
-    .glider: {  ;$00
+    .glider: {
         ..idle: {
             db $00
         }
@@ -344,6 +344,11 @@ spritemap: {
         ..5: {
             db $01
             db $00, $00, $3a,   %00111001,  %00000010
+        }
+        
+        ..6: {
+            db $01
+            db $00, $00, $3c,   %00111001,  %00000010
         }
     }
 }

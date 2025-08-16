@@ -97,7 +97,7 @@ bands: {
         
         dey : dey
         bpl -
-        
+        bmi +
         
         ++
         ldx #!enemydynamicspawnslot     ;x = pointer to enemy population entry in ram
