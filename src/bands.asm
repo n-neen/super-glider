@@ -74,21 +74,21 @@ bands: {
         dec !bandsammo
         
         lda #enemy_ptr_band
-        sta !enemydynamicspawnslot
+        sta !enemydynamicspawnslot              ;0 = ptr
         
         lda !gliderx
-        sta !enemydynamicspawnslot+2
+        sta !enemydynamicspawnslot+2            ;2 = x
         
         lda !glidery
-        sta !enemydynamicspawnslot+4
-        
-        lda !kbandspalette
-        sta !enemydynamicspawnslot+6
+        sta !enemydynamicspawnslot+4            ;4 = y
         
         lda !gliderdir
         xba
         asl #7
-        sta !enemydynamicspawnslot+8
+        sta !enemydynamicspawnslot+6            ;6 = direction (property)
+        
+        lda !kbandspalette
+        sta !enemydynamicspawnslot+8            ;8 = palette (property 2)
         
         ldy #!enemyarraysize
         -

@@ -655,6 +655,12 @@ enemy: {
         ..band:         dw enemy_headers_band
         ..lightswitch:  dw enemy_headers_lightswitch
         ..switch:       dw enemy_headers_switch
+        ..drip:         dw enemy_headers_drip
+        
+        ;todo: drip
+        ;todo: basketball
+        ;todo: foil
+        ;todo: toaster
     }
     
     
@@ -680,6 +686,8 @@ enemy: {
             dw spritemap_pointers_lightswitch,  $0030,      $0020,      $0000,              enemy_main_switchcommon,    enemy_touch_lightswitch,    enemy_touch_lightswitch
         ..switch:
             dw spritemap_pointers_switch,       $0030,      $0020,      $0000,              enemy_main_switch,          enemy_touch_switch,         enemy_touch_switch
+        ..drip:
+            dw spritemap_pointers_drip,         $0018,      $0018,      $0000,              enemy_main_drip,            enemy_touch_drip,           $0000
             
     }
     
@@ -765,6 +773,11 @@ enemy: {
     
     
     .main: {
+        ..drip: {
+            ;todo: drop the drip
+            rts
+        }
+        
         ..switchcommon: {
             lda !enemytimer,x
             beq +
@@ -852,6 +865,12 @@ enemy: {
     
     
     .touch: {
+        ..drip: {
+            ;todo: kill, or, if on fire, put out fire
+            rts
+        }
+        
+        
         ..lightswitch: {
             ;turn off or on the lights
             lda !enemytimer,x

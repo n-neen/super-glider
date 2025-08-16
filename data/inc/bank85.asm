@@ -31,5 +31,10 @@ dartdata:
         ;loading table entry has a size of 1
         ;and you target a sprite palette's transparent color
 
+dripdata:
+    .graphics:
+        incbin "./data/sprites/drip.gfx"
+    .palette:
+        incbin "./data/sprites/drip.pal"
 
 print "bank $85 end: ", pc

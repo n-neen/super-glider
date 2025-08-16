@@ -79,6 +79,15 @@ spritemap: {
             dw spritemap_switch_on,
                spritemap_switch_off
         }
+        
+        ..drip: {
+            dw spritemap_drip_0,
+               spritemap_drip_1,
+               spritemap_drip_2,
+               spritemap_drip_3,
+               spritemap_drip_4,
+               spritemap_drip_5
+        }
     }
     
     
@@ -304,5 +313,37 @@ spritemap: {
             db $00, $04, $e9,   %00111000,  %00000010
         }
         
+    }
+    
+    .drip: {
+        ..0: {
+            db $01
+            db $00, $00, $30,   %00111001,  %00000010
+        }
+        
+        ..1: {
+            db $01
+            db $00, $00, $32,   %00111001,  %00000010
+        }
+        
+        ..2: {
+            db $01
+            db $00, $00, $34,   %00111001,  %00000010
+        }
+        
+        ..3: {
+            db $01
+            db $00, $00, $36,   %00111001,  %00000010
+        }
+        
+        ..4: {
+            db $01
+            db $00, $00, $38,   %00111001,  %00000010
+        }
+        
+        ..5: {
+            db $01
+            db $00, $00, $3a,   %00111001,  %00000010
+        }
     }
 }
