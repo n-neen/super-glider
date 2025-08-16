@@ -132,6 +132,8 @@ print "enemy ram end: ", hex(!enemyproperty3+!enemyarraysize+2)
 !oamhightable            =      !oambuffer+$200
 ;end: $720
 
+!objdyntilemap      =       $730
+
 !housestart              =      $800
 !houseptr                =      !housestart
 !roomptr                 =      !housestart+2
@@ -165,6 +167,7 @@ print "enemy ram end: ", hex(!enemyproperty3+!enemyarraysize+2)
 
 !objectarraystart   =       $1000
 !objectarraysize    =       $0030
+print "object ram start: ", hex(!objectarraystart)
 !objID              =       !objectarraystart+2
 !objxsize           =       !objID+!objectarraysize+2
 !objysize           =       !objxsize+!objectarraysize+2
@@ -175,10 +178,9 @@ print "enemy ram end: ", hex(!enemyproperty3+!enemyarraysize+2)
 !objroutineptr      =       !objpal+!objectarraysize+2
 !objproperty        =       !objroutineptr+!objectarraysize+2
 !objvariable        =       !objproperty+!objectarraysize+2
+print "object ram start: ", hex(!objvariable+!objectarraysize+2)
 
-!objdyntilemap      =       $730
-
-;arrays' ends       last define + !objectarraysize for total size
+;arrays' ends       last define + !objectarraysize+2 for total size
 
 
 

@@ -1023,11 +1023,11 @@
 [source files]
 0000 b6e86ce8 c:/users/keenan/desktop/glider pro snes/snes/src/main.asm
 0001 f2de79b3 c:/users/keenan/desktop/glider pro snes/snes/src/loading.asm
-0002 1fd7f540 c:/users/keenan/desktop/glider pro snes/snes/src/room.asm
+0002 837400b1 c:/users/keenan/desktop/glider pro snes/snes/src/room.asm
 0003 94c632d0 c:/users/keenan/desktop/glider pro snes/snes/src/gameplay.asm
 0004 e9e445bd c:/users/keenan/desktop/glider pro snes/snes/src/glider.asm
 0005 77f43655 c:/users/keenan/desktop/glider pro snes/snes/src/bands.asm
-0006 b2e495ea c:/users/keenan/desktop/glider pro snes/snes/src/enemies.asm
+0006 ffe5b2f9 c:/users/keenan/desktop/glider pro snes/snes/src/enemies.asm
 0007 e053d70b c:/users/keenan/desktop/glider pro snes/snes/data/sprites/spritemaps.asm
 0008 df0de9d7 c:/users/keenan/desktop/glider pro snes/snes/src/objects.asm
 0009 4bee6bf9 c:/users/keenan/desktop/glider pro snes/snes/src/roomlink.asm
@@ -1042,7 +1042,7 @@
 0012 ab9d1924 c:/users/keenan/desktop/glider pro snes/snes/super_glider.asm
 
 [rom checksum]
-808ae338
+5d5d0005
 
 [addr-to-line mapping]
 80:8000 0000:00000032

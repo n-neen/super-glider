@@ -591,7 +591,7 @@ enemy: {
                 bmi +
                 rts
                 +
-                lda !kfloor+35
+                lda #$00ea
                 sta !enemyy,x
                 
                 lda !enemyproperty2,x

@@ -1177,7 +1177,7 @@ room: {
             dw enemy_ptr_balloon,       $0060,    $0028,   $0f80,       $3002,             $0000
             dw enemy_ptr_battery,       $0070,    $0070,   $0064,       $0006,             $0001
             dw enemy_ptr_duct,          $0090,    $0008,   $2000,       $8004,             $0000
-            dw enemy_ptr_switch,        $0060,    $0060,   $4000,       $0200,             $2028
+            dw enemy_ptr_switch,        $0068,    $0060,   $4000,       $0200,             $2028
             dw $ffff
         }
         
