@@ -42,6 +42,7 @@ enemy: {
         plx
         rts
         
+        
         ..calchitbox: {
             ;!hitboxleft   ;glider x position - hitbox size
             ;!hitboxright  ;glider x position + hitbox size
@@ -590,7 +591,7 @@ enemy: {
                 bmi +
                 rts
                 +
-                lda !kfloor+32
+                lda !kfloor+35
                 sta !enemyy,x
                 
                 lda !enemyproperty2,x
@@ -608,7 +609,7 @@ enemy: {
                 dec !enemytimer,x
                 bpl +
                 
-                lda #enemy_instruction_balloon_moveup
+                lda #enemy_main_balloon
                 sta !enemymainptr,x
                 
             +   rts
@@ -743,19 +744,19 @@ enemy: {
 ;===========================================================================================
     
     .ptr: {
-        ..balloon:      dw enemy_headers_balloon
-        ..paper:        dw enemy_headers_paper
-        ..clock:        dw enemy_headers_clock
-        ..battery:      dw enemy_headers_battery
-        ..bandspack:    dw enemy_headers_bandspack
-        ..dart:         dw enemy_headers_dart
-        ..duct:         dw enemy_headers_duct
-        ..band:         dw enemy_headers_band
-        ..lightswitch:  dw enemy_headers_lightswitch
-        ..switch:       dw enemy_headers_switch
-        ..drip:         dw enemy_headers_drip
-        ..drop:         dw enemy_headers_drop
-        ;todo: drip
+        ..balloon:      dw enemy_headers_balloon                ;
+        ..paper:        dw enemy_headers_paper                  ;
+        ..clock:        dw enemy_headers_clock                  ;
+        ..battery:      dw enemy_headers_battery                ;
+        ..bandspack:    dw enemy_headers_bandspack              ;
+        ..dart:         dw enemy_headers_dart                   ;
+        ..duct:         dw enemy_headers_duct                   ;
+        ..band:         dw enemy_headers_band                   ;
+        ..lightswitch:  dw enemy_headers_lightswitch            ;
+        ..switch:       dw enemy_headers_switch                 ;
+        ..drip:         dw enemy_headers_drip                   ;x
+        ..drop:         dw enemy_headers_drop                   ;
+        ..foil:         dw enemy_headers_foil
         ;todo: basketball
         ;todo: foil
         ;todo: toaster
@@ -788,7 +789,8 @@ enemy: {
             dw spritemap_pointers_drip,         $0018,      $0018,      enemy_init_drip,    enemy_main_drip,            enemy_touch_drip,           $0000
         ..drop:
             dw spritemap_pointers_drip+8,       $0028,      $0020,      $0000,              enemy_main_drop,            enemy_touch_drip,           $0000
-            
+        ..foil:
+            dw spritemap_pointers_foil,         $0048,      $0020,      $0000,              $0000,                      enemy_touch_foil,           $0000
     }
 
 
@@ -982,8 +984,8 @@ enemy: {
         }
         
         ..balloon: {
-            jsr enemy_instruction_balloon_moveup
             jsr enemy_instruction_balloon_checkheight
+            jsr enemy_instruction_balloon_moveup
             rts
         }
         
@@ -1053,6 +1055,19 @@ enemy: {
             rts
         }
         
+        ..foil: {
+            ;add to foil amount
+            ;change sprite palette 7:
+                ;set !foilpalette, write nmi handler to dma one palette line
+            
+            lda !foilamount
+            clc
+            adc !kfoilpackamount
+            sta !foilamount
+            
+            jsr enemy_clear
+            rts
+        }
         
         ..lightswitch: {
             ;turn off or on the lights
@@ -1070,9 +1085,49 @@ enemy: {
         }
         
         ..kill: {
+            lda !foilamount
+            bne ...foil
+            
             lda !kgliderstatelostlife
             sta !glidernextstate
+            
+            ...foilreturn:
             rts
+            
+            ...foil: {
+                phx
+                phb
+                
+                phk
+                plb
+                
+                lda !foilamount
+                beq +
+                dec
+                sta !foilamount
+                ;beq +
+                
+                lda !kliftstateup
+                sta !gliderliftstate
+                
+                lda !gliderdir
+                asl
+                tax
+                lda enemy_touch_kill_foil_table,x
+                clc
+                adc !gliderx
+                sta !gliderx
+                
+                ;play hit sound, some day
+                
+            +   plb
+                plx
+                bra enemy_touch_kill_foilreturn
+        
+                ....table: {
+                    dw $fffe, $0002
+                }
+            }
         }
         
         ..switch: {

@@ -51,9 +51,13 @@ gliderdata:
         incbin "./data/sprites/glider.gfx"
     
     .palette:
-        ;incbin "./data/sprites/glider.pal"
+        ;incbin "./data/sprites/glider.pal"     ;um... i do not recall doing this
         dw $2940, $0000, $6739, $7ec7, $2108, $5ef7, $39ac, $24a4,
            $2529, $39ce, $4e73, $44c4, $7fff, $5294, $3c3c, $643c
+           
+    .foilpalette
+        dw $0000, $0421, $0c63, $0421, $0c63, $0421, $0c63, $0421,
+           $1ce7, $1084, $0421, $0c63, $0c63, $0421, $1ce7, $1ce7
 
 
 ;===========================================================================================

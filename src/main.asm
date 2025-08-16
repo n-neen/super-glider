@@ -765,6 +765,7 @@ nmi: {
     jsr updateppuregisters      ;read wram buffer and write register
     jsr readcontroller
     jsr hud_uploadtilemappartial
+    jsr foilpalette
     
     
     stz !nmiflag
@@ -780,6 +781,20 @@ nmi: {
     .lag
     inc !lagcounter
     bra .return
+}
+
+foilpalette: {
+    lda !foilamount
+    beq +
+    
+    lda #$0005*8                ;sprite 5
+    sta !dmaloadindex
+    jsr load_sprite_palette
+    rts
+    
++   stz !dmaloadindex           ;if no foil, upload normal palette
+    jsr load_sprite_palette
+    rts
 }
 
 

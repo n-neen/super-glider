@@ -596,20 +596,22 @@ endmacro
 loadingtable: {
     .sprites: {
         ..gfx: {          ;long pointer,            size,  baseaddr,                unused
-            %loadtablentry(#gliderdata_graphics,    $0a00, !spritestart,            $00)     ;glider  = 00
-            %loadtablentry(#balloondata_graphics,   $0800, !spritestart+$0500,      $01)     ;balloon = 01
-            %loadtablentry(#prizedata_graphics,     $0e00, !spritestart+$0900,      $02)     ;prizes  = 02
-            %loadtablentry(#dartdata_graphics,      $0700, !spritestart+$1000,      $03)     ;dart    = 03
-            %loadtablentry(#dripdata_graphics,      $0400, !spritestart+$1300,      $04)     ;drip    = 04
+            %loadtablentry(#gliderdata_graphics,    $0a00, !spritestart,            $00)     ;glider        = 00
+            %loadtablentry(#balloondata_graphics,   $0800, !spritestart+$0500,      $01)     ;balloon       = 01
+            %loadtablentry(#prizedata_graphics,     $0e00, !spritestart+$0900,      $02)     ;prizes        = 02
+            %loadtablentry(#dartdata_graphics,      $0700, !spritestart+$1000,      $03)     ;dart          = 03
+            %loadtablentry(#dripdata_graphics,      $0400, !spritestart+$1300,      $04)     ;drip          = 04
+            %loadtablentry(#gliderdata_graphics,    $0400, !spritestart+$1300,      $04)     ;foil glider   = 05
             
         }
         
         ..palettes: {
-           %loadtablentry(#gliderdata_palette,      $0020, !spritepalette+$0070,    $00)     ;glider  = 00      ;sprite line 7
-           %loadtablentry(#balloondata_palette,     $0020, !spritepalette+$0010,    $01)     ;balloon = 01      ;sprite line 1
-           %loadtablentry(#prizedata_palette,       $0060, !spritepalette+$0020,    $02)     ;prizes  = 02      ;sprite line 2
-           %loadtablentry(#gliderdata_palette,      $0020, !spritepalette+$0000,    $03)     ;dart    = 03      ;sprite line 0
-           %loadtablentry(#dripdata_palette,        $0020, !spritepalette+$0050,    $04)     ;drip    = 04      ;sprite line 0
+           %loadtablentry(#gliderdata_palette,      $0020, !spritepalette+$0070,    $00)     ;glider        = 00      ;sprite line 7
+           %loadtablentry(#balloondata_palette,     $0020, !spritepalette+$0010,    $01)     ;balloon       = 01      ;sprite line 1
+           %loadtablentry(#prizedata_palette,       $0060, !spritepalette+$0020,    $02)     ;prizes        = 02      ;sprite line 2
+           %loadtablentry(#gliderdata_palette,      $0020, !spritepalette+$0000,    $03)     ;dart          = 03      ;sprite line 0
+           %loadtablentry(#dripdata_palette,        $0020, !spritepalette+$0050,    $04)     ;drip          = 04      ;sprite line 0
+           %loadtablentry(#gliderdata_foilpalette,  $0020, !spritepalette+$0070,    $05)     ;foil glider   = 05      ;sprite line 7
         }
     }
     

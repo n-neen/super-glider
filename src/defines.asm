@@ -97,6 +97,7 @@ print "glider ram start: ", hex(!gliderramstart)
 !bandsammo          =       !gliderramstart+58
 !fireband           =       !gliderramstart+60      ;flag to fire band at next opportunity
 !bandtimer          =       !gliderramstart+62
+!foilamount         =       !gliderramstart+64
 print "glider ram end: ", hex(!bandtimer)
 
 ;enemy ram
@@ -258,6 +259,8 @@ print "enemy ram end: ", hex(!enemyproperty3+!enemyarraysize+2)
 
 !kbandspalette              =       #$0002
 !kbandhitboxoffset          =       #$0000
+
+!kfoilpackamount            =       #$0020
 
 !kgliderupbound             =       #$fff8      ;for object collision
 !kgliderdownbound           =       #$0010
