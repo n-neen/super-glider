@@ -143,6 +143,7 @@ print "enemy ram end: ", hex(!enemyproperty3+!enemyarraysize+2)
 !roomy                   =      !housestart+16
 !roomindex               =      !housestart+18
 !ductoutputxpos          =      !housestart+20
+!roomcounter             =      !housestart+22
 
 !enemydynamicspawnslot   =      $0880
 

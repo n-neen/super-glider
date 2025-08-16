@@ -10,6 +10,7 @@
 game: {
     .play: {
         stz !batteryactive      ;find a better place to do this
+        inc !roomcounter
         
         jsl oam_fillbuffer
         jsl oam_hightablejank

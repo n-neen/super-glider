@@ -699,6 +699,7 @@ loadroom: {
     jsr waitfornmi
     jsr screenoff
     
+    stz !roomcounter
     jsl room_load
     
     jsr waitfornmi
