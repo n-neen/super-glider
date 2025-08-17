@@ -2,6 +2,8 @@ Super Glider
 
 based on Glider (pro) by john calhoun
 
+assemble with asar 1.91
+
 controls:
 
 dpad: left and right to move (up and down not used)
