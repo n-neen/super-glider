@@ -556,6 +556,14 @@ enemy: {
                 sbc !speed
                 sta !enemyy,x
                 
+                lda !roomcounter
+                and #$0008
+                lsr #2
+                clc
+                adc #spritemap_pointers_balloon
+                sta !enemyspritemapptr,x
+
+                +
                 rts
             }
             
@@ -606,6 +614,9 @@ enemy: {
             }
             
             ...wait: {
+                lda #spritemap_pointers_null
+                sta !enemyspritemapptr,x
+                
                 dec !enemytimer,x
                 bpl +
                 
