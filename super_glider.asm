@@ -46,6 +46,7 @@ org $828000
     incsrc "./src/glider.asm"
     incsrc "./src/bands.asm"
     incsrc "./src/enemies.asm"
+    incsrc "./src/enemies/cat.asm"
     incsrc "./data/sprites/spritemaps.asm"
     print "bank $82 end: ", pc
     
@@ -59,7 +60,7 @@ org $838000
 ;data
 incsrc "./data/inc/bank84.asm"          ;hud data
 incsrc "./data/inc/bank85.asm"          ;sprite data: balloon, prizes, dart
-incsrc "./data/inc/bank86.asm"          ;
+incsrc "./data/inc/bank86.asm"          ;cat data
 incsrc "./data/inc/bank87.asm"          ;
 incsrc "./data/inc/bank88.asm"          ;
 incsrc "./data/inc/bank89.asm"          ;

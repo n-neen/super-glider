@@ -29,7 +29,7 @@ game: {
         
         jsl obj_collision
         
-        ;jsl coolmode
+        jsl coolmode
         
         jsl iframecolormath
         jsl handlecolormath
@@ -91,7 +91,8 @@ getinput: {
     .sl: {
         bit !ksl
         beq ..nosl
-            stz !coolmode
+            
+            sta !coolmode
         ..nosl:
     }
     

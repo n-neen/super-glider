@@ -769,7 +769,6 @@ enemy: {
         ..drop:         dw enemy_headers_drop                   ;
         ..foil:         dw enemy_headers_foil
         ;todo: basketball
-        ;todo: foil
         ;todo: toaster
     }
     
