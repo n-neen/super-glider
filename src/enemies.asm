@@ -767,7 +767,10 @@ enemy: {
         ..switch:       dw enemy_headers_switch                 ;
         ..drip:         dw enemy_headers_drip                   ;x
         ..drop:         dw enemy_headers_drop                   ;
-        ..foil:         dw enemy_headers_foil
+        ..foil:         dw enemy_headers_foil                   ;
+        ..catbody:      dw cat_bodyheader
+        ..catpaw:       dw cat_pawheader
+        ..cattail:      dw cat_tailheader
         ;todo: basketball
         ;todo: toaster
     }

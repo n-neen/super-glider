@@ -7,9 +7,9 @@ org $868000
 ;===========================================================================================
 
 catdata: {
-    graphics:
+    .graphics:
         incbin "./data/sprites/cat.gfx"
-    palette:
+    .palette:
         incbin "./data/sprites/cat.pal"
 }
 

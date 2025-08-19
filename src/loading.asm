@@ -601,7 +601,8 @@ loadingtable: {
             %loadtablentry(#prizedata_graphics,     $0e00, !spritestart+$0900,      $02)     ;prizes        = 02
             %loadtablentry(#dartdata_graphics,      $0700, !spritestart+$1000,      $03)     ;dart          = 03
             %loadtablentry(#dripdata_graphics,      $0400, !spritestart+$1300,      $04)     ;drip          = 04
-            %loadtablentry(#gliderdata_graphics,    $0400, !spritestart+$1300,      $04)     ;foil glider   = 05
+            %loadtablentry(#gliderdata_graphics,    $0400, !spritestart+$1300,      $05)     ;foil glider   = 05
+            %loadtablentry(#catdata_graphics,       $1000, !spritestart+$1000,      $06)     ;cat           = 06    ;overwrites entire second page
             
         }
         
@@ -612,6 +613,8 @@ loadingtable: {
            %loadtablentry(#gliderdata_palette,      $0020, !spritepalette+$0000,    $03)     ;dart          = 03      ;sprite line 0
            %loadtablentry(#dripdata_palette,        $0020, !spritepalette+$0050,    $04)     ;drip          = 04      ;sprite line 0
            %loadtablentry(#gliderdata_foilpalette,  $0020, !spritepalette+$0070,    $05)     ;foil glider   = 05      ;sprite line 7
+           %loadtablentry(#catdata_palette,         $0020, !spritepalette+$0000,    $06)     ;cat           = 06      ;sprite line 0
+           
         }
     }
     

@@ -150,6 +150,12 @@ print "enemy ram end: ", hex(!enemyproperty3+!enemyarraysize+2)
 
 !enemydynamicspawnslot   =      $0880
 
+;catram
+
+!catstart   =   $0a00
+!catmode    =   !catstart
+
+
 ;object ram
 !rowcounter         =       $06
 !objdrawpointer     =       $08
