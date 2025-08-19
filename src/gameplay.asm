@@ -29,7 +29,7 @@ game: {
         
         jsl obj_collision
         
-        jsl coolmode
+        ;jsl coolmode
         
         jsl iframecolormath
         jsl handlecolormath
