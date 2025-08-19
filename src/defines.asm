@@ -152,8 +152,10 @@ print "enemy ram end: ", hex(!enemyproperty3+!enemyarraysize+2)
 
 ;catram
 
-!catstart   =   $0a00
-!catmode    =   !catstart
+!catstart           =   $0a00
+!catstate           =   !catstart
+!cattailstate       =   !catstart+2
+!catpawstate        =   !catstart+4
 
 
 ;object ram

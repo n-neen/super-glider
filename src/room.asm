@@ -937,10 +937,10 @@ room: {
         }
 
         ..65: {
-            dw #obj_ptr_vent,       $0018, $001a,  $0000,   $0013
-            dw #obj_ptr_vent,       $0008, $001a,  $0000,   $0013
             dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
-            dw #obj_ptr_table,      $000d, $0010,  $0800,   $0000
+            dw #obj_ptr_vent,       $0018, $001a,  $0000,   $0013
+            dw #obj_ptr_vent,       $0003, $001a,  $0000,   $0013
+            ;dw #obj_ptr_table,      $000d, $0010,  $0800,   $0000
             dw $ffff
         }
 
@@ -1475,8 +1475,8 @@ room: {
         ..65: {
             ;enemy type                    x,        y,         property,      property2,         property3
             dw enemy_ptr_catbody,          $0080,    $0065,     $0070,         $0000,             $0000
-            dw enemy_ptr_catpaw,           $0080,    $0065,     $0070,         $0000,             $0000
-            dw enemy_ptr_cattail,          $0080,    $0065,     $0070,         $0000,             $0000
+            dw enemy_ptr_catpaw,           $0050,    $006d,     $0070,         $0000,             $0000
+            dw enemy_ptr_cattail,          $0088,    $007d,     $0070,         $0000,             $0000
             dw $ffff
         }
         
