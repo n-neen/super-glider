@@ -771,7 +771,8 @@ enemy: {
         ..catbody:      dw cat_bodyheader
         ..catpaw:       dw cat_pawheader
         ..cattail:      dw cat_tailheader
-        ;todo: basketball
+        ;..gfxloader     dw gfxloader_header                    ;todo: restores graphics overwritten
+        ;todo: basketball                                       ;by the cat: entire second page of sprite graphics
         ;todo: toaster
     }
     

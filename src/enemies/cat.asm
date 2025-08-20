@@ -1,11 +1,16 @@
 
 cat: {
-    .bodyheader:                        ;xsize      ysize       init            main             touch          shot
-        dw cat_bodyspritemaps_ptr,      $0040,      $002e,      cat_init,       cat_main,        cat_touch,     cat_shot
+    .bodyheader:                        ;xsize      ysize       init            main            touch          shot
+        dw cat_bodyspritemaps_ptr,      $0040,      $002e,      cat_init,       cat_bodymain,   cat_pet,       cat_shot
     .pawheader:
-        dw cat_pawspritemaps_ptr,       $0030,      $0020,      $0000,          $0000,           cat_touch,     $0000
+        dw cat_pawspritemaps_ptr,       $0030,      $0020,      $0000,          cat_pawmain,    cat_touch,     $0000
     .tailheader:
-        dw cat_tailspritemaps_ptr,      $0020,      $0020,      $0000,          $0000,           cat_tailpush,  $0000
+        dw cat_tailspritemaps_ptr,      $0020,      $0020,      $0000,          cat_tailmain,   cat_tailpush,  $0000
+    
+    
+    ;=======================================================================================
+    ;========================================= INIT ========================================
+    ;=======================================================================================
     
     .init: {
         ;load graphics
@@ -15,31 +20,116 @@ cat: {
         ;todo: make something replace the graphics this overwrites, in the room before cat
         
         stz !catstate
-        stz !cattailstate
-        stz !catpawstate
+        stz !tailstate
+        stz !pawstate
         
         lda #$0006
         jsl load_sprite
         rts
     }
     
-    .main: {
+    ;=======================================================================================
+    ;========================================= BODY ========================================
+    ;========================================= MAIN ========================================
+    ;=======================================================================================
+    
+    .bodymain: {
         lda !catstate
         asl
         tax
-        jsr (cat_statetable,x)
+        jsr (cat_bodystatetable,x)
         rts
     }
     
-    .statetable: {
-        dw cat_mode_idle        ;0
+    .bodystatetable: {
+        dw cat_bodystate_idle,              ;0
+           cat_bodystate_glidernearby,      ;1
+           cat_bodystate_begintostrike      ;2
     }
     
-    .mode: {
+    .bodystate: {
+        ..idle: {
+            ;idly move tail
+            ;check glider position
+            ;react to glider being nearby
+            ;carry out actions and return to idle
+            rts
+        }
+        
+        ..glidernearby: {
+            ;short threatening batting at the air
+            rts
+        }
+        
+        ..begintostrike: {
+            ;glider was close enough
+            ;set paw state
+            rts
+        }
+        
+    }
+    
+    
+    ;=======================================================================================
+    ;======================================= PAW ===========================================
+    ;=======================================================================================
+    
+    .pawmain: {
+        lda !pawstate
+        asl
+        tax
+        jsr (cat_pawstatetable,x)
+        rts
+    }
+    
+    .pawstatetable: {
+        dw cat_pawstate_idle,
+           cat_pawstate_raising,
+           cat_pawstate_lowering
+    }
+    
+    .pawstate: {
         ..idle: {
             rts
         }
+        
+        ..raising: {
+            rts
+        }
+        
+        ..lowering: {
+            rts
+        }
     }
+    
+    ;=======================================================================================
+    ;========================================= TAIL ========================================
+    ;=======================================================================================
+    
+    .tailmain: {
+        lda !tailstate
+        asl
+        tax
+        jsr (cat_tailstatetable,x)
+        rts
+    }
+    
+    .tailstatetable: {
+        dw cat_tailstate_idle
+    }
+    
+    .tailstate: {
+        ..idle: {
+            rts
+        }
+        
+        
+    }
+    
+    
+    ;=======================================================================================
+    ;==================================== CAT ROUTINES =====================================
+    ;=======================================================================================
     
     .touch: {
         ;probably just death?
@@ -59,6 +149,15 @@ cat: {
         ;or delete band?
         rts
     }
+    
+    .pet: {
+        inc !gliderx
+        rts
+    }
+    
+    ;=======================================================================================
+    ;================================ CAT BODY SPRITEMAPS ==================================
+    ;=======================================================================================
     
     .bodyspritemaps: {
         ..ptr: {
@@ -87,6 +186,9 @@ cat: {
         
     }
     
+    ;=======================================================================================
+    ;================================= CAT PAW SPRITEMAPS ==================================
+    ;=======================================================================================
     
     .pawspritemaps: {
         ..ptr: {
@@ -115,6 +217,9 @@ cat: {
         }
     }
     
+    ;=======================================================================================
+    ;================================ CAT TAIL SPRITEMAPS ==================================
+    ;=======================================================================================
     
     .tailspritemaps: {
         ..ptr: {
