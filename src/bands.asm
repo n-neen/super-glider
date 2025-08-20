@@ -136,12 +136,15 @@ bands: {
     }
     
     .collision: {
-        ;x = id of band, but we don't need it here, because the
+        ;x = enemy index of band, but we don't need it here, because the
         ;band's hitbox is now in !hitboxleft,right,up,down variables
         ;so we call enemy_collision_check
         ;with x = non-band enemy to check
         ;and hitbox variables set for the band
         phx
+        phy
+        
+        txy     ;put enemy index of band into y for the enemy's shot routine to use if needed
         
         ldx #!enemyarraysize
         -
@@ -158,6 +161,7 @@ bands: {
         dex : dex
         bpl -
         
+        ply
         plx
         rts
 

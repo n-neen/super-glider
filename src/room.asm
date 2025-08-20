@@ -1469,6 +1469,7 @@ room: {
         }
         
         ..64: {
+            dw enemy_ptr_bandspack,        $0040,    $0058,     $0000,        $0000,           $0001
             dw $ffff
         }
         

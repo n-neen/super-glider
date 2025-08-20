@@ -3,9 +3,9 @@ cat: {
     .bodyheader:                        ;xsize      ysize       init            main            touch          shot
         dw cat_bodyspritemaps_ptr,      $0040,      $002e,      cat_init,       cat_bodymain,   cat_pet,       cat_shot
     .pawheader:
-        dw cat_pawspritemaps_ptr,       $0030,      $0020,      $0000,          cat_pawmain,    cat_touch,     $0000
+        dw cat_pawspritemaps_ptr,       $0030,      $0020,      $0000,          cat_pawmain,    cat_touch,     cat_shot
     .tailheader:
-        dw cat_tailspritemaps_ptr,      $0020,      $0020,      $0000,          cat_tailmain,   cat_tailpush,  $0000
+        dw cat_tailspritemaps_ptr,      $0020,      $0020,      $0000,          cat_tailmain,   cat_tailpush,  cat_shot
     
     
     ;=======================================================================================
@@ -145,13 +145,27 @@ cat: {
     }
     
     .shot: {
-        ;nothing?
-        ;or delete band?
+        ;y = enemy index of rubber band that hit the cat
+        phx
+        tyx
+        jsr enemy_clear
+        plx
         rts
     }
     
     .pet: {
+        lda !gliderx
+        cmp !enemyx,x
+        bmi +
+        
         inc !gliderx
+        rts
+        
+        +
+        dec !gliderx
+        rts
+        
+        jsr enemy_touch_kill
         rts
     }
     
