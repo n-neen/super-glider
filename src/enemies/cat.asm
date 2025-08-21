@@ -34,6 +34,8 @@ cat: {
     ;=======================================================================================
     
     .bodymain: {
+        jsr cat_calculatedistancetoglider
+        
         lda !catstate
         asl
         tax
@@ -42,9 +44,20 @@ cat: {
     }
     
     .bodystatetable: {
+        !kcatstateidle              =       #$0000
+        !kcatstatebegintobat        =       #$0001
+        !kcatstatebegintostrike     =       #$0002
+        
+        !kpawstateidle              =       #$0000
+        !kpawstateraising           =       #$0001
+        !kpawstatepeak              =       #$0002
+        !kpawstatelowering          =       #$0003
+        
+        
         dw cat_bodystate_idle,              ;0
-           cat_bodystate_glidernearby,      ;1
-           cat_bodystate_begintostrike      ;2
+           cat_bodystate_begintobat,        ;1
+           cat_bodystate_begintostrike,     ;2
+           cat_bodystate_begintoswirl       ;3
     }
     
     .bodystate: {
@@ -53,17 +66,49 @@ cat: {
             ;check glider position
             ;react to glider being nearby
             ;carry out actions and return to idle
+            
+            lda !catdistancetogliderx
+            cmp #$0040
+            bpl ++
+            
+            cmp #$0020
+            bmi +
+
+            lda !kcatstatebegintobat        ;if glider is within $40 and $20 pixels
+            sta !catstate
+            rts
+            
+            +
+            lda !kcatstatebegintostrike     ;if glider is closer than $20 pixels
+            sta !catstate
+            rts
+            
+            ++                              ;if glider is neither
+            ;chance to swish tail
+            stz !pawstate
             rts
         }
         
-        ..glidernearby: {
+        ..begintobat: {
+            ;glider is kind of near,
             ;short threatening batting at the air
+            lda !kpawstateraising
+            sta !pawstate
+            
+            ;yadda, yadda?
+            
+            stz !catstate
             rts
         }
         
         ..begintostrike: {
-            ;glider was close enough
-            ;set paw state
+            ;glider was close enough,
+            ;set paw state to fully strike
+            rts
+        }
+        
+        ..begintoswirl: {
+            ;move tail around a bit in anticipation
             rts
         }
         
@@ -85,6 +130,7 @@ cat: {
     .pawstatetable: {
         dw cat_pawstate_idle,
            cat_pawstate_raising,
+           cat_pawstate_peak,
            cat_pawstate_lowering
     }
     
@@ -94,10 +140,19 @@ cat: {
         }
         
         ..raising: {
+            ;move paw, animate spritemaps
+            ;when peak is reached, do a wiggle?
+            rts
+        }
+        
+        ..peak: {
+            ;wiggle a tad
             rts
         }
         
         ..lowering: {
+            ;move paw, animate spritemaps
+            ;then return to idle
             rts
         }
     }
@@ -130,6 +185,31 @@ cat: {
     ;=======================================================================================
     ;==================================== CAT ROUTINES =====================================
     ;=======================================================================================
+    
+    .calculatedistancetoglider: {
+        ;i think we want to |distancetogliderx|
+        
+        lda !enemyx,x
+        sec
+        sbc !gliderx
+        bpl +
+        eor #$ffff
+        inc
+        +
+        sta !catdistancetogliderx
+        
+        lda !enemyy,x
+        sec
+        sbc !glidery
+        bpl ++
+        eor #$ffff
+        inc
+        ++
+        sta !catdistancetoglidery
+        
+        
+        rts
+    }
     
     .touch: {
         ;probably just death?
