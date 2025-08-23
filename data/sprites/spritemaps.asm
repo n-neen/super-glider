@@ -100,6 +100,11 @@ spritemap: {
                spritemap_fire_3,
                spritemap_fire_4
         }
+        
+        ..candleflame: {
+            dw spritemap_candleflame_1,
+               spritemap_candleflame_2
+        }
     }
     
     
@@ -402,6 +407,18 @@ spritemap: {
             db $08, $00, $3a,   %00111100,  %00000010
             db $00, $f8, $29,   %00111100,  %00000010
             db $08, $f8, $2a,   %00111100,  %00000010
+        }
+    }
+    
+    .candleflame: {
+        ..1: {
+            db $01
+            db $00, $00, $ce,   %00111100,  %00000010
+        }
+        
+        ..2: {
+            db $01
+            db $00, $00, $ee,   %00111100,  %00000010
         }
     }
 }

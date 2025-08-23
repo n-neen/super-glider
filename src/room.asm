@@ -629,6 +629,7 @@ room: {
             dw #obj_ptr_dnstairs,   $0010, $0005,  $0400,   $0000
             dw #obj_ptr_vent,       $0011, $001a,  $0000,   $0013
             dw #obj_ptr_table,      $0004, $0011,  $0800,   $0000
+            dw #obj_ptr_candle,     $0004, $000d,  $0800,   $0000
             dw $ffff
         }
 
@@ -652,6 +653,7 @@ room: {
             dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
             dw #obj_ptr_vent,       $0008, $001a,  $0000,   $0013
             dw #obj_ptr_window,     $0010, $0008,  $0c00,   $0033
+            dw #obj_ptr_candle,     $000f, $000f,  $0800,   $0000
             dw $ffff
         }
 
@@ -1204,7 +1206,7 @@ room: {
         
         ..22: {
             dw enemy_ptr_drip,          $0060,    $0008,   $0070,       $0002,             $0000
-            dw enemy_ptr_foil,          $0050,    $0058,   $0070,       $0002,             $0000
+            ;dw enemy_ptr_foil,          $0050,    $0058,   $0070,       $0002,             $0000
             dw $ffff
         }
         

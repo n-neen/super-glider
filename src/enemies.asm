@@ -133,12 +133,29 @@ enemy: {
         rtl
     }
     
+    .findslot: {
+        ;returns empty enemy slot in Y
+        ldy #!enemyarraysize
+        -
+        lda !enemyID,y
+        beq +
+        dey : dey
+        bpl -
+        bmi ++
+        
+        +
+        rtl
+        
+        ++
+        ldy #$ffff
+        rtl
+    }
     
     .dynamicspawn: {
         
         
         
-        rtl
+        rts
     }
     
     
@@ -210,12 +227,15 @@ enemy: {
         +
         plx
         plb
-        rts
+        rtl
         
         ..stop: {
             plx
             plb
             pla
+            sep #$20
+            pla
+            rep #$20
             jmp enemy_spawnall_out
         }
     }
@@ -234,7 +254,7 @@ enemy: {
         -
         dey : dey
         bmi ..out                       ;if y goes negative we are out of slots
-        jsr enemy_spawn
+        jsl enemy_spawn
         
         txa
         clc
@@ -517,7 +537,7 @@ enemy: {
                 +
                 
                 ldx #!enemydynamicspawnslot
-                jsr enemy_spawn
+                jsl enemy_spawn
                 
                 ++
                 ply
@@ -772,6 +792,7 @@ enemy: {
         ..catpaw:       dw cat_pawheader
         ..cattail:      dw cat_tailheader
         ..fire:         dw enemy_headers_fire
+        ..candleflame:  dw enemy_headers_candleflame
         ;..gfxloader     dw gfxloader_header                    ;todo: restores graphics overwritten by the cat: entire second page of sprite graphics
         ;todo: basketball
         ;todo: toaster
@@ -779,35 +800,128 @@ enemy: {
     
     
     .headers: {
-               ;spritemap ptr                   xsize,      ysize,      init routine,       main routine,               touch,                      shot
         ..balloon:
-            dw spritemap_pointers_balloon,      $0030,      $0028,      $0000,              enemy_main_balloon,         enemy_touch_kill,           enemy_shot_balloon
+            dw  spritemap_pointers_balloon,      ;spritemap ptr
+                $0030,                           ;xsize,
+                $0028,                           ;ysize,
+                $0000,                           ;init routine,
+                enemy_main_balloon,              ;main routine,
+                enemy_touch_kill,                ;touch,
+                enemy_shot_balloon               ;shot
         ..paper:
-            dw spritemap_pointers_paper,        $0048,      $0028,      enemy_init_prize,   $0000,                      enemy_touch_paper,          $0000
+            dw  spritemap_pointers_paper,
+                $0048,
+                $0028,
+                enemy_init_prize,
+                $0000,
+                enemy_touch_paper,
+                $0000
         ..clock:
-            dw spritemap_pointers_clock,        $0040,      $0020,      enemy_init_prize,   $0000,                      enemy_touch_clock,          $0000
+            dw  spritemap_pointers_clock,
+                $0040,
+                $0020,
+                enemy_init_prize,
+                $0000,
+                enemy_touch_clock,
+                $0000
         ..battery:
-            dw spritemap_pointers_battery,      $0040,      $0028,      enemy_init_prize,   $0000,                      enemy_touch_battery,        $0000
+            dw  spritemap_pointers_battery,
+                $0040,
+                $0028,
+                enemy_init_prize,
+                $0000,
+                enemy_touch_battery,
+                $0000
         ..bandspack:
-            dw spritemap_pointers_bandspack,    $0030,      $0030,      enemy_init_prize,   $0000,                      enemy_touch_bandspack,      $0000
+            dw  spritemap_pointers_bandspack,
+                $0030,
+                $0030,
+                enemy_init_prize,
+                $0000,
+                enemy_touch_bandspack,
+                $0000
         ..dart:
-            dw spritemap_pointers_dart,         $0040,      $0020,      enemy_init_dart,    enemy_main_dart,            enemy_touch_kill,           enemy_shot_dart
+            dw  spritemap_pointers_dart,
+                $0040,
+                $0020,
+                enemy_init_dart,
+                enemy_main_dart,
+                enemy_touch_kill,
+                enemy_shot_dart
         ..duct:
-            dw spritemap_pointers_duct,         $0030,      $0028,      enemy_init_duct,    $0000,                      enemy_touch_duct,           $0000
+            dw  spritemap_pointers_duct,
+                $0030,
+                $0028,
+                enemy_init_duct,
+                $0000,
+                enemy_touch_duct,
+                $0000
         ..band:
-            dw spritemap_pointers_band,         $0020,      $0020,      $0000,              enemy_main_band,            $0000,                      $0000
+            dw  spritemap_pointers_band,
+                $0020,
+                $0020,
+                $0000,
+                enemy_main_band,
+                $0000,
+                $0000
         ..lightswitch:
-            dw spritemap_pointers_lightswitch,  $0030,      $0020,      $0000,              enemy_main_switchcommon,    enemy_touch_lightswitch,    enemy_touch_lightswitch
+            dw  spritemap_pointers_lightswitch,
+                $0030,
+                $0020,
+                $0000,
+                enemy_main_switchcommon,
+                enemy_touch_lightswitch,
+                enemy_touch_lightswitch
         ..switch:
-            dw spritemap_pointers_switch,       $0030,      $0020,      $0000,              enemy_main_switch,          enemy_touch_switch,         enemy_touch_switch
+            dw  spritemap_pointers_switch,
+                $0030,
+                $0020,
+                $0000,
+                enemy_main_switch,
+                enemy_touch_switch,
+                enemy_touch_switch
         ..drip:
-            dw spritemap_pointers_drip,         $0018,      $0018,      enemy_init_drip,    enemy_main_drip,            enemy_touch_drip,           $0000
+            dw  spritemap_pointers_drip,
+                $0018,
+                $0018,
+                enemy_init_drip,
+                enemy_main_drip,
+                enemy_touch_drip,
+                $0000
         ..drop:
-            dw spritemap_pointers_drip+8,       $0028,      $0020,      $0000,              enemy_main_drop,            enemy_touch_drip,           $0000
+            dw  spritemap_pointers_drip+8,
+                $0028,
+                $0020,
+                $0000,
+                enemy_main_drop,
+                enemy_touch_drip,
+                $0000
         ..foil:
-            dw spritemap_pointers_foil,         $0048,      $0020,      $0000,              $0000,                      enemy_touch_foil,           $0000
+            dw  spritemap_pointers_foil,
+                $0048,
+                $0020,
+                $0000,
+                $0000,
+                enemy_touch_foil,
+                $0000
         ..fire:
-            dw spritemap_pointers_fire,         $0018,      $0018,      $0000,              enemy_main_fire,            $0000,                      $0000
+            dw  spritemap_pointers_fire,
+                $0018,
+                $0018,
+                $0000,
+                enemy_main_fire,
+                $0000,
+                $0000
+        ..candleflame:
+            dw  spritemap_pointers_candleflame,         ;spritemap ptr
+                $0030,                                  ;xsize,
+                $0030,                                  ;ysize,
+                $0000,                                  ;init routine,
+                enemy_main_candleflame,                 ;main routine,
+                enemy_touch_candleflame,                ;touch,
+                $0000                                   ;shot
+                
+                
     }
 
 
@@ -926,12 +1040,27 @@ enemy: {
 ;===========================================================================================
     
     .main: {
-        ..fire: {
-            ;todo:
-            ;animate fire
+        ..candleflame: {
+            lda !roomcounter
+            and #$0008
+            lsr #2
+            clc
+            adc #spritemap_pointers_candleflame
+            sta !enemyspritemapptr,x
             
+            rts
+        }
+        
+        ..fire: {
             lda !firetimer
             beq ++
+            
+            lda !roomcounter
+            and #$000c
+            lsr
+            clc
+            adc #spritemap_pointers_fire
+            sta !enemyspritemapptr,x
             
             lda !gliderdir
             dec
@@ -1110,10 +1239,27 @@ enemy: {
 ;===========================================================================================
     
     .touch: {
+        ..candleflame: {
+            lda !kgliderstatefirestarted
+            sta !glidernextstate
+            rts
+        }
+        
         ..drip: {
             ;todo: kill, or, if on fire, put out fire
+            lda !gliderstate
+            cmp !kgliderstateonfire
+            beq +
             
             jsr enemy_touch_kill
+            rts
+            
+            ;if on fire, put out fire and give iframes
+            lda !kglideriframes
+            sta !iframecounter
+            
+            lda !kgliderstateidle
+            sta !gliderstate
             rts
         }
         

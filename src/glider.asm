@@ -446,7 +446,7 @@ glider: {
         
         +
         ldx #!enemydynamicspawnslot
-        jsr enemy_spawn
+        jsl enemy_spawn
         
         
         ++

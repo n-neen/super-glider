@@ -618,7 +618,44 @@ obj: {
         ..candle: {
             
             ;spawn flame enemy
+            phx
+            phy
             
+            lda !objvariable,x
+            inc
+            sta !objvariable,x
+            cmp #$0003
+            beq +
+            
+            lda #enemy_ptr_candleflame
+            sta !enemydynamicspawnslot          ;enemy type
+            
+            lda !objxpos,x
+            asl #2
+            clc
+            adc #$0005
+            sta !enemydynamicspawnslot+2        ;x
+            
+            lda !objypos,x
+            asl #2
+            sec
+            sbc #$0005
+            sta !enemydynamicspawnslot+4        ;y
+            
+            phx
+            jsl enemy_findslot                  ;y = available slot
+            ldx #!enemydynamicspawnslot         ;x = enemy population entry ptr
+            jsl enemy_spawn                     ;spawn enemy
+            plx
+            
+            ply
+            plx
+            rts
+            
+            +
+            stz !objroutineptr,x
+            ply
+            plx
             rts
         }
         
