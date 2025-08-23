@@ -420,7 +420,7 @@ glider: {
         sta !glidernextstate
         sta !gliderstate
         
-        lda #$0060
+        lda #$0090
         sta !firetimer
         sta !iframecounter
         
@@ -630,7 +630,18 @@ glider: {
 
 
 roomtransitionstart: {
+    lda !gliderstate
+    cmp !kgliderstateonfire
+    beq +
+    cmp !kgliderstatefirestarted
+    beq +
     lda !kstateroomtrans
     sta !gamestate
+    rts
+    
+    +
+    lda !kgliderstatelostlife
+    sta !gliderstate
+    sta !glidernextstate
     rts
 }
