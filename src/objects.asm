@@ -642,6 +642,8 @@ obj: {
             sbc #$0005
             sta !enemydynamicspawnslot+4        ;y
             
+            stz !enemydynamicspawnslot+8        ;properties 2 (palette)
+            
             phx
             jsl enemy_findslot                  ;y = available slot
             ldx #!enemydynamicspawnslot         ;x = enemy population entry ptr

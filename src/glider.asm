@@ -436,6 +436,8 @@ glider: {
         lda #$0002
         sta !enemydynamicspawnslot+6
         
+        stz !enemydynamicspawnslot+8
+        
         ldy #!enemyarraysize
         -
         lda !enemyID,y
@@ -467,7 +469,6 @@ glider: {
         rts
         
         +
-        
         lda !kgliderstatelostlife
         sta !glidernextstate
         

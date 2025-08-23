@@ -1,6 +1,5 @@
 todo: {
     enemies: {
-        drip
         dart
         basketball
         toaster
@@ -24,9 +23,9 @@ todo: {
     }
     
     other: {
-        end of game, stars
-        OR
-        end of game, window
+        end of game, window (w/ cat)
+        improve title screen
+        options, menus?
     }
 }
 
