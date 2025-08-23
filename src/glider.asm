@@ -466,12 +466,27 @@ glider: {
         lda !kgliderstateonfire
         sta !gliderstate
         
+        lda !gliderx
+        cmp !kleftbound
+        bmi ++
+        cmp !krightbound
+        bpl ++
+        lda !glidery
+        cmp !kceiling
+        bmi ++
+        cmp !kfloor
+        bpl ++
+        
         rts
         
         +
         lda !kgliderstatelostlife
         sta !glidernextstate
+        rts
         
+        ++
+        lda !kgliderstatelostlife
+        sta !glidernextstate
         rts
     }
     

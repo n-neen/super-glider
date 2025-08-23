@@ -27,5 +27,10 @@ todo: {
         improve title screen
         options, menus?
     }
+    
+    bugs: {
+        dynamic enemy spawning palette bug
+        
+    }
 }
 
