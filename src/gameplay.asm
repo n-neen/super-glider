@@ -75,6 +75,12 @@ noinput: {
 }
 
 
+onfire: {
+    
+    plx
+    rtl
+}
+
 getinput: {
     phx
     ;use x for general stores here to preserve A
@@ -88,11 +94,18 @@ getinput: {
         ..nost:
     }
     
+    ldx !gliderstate
+    cpx !kgliderstateonfire
+    beq onfire
+    cpx !kgliderstatefirestarted
+    beq onfire
+    
     .sl: {
         bit !ksl
         beq ..nosl
             
-            sta !coolmode
+            ldx !kgliderstatefirestarted
+            stx !glidernextstate
         ..nosl:
     }
     
@@ -206,6 +219,7 @@ getinput: {
             stx !gliderliftstate
         ..nor:
     }
+    
     plx
     rtl
 }

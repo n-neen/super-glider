@@ -63,12 +63,12 @@ print "glider ram start: ", hex(!gliderramstart)
 !gliderx            =       !gliderramstart         ;x coord
 !glidery            =       !gliderramstart+2       ;y coord
 !gliderstate        =       !gliderramstart+4       ;movement state
-!gliderdir          =       !gliderramstart+6       ;left or right (1 or 2)
+!gliderdir          =       !gliderramstart+6       ;left or right (1 or 0)
 !glidermovetimer    =       !gliderramstart+8       ;for moving left and right
 !gliderliftstate    =       !gliderramstart+10      ;vent state: up down or the mysterious neither
 !gliderturntimer    =       !gliderramstart+12      ;unimplemented
 !gliderhitbound     =       !gliderramstart+14      ;boolean (zero or nonzero)
-!gliderlives        =       !gliderramstart+16      ;int
+!gliderlives        =       !gliderramstart+16      ;decimal
 !glidernextstate    =       !gliderramstart+18      ;next movement state
 !glidersubx         =       !gliderramstart+20      ;subpixel x
 !glidersuby         =       !gliderramstart+22      ;subpixel y
@@ -98,29 +98,30 @@ print "glider ram start: ", hex(!gliderramstart)
 !fireband           =       !gliderramstart+60      ;flag to fire band at next opportunity
 !bandtimer          =       !gliderramstart+62
 !foilamount         =       !gliderramstart+64
+!firetimer          =       !gliderramstart+66
 print "glider ram end: ", hex(!bandtimer)
 
 ;enemy ram
-!enemystart         =       $200
+!enemystart             =       $200
 print "enemy ram start: ", hex(!enemystart)
-!enemyarraysize     =       $0028
-!enemyID            =       !enemystart
-!enemyx             =       !enemyID+!enemyarraysize+2
-!enemyy             =       !enemyx+!enemyarraysize+2
-!enemysubx          =       !enemyy+!enemyarraysize+2
-!enemysuby          =       !enemysubx+!enemyarraysize+2
-!enemyinitptr       =       !enemysuby+!enemyarraysize+2
-!enemymainptr       =       !enemyinitptr+!enemyarraysize+2
-!enemytouchptr      =       !enemymainptr+!enemyarraysize+2
-!enemyproperty      =       !enemytouchptr+!enemyarraysize+2
-!enemyproperty2     =       !enemyproperty+!enemyarraysize+2        ;high byte = properties 2, low byte = palette bitmask
-!enemyspritemapptr  =       !enemyproperty2+!enemyarraysize+2
-!enemyxsize         =       !enemyspritemapptr+!enemyarraysize+2
-!enemyysize         =       !enemyxsize+!enemyarraysize+2
-!enemyshotptr       =       !enemyysize+!enemyarraysize+2
-!enemytimer         =       !enemyshotptr+!enemyarraysize+2
-!enemyvariable      =       !enemytimer+!enemyarraysize+2
-!enemyproperty3     =       !enemyvariable+!enemyarraysize+2
+!enemyarraysize         =       $0028
+!enemyID                =       !enemystart
+!enemyx                 =       !enemyID+!enemyarraysize+2
+!enemyy                 =       !enemyx+!enemyarraysize+2
+!enemysubx              =       !enemyy+!enemyarraysize+2
+!enemysuby              =       !enemysubx+!enemyarraysize+2
+!enemyinitptr           =       !enemysuby+!enemyarraysize+2
+!enemymainptr           =       !enemyinitptr+!enemyarraysize+2
+!enemytouchptr          =       !enemymainptr+!enemyarraysize+2
+!enemyproperty          =       !enemytouchptr+!enemyarraysize+2
+!enemyproperty2         =       !enemyproperty+!enemyarraysize+2        ;high byte = properties 2, low byte = palette bitmask
+!enemyspritemapptr      =       !enemyproperty2+!enemyarraysize+2
+!enemyxsize             =       !enemyspritemapptr+!enemyarraysize+2
+!enemyysize             =       !enemyxsize+!enemyarraysize+2
+!enemyshotptr           =       !enemyysize+!enemyarraysize+2
+!enemytimer             =       !enemyshotptr+!enemyarraysize+2
+!enemyvariable          =       !enemytimer+!enemyarraysize+2
+!enemyproperty3         =       !enemyvariable+!enemyarraysize+2
 print "enemy ram end: ", hex(!enemyproperty3+!enemyarraysize+2)
 
 ;length of data in room file for each enemy entry
@@ -255,6 +256,8 @@ print "object ram start: ", hex(!objvariable+!objectarraysize+2)
 !kgliderstatetipright       =       #$0004
 !kgliderstateturnaround     =       #$0005
 !kgliderstatelostlife       =       #$0006
+!kgliderstatefirestarted    =       #$0007
+!kgliderstateonfire         =       #$0008
 
 ;changed to use dynamic gravity. this get used to
 ;initialize that value at newgame but from then on it uses !gliderysubspeed

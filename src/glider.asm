@@ -405,9 +405,73 @@ glider: {
                    #.tipleft,           ;3
                    #.tipright,          ;4
                    #.turnaround,        ;5
-                   #.lostlife           ;6
+                   #.lostlife,          ;6
+                   #.firestarted,       ;7
+                   #.onfire             ;8
             }
         }
+    }
+    
+    .firestarted: {
+        phx
+        phy
+        
+        lda !kgliderstateonfire
+        sta !glidernextstate
+        sta !gliderstate
+        
+        lda #$0060
+        sta !firetimer
+        sta !iframecounter
+        
+        lda #enemy_ptr_fire
+        sta !enemydynamicspawnslot          ;enemy type
+        
+        lda !gliderx
+        sta !enemydynamicspawnslot+2        ;x
+        
+        lda !glidery
+        sta !enemydynamicspawnslot+4        ;y
+        
+        lda #$0002
+        sta !enemydynamicspawnslot+6
+        
+        ldy #!enemyarraysize
+        -
+        lda !enemyID,y
+        beq +
+        dey : dey
+        bpl -
+        bmi ++
+        
+        +
+        ldx #!enemydynamicspawnslot
+        jsr enemy_spawn
+        
+        
+        ++
+        ply
+        plx
+        rts
+    }
+    
+    .onfire: {
+        lda !firetimer
+        dec
+        beq +
+        sta !firetimer
+        
+        lda !kgliderstateonfire
+        sta !gliderstate
+        
+        rts
+        
+        +
+        
+        lda !kgliderstatelostlife
+        sta !glidernextstate
+        
+        rts
     }
     
     
@@ -417,6 +481,7 @@ glider: {
     }
     
     .lostlife: {
+        stz !firetimer
         
         lda !kglideriframes
         sta !iframecounter

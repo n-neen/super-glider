@@ -548,7 +548,7 @@ obj: {
         }
         
         ..candle: {
-            dw #obj_tilemaps_candle,        $0004, $0004, obj_routines_none,        $0000
+            dw #obj_tilemaps_candle,        $0004, $0004, obj_routines_candle,      $0000
         }
         
         ..fanR: {
@@ -614,6 +614,13 @@ obj: {
     
     
     .routines: {
+    
+        ..candle: {
+            
+            ;spawn flame enemy
+            
+            rts
+        }
         
         ..shelf: {
             ;x = obj index

@@ -771,8 +771,9 @@ enemy: {
         ..catbody:      dw cat_bodyheader
         ..catpaw:       dw cat_pawheader
         ..cattail:      dw cat_tailheader
-        ;..gfxloader     dw gfxloader_header                    ;todo: restores graphics overwritten
-        ;todo: basketball                                       ;by the cat: entire second page of sprite graphics
+        ..fire:         dw enemy_headers_fire
+        ;..gfxloader     dw gfxloader_header                    ;todo: restores graphics overwritten by the cat: entire second page of sprite graphics
+        ;todo: basketball
         ;todo: toaster
     }
     
@@ -805,6 +806,8 @@ enemy: {
             dw spritemap_pointers_drip+8,       $0028,      $0020,      $0000,              enemy_main_drop,            enemy_touch_drip,           $0000
         ..foil:
             dw spritemap_pointers_foil,         $0048,      $0020,      $0000,              $0000,                      enemy_touch_foil,           $0000
+        ..fire:
+            dw spritemap_pointers_fire,         $0018,      $0018,      $0000,              enemy_main_fire,            $0000,                      $0000
     }
 
 
@@ -815,6 +818,18 @@ enemy: {
 ;===========================================================================================
     
     .init: {
+        ..fire: {
+            lda !kgliderstateonfire
+            sta !glidernextstate
+            sta !gliderstate
+            
+            lda #$0060
+            sta !firetimer
+            sta !iframecounter
+            rts
+        }
+        
+        
         ..drip: {
             lda !enemyproperty,x
             sta !enemytimer,x
@@ -911,6 +926,39 @@ enemy: {
 ;===========================================================================================
     
     .main: {
+        ..fire: {
+            ;todo:
+            ;animate fire
+            
+            lda !firetimer
+            beq ++
+            
+            lda !gliderdir
+            dec
+            bmi +
+            inc
+            +
+            clc
+            adc !gliderx
+            sta !gliderx
+            
+            
+            lda !gliderx
+            sta !enemyx,x
+            
+            lda !glidery
+            sec
+            sbc #$0008
+            sta !enemyy,x
+            +++
+            rts
+            
+            ++
+            jsr enemy_clear
+            rts
+        }
+        
+        
         ..drop: {
             
             lda !enemyproperty,x

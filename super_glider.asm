@@ -47,6 +47,7 @@ org $828000
     incsrc "./src/bands.asm"
     incsrc "./src/enemies.asm"
     incsrc "./src/enemies/cat.asm"
+    incsrc "./src/enemies/instructionlisthandler.asm"
     incsrc "./data/sprites/spritemaps.asm"
     print "bank $82 end: ", pc
     

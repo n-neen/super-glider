@@ -611,7 +611,7 @@ loadingtable: {
            %loadtablentry(#balloondata_palette,     $0020, !spritepalette+$0010,    $01)     ;balloon       = 01      ;sprite line 1
            %loadtablentry(#prizedata_palette,       $0060, !spritepalette+$0020,    $02)     ;prizes        = 02      ;sprite line 2
            %loadtablentry(#gliderdata_palette,      $0020, !spritepalette+$0000,    $03)     ;dart          = 03      ;sprite line 0
-           %loadtablentry(#dripdata_palette,        $0020, !spritepalette+$0050,    $04)     ;drip          = 04      ;sprite line 0
+           %loadtablentry(#dripdata_palette,        $0040, !spritepalette+$0050,    $04)     ;drip          = 04      ;sprite line 5 + 6 also contains fire!
            %loadtablentry(#gliderdata_foilpalette,  $0020, !spritepalette+$0070,    $05)     ;foil glider   = 05      ;sprite line 7
            %loadtablentry(#catdata_palette,         $0020, !spritepalette+$0000,    $06)     ;cat           = 06      ;sprite line 0
            
