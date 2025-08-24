@@ -29,8 +29,8 @@ todo: {
     }
     
     bugs: {
-        dynamic enemy spawning palette bug
-        
+        dynamic enemy spawning palette bug      ;i think this is fixed
+        candle object spawns flame enemy, but the routine has to run three times before it actually works (lmao)
     }
 }
 

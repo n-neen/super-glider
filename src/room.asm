@@ -62,10 +62,8 @@ room: {
                                 
         jsl oam_fillbuffer
         jsl glider_draw
-        jsl enemy_clearall
         jsl enemy_spawnall
         jsl enemy_runinit
-        
         
         jsl link_handle
                 
@@ -100,7 +98,8 @@ room: {
         
         jsl enemy_clearall
         stz !oamentrypoint
-        jsl oam_cleantable
+        ;jsl oam_cleantable
+        jsl oam_fillbuffer
         
         plb
         rtl

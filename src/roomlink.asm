@@ -10,13 +10,10 @@
 
 ;        %rrrrrrrrssiiiiit, $dddd
 ;         8421842184218421
-;         000000000000
-;         00000000
-;         0000
 ;         
 ;        r = room index of target
 ;        s = property select of target
-;        t = type select: enemy (0) or object(1)
+;        t = type select: enemy (0) or object (1)
 ;        i = index of target
 ;
 ;        d = data for target

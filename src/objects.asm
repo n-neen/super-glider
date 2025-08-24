@@ -627,6 +627,7 @@ obj: {
             cmp #$0003
             beq +
             
+            
             lda #enemy_ptr_candleflame
             sta !enemydynamicspawnslot          ;enemy type
             

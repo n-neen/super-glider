@@ -252,6 +252,8 @@ newgame: {
     lda #$0000
     jsl load_background     ;load data for layer 1 (object layer)
     
+    ;this whole thing sucks but i don't want to rewrite it right now
+    
     lda #$0000
     jsl load_sprite         ;load sprite data 0 (glider)
     
@@ -1104,7 +1106,7 @@ hud: {
     .drawbattery: {
         ;battery $382a
         ;$74
-        lda #$382a
+        lda #$3c2a
         sta !hudtilemaplong+!kbatteryhudiconspot
         rts
     }
@@ -1113,7 +1115,7 @@ hud: {
     .drawbands: {
         ;band $382b
         ;$76
-        lda #$382b
+        lda #$3c2b
         sta !hudtilemaplong+!kbandshudiconspot
         rts
     }
@@ -1121,7 +1123,7 @@ hud: {
     
     .cleartile: {
         ;x=tile index
-        lda #$380a
+        lda #$3c0a
         sta !hudtilemaplong,x
         rts
     }
@@ -1155,16 +1157,16 @@ hud: {
     
     
     .charactertable: {
-        dw $3800,       ;0
-           $3801,       ;1
-           $3802,       ;2
-           $3803,       ;3
-           $3804,       ;4
-           $3805,       ;5
-           $3806,       ;6
-           $3807,       ;7
-           $3808,       ;8
-           $3809        ;9
+        dw $3c00,       ;0
+           $3c01,       ;1
+           $3c02,       ;2
+           $3c03,       ;3
+           $3c04,       ;4
+           $3c05,       ;5
+           $3c06,       ;6
+           $3c07,       ;7
+           $3c08,       ;8
+           $3c09        ;9
            ;blank tile $380a
     }
 }
