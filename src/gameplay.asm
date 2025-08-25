@@ -12,6 +12,8 @@ game: {
         stz !batteryactive      ;find a better place to do this
         inc !roomcounter
         
+        jsr game_runroomroutine
+        
         jsl oam_fillbuffer
         jsl oam_hightablejank
         jsl getinput
@@ -39,6 +41,21 @@ game: {
 
         
         rtl
+    }
+    
+    .runroomroutine: {
+        lda !roomroutineptr
+        beq +
+        bpl ++
+        
+        jmp (!roomroutineptr)
+        ;we will never return here after this jmp
+        ;because the room routine's rts will go back to game_play
+        
+        ++
+        ;maybe do something else if it's not a pointer
+        +
+        rts
     }
     
     

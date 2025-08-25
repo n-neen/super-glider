@@ -35,6 +35,7 @@ incsrc "./src/defines.asm"
 org $808000
     incsrc "./src/main.asm"
     incsrc "./src/loading.asm"
+    incsrc "./src/hud.asm"
     print "bank $80 end: ", pc
     
 org $818000
@@ -49,6 +50,7 @@ org $828000
     incsrc "./src/enemies/cat.asm"
     incsrc "./src/enemies/instructionlisthandler.asm"
     incsrc "./data/sprites/spritemaps.asm"
+    incsrc "./src/roomroutines.asm"
     print "bank $82 end: ", pc
     
 org $838000

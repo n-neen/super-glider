@@ -621,8 +621,8 @@ obj: {
             phx
             phy
             
-            lda !objvariable,x
-            inc
+            lda !objvariable,x                  ;for some reason, this only works
+            inc                                 ;on the third time this routine runs
             sta !objvariable,x
             cmp #$0003
             beq +

@@ -80,6 +80,7 @@ glider: {
             
             lda !roombounds
             bit #$0001
+            ;i think this and the next one are the only places !roombounds is read
             bne +
             
             lda !kroomtranstyperight
@@ -98,7 +99,8 @@ glider: {
             beq .checktrans_ignore
             
             lda !roombounds
-            bit #$1000
+            bit #$0002
+            ;here
             bne +
             
             lda !kroomtranstypeleft

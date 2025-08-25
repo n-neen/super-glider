@@ -169,7 +169,7 @@ enemy: {
         phx
         
         phk
-        plb     ;db = $82
+        plb
         
         ;enemy data that's per instance
         ;comes from room's enemy list

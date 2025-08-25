@@ -101,7 +101,7 @@ bands: {
         
         ++
         ldx #!enemydynamicspawnslot     ;x = pointer to enemy population entry in ram
-        jsr enemy_spawn                 ;y = enemy index of open slot
+        jsl enemy_spawn                 ;y = enemy index of open slot
         
     +   plx
         ply

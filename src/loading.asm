@@ -646,6 +646,7 @@ loadingtable: {
     }
     
     .layertilemaps: {
+        ;inelegant kludge table
         dl !objtilemap                  : db $00
         dl #splashtilemap               : db $01
         dl #bg2tilemap                  : db $02

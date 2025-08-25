@@ -25,12 +25,27 @@ todo: {
     other: {
         end of game, window (w/ cat)
         improve title screen
-        options, menus?
+        options, menus
+        room format:
+            change bounds from $1001 to something like
+            %0000000000000011
+            i.e.
+            $0001   right bound
+            $0002   left bound
+            to maximize the other space that can be used
+    }
+    
+    room: {
+        combine room bg and bounds into a single word
+        and leave the other word unused
+        possibly for use as a pointer to a routine to run
     }
     
     bugs: {
-        dynamic enemy spawning palette bug      ;i think this is fixed
+        dynamic enemy spawning palette bug  <----------- i think this is fixed
         candle object spawns flame enemy, but the routine has to run three times before it actually works (lmao)
     }
+    
+    
 }
 
