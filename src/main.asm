@@ -705,6 +705,8 @@ loadroom: {
     stz !roomcounter
     jsl room_load
     
+    jsl game_runroomroutine
+    
     jsr waitfornmi
     jsr screenon
     

@@ -453,7 +453,7 @@ room: {
         ..61: dw room_objlist_61, room_enemylist_61, $0003,     $0000
         ..62: dw room_objlist_62, room_enemylist_62, $0103,     $0000
         ..63: dw room_objlist_63, room_enemylist_63, $0102,     $0000
-        ..64: dw room_objlist_64, room_enemylist_64, $0003,     $0000
+        ..64: dw room_objlist_64, room_enemylist_64, $0003,     roomroutines_precat
         ..65: dw room_objlist_65, room_enemylist_65, $0103,     $0000
         ..66: dw room_objlist_66, room_enemylist_66, $0102,     $0000
         ..67: dw room_objlist_67, room_enemylist_67, $0102,     $0000

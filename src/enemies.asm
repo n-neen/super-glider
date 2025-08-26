@@ -785,7 +785,7 @@ enemy: {
         ..band:         dw enemy_headers_band                   ;
         ..lightswitch:  dw enemy_headers_lightswitch            ;
         ..switch:       dw enemy_headers_switch                 ;
-        ..drip:         dw enemy_headers_drip                   ;x
+        ..drip:         dw enemy_headers_drip                   ;
         ..drop:         dw enemy_headers_drop                   ;
         ..foil:         dw enemy_headers_foil                   ;
         ..catbody:      dw cat_bodyheader

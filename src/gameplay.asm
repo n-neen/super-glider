@@ -12,7 +12,7 @@ game: {
         stz !batteryactive      ;find a better place to do this
         inc !roomcounter
         
-        jsr game_runroomroutine
+        jsl game_runroomroutine
         
         jsl oam_fillbuffer
         jsl oam_hightablejank
@@ -55,7 +55,7 @@ game: {
         ++
         ;maybe do something else if it's not a pointer
         +
-        rts
+        rtl
     }
     
     
