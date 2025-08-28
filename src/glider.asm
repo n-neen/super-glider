@@ -31,9 +31,9 @@ glider: {
         
         
         ..spawn: {
-            lda #$0095
+            lda !gliderrespawnx     ;$95
             sta !gliderx            ;glider initial position
-            lda #$0030
+            lda !gliderrespawny     ;$30
             sta !glidery
             
             lda !kliftstatedown
@@ -512,6 +512,10 @@ glider: {
         sta !gliderlives
         
         stz !glidernextstate
+        
+        ;todo
+        ;set respawn point
+        
         jsl glider_init_spawn
         rts
     }

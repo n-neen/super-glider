@@ -428,7 +428,7 @@ load: {
     }
     
     .sprite: {
-    ;initiates s vram transfers:
+    ;initiates 2 vram transfers:
     ;gfx, palette
     ;takes arguments:
     ;a = sprite index
@@ -441,7 +441,7 @@ load: {
         plb
     
         rep #$30
-        asl #3          ;a = a * 8 (table entries are 8 bytes long
+        asl #3          ;a = a * 8 (table entries are 8 bytes long)
         sta !dmaloadindex
     
         jsr load_sprite_gfx
@@ -582,7 +582,10 @@ tablepointers: {            ;not actually used in this refactored routine
 }
 
 ;in order to add a background type, you must add an entry in each corresponding table
-;loading "background 00" loads the first entry of .bg_gfx, .bg_tilemaps and .bg_palettes
+;the tilemap long pointers exist in 'layertilemaps' because of the layer tilemap buffer
+;so 'loadingtable' has a reference to the buffer, and we load the buffer elsewhere
+;at 'layertilemap_writebuffer'
+;loading "background 00" loads the first entry of .bg_gfx, .bg_tilemaps (indirectly) and .bg_palettes
 ;table format:
 
 macro loadtablentry(pointer, size, baseaddr, index)

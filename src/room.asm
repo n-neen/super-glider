@@ -16,7 +16,7 @@ room: {
         ;number of bytes into the room header the thing is
         ;roomobjlist               =       $0000
         ;roomenemylist             =       $0002
-        ;roombgtypebounds          =       $0004   ;bg is high byte, bounds is low byte
+        ;roombgtypebounds          =       $0004   ;bg is low byte, bounds is high byte
         ;roomroutineptr            =       $0006
         
         ;argument:
@@ -125,6 +125,12 @@ room: {
             lda !ductoutputxpos
             sta !gliderx
             
+            lda !gliderx
+            sta !gliderrespawnx
+            
+            lda #$0020
+            sta !gliderrespawny
+            
             lda !ktranstimer
             sta !glidertranstimer
             sta !gliderstairstimer
@@ -141,6 +147,12 @@ room: {
             lda !kleftbound+7
             sta !gliderx
             
+            lda !glidery
+            sta !gliderrespawny
+            
+            lda !gliderx
+            sta !gliderrespawnx
+            
             lda !ktranstimer
             sta !glidertranstimer
             
@@ -156,6 +168,12 @@ room: {
             lda !krightbound-7
             sta !gliderx
             
+            lda !glidery
+            sta !gliderrespawny
+            
+            lda !gliderx
+            sta !gliderrespawnx
+            
             lda !ktranstimer
             sta !glidertranstimer
             
@@ -170,6 +188,12 @@ room: {
             
             lda !kfloor-$40
             sta !glidery
+            
+            lda !gliderx
+            sta !gliderrespawnx
+            
+            lda #$0040
+            sta !gliderrespawny
             
             lda !ktranstimer
             sta !glidertranstimer
@@ -187,6 +211,12 @@ room: {
             lda !kceiling+$28
             sta !glidery
             
+            lda !gliderx
+            sta !gliderrespawnx
+            
+            lda #$0040
+            sta !gliderrespawny
+            
             lda !ktranstimer
             sta !glidertranstimer
             sta !gliderstairstimer
@@ -196,6 +226,7 @@ room: {
 
     }
     
+
 
 
 ;bounds, background field:

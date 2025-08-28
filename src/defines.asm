@@ -99,6 +99,9 @@ print "glider ram start: ", hex(!gliderramstart)
 !bandtimer          =       !gliderramstart+62
 !foilamount         =       !gliderramstart+64
 !firetimer          =       !gliderramstart+66
+
+!gliderrespawnx     =       !gliderramstart+68
+!gliderrespawny     =       !gliderramstart+70
 print "glider ram end: ", hex(!bandtimer)
 
 ;enemy ram

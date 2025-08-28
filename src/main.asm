@@ -269,6 +269,12 @@ newgame: {
     lda #$0004
     jsl load_sprite         ;load sprite data 3 (drip)
     
+    lda #$0095
+    sta !gliderrespawnx
+    
+    lda #$0030
+    sta !gliderrespawny
+    
     jsl glider_init
     jsl hud_updatelives
     
