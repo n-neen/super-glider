@@ -19,4 +19,11 @@ hud_data: {
         incbin "./data/tilemaps/hud.map"
 }
 
+fishdata: {
+    .gfx:
+        incbin "./data/sprites/fish.gfx"
+    .palette:
+        dw $0000
+}
+
 print "bank $84 end: ", pc

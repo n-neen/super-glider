@@ -26,13 +26,6 @@ todo: {
         end of game, window (w/ cat)
         improve title screen
         options, menus
-        room format:
-            change bounds from $1001 to something like
-            %0000000000000011
-            i.e.
-            $0001   right bound
-            $0002   left bound
-            to maximize the other space that can be used
     }
     
     room: {

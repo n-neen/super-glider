@@ -21,8 +21,6 @@ game: {
         jsl obj_handle
         jsl obj_collision
         
-        jsl enemy_top
-        
         jsr bands_handle
         
         jsr glider_handle
@@ -30,6 +28,8 @@ game: {
         jsr glider_checktrans
         
         jsl obj_collision
+        
+        jsl enemy_top
         
         ;jsl coolmode
         

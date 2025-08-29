@@ -127,6 +127,7 @@ glider: {
         plp
         plb
         plx
+        ply
         rtl
     }
     
@@ -145,7 +146,7 @@ glider: {
         
         lda !iframecounter             ;traditional iframes
         bit #$0001
-        bne +
+        bne glider_nodraw
         
         ldy #$0000
         

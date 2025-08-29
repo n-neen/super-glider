@@ -277,7 +277,7 @@ print "object ram start: ", hex(!objvariable+!objectarraysize+2)
 !kbatteryoff                =       #$0000
 
 !kbandammoamount            =       #$0010
-!kbandtimerlength           =       #$0008
+!kbandtimerlength           =       #$000a
 
 !kbandxspeed                =       #$0002
 !kbandxsubspeed             =       #$8000

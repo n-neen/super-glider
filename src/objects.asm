@@ -537,83 +537,114 @@ obj: {
         
         ..tabletop:     dw obj_headers_tabletop
         ..tablepole:    dw obj_headers_tablepole
+        
+        ..fishbowl:     dw obj_headers_fishbowl
     }
     
     
     
     .headers: {
         ;object types
-        ..vent: {     ;tilemap pointer,     xsize, ysize, routine,                  properties
+        ..vent:       ;tilemap pointer,     xsize, ysize, routine,                  properties
             dw #obj_tilemaps_vent,          $0006, $0003, obj_routines_vent,        $8000
-        }
         
-        ..candle: {
+        ..candle:
             dw #obj_tilemaps_candle,        $0004, $0004, obj_routines_candle,      $0000
-        }
         
-        ..fanR: {
+        ..fanR:
             dw #obj_tilemaps_fanR,          $0004, $0007, obj_routines_none,        $0000
-        }
         
-        ..fanL: {
+        ..fanL:
             dw #obj_tilemaps_fanL,          $0005, $0007, obj_routines_none,        $0000
-        }
         
-        ..tallcandle: {
+        ..tallcandle:
             dw #obj_tilemaps_tallcandle,    $0002, $0008, obj_routines_none,        $0000
-        }
         
-        ..shelf: {
+        ..shelf:
             dw !objdyntilemap,              $0030, $0001, obj_routines_shelf,       $0000
-        }
         
-        ..upstairs: {
+        ..upstairs:
             dw #obj_tilemaps_upstairs,      $000c, $0014, obj_routines_upstairs,    $8000
-        }
         
-        ..dnstairs {
+        ..dnstairs
             dw #obj_tilemaps_dnstairs,      $000c, $0014, obj_routines_dnstairs,    $8000
-        }
         
-        ..openwall: {
+        ..openwall:
             dw #obj_tilemaps_openwall,      $0005, $0020, obj_routines_delete,      $8000
-        }
         
-        ..window: {
+        ..window:
             dw #obj_tilemaps_window,        $0006, $0008, obj_routines_delete,      $8000
-        }
         
-        ..ozma: {
+        ..ozma:
             dw #obj_tilemaps_ozma,          $000c, $000b, obj_routines_delete,      $8000
-        }
         
-        ..lamp: {
+        ..lamp:
             dw #obj_tilemaps_lamp,          $0004, $0005, obj_routines_delete,      $0000
-        }
         
-        ..table: {
+        ..table:
             dw #obj_tilemaps_table,         $0009, $000d, obj_routines_none,        $0000
-        }
         
-        ..table2: {
+        ..table2:
             dw #obj_tilemaps_table2,        $000b, $0008, obj_routines_none,        $0000
-        }
         
-        ..tabletop: {
+        ..tabletop:
             dw !objdyntilemap,              $0000, $0000, obj_routines_none,        $4000
-        }
         
-        ..tablepole: {
+        ..tablepole:
             dw !objdyntilemap,              $0000, $0000, obj_routines_none,        $c000
-        }
         
-        .tablebase: {
+        ..tablebase:
             dw #obj_tilemaps_tablebase,     $0000, $0000, obj_routines_none,        $4000
-        }
+        
+        ..fishbowl:
+            dw #obj_tilemaps_fishbowl,      $0005, $0004, obj_routines_fishbowl,    $0000
     }
     
+    ;===========================================================================================
+    ;=====================================   O B J E C T    ====================================
+    ;===================================   R O U T I N E S   ===================================
+    ;===========================================================================================
     
     .routines: {
+    
+        ..fishbowl: {
+            ;spawn fish
+            phy
+            
+            lda #enemy_ptr_fish
+            sta !enemydynamicspawnslot          ;enemy type
+            
+            lda !objxpos,x
+            asl #2
+            clc
+            adc #$000d
+            sta !enemydynamicspawnslot+2        ;x
+            
+            lda !objypos,x
+            asl #2
+            clc
+            adc #$0008
+            sta !enemydynamicspawnslot+4        ;y
+            
+            lda !objvariable,x                  ;object's variable gets passed to fish enemy
+            xba
+            sta !enemydynamicspawnslot+8        ;properties 2
+                                                ;jump height (low byte)
+                                                ;palette (high byte) (unlikely to be used)
+            
+            phx
+            jsl enemy_findslot                  ;y = available slot
+            ldx #!enemydynamicspawnslot         ;x = enemy population entry ptr
+            jsl enemy_spawn                     ;spawn enemy
+            plx
+            
+            
+            ;clear routine
+            stz !objroutineptr,x
+            
+            ply
+            rts
+        }
     
         ..candle: {
             
@@ -938,6 +969,11 @@ obj: {
         
         ..tablebase: {
             ;incbin "./data/tilemaps/objects/tablebase.map"
+            dw $ffff
+        }
+        
+        ..fishbowl: {
+            incbin "./data/tilemaps/objects/fishbowl.map"
             dw $ffff
         }
         

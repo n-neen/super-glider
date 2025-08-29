@@ -780,7 +780,7 @@ enemy: {
         ..clock:        dw enemy_headers_clock                  ;
         ..battery:      dw enemy_headers_battery                ;
         ..bandspack:    dw enemy_headers_bandspack              ;
-        ..dart:         dw enemy_headers_dart                   ;
+        ..dart:         dw enemy_headers_dart                   ; all exist in this file
         ..duct:         dw enemy_headers_duct                   ;
         ..band:         dw enemy_headers_band                   ;
         ..lightswitch:  dw enemy_headers_lightswitch            ;
@@ -788,12 +788,14 @@ enemy: {
         ..drip:         dw enemy_headers_drip                   ;
         ..drop:         dw enemy_headers_drop                   ;
         ..foil:         dw enemy_headers_foil                   ;
-        ..catbody:      dw cat_bodyheader
-        ..catpaw:       dw cat_pawheader
-        ..cattail:      dw cat_tailheader
-        ..fire:         dw enemy_headers_fire
-        ..candleflame:  dw enemy_headers_candleflame
-        ;..gfxloader     dw gfxloader_header                    ;todo: restores graphics overwritten by the cat: entire second page of sprite graphics
+        ..fire:         dw enemy_headers_fire                   ;
+        ..candleflame:  dw enemy_headers_candleflame            ;
+        
+        ..catbody:      dw cat_bodyheader                       ;
+        ..catpaw:       dw cat_pawheader                        ;
+        ..cattail:      dw cat_tailheader                       ; exist in their own files
+        ..fish:         dw fish_header                          ;
+        
         ;todo: basketball
         ;todo: toaster
     }
@@ -920,7 +922,6 @@ enemy: {
                 enemy_main_candleflame,                 ;main routine,
                 enemy_touch_candleflame,                ;touch,
                 $0000                                   ;shot
-                
                 
     }
 

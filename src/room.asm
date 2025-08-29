@@ -696,10 +696,12 @@ room: {
         }
 
         ..23: {
+            ;obj type               x      y       palette  variable
             dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
             dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
             dw #obj_ptr_upstairs,   $000e, $0005,  $0400,   $0000
             dw #obj_ptr_vent,       $0010, $001a,  $0000,   $0013
+            dw #obj_ptr_fishbowl,   $0018, $0016,  $0800,   $0010
             dw $ffff
         }
 

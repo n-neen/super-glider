@@ -105,6 +105,17 @@ spritemap: {
             dw spritemap_candleflame_1,
                spritemap_candleflame_2
         }
+        
+        ..fish: {
+            dw spritemap_fish_1,
+               spritemap_fish_2,
+               spritemap_fish_3,
+               spritemap_fish_4,
+               spritemap_fish_5,
+               spritemap_fish_6,
+               spritemap_fish_7,
+               spritemap_fish_8
+        }
     }
     
     
@@ -419,6 +430,48 @@ spritemap: {
         ..2: {
             db $01
             db $00, $00, $ee,   %00111100,  %00000010
+        }
+    }
+    
+    .fish: {
+        ..1: {
+            db $01
+            db $00, $00, $50,   %00111101,  %00000010
+        }
+        
+        ..2: {
+            db $01
+            db $00, $00, $52,   %00111101,  %00000010
+        }
+        
+        ..3: {
+            db $01
+            db $00, $00, $54,   %00111101,  %00000010
+        }
+        
+        ..4 {
+            db $01
+            db $00, $00, $56,   %00111101,  %00000010
+        }
+        
+        ..5: {
+            db $01
+            db $00, $00, $58,   %00111101,  %00000010
+        }
+        
+        ..6: {
+            db $01
+            db $00, $00, $5a,   %00111101,  %00000010
+        }
+        
+        ..7: {
+            db $01
+            db $00, $00, $5c,   %00111101,  %00000010
+        }
+        
+        ..8 {
+            db $01
+            db $00, $00, $5e,   %00111101,  %00000010
         }
     }
 }
