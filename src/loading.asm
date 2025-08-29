@@ -640,7 +640,7 @@ loadingtable: {
             %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $04)     ;bg4    = 04
         }       
                 
-        ..palettes: {       
+        ..palettes: {
             %loadtablentry(#bg3palette,             $0100, !palettes,               $00)     ;obj    = 00              ;object layer
             %loadtablentry(#splashpalette,          $0100, !palettes,               $01)     ;splash = 01
             %loadtablentry(#bg2palette,             $0100, !palettes,               $02)     ;bg1    = 02
