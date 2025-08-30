@@ -13,7 +13,7 @@ copter: {
         jsr copter_movedown
         jsr copter_checkheight
         
-        jsr copter_movelaterally
+        jsr copter_determinedirectionandmove
         jsr copter_checklateral
         
         lda !roomcounter
@@ -23,8 +23,8 @@ copter: {
         lda !enemytimer,x
         inc
         sta !enemytimer,x
-        cmp #$0010
-        beq ++
+        ;cmp #$0010
+        ;beq ++
         
         -
         jsr copter_animate
@@ -59,7 +59,7 @@ copter: {
         
     }
     
-    .movelaterally: {
+    .determinedirectionandmove: {
         !tempspeed      =   !localtempvar
         !tempsubspeed   =   !localtempvar2
         
@@ -73,6 +73,22 @@ copter: {
         xba
         sta !tempsubspeed
         
+        lda !enemyproperty2,x
+        bit #$0100
+        bne +
+        
+        jsr copter_moveright
+        rts
+        
+        +
+        jsr copter_moveleft
+        rts
+    }
+    
+    .moveright: {
+        !tempspeed      =   !localtempvar
+        !tempsubspeed   =   !localtempvar2
+        
         lda !enemysubx,x
         clc
         adc !tempsubspeed
@@ -80,6 +96,22 @@ copter: {
         
         lda !enemyx,x
         adc !tempspeed
+        sta !enemyx,x
+        
+        rts
+    }
+    
+    .moveleft: {
+        !tempspeed      =   !localtempvar
+        !tempsubspeed   =   !localtempvar2
+        
+        lda !enemysubx,x
+        clc
+        adc !tempsubspeed
+        sta !enemysubx,x
+        
+        lda !enemyx,x
+        sbc !tempspeed
         sta !enemyx,x
         
         rts
@@ -113,7 +145,7 @@ copter: {
     
     .startwaiting: {
         lda !enemyproperty,x
-        and #$ff00
+        and #$fe00
         xba
         sta !enemytimer,x
         
@@ -125,7 +157,7 @@ copter: {
     
     .wait: {
         dec !enemytimer,x
-        beq +
+        bmi +
         rts
         
         +
@@ -152,6 +184,23 @@ copter: {
         rts
     }
     
+    .gotshot: {
+        lda !enemyy,x
+        clc
+        adc #$0002          ;fallspeed
+        sta !enemyy,x
+        cmp !kfloor
+        bpl +
+        rts
+        
+        +
+        stz !enemyy,x
+        lda #copter_main
+        sta !enemymainptr,x
+        
+        rts
+    }
+    
     .animate: {
         phy
         phb
@@ -164,6 +213,7 @@ copter: {
         tay
         
         lda copter_animate_table,y
+        bmi +
         clc
         adc #spritemap_pointers_copter
         sta !enemyspritemapptr,x
@@ -172,26 +222,42 @@ copter: {
         ply
         rts
         
+        +
+        stz !enemytimer,x
+        plb
+        ply
+        rts
+        
         
         ..table: {
             dw $0000,
                $0000,
+               $0000,
+               $0000,
+               
                $0002,
                $0002,
+               $0002,
+               $0002,
+               
                $0004,
                $0004,
                $0004,
+               $0004,
+               
                $0006,
                $0006,
                $0006,
-               $0006,
+               
                $0004,
                $0004,
                $0004,
-               $0004,
+               
                $0002,
                $0002,
-               $0002
+               $0002,
+               
+               $8000
         }
     }
     
@@ -200,6 +266,11 @@ copter: {
     }
     
     .shot: {
+        lda #spritemap_pointers_copter+8
+        sta !enemyspritemapptr,x
+        
+        lda #copter_gotshot
+        sta !enemymainptr,x
         rts
     }
 

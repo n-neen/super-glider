@@ -37,10 +37,6 @@ switch: {
         $0200 bit = spritemap selection
     property3
         %rrrrrrrrssiiiiit
-         8421842184218421
-         000000000000
-         00000000
-         0000
          
         r = room index of target
         s = property select of target
@@ -74,7 +70,7 @@ all prizes: {
         each item gets one bit and it must be unique
 }
 
-copter:
+copter: {
     property:
         x speed.subspeed [speed is signed, subspeed is not]
             ssbb
@@ -82,13 +78,18 @@ copter:
             bb = bb00 subspeed
     property2:
         high byte:
-            timer
+            %tttttttd
+            d = select left or right
+            t = respawn timer
+        low byte:
+            sprite properties
+            
     property3:
         y speed.subspeed:
             ssbb
             ss = speed
             bb = bb00 subspeed
-
+}
 
 dart:
     unfinished, todo

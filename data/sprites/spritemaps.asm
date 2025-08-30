@@ -121,7 +121,8 @@ spritemap: {
             dw spritemap_copter_1,
                spritemap_copter_2,
                spritemap_copter_3,
-               spritemap_copter_4
+               spritemap_copter_4,
+               spritemap_copter_5
         }
     }
     
@@ -509,5 +510,12 @@ spritemap: {
             db $f8, $f8, $7a,   %00110001,  %00000010
             db $08, $f8, $7c,   %00110001,  %00000010
         }
+        
+        ..5: {
+            db $02
+            db $00, $f8, $7e,   %00110001,  %00000010
+            db $00, $08, $9e,   %00110001,  %00000010
+        }
+        
     }
 }
