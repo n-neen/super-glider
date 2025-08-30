@@ -47,9 +47,12 @@ org $828000
     incsrc "./src/glider.asm"
     incsrc "./src/bands.asm"
     incsrc "./src/enemies.asm"
+    
     incsrc "./src/enemies/cat.asm"
-    incsrc "./src/enemies/instructionlisthandler.asm"
     incsrc "./src/enemies/fish.asm"
+    incsrc "./src/enemies/copter.asm"
+    
+    incsrc "./src/enemies/instructionlisthandler.asm"
     incsrc "./data/sprites/spritemaps.asm"
     incsrc "./src/roomroutines.asm"
     print "bank $82 end: ", pc

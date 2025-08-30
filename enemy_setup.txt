@@ -74,6 +74,20 @@ all prizes: {
         each item gets one bit and it must be unique
 }
 
+copter:
+    property:
+        x speed.subspeed [speed is signed, subspeed is not]
+            ssbb
+            ss = speed
+            bb = bb00 subspeed
+    property2:
+        high byte:
+            timer
+    property3:
+        y speed.subspeed:
+            ssbb
+            ss = speed
+            bb = bb00 subspeed
 
 
 dart:

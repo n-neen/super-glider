@@ -26,4 +26,11 @@ fishdata: {
         dw $0000
 }
 
+copterdata: {
+    .gfx:
+        incbin "./data/sprites/copter.gfx"
+    .palette:
+        dw $0000
+}
+
 print "bank $84 end: ", pc
