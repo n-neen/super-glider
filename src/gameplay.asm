@@ -33,7 +33,7 @@ game: {
         
         ;jsl coolmode
         
-        jsl iframecolormath
+        ;jsl iframecolormath
         jsl handlecolormath
         
         jsr handlehud

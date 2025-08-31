@@ -514,9 +514,6 @@ glider: {
         
         stz !glidernextstate
         
-        ;todo
-        ;set respawn point
-        
         jsl glider_init_spawn
         rts
     }

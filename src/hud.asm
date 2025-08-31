@@ -67,6 +67,8 @@ hud: {
     
     .uploadtilemappartial: {
         ;upload tilemap from wram buffer to vram
+        ;during gameplay we only want to do a few rows
+        ;to save on cpu
         
         lda !hudupdateflag
         beq +

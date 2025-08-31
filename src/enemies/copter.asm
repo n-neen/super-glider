@@ -23,15 +23,9 @@ copter: {
         lda !enemytimer,x
         inc
         sta !enemytimer,x
-        ;cmp #$0010
-        ;beq ++
         
-        -
         jsr copter_animate
     +   rts
-    
-    ++  stz !enemytimer,x
-        bra -
     }
     
     .checklateral: {

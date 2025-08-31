@@ -35,6 +35,12 @@ org $8b8000
         incbin "./data/palettes/obj.pal"
         incbin "./data/palettes/obj2.pal"
         
+    bg5palette:
+        incbin "./data/palettes/bg5.pal"
+        incbin "./data/palettes/stairs.pal"
+        incbin "./data/palettes/obj.pal"
+        incbin "./data/palettes/obj2.pal"
+        
 ;===========================================================================================
 ;===============================   S P R I T E   D A T A   =================================
 ;===========================================================================================
@@ -80,8 +86,8 @@ objtilemap:
 bg4tilemap:
     incbin "./data/tilemaps/bg4.map"
 
-
-
+bg5tilemap:
+    incbin "./data/tilemaps/bg5.map"
 
 
 print "bank $8b end: ", pc

@@ -527,18 +527,15 @@ obj: {
         ..shelf:        dw obj_headers_shelf
         ..upstairs:     dw obj_headers_upstairs
         ..dnstairs:     dw obj_headers_dnstairs
-        ..openwall:     dw obj_headers_openwall
         ..window:       dw obj_headers_window
         ..ozma:         dw obj_headers_ozma
         ..lamp:         dw obj_headers_lamp
-        
         ..table:        dw obj_headers_table
-        ..table2:       dw obj_headers_table2
-        
-        ..tabletop:     dw obj_headers_tabletop
-        ..tablepole:    dw obj_headers_tablepole
-        
+        ..table2:       dw obj_headers_table2           ;unfinished
+        ..tabletop:     dw obj_headers_tabletop         ;unfinished
+        ..tablepole:    dw obj_headers_tablepole        ;unfinished
         ..fishbowl:     dw obj_headers_fishbowl
+        ..openwall:     dw openwall_header
     }
     
     
@@ -568,9 +565,6 @@ obj: {
         
         ..dnstairs
             dw #obj_tilemaps_dnstairs,      $000c, $0014, obj_routines_dnstairs,    $8000
-        
-        ..openwall:
-            dw #obj_tilemaps_openwall,      $0005, $0020, obj_routines_delete,      $8000
         
         ..window:
             dw #obj_tilemaps_window,        $0006, $0008, obj_routines_delete,      $8000
@@ -897,85 +891,52 @@ obj: {
     }
     
     .tilemaps: {
-        ..vent: {
-            incbin "./data/tilemaps/objects/floorvent.map"
+        macro objtilemapentry(filename)
+            incbin "./data/tilemaps/objects/<filename>.map"
             dw $ffff
-        }
+        endmacro
         
-        ..table2: {
-            incbin "./data/tilemaps/objects/table2.map"
-            dw $ffff
-        }
+        ..vent:
+            %objtilemapentry(floorvent)
         
-        ..candle: {
-            incbin "./data/tilemaps/objects/candle.map"
-            dw $ffff
-        }
+        ..table2:
+            %objtilemapentry(table2)
         
-        ..fanR: {
-            incbin "./data/tilemaps/objects/fanR.map"
-            dw $ffff
-        }
+        ..candle:
+            %objtilemapentry(candle)
         
-        ..fanL: {
-            incbin "./data/tilemaps/objects/fanL.map"
-            dw $ffff
-        }
+        ..fanR:
+            %objtilemapentry(fanR)
         
-        ..table: {
-            incbin "./data/tilemaps/objects/table.map"
-            dw $ffff
-        }
+        ..fanL:
+            %objtilemapentry(fanL)
         
-        ..tallcandle: {
-            incbin "./data/tilemaps/objects/tallcandle.map"
-            dw $ffff
-        }
+        ..table:
+            %objtilemapentry(table)
         
-        ;..shelf: {
-        ;    incbin "./data/tilemaps/objects/shelf.map"
-        ;    dw $ffff
-        ;}
+        ..tallcandle:
+            %objtilemapentry(tallcandle)
         
-        ..upstairs: {
-            incbin "./data/tilemaps/objects/up_stairs.map"
-            dw $ffff
-        }
+        ..upstairs:
+            %objtilemapentry(up_stairs)
         
-        ..dnstairs: {
-            incbin "./data/tilemaps/objects/down_stairs.map"
-            dw $ffff
-        }
+        ..dnstairs:
+            %objtilemapentry(down_stairs)
         
-        ..openwall: {
-            incbin "./data/tilemaps/objects/openwall.map"
-            dw $ffff
-        }
+        ..window:
+            %objtilemapentry(window)
         
-        ..window: {
-            incbin "./data/tilemaps/objects/window.map"
-            dw $ffff
-        }
+        ..ozma:
+            %objtilemapentry(ozma)
         
-        ..ozma: {
-            incbin "./data/tilemaps/objects/ozma.map"
-            dw $ffff
-        }
+        ..lamp:
+            %objtilemapentry(lamp)
         
-        ..lamp: {
-            incbin "./data/tilemaps/objects/lamp.map"
-            dw $ffff
-        }
+        ..tablebase:
+            ;%objtilemapentry(tablebase)
         
-        ..tablebase: {
-            ;incbin "./data/tilemaps/objects/tablebase.map"
-            dw $ffff
-        }
-        
-        ..fishbowl: {
-            incbin "./data/tilemaps/objects/fishbowl.map"
-            dw $ffff
-        }
+        ..fishbowl:
+            %objtilemapentry(fishbowl)
         
     }
     

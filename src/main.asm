@@ -295,7 +295,7 @@ newgame: {
     sta !roomindex
     asl
     tax
-    lda room_list,x         ;room = room $20
+    lda room_list,x
     sta !roomptr
     
     jsl obj_clearall
@@ -702,14 +702,6 @@ scroll: {
 ;===========================================================================================
 
 loadroom: {
-    ;turn screen off
-    ;load background
-    ;load object layer
-    ;load objects
-    ;draw objects (to allow layer 2 to be built from those objects which draw on it)
-    ;objects which can, will delete themselves after drawing
-    ;update layer 2 tilemap
-    ;turn screen on
     
     jsr waitfornmi
     jsr screenoff
@@ -731,6 +723,8 @@ loadroom: {
 ;===========================================================================================
 ;================================   STATE 7:  P A U S E   ==================================
 ;===========================================================================================
+
+;unimplemented
 
 pause: {
     jsl getinput
@@ -885,6 +879,7 @@ updateppuregisters: { ;transfer wram mirrors to their registers
     
     sep #$20
     
+    ;these scroll updates are probably unnecessary
     lda !bg1x
     sta $210d           ;update bg1 x scroll
     sta $210d

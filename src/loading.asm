@@ -627,11 +627,12 @@ loadingtable: {
     
     .bg: {
         ..gfx: {
-            %loadtablentry(#objgfx,                 $4000, !bg1start,               $00)     ;obj    = 00              ;object layer
-            %loadtablentry(#splashgfx,              $8000, !bg2start,               $01)     ;splash = 01
-            %loadtablentry(#bg2gfx,                 $4000, !bg2start,               $02)     ;bg2    = 02
-            %loadtablentry(#bg3gfx,                 $4000, !bg2start,               $03)     ;bg3    = 03
-            %loadtablentry(#bg4gfx,                 $4000, !bg2start,               $04)     ;bg4    = 04
+            %loadtablentry(#objgfx,                 $4000, !bg1start,               $00)     ;object layer      = 00
+            %loadtablentry(#splashgfx,              $8000, !bg2start,               $01)     ;splash            = 01
+            %loadtablentry(#bg2gfx,                 $4000, !bg2start,               $02)     ;simple room       = 02
+            %loadtablentry(#bg3gfx,                 $4000, !bg2start,               $03)     ;panneled room     = 03
+            %loadtablentry(#bg4gfx,                 $4000, !bg2start,               $04)     ;basement          = 04
+            %loadtablentry(#bg5gfx,                 $4000, !bg2start,               $04)     ;tiled room        = 05
         }
         
         ..tilemaps: {
@@ -640,6 +641,7 @@ loadingtable: {
             %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $02)     ;bg2    = 02
             %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $03)     ;bg3    = 03
             %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $04)     ;bg4    = 04
+            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $05)     ;bg4    = 04
         }       
                 
         ..palettes: {
@@ -648,6 +650,7 @@ loadingtable: {
             %loadtablentry(#bg2palette,             $0100, !palettes,               $02)     ;bg1    = 02
             %loadtablentry(#bg3palette,             $0100, !palettes,               $03)     ;bg3    = 03
             %loadtablentry(#bg4palette,             $0100, !palettes,               $04)     ;bg4    = 04
+            %loadtablentry(#bg5palette,             $0100, !palettes,               $04)     ;bg4    = 04
             
         }
     }
@@ -659,5 +662,6 @@ loadingtable: {
         dl #bg2tilemap                  : db $02
         dl #bg3tilemap                  : db $03
         dl #bg4tilemap                  : db $04
+        dl #bg5tilemap                  : db $05
     }
 }
