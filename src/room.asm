@@ -586,7 +586,7 @@ room: {
     .objlist: { ;obj type           x      y       palette  variable
         ..0: {                                              ;like room ptr for stairs, or vent height
             dw #obj_ptr_vent,       $0006, $001a,  $0000,   $0050           ;30
-            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000           ;2e
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000           ;2e
             dw #obj_ptr_vent,       $0012, $001a,  $0000,   $0020           ;2c
             dw #obj_ptr_vent,       $001a, $001a,  $0000,   $0020           ;2a
             dw #obj_ptr_upstairs,   $000e, $0005,  $0400,   $0000           ;28
@@ -594,8 +594,8 @@ room: {
         }
         
         ..1: {
-            dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
-            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
             dw #obj_ptr_fanL,       $0011, $000e,  $0800,   $0013
             dw #obj_ptr_table2,     $000b, $0015,  $0800,   $0000
             dw #obj_ptr_vent,       $0005, $001a,  $0000,   $0013
@@ -605,7 +605,7 @@ room: {
         }
         
         ..2: {
-            dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
             dw #obj_ptr_vent,       $0006, $001a,  $0000,   $0013
             dw #obj_ptr_vent,       $0014, $001a,  $0000,   $0033
             dw $ffff
@@ -729,7 +729,7 @@ room: {
         }
 
         ..20: {     ;second floor
-            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
             dw #obj_ptr_dnstairs,   $0010, $0005,  $0400,   $0000
             dw #obj_ptr_vent,       $0011, $001a,  $0000,   $0013
             dw #obj_ptr_table,      $0004, $0011,  $0800,   $0000
@@ -739,8 +739,8 @@ room: {
 
         ..21: {
             dw #obj_ptr_shelf,      $0010, $0011,  $0800,   $0008
-            dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
-            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
             ;dw #obj_ptr_shelf,      $0010, $0013,  $0800,   $0006
             ;dw #obj_ptr_shelf,      $0010, $0015,  $0800,   $0004
             ;dw #obj_ptr_shelf,      $0010, $0017,  $0800,   $0002
@@ -753,8 +753,8 @@ room: {
         }
 
         ..22: {
-            dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
-            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
             dw #obj_ptr_vent,       $0008, $001a,  $0000,   $0013
             dw #obj_ptr_window,     $0010, $0008,  $0c00,   $0033
             dw #obj_ptr_candle,     $000f, $000f,  $0800,   $0000
@@ -763,8 +763,8 @@ room: {
 
         ..23: {
             ;obj type               x      y       palette  variable
-            dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
-            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0000, $0001,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0000, $0001,  $0000,   $8000
             dw #obj_ptr_upstairs,   $000e, $0005,  $0400,   $0000
             dw #obj_ptr_vent,       $0010, $001a,  $0000,   $0013
             dw #obj_ptr_fishbowl,   $0018, $0016,  $0800,   $0010
