@@ -1,0 +1,3 @@
+C:\Users\keenan\Desktop\superfamiconv.exe -i "C:\Users\keenan\Desktop\glider pro snes\snes\asset work\swingers_room\swingers_room.png" -p "C:\Users\keenan\Desktop\glider pro snes\snes\asset work\swingers_room\swingers_room.pal" -t "C:\Users\keenan\Desktop\glider pro snes\snes\asset work\swingers_room\swingers_room.gfx" -m "C:\Users\keenan\Desktop\glider pro snes\snes\asset work\swingers_room\swingers_room.map" -v --color-zero 7f007f
+
+pause

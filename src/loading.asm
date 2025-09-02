@@ -634,6 +634,7 @@ loadingtable: {
             %loadtablentry(#bg4gfx,                 $4000, !bg2start,               $04)     ;basement          = 04
             %loadtablentry(#bg5gfx,                 $4000, !bg2start,               $05)     ;tiled room        = 05
             %loadtablentry(#bg6gfx,                 $4000, !bg2start,               $06)     ;skywalk           = 06
+            %loadtablentry(#bg7gfx,                 $4000, !bg2start,               $07)     ;swingers room ;]  = 07
         }
         
         ..tilemaps: {
@@ -643,7 +644,8 @@ loadingtable: {
             %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $03)     ;bg3    = 03
             %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $04)     ;bg4    = 04
             %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $05)     ;bg5    = 05
-            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $06)     ;bg6    = 05
+            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $06)     ;bg6    = 06
+            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $07)     ;bg7    = 07
         }       
                 
         ..palettes: {
@@ -654,6 +656,7 @@ loadingtable: {
             %loadtablentry(#bg4palette,             $0100, !palettes,               $04)     ;bg4    = 04
             %loadtablentry(#bg5palette,             $0100, !palettes,               $05)     ;bg5    = 05
             %loadtablentry(#bg6palette,             $0100, !palettes,               $06)     ;bg6    = 06
+            %loadtablentry(#bg7palette,             $0100, !palettes,               $07)     ;bg7    = 07
             
         }
     }
@@ -667,5 +670,6 @@ loadingtable: {
         dl #bg4tilemap                  : db $04
         dl #bg5tilemap                  : db $05
         dl #bg6tilemap                  : db $06
+        dl #bg7tilemap                  : db $07
     }
 }

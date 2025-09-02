@@ -63,7 +63,8 @@ openwall: {
            openwall_tilemaps_bg3,
            openwall_tilemaps_bg4,
            openwall_tilemaps_bg5,
-           openwall_tilemaps_bg6
+           openwall_tilemaps_bg6,
+           openwall_tilemaps_bg7
     }
     
     .widthlist: {
@@ -73,7 +74,8 @@ openwall: {
            $0006,       ;bg3
            $0004,       ;bg4
            $0006,       ;bg5
-           $0004        ;bg6
+           $0004,       ;bg6
+           $0006        ;bg7
     }
     
     .tilemaps: {
@@ -87,6 +89,8 @@ openwall: {
             %objtilemapentry(openwall/openwall_bg5)
         ..bg6:
             %objtilemapentry(openwall/openwall_bg6)
+        ..bg7:
+            %objtilemapentry(openwall/openwall_bg7)
     }
     
     .spawner: {

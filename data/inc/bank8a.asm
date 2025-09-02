@@ -10,4 +10,4 @@ org $8a8000
 splashgfx:
     incbin "./data/tiles/splash.gfx"
         
-print "bank $8a end: ", pc
+print "bank $8a end: ", pc, " FULL"

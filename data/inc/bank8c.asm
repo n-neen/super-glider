@@ -13,4 +13,4 @@ bg2gfx:
 bg6gfx:
     incbin "./data/tiles/bg6.gfx"
     
-print "bank $8c end: ", pc
+print "bank $8c end: ", pc, " FULL"
