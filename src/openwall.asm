@@ -1,11 +1,18 @@
 openwall: {
-
+    ;this is an object type. see "objects.asm" for the system that it interacts with
+    ;by default, a room's layer 2 tilemap contains both left and right walls
+    ;this object removes the wall, but does not change the room bounds
+    ;the $0001 (right) and $0002 (left) bits of !roombounds do that
+    ;see room.asm for the room's bounds field to make the player able to exit the room
+    ;in the desire direction
+    
+    
     .header:
-        dw  $0000,                      ;tilemap ptr, set in init
-            $0000,                      ;x size, set in init
-            $0020,                      ;y size
-            openwall_init,              ;routine ptr
-            $8000                       ;properties
+        dw  $0000,              ;tilemap ptr, set in init
+            $0000,              ;x size, set in init
+            $0020,              ;y size
+            openwall_init,      ;routine ptr
+            $8000               ;properties
             
     .init: {
         phy
@@ -18,11 +25,13 @@ openwall: {
         asl
         tay
         
+        lda openwall_widthlist,y
+        beq +++                 ;if width = 0, stop (delete object)
+        sta !objxsize,x
+        
         lda openwall_tilemaplist,y
         sta !objtilemapointer,x
         
-        lda openwall_widthlist,y
-        sta !objxsize,x
         
         lda !objvariable,x      ;left openwall  = $8000 variable
         bmi +                   ;right openwall = $0000
@@ -41,7 +50,7 @@ openwall: {
         ++
         stz !objypos,x          ;both kinds always y position = 0
         jsr obj_draw
-        jsr obj_clear
+    +++ jsr obj_clear
         plb
         ply
         rts
@@ -53,7 +62,8 @@ openwall: {
            openwall_tilemaps_bg2,
            openwall_tilemaps_bg3,
            openwall_tilemaps_bg4,
-           openwall_tilemaps_bg5
+           openwall_tilemaps_bg5,
+           openwall_tilemaps_bg6
     }
     
     .widthlist: {
@@ -62,7 +72,8 @@ openwall: {
            $0005,       ;bg2
            $0006,       ;bg3
            $0004,       ;bg4
-           $0006        ;bg5
+           $0006,       ;bg5
+           $0004        ;bg6
     }
     
     .tilemaps: {
@@ -73,7 +84,9 @@ openwall: {
         ..bg4:
             %objtilemapentry(openwall/openwall_bg4)
         ..bg5:
-            %objtilemapentry(openwall/openwall_bg5) ;todo: new tilemap
+            %objtilemapentry(openwall/openwall_bg5)
+        ..bg6:
+            %objtilemapentry(openwall/openwall_bg6)
     }
     
     .spawner: {
@@ -93,7 +106,6 @@ openwall: {
         bne ..leftbound
         
         ..return:
-        
         rtl
         
         ..leftbound: {

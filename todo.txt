@@ -17,8 +17,6 @@ todo: {
         swinger's room
         unfinished room
         many-windowed room
-        bathroom        ;done, but the open walls don't work, oops
-            so, todo: fix that^
         library
     }
     
@@ -29,9 +27,7 @@ todo: {
     }
     
     room: {
-        combine room bg and bounds into a single word
-        and leave the other word unused
-        possibly for use as a pointer to a routine to run
+        ;
     }
     
     bugs: {

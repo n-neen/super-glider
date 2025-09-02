@@ -549,11 +549,11 @@ room: {
                  ;objs            enemies          bounds,bg;   routine ptr
         ..80: dw room_objlist_80, room_enemylist_80, $0203,     $0000
         ..81: dw room_objlist_81, room_enemylist_81, $0003,     $0000
-        ..82: dw room_objlist_82, room_enemylist_82, $0305,     $0000
-        ..83: dw room_objlist_83, room_enemylist_83, $0102,     $0000
-        ..84: dw room_objlist_84, room_enemylist_84, $0003,     $0000
-        ..85: dw room_objlist_85, room_enemylist_85, $0103,     $0000
-        ..86: dw room_objlist_86, room_enemylist_86, $0102,     $0000
+        ..82: dw room_objlist_82, room_enemylist_82, $0005,     $0000
+        ..83: dw room_objlist_83, room_enemylist_83, $0006,     $0000
+        ..84: dw room_objlist_84, room_enemylist_84, $0006,     $0000
+        ..85: dw room_objlist_85, room_enemylist_85, $0006,     $0000
+        ..86: dw room_objlist_86, room_enemylist_86, $0006,     $0000
         ..87: dw room_objlist_87, room_enemylist_87, $0102,     $0000
         ..88: dw room_objlist_88, room_enemylist_88, $0102,     $0000
         ..89: dw room_objlist_89, room_enemylist_89, $0102,     $0000
@@ -893,7 +893,7 @@ room: {
 
         ..42: {
             dw #obj_ptr_upstairs,   $000e, $0005,  $0400,   $0000
-            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
             dw #obj_ptr_vent,       $000a, $001a,  $0000,   $0013
             dw $ffff
         }
@@ -901,21 +901,21 @@ room: {
         ..43: {
             dw #obj_ptr_dnstairs,   $000e, $0005,  $0400,   $0000
             dw #obj_ptr_vent,       $000a, $001a,  $0000,   $0013
-            dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
-            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
             dw $ffff
         }
 
         ..44: {
-            dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
-            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
             dw #obj_ptr_upstairs,   $000e, $0005,  $0400,   $0000
             dw #obj_ptr_vent,       $0010, $001a,  $0000,   $0043
             dw $ffff
         }
 
         ..45: {
-            dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $8000
             dw $ffff
         }
 
@@ -1045,14 +1045,14 @@ room: {
 
         ..64: {
             dw #obj_ptr_vent,       $000a, $001a,  $0000,   $0013
-            dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
-            dw #obj_ptr_openwall,   $001c, $0001,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
             dw #obj_ptr_dnstairs,   $000e, $0005,  $0400,   $0000
             dw $ffff
         }
 
         ..65: {
-            dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
             dw #obj_ptr_vent,       $0018, $001a,  $0000,   $0013
             dw #obj_ptr_vent,       $0003, $001a,  $0000,   $0013
             ;dw #obj_ptr_table,      $000d, $0010,  $0800,   $0000
@@ -1172,22 +1172,36 @@ room: {
         }
 
         ..82: {
+            dw #obj_ptr_dnstairs,   $0005, $0005,  $0400,   $0000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
+            dw #obj_ptr_vent,       $0003, $001a,  $0000,   $0013
             dw $ffff
         }
 
         ..83: {
+            dw #obj_ptr_vent,       $0008, $001a,  $0000,   $0013
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
             dw $ffff
         }
 
         ..84: {
+            dw #obj_ptr_vent,       $0008, $001a,  $0000,   $0013
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
             dw $ffff
         }
 
         ..85: {
+            dw #obj_ptr_vent,       $0008, $001a,  $0000,   $0013
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
             dw $ffff
         }
 
         ..86: {
+            dw #obj_ptr_vent,       $0008, $001a,  $0000,   $0013
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
+            dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
             dw $ffff
         }
 
@@ -1295,8 +1309,8 @@ room: {
 
     .enemylist: {
         ..0: {
-            ;enemy type             x,        y,         property,  prop2,      property3
-            dw enemy_ptr_duct,      $0020,    $0008,     $9021,     $8004,      $0000
+            ;enemy type             x,        y,        property,  prop2,       property3
+            dw enemy_ptr_duct,      $0020,    $0008,    $9021,      $8004,      $0000
             dw $ffff                                                 
         }                                                            
                                                                      
