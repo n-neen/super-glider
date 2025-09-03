@@ -19,14 +19,14 @@ specialtilemaploading: {
     ;y = special tilemap pointer in bank $88 (currently)
     
     
-    ldx #$0802
-    ldy #$0802
+    ldx #$0800
+    ldy #$0800
     -
     lda (!localtempvar),y
     sta.l !layer2tilemap,x
     dex : dex
     dey : dey
-    bne -
+    bpl -
     
     stz !roomspecialptr
     

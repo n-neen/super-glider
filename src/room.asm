@@ -420,7 +420,6 @@ room: {
         ..0:  dw room_objlist_0,  room_enemylist_0,  $0204,     $0000
         ..1:  dw room_objlist_1,  room_enemylist_1,  $0004,     $0000
         ..2:  dw room_objlist_2,  room_enemylist_2,  $0004,     $0000
-        print pc
         ..3:  dw room_objlist_3,  room_enemylist_3,  $0008,     specialtilemaps_1&$7fff
         ..4:  dw room_objlist_4,  room_enemylist_4,  $0008,     specialtilemaps_2&$7fff
         ..5:  dw room_objlist_5,  room_enemylist_5,  $0008,     specialtilemaps_3&$7fff

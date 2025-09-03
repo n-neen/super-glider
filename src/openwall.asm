@@ -64,7 +64,8 @@ openwall: {
            openwall_tilemaps_bg4,
            openwall_tilemaps_bg5,
            openwall_tilemaps_bg6,
-           openwall_tilemaps_bg7
+           openwall_tilemaps_bg7,
+           $0000                    ;8 is ending scene, skip
     }
     
     .widthlist: {
@@ -75,7 +76,8 @@ openwall: {
            $0004,       ;bg4
            $0006,       ;bg5
            $0004,       ;bg6
-           $0006        ;bg7
+           $0006,       ;bg7
+           $0000        ;bg8 is ending scene, do not use
     }
     
     .tilemaps: {
