@@ -51,12 +51,14 @@ room: {
         sta !roombounds
         
         lda $0006,x
-        sta !roomroutineptr
+        sta !roomspecialptr
         
         lda $0004,x
         and #$00ff
         sta !roombg
         jsl load_background     ;relies on contents of A
+        
+        jsl specialtilemaploading
         
         jsl obj_spawnall
         jsl obj_handle
@@ -241,7 +243,7 @@ room: {
 ;the maximum room index supported is $ff. room link table entries would have to be changed
 ;in order to support more than that.
 ;todo: document what would need to be changed 
-    
+
 
     .list: {    ;room list
         
@@ -417,10 +419,11 @@ room: {
     .entry: {    ;objs            enemies          bounds,bg;   routine ptr
         ..0:  dw room_objlist_0,  room_enemylist_0,  $0204,     $0000
         ..1:  dw room_objlist_1,  room_enemylist_1,  $0004,     $0000
-        ..2:  dw room_objlist_2,  room_enemylist_2,  $0104,     $0000
-        ..3:  dw room_objlist_3,  room_enemylist_3,  $0102,     $0000
-        ..4:  dw room_objlist_4,  room_enemylist_4,  $0102,     $0000
-        ..5:  dw room_objlist_5,  room_enemylist_5,  $0102,     $0000
+        ..2:  dw room_objlist_2,  room_enemylist_2,  $0004,     $0000
+        print pc
+        ..3:  dw room_objlist_3,  room_enemylist_3,  $0008,     specialtilemaps_1&$7fff
+        ..4:  dw room_objlist_4,  room_enemylist_4,  $0008,     specialtilemaps_2&$7fff
+        ..5:  dw room_objlist_5,  room_enemylist_5,  $0008,     specialtilemaps_3&$7fff
         ..6:  dw room_objlist_6,  room_enemylist_6,  $0102,     $0000
         ..7:  dw room_objlist_7,  room_enemylist_7,  $0102,     $0000
         ..8:  dw room_objlist_8,  room_enemylist_8,  $0102,     $0000
@@ -613,7 +616,6 @@ room: {
         }
         
         ..3: {
-            dw #obj_ptr_vent,       $0014, $001a,  $0000,   $0000
             dw $ffff
         }
         

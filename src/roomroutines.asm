@@ -19,7 +19,10 @@ roomroutines: {
         lda #$0007
         jsl load_sprite         ;load sprite data 7 (fish)
         
-        stz !roomroutineptr
+        lda #$0008
+        jsl load_sprite         ;load sprite data 8 (copter)
+        
+        stz !roomspecialptr
         rtl
     }
 }

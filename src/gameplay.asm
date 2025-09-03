@@ -44,11 +44,15 @@ game: {
     }
     
     .runroomroutine: {
-        lda !roomroutineptr
+        ;only run this routine if the contents of roomspecialptr is negative
+        ;if it's zero of positive, exit
+        
+        
+        lda !roomspecialptr
         beq +
         bpl ++
         
-        jmp (!roomroutineptr)
+        jmp (!roomspecialptr)
         ;we will never return here after this jmp
         ;because the room routine's rts will go back to game_play
         

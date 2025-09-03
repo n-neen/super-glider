@@ -151,7 +151,7 @@ print "enemy ram end: ", hex(!enemyproperty3+!enemyarraysize+2)
 !roomindex               =      !housestart+18
 !ductoutputxpos          =      !housestart+20
 !roomcounter             =      !housestart+22
-!roomroutineptr          =      !housestart+24
+!roomspecialptr          =      !housestart+24
 
 !enemydynamicspawnslot   =      $0880
 
@@ -382,6 +382,10 @@ print "object ram start: ", hex(!objvariable+!objectarraysize+2)
 
 ;module label-derived defines
 
-!spritemapbanklong        =   spritemap&$ff0000
-!spritemapbankword        =   !spritemapbanklong>>8
-!spritemapbankshort       =   !spritemapbanklong>>16
+!spritemapbanklong          =   spritemap&$ff0000
+!spritemapbankword          =   !spritemapbanklong>>8
+!spritemapbankshort         =   !spritemapbanklong>>16
+
+!specialtilemapbanklong     =   specialtilemaps&$ff0000
+!specialtilemapbankword     =   !specialtilemapbanklong>>8
+!specialtilemapbankshort    =   !specialtilemapbanklong>>16
