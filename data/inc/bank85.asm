@@ -40,5 +40,11 @@ dripdata: {
         incbin "./data/sprites/drip.pal"
 }
 
+teddydata: {
+    .graphics:
+        incbin "./data/sprites/teddy.gfx"
+    .palette:
+        incbin "./data/sprites/teddy.pal"
+}
 
 print "bank $85 end: ", pc

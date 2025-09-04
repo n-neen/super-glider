@@ -1,0 +1,112 @@
+star: {
+    .header:
+        dw  spritemap_pointers_star,    ;spritemaps
+            $0040,                      ;xsize
+            $0040,                      ;ysize
+            $0000,                      ;init
+            star_main,                  ;main
+            star_touch,                 ;touch
+            $0000                       ;shot
+    
+    
+    .main: {
+        phx
+        phb
+        
+        phk
+        plb
+        
+        lda !enemytimer,x
+        inc
+        sta !enemytimer,x
+        -
+        asl
+        tay
+        lda star_animationtable,y
+        bmi +
+        clc
+        adc #spritemap_pointers_star
+        sta !enemyspritemapptr,x
+        
+        ++
+        plb
+        plx
+        rts
+        
+        +
+        stz !enemytimer,x
+        bra -
+    }
+    
+    .touch: {
+        ;brk #$00
+        ;end the game!
+        rts
+    }
+    
+    .animationtable: {
+        dw $0000,
+           $0000,
+           $0000,
+           $0000,
+           $0000,
+           $0000,
+           $0000,
+           $0000,
+           $0000,
+           $0000,
+           $0002,
+           $0002,
+           $0002,
+           $0002,
+           $0002,
+           $0002,
+           $0002,
+           $0002,
+           $0002,
+           $0002,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0006,
+           $0006,
+           $0006,
+           $0006,
+           $0006,
+           $0006,
+           $0006,
+           $0006,
+           $0006,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0004,
+           $0002,
+           $0002,
+           $0002,
+           $0002,
+           $0002,
+           $0002,
+           $0002,
+           $0002,
+           $0002,
+           $8000
+    }
+}

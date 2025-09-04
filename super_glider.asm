@@ -52,7 +52,11 @@ org $828000
     incsrc "./src/enemies/cat.asm"
     incsrc "./src/enemies/fish.asm"
     incsrc "./src/enemies/copter.asm"
-    incsrc "./src/enemies/instructionlisthandler.asm"
+    incsrc "./src/enemies/teddybear.asm"
+    incsrc "./src/enemies/gfxloader.asm"
+    incsrc "./src/enemies/star.asm"
+    
+    incsrc "./src/enemies/instructionlisthandler.asm"       ;unfinished
     
     incsrc "./data/sprites/spritemaps.asm"
     incsrc "./src/roomroutines.asm"

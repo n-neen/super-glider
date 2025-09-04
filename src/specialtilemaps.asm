@@ -4,7 +4,6 @@ specialtilemaploading: {
 
     phb
     
-    ;print pc
     pea.w !specialtilemapbankword
     plb : plb           ;db = bank where special tilemaps are stored
         

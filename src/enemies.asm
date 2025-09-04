@@ -796,6 +796,9 @@ enemy: {
         ..cattail:      dw cat_tailheader                       ; exist in their own files
         ..fish:         dw fish_header                          ;
         ..copter:       dw copter_header                        ;
+        ..teddy:        dw teddy_header                         ;
+        ..gfxloader:    dw gfxloader_header                     ;
+        ..star:         dw star_header                          ;
         
         ;todo: basketball
         ;todo: toaster

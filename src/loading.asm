@@ -608,6 +608,8 @@ loadingtable: {
             %loadtablentry(#catdata_graphics,       $1000, !spritestart+$1000,      $06)     ;cat           = 06    ;overwrites entire second page
             %loadtablentry(#fishdata_gfx,           $0400, !spritestart+$1500,      $07)     ;fish          = 07
             %loadtablentry(#copterdata_gfx,         $0800, !spritestart+$1700,      $08)     ;copter        = 08
+            %loadtablentry(#teddydata_graphics,     $0800, !spritestart+$0500,      $09)     ;teddy         = 09
+            %loadtablentry(#stardata_gfx,           $1000, !spritestart+$1000,      $0a)     ;star          = 0a
             
         }
         
@@ -619,8 +621,10 @@ loadingtable: {
            %loadtablentry(#dripdata_palette,        $0040, !spritepalette+$0050,    $04)     ;drip          = 04      ;sprite line 5 + 6 also contains fire AND fish colors
            %loadtablentry(#gliderdata_foilpalette,  $0020, !spritepalette+$0070,    $05)     ;foil glider   = 05      ;sprite line 7
            %loadtablentry(#catdata_palette,         $0020, !spritepalette+$0000,    $06)     ;cat           = 06      ;sprite line 0
-           %loadtablentry(#fishdata_palette,        $0001, !spritepalette+$0000,    $07)     ;dummy palette
-           %loadtablentry(#copterdata_palette,      $0001, !spritepalette+$0000,    $08)     ;dummy palette
+           %loadtablentry(#fishdata_palette,        $0001, !spritepalette+$0000,    $07)     ;dummy palette 
+           %loadtablentry(#copterdata_palette,      $0001, !spritepalette+$0000,    $08)     ;dummy palette 
+           %loadtablentry(#teddydata_palette,       $0020, !spritepalette+$0000,    $09)     ;teddy         = 09
+           %loadtablentry(#stardata_palette,        $0010, !spritepalette+$0010,    $0a)     ;star          = 0a
            
         }
     }

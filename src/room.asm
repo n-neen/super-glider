@@ -416,15 +416,15 @@ room: {
     }
 
 
-    .entry: {    ;objs            enemies          bounds,bg;   routine ptr
+    .entry: {    ;objs            enemies          bounds,bg;   special ptr
         ..0:  dw room_objlist_0,  room_enemylist_0,  $0204,     $0000
         ..1:  dw room_objlist_1,  room_enemylist_1,  $0004,     $0000
         ..2:  dw room_objlist_2,  room_enemylist_2,  $0004,     $0000
         ..3:  dw room_objlist_3,  room_enemylist_3,  $0008,     specialtilemaps_1&$7fff
         ..4:  dw room_objlist_4,  room_enemylist_4,  $0008,     specialtilemaps_2&$7fff
         ..5:  dw room_objlist_5,  room_enemylist_5,  $0008,     specialtilemaps_3&$7fff
-        ..6:  dw room_objlist_6,  room_enemylist_6,  $0102,     $0000
-        ..7:  dw room_objlist_7,  room_enemylist_7,  $0102,     $0000
+        ..6:  dw room_objlist_6,  room_enemylist_6,  $0008,     specialtilemaps_4&$7fff
+        ..7:  dw room_objlist_7,  room_enemylist_7,  $0008,     specialtilemaps_5&$7fff
         ..8:  dw room_objlist_8,  room_enemylist_8,  $0102,     $0000
         ..9:  dw room_objlist_9,  room_enemylist_9,  $0102,     $0000
         ..a:  dw room_objlist_a,  room_enemylist_a,  $0102,     $0000
@@ -449,7 +449,7 @@ room: {
         ..1d: dw room_objlist_1d, room_enemylist_1d, $0102,     $0000
         ..1e: dw room_objlist_1e, room_enemylist_1e, $0102,     $0000
         ..1f: dw room_objlist_1f, room_enemylist_1f, $0102,     $0000
-                 ;objs            enemies          bounds,bg;   routine ptr
+                 ;objs            enemies          bounds,bg;   special ptr
         ..20: dw room_objlist_20, room_enemylist_20, $0202,     $0000
         ..21: dw room_objlist_21, room_enemylist_21, $0003,     $0000
         ..22: dw room_objlist_22, room_enemylist_22, $0003,     $0000
@@ -482,7 +482,7 @@ room: {
         ..3d: dw room_objlist_3d, room_enemylist_3d, $0102,     $0000
         ..3e: dw room_objlist_3e, room_enemylist_3e, $0102,     $0000
         ..3f: dw room_objlist_3f, room_enemylist_3f, $0102,     $0000
-                 ;objs            enemies          bounds,bg;   routine ptr
+                 ;objs            enemies          bounds,bg;   special ptr
         ..40: dw room_objlist_40, room_enemylist_40, $0203,     $0000
         ..41: dw room_objlist_41, room_enemylist_41, $0003,     $0000
         ..42: dw room_objlist_42, room_enemylist_42, $0203,     $0000
@@ -515,7 +515,7 @@ room: {
         ..5d: dw room_objlist_5d, room_enemylist_5d, $0102,     $0000
         ..5e: dw room_objlist_5e, room_enemylist_5e, $0102,     $0000
         ..5f: dw room_objlist_5f, room_enemylist_5f, $0102,     $0000
-                 ;objs            enemies          bounds,bg;   routine ptr
+                 ;objs            enemies          bounds,bg;   special ptr
         ..60: dw room_objlist_60, room_enemylist_60, $0203,     $0000
         ..61: dw room_objlist_61, room_enemylist_61, $0003,     $0000
         ..62: dw room_objlist_62, room_enemylist_62, $0305,     $0000
@@ -548,7 +548,7 @@ room: {
         ..7d: dw room_objlist_7d, room_enemylist_7d, $0102,     $0000
         ..7e: dw room_objlist_7e, room_enemylist_7e, $0102,     $0000
         ..7f: dw room_objlist_7f, room_enemylist_7f, $0102,     $0000
-                 ;objs            enemies          bounds,bg;   routine ptr
+                 ;objs            enemies          bounds,bg;   special ptr
         ..80: dw room_objlist_80, room_enemylist_80, $0203,     $0000
         ..81: dw room_objlist_81, room_enemylist_81, $0003,     $0000
         ..82: dw room_objlist_82, room_enemylist_82, $0005,     $0000
@@ -1336,6 +1336,7 @@ room: {
         }
         
         ..3: {
+            dw enemy_ptr_gfxloader, $0000,    $0000,    $0000,      $0000,      $0000
             dw $ffff
         }
         
@@ -1352,6 +1353,8 @@ room: {
         }
         
         ..7: {
+            dw enemy_ptr_teddy,     $0052,    $0011,    $0000,      $0000,      $0000
+            dw enemy_ptr_star,      $0092,    $0011,    $0000,      $0000,      $0000
             dw $ffff
         }
         
