@@ -63,6 +63,7 @@ glider: {
     .checktrans: {
         ;i guess this also does bounds now, probably want to remove the
         ;original one in glider_handle?
+        ;i think this and the next one are the only places !roombounds is read
         
         lda !gliderx
         cmp !krightbound-2
@@ -72,7 +73,57 @@ glider: {
         cmp !kleftbound+2
         bmi ..left
         
+        lda !glidery
+        cmp !kceiling
+        bmi ..up
+        
+        lda !glidery
+        cmp !kfloor
+        bpl ..down
+        
         rts
+        
+        ..up: {
+            lda !ktranstimer
+            beq .checktrans_ignore
+            
+            lda !roombounds
+            bit #$0020
+            bne ...ending
+            bit #$0080
+            bne +
+            
+            lda !kroomtranstypeup
+            sta !roomtranstype
+            jsr roomtransitionstart
+            
+            +
+            rts
+            
+            ...ending: {
+                lda !kroomtranstypeending
+                sta !roomtranstype
+                jsr roomtransitionstart
+                rts
+            }
+        }
+        
+        ..down: {
+            lda !ktranstimer
+            beq .checktrans_ignore
+            
+            lda !roombounds
+            bit #$0040
+            bne +
+            
+            lda !kroomtranstypedown
+            sta !roomtranstype
+            jsr roomtransitionstart
+            
+            +
+            rts
+        }
+        
         
         ..right: {
             lda !ktranstimer
@@ -80,7 +131,6 @@ glider: {
             
             lda !roombounds
             bit #$0001
-            ;i think this and the next one are the only places !roombounds is read
             bne +
             
             lda !kroomtranstyperight

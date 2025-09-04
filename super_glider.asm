@@ -39,7 +39,7 @@ org $808000
     print "bank $80 end: ", pc
     
 org $818000
-    incsrc "./src/room.asm"
+    incsrc "./src/room/room.asm"
     print "bank $81 end: ", pc
     
 org $828000
