@@ -291,7 +291,7 @@ newgame: {
     jsr fixlayerscroll
     
     lda #$0020             ;real starting room
-    ;lda #$0064             ;temp for cat testing
+    ;lda #$00d3             ;temp for cat testing
     sta !roomindex
     asl
     tax

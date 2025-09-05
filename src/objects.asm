@@ -536,6 +536,7 @@ obj: {
         ..tablepole:    dw obj_headers_tablepole        ;unfinished
         ..fishbowl:     dw obj_headers_fishbowl
         ..openwall:     dw openwall_header
+        ..openwindow:   dw obj_headers_openwindow
     }
     
     
@@ -578,20 +579,23 @@ obj: {
         ..table:
             dw #obj_tilemaps_table,         $0009, $000d, obj_routines_none,        $0000
         
-        ..table2:
+        ..table2:       ;unimpl
             dw #obj_tilemaps_table2,        $000b, $0008, obj_routines_none,        $0000
         
-        ..tabletop:
+        ..tabletop:     ;unimpl
             dw !objdyntilemap,              $0000, $0000, obj_routines_none,        $4000
         
-        ..tablepole:
+        ..tablepole:    ;uniplm
             dw !objdyntilemap,              $0000, $0000, obj_routines_none,        $c000
         
-        ..tablebase:
+        ..tablebase:    ;unimpl
             dw #obj_tilemaps_tablebase,     $0000, $0000, obj_routines_none,        $4000
         
         ..fishbowl:
             dw #obj_tilemaps_fishbowl,      $0005, $0004, obj_routines_fishbowl,    $0000
+            
+        ..openwindow:
+            dw #obj_tilemaps_openwindow,    $000c, $000d, obj_routines_openwindow,  $8000
     }
     
     ;===========================================================================================
@@ -600,7 +604,35 @@ obj: {
     ;===========================================================================================
     
     .routines: {
-    
+        ..openwindow: {
+            ;!hitboxleft   
+            ;!hitboxright  
+            ;!hitboxtop    
+            ;!hitboxbottom 
+            
+            !windowx    =   !localtempvar
+            !windowy    =   !localtempvar2
+            
+            ;todo: end game if touched
+            lda !objxpos,x
+            asl #2
+            sta !windowx
+            
+            lda !objypos,x
+            asl #2
+            sta !windowy
+            
+            lda !objxsize
+            
+            
+            ;todo: the rest of this shit
+            
+            
+            
+            rts
+        }
+        
+        
         ..fishbowl: {
             ;spawn fish
             phy
@@ -896,48 +928,21 @@ obj: {
             dw $ffff
         endmacro
         
-        ..vent:
-            %objtilemapentry(floorvent)
-        
-        ..table2:
-            %objtilemapentry(table2)
-        
-        ..candle:
-            %objtilemapentry(candle)
-        
-        ..fanR:
-            %objtilemapentry(fanR)
-        
-        ..fanL:
-            %objtilemapentry(fanL)
-        
-        ..table:
-            %objtilemapentry(table)
-        
-        ..tallcandle:
-            %objtilemapentry(tallcandle)
-        
-        ..upstairs:
-            %objtilemapentry(up_stairs)
-        
-        ..dnstairs:
-            %objtilemapentry(down_stairs)
-        
-        ..window:
-            %objtilemapentry(window)
-        
-        ..ozma:
-            %objtilemapentry(ozma)
-        
-        ..lamp:
-            %objtilemapentry(lamp)
-        
-        ..tablebase:
-            ;%objtilemapentry(tablebase)
-        
-        ..fishbowl:
-            %objtilemapentry(fishbowl)
-        
+        ..vent:         %objtilemapentry(floorvent)
+        ..table2:       %objtilemapentry(table2)
+        ..candle:       %objtilemapentry(candle)
+        ..fanR:         %objtilemapentry(fanR)
+        ..fanL:         %objtilemapentry(fanL)
+        ..table:        %objtilemapentry(table)
+        ..tallcandle:   %objtilemapentry(tallcandle)
+        ..upstairs:     %objtilemapentry(up_stairs)
+        ..dnstairs:     %objtilemapentry(down_stairs)
+        ..window:       %objtilemapentry(window)
+        ..ozma:         %objtilemapentry(ozma)
+        ..lamp:         %objtilemapentry(lamp)
+        ..tablebase:    ;%objtilemapentry(tablebase)
+        ..fishbowl:     %objtilemapentry(fishbowl)
+        ..openwindow:   %objtilemapentry(openwindow)
     }
     
 }

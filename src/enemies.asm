@@ -791,14 +791,15 @@ enemy: {
         ..fire:         dw enemy_headers_fire                   ;
         ..candleflame:  dw enemy_headers_candleflame            ;
         
-        ..catbody:      dw cat_bodyheader                       ;
-        ..catpaw:       dw cat_pawheader                        ;
-        ..cattail:      dw cat_tailheader                       ; exist in their own files
-        ..fish:         dw fish_header                          ;
-        ..copter:       dw copter_header                        ;
-        ..teddy:        dw teddy_header                         ;
-        ..gfxloader:    dw gfxloader_header                     ;
-        ..star:         dw star_header                          ;
+        ..catbody:          dw cat_bodyheader                       ;
+        ..catpaw:           dw cat_pawheader                        ;
+        ..cattail:          dw cat_tailheader                       ; exist in their own files
+        ..fish:             dw fish_header                          ;
+        ..copter:           dw copter_header                        ;
+        ..teddy:            dw teddy_header                         ;
+        ..gfxloader:        dw gfxloader_header                     ;
+        ..star:             dw star_header                          ;
+        ..cutscenehandler:  dw cutscenehandler_header               ;
         
         ;todo: basketball
         ;todo: toaster

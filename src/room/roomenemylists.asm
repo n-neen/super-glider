@@ -421,15 +421,11 @@
     }
     
     ..64: {
-        dw enemy_ptr_bandspack,        $0040,    $0058,     $0000,        $0000,           $0001
+        ;dw enemy_ptr_bandspack,        $0040,    $0058,     $0000,        $0000,           $0001
         dw $ffff
     }
     
     ..65: {
-        ;enemy type                    x,        y,         property,      property2,         property3
-        dw enemy_ptr_catbody,          $0080,    $0065,     $0070,         $0000,             $0000
-        dw enemy_ptr_catpaw,           $0050,    $006d,     $0070,         $0000,             $0000
-        dw enemy_ptr_cattail,          $0088,    $007d,     $0070,         $0000,             $0000
         dw $ffff
     }
     
@@ -558,7 +554,6 @@
     }
 
     ..85: {
-        dw enemy_ptr_gfxloader, $0000,    $0000,    $0000,      $0000,      $0000
         dw $ffff
     }
 
@@ -575,8 +570,6 @@
     }
 
     ..89: {
-        dw enemy_ptr_teddy,     $0052,    $0011,    $0000,      $0000,      $0000
-        dw enemy_ptr_star,      $00a2,    $0011,    $0000,      $0000,      $0000
         dw $ffff
     }
 
@@ -877,26 +870,40 @@
     }
 
     ..d4: {
+        ;cat room
+        ;enemy type                    x,            y,     property,   property2,  property3
+        dw enemy_ptr_catbody,          $0080+$28,    $0065, $0070,      $0000,      $0000
+        dw enemy_ptr_catpaw,           $0050+$28,    $006d, $0070,      $0000,      $0000
+        dw enemy_ptr_cattail,          $0088+$28,    $007d, $0070,      $0000,      $0000
         dw $ffff
     }
-
+    
+    ;ending section
     ..d5: {
+        dw enemy_ptr_cutscenehandler,   $0000,      $0000,  $0000,      $0000,      $0000
+        dw enemy_ptr_gfxloader,         $0000,      $0000,  $0000,      $0000,      $0000
         dw $ffff
     }
 
     ..d6: {
+        dw enemy_ptr_cutscenehandler,   $0000,      $0000,  $0000,      $0000,      $0000
         dw $ffff
     }
 
     ..d7: {
+        dw enemy_ptr_cutscenehandler,   $0000,      $0000,  $0000,      $0000,      $0000
         dw $ffff
     }
 
     ..d8: {
+        dw enemy_ptr_cutscenehandler,   $0000,      $0000,  $0000,      $0000,      $0000
         dw $ffff
     }
 
     ..d9: {
+        dw enemy_ptr_cutscenehandler,   $0000,      $0000,  $8000,      $0000,      $0000
+        dw enemy_ptr_teddy,             $0052,      $0011,  $0000,      $0000,      $0000
+        dw enemy_ptr_star,              $00a2,      $0011,  $0000,      $0000,      $0000
         dw $ffff
     }
 

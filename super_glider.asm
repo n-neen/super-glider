@@ -55,6 +55,7 @@ org $828000
     incsrc "./src/enemies/teddybear.asm"
     incsrc "./src/enemies/gfxloader.asm"
     incsrc "./src/enemies/star.asm"
+    incsrc "./src/enemies/cutscenehandler.asm"
     
     incsrc "./src/enemies/instructionlisthandler.asm"       ;unfinished
     
