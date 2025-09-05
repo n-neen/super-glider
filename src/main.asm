@@ -275,7 +275,7 @@ newgame: {
     lda #$0008
     jsl load_sprite         ;load sprite data 8 (copter)
     
-    lda #$0095
+    lda #$0095              
     sta !gliderrespawnx
     
     lda #$0030

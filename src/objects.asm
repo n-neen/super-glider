@@ -286,6 +286,103 @@ obj: {
         }
     }
     
+    
+    .touch: {
+        ;x = object index
+        ;call from enemy routine, then branch based on carry
+        ;special collision reaction based on hitbox
+        print pc
+        
+        jsr obj_calchitbox
+
+        lda !gliderx
+        clc
+        adc !kgliderleftbound
+        cmp !hitboxright
+        bpl ++
+        
+        lda !gliderx
+        clc
+        adc !kgliderrightbound
+        cmp !hitboxleft
+        bmi ++
+        
+        lda !glidery
+        clc
+        adc !kgliderdownbound
+        cmp !hitboxtop
+        bmi ++
+        
+        lda !glidery
+        clc
+        adc !kgliderupbound
+        cmp !hitboxbottom
+        bpl ++
+        
+        
+        +
+        sec     ;collision
+        rts
+        
+        ++
+        clc     ;no collision
+        rts
+    }
+    
+    
+    .calchitbox: {
+        !xsizepixels    =   !localtempvar
+        !ysizepixels    =   !localtempvar2
+        !xpospixels     =   !localtempvar3
+        !ypospixels     =   !localtempvar4
+        
+        
+        
+        ;called from obj_touch
+        
+        ;x = object index
+        
+            ;!hitboxleft   
+            ;!hitboxright  
+            ;!hitboxtop    
+            ;!hitboxbottom 
+        lda !objxsize,x
+        asl #3
+        sta !xsizepixels
+        
+        lda !objysize,x
+        asl #3
+        sta !ysizepixels
+        
+        lda !objxpos,x
+        lsr
+        inc
+        asl #3
+        sta !xpospixels
+        
+        lda !objypos,x
+        lsr
+        inc
+        asl #3
+        sta !ypospixels
+        
+        lda !xpospixels
+        sta !hitboxleft         ;left edge
+        
+        clc
+        adc !xsizepixels
+        sta !hitboxright        ;+ x size = right edge
+        
+        lda !ypospixels         ;top edge
+        sta !hitboxtop
+        
+        clc
+        adc !ysizepixels        ;+ y size = bottom edge
+        sta !hitboxbottom
+        
+        rts
+    }
+    
     .collision: {
         
         ;see defines.asm for hitbox bounds
@@ -418,7 +515,7 @@ obj: {
         sta !objxsize,y
         
         lda.l !objbanklong+4,x
-        asl
+        ;asl                     ;why on earth did i do this
         sta !objysize,y
         
         lda.l !objbanklong+6,x
@@ -605,31 +702,16 @@ obj: {
     
     .routines: {
         ..openwindow: {
-            ;!hitboxleft   
-            ;!hitboxright  
-            ;!hitboxtop    
-            ;!hitboxbottom 
+            jsr obj_touch
             
-            !windowx    =   !localtempvar
-            !windowy    =   !localtempvar2
+            bcc +
             
-            ;todo: end game if touched
-            lda !objxpos,x
-            asl #2
-            sta !windowx
+            ;if touched
+            ;end game
+            ;but actually we need to modify the object's size and y position
+            ;so only the lower part is the hitbox
             
-            lda !objypos,x
-            asl #2
-            sta !windowy
-            
-            lda !objxsize
-            
-            
-            ;todo: the rest of this shit
-            
-            
-            
-            rts
+        +   rts
         }
         
         

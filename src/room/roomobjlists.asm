@@ -929,7 +929,8 @@
     }
 
     ..d3: {
-        dw #obj_ptr_dnstairs,   $000e, $0005,  $0400,   $0000
+        dw #obj_ptr_openwindow, $0013, $0005,  $0c00,   $0000
+        dw #obj_ptr_dnstairs,   $0006, $0005,  $0400,   $0000
         dw #obj_ptr_vent,       $0005, $001a,  $0000,   $0018
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
         dw $ffff

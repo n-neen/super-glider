@@ -34,6 +34,7 @@ cutscenehandler: {
         
         ;if at desired height
         ;uhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+        ;todo todo todo
         lda !glidersuby
         clc
         adc #$f000
