@@ -35,12 +35,16 @@ room: {
     ;pointer to enemy list in roomenemylists.asm
     
     ;bounds, background field:
-    ;#%ud0000lrgggggggg
+    ;#%ude000lrgggggggg
     ;g = background type
     ;l = left bound
     ;r = right bound
-    ;u = up bound           ;
-    ;d = down bound         ;unimplemented 9.4.25
+    ;u = up bound
+    ;d = down bound
+    ;e = ending room special vertical transition
+        ;does an up transition but increments the roomindex by 1 instead of $20
+        ;this also is the inverse of the other bounds bits!
+        ;setting it /enables/ the transition type, not disables
     
     ;background types are defined in loading.asm
     
