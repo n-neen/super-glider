@@ -42,8 +42,8 @@ star: {
     }
     
     .touch: {
-        ;brk #$00
         ;end the game!
+        brk #$00
         rts
     }
     

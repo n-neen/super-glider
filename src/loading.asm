@@ -299,7 +299,7 @@ oam: {
         ldx !oamentrypoint
         
         -
-        lda #$0000
+        lda #$e0e0
         sta !oambuffer,x
         inx : inx
         cpx #$0220

@@ -35,13 +35,7 @@ cutscenehandler: {
         ;if at desired height
         ;uhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
         ;todo todo todo
-        lda !glidersuby
-        clc
-        adc #$f000
-        sta !glidersuby
-        lda !glidery
-        adc #$0003
-        sta !glidery
+        
         ++
         rts
         

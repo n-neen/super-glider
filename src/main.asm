@@ -290,8 +290,8 @@ newgame: {
     
     jsr fixlayerscroll
     
-    lda #$0020             ;real starting room
-    ;lda #$00d3             ;temp for cat testing
+    ;lda #$0020             ;real starting room
+    lda #$00d3             ;temp for testing
     sta !roomindex
     asl
     tax
@@ -711,6 +711,8 @@ loadroom: {
     
     jsl game_runroomroutine
     
+    jsl oam_cleantable
+    ;jsl oam_hightablejank
     jsr waitfornmi
     jsr screenon
     

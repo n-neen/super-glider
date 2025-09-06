@@ -78,6 +78,8 @@ lorom
     sta $4200               ;enable interrupts
     rep #$20
     
+    jsl oam_cleantable
+    
     ply
     plx
     plb
@@ -111,12 +113,13 @@ lorom
     rtl
     
     ..table: {
-        dw room_transition_right,
-           room_transition_left,
-           room_transition_up,
-           room_transition_down,
-           room_transition_duct,
-           room_transition_ending
+        dw room_transition_right,       ;0
+           room_transition_left,        ;1
+           room_transition_up,          ;2
+           room_transition_down,        ;3
+           room_transition_duct,        ;4
+           room_transition_ending,      ;5  ;special vertical that only +1 roomindex
+           room_transition_window       ;6  ;special duct that has lower glider y output pos
     }
     
     ..ending: {
@@ -147,9 +150,16 @@ lorom
         rts
     }
     
+    ..window: {
+        lda !kfloor-5
+        bra ..duct_window
+    }
+    
     ..duct: {
         lda !kceiling+$10
         sta !glidery
+        
+        ...window:
         
         lda !ductoutputxpos
         sta !gliderx

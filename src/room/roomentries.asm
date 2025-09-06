@@ -220,7 +220,7 @@
     ..d1: dw room_objlist_d1, room_enemylist_d1, $c003,     $0000
     ..d2: dw room_objlist_d2, room_enemylist_d2, $c103,     $0000
     ..d3: dw room_objlist_d3, room_enemylist_d3, $c203,     roomroutines_precat         ;precat
-    ..d4: dw room_objlist_d4, room_enemylist_d4, $c003,     $0000                       ;cat
+    ..d4: dw room_objlist_d4, room_enemylist_d4, $c103,     $0000                       ;cat
     ..d5: dw room_objlist_d5, room_enemylist_d5, $e308,     specialtilemaps_1&$7fff     ;ending scene
     ..d6: dw room_objlist_d6, room_enemylist_d6, $e308,     specialtilemaps_2&$7fff     ;
     ..d7: dw room_objlist_d7, room_enemylist_d7, $e308,     specialtilemaps_3&$7fff     ;

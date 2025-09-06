@@ -291,7 +291,6 @@ obj: {
         ;x = object index
         ;call from enemy routine, then branch based on carry
         ;special collision reaction based on hitbox
-        print pc
         
         jsr obj_calchitbox
 
@@ -617,23 +616,24 @@ obj: {
     ;$4000     = dynamic size
     
     .ptr: {
-        ..vent:         dw obj_headers_vent
-        ..candle:       dw obj_headers_candle
-        ..fanR:         dw obj_headers_fanR
-        ..fanL:         dw obj_headers_fanL
-        ..shelf:        dw obj_headers_shelf
-        ..upstairs:     dw obj_headers_upstairs
-        ..dnstairs:     dw obj_headers_dnstairs
-        ..window:       dw obj_headers_window
-        ..ozma:         dw obj_headers_ozma
-        ..lamp:         dw obj_headers_lamp
-        ..table:        dw obj_headers_table
-        ..table2:       dw obj_headers_table2           ;unfinished
-        ..tabletop:     dw obj_headers_tabletop         ;unfinished
-        ..tablepole:    dw obj_headers_tablepole        ;unfinished
-        ..fishbowl:     dw obj_headers_fishbowl
-        ..openwall:     dw openwall_header
-        ..openwindow:   dw obj_headers_openwindow
+        ..vent:             dw obj_headers_vent
+        ..candle:           dw obj_headers_candle
+        ..fanR:             dw obj_headers_fanR
+        ..fanL:             dw obj_headers_fanL
+        ..shelf:            dw obj_headers_shelf
+        ..upstairs:         dw obj_headers_upstairs
+        ..dnstairs:         dw obj_headers_dnstairs
+        ..window:           dw obj_headers_window
+        ..ozma:             dw obj_headers_ozma
+        ..lamp:             dw obj_headers_lamp
+        ..table:            dw obj_headers_table
+        ..table2:           dw obj_headers_table2           ;unfinished
+        ..tabletop:         dw obj_headers_tabletop         ;unfinished
+        ..tablepole:        dw obj_headers_tablepole        ;unfinished
+        ..fishbowl:         dw obj_headers_fishbowl
+        ..openwall:         dw openwall_header
+        ..openwindow:       dw obj_headers_openwindow
+        ..windowtouchbox:   dw obj_headers_windowtouchbox
     }
     
     
@@ -647,13 +647,13 @@ obj: {
             dw #obj_tilemaps_candle,        $0004, $0004, obj_routines_candle,      $0000
         
         ..fanR:
-            dw #obj_tilemaps_fanR,          $0004, $0007, obj_routines_none,        $0000
+            dw #obj_tilemaps_fanR,          $0004, $0007, $0000,                    $0000
         
         ..fanL:
-            dw #obj_tilemaps_fanL,          $0005, $0007, obj_routines_none,        $0000
+            dw #obj_tilemaps_fanL,          $0005, $0007, $0000,                    $0000
         
-        ..tallcandle:
-            dw #obj_tilemaps_tallcandle,    $0002, $0008, obj_routines_none,        $0000
+        ..tallcandle:   ;unfinished
+            dw #obj_tilemaps_tallcandle,    $0002, $0008, $0000,                    $0000
         
         ..shelf:
             dw !objdyntilemap,              $0030, $0001, obj_routines_shelf,       $0000
@@ -674,7 +674,7 @@ obj: {
             dw #obj_tilemaps_lamp,          $0004, $0005, obj_routines_delete,      $0000
         
         ..table:
-            dw #obj_tilemaps_table,         $0009, $000d, obj_routines_none,        $0000
+            dw #obj_tilemaps_table,         $0009, $000d, obj_routines_delete,      $0000
         
         ..table2:       ;unimpl
             dw #obj_tilemaps_table2,        $000b, $0008, obj_routines_none,        $0000
@@ -692,7 +692,10 @@ obj: {
             dw #obj_tilemaps_fishbowl,      $0005, $0004, obj_routines_fishbowl,    $0000
             
         ..openwindow:
-            dw #obj_tilemaps_openwindow,    $000c, $000d, obj_routines_openwindow,  $8000
+            dw #obj_tilemaps_openwindow,    $000c, $000d, obj_routines_delete,      $8000
+            
+        ..windowtouchbox:
+            dw #obj_tilemaps_null,          $000b, $0005, obj_routines_openwindow,  $8000
     }
     
     ;===========================================================================================
@@ -706,10 +709,17 @@ obj: {
             
             bcc +
             
-            ;if touched
-            ;end game
-            ;but actually we need to modify the object's size and y position
-            ;so only the lower part is the hitbox
+            lda #$00d5              ;first room of ending scene
+            sta !roomindex
+            
+            lda #$0080
+            sta !ductoutputxpos
+            
+            lda !kroomtranstypewindow
+            sta !roomtranstype
+            
+            lda !kstateroomtrans
+            sta !gamestate
             
         +   rts
         }
@@ -1010,6 +1020,7 @@ obj: {
             dw $ffff
         endmacro
         
+        ..null:         dw $ffff
         ..vent:         %objtilemapentry(floorvent)
         ..table2:       %objtilemapentry(table2)
         ..candle:       %objtilemapentry(candle)

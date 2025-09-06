@@ -929,7 +929,6 @@
     }
 
     ..d3: {
-        dw #obj_ptr_openwindow, $0013, $0005,  $0c00,   $0000
         dw #obj_ptr_dnstairs,   $0006, $0005,  $0400,   $0000
         dw #obj_ptr_vent,       $0005, $001a,  $0000,   $0018
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
@@ -937,10 +936,11 @@
     }
 
     ..d4: {
-        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
-        dw #obj_ptr_vent,       $0005, $001a,  $0000,   $0018
-        dw #obj_ptr_openwindow, $000c, $0005,  $0c00,   $0000
-        dw #obj_ptr_table,      $0012, $0010,  $0800,   $0000
+        dw #obj_ptr_openwall,       $0000, $0000,  $0000,   $8000
+        dw #obj_ptr_vent,           $0005, $001a,  $0000,   $0018
+        dw #obj_ptr_openwindow,     $000c, $0005,  $0c00,   $0000
+        dw #obj_ptr_windowtouchbox, $000d, $000e,  $0000,   $0000
+        dw #obj_ptr_table,          $0012, $0010,  $0800,   $0000
         dw $ffff
     }
 
