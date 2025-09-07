@@ -67,7 +67,7 @@ boot:
     lda #$0000
     tcd             ;clear dp register
     
-    ldy #$0000
+    ldy #$0000      ;lmaoooo
 
 clear7e:
     pea $7e7e
@@ -114,6 +114,9 @@ init:
         sep #$20
         lda #$80            ;enable nmi
         sta $4200
+        
+        ;set up ppu
+        
         lda #%00010110      ;main screen = sprites, L2
         sta $212c
         
@@ -182,7 +185,6 @@ main: {
     }
         
     .statetable: {
-
         dw #splashsetup     ;0
         dw #splash          ;1
         dw #newgame         ;2
@@ -290,8 +292,8 @@ newgame: {
     
     jsr fixlayerscroll
     
-    ;lda #$0020             ;real starting room
-    lda #$00d3             ;temp for testing
+    lda #$0020             ;real starting room
+    ;lda #$00d3             ;temp for testing
     sta !roomindex
     asl
     tax
@@ -882,6 +884,12 @@ updateppuregisters: { ;transfer wram mirrors to their registers
     sep #$20
     
     ;these scroll updates are probably unnecessary
+    ;ugh
+    ;no wait they are needed
+    ;i have done this thing where i comment this shit out
+    ;and then the scroll values of the background layers is wrong
+    ;so please just leave this here, okay?
+    
     lda !bg1x
     sta $210d           ;update bg1 x scroll
     sta $210d

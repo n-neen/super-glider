@@ -16,7 +16,7 @@ lorom
     ;roomobjlist               =       $0000
     ;roomenemylist             =       $0002
     ;roombgtypebounds          =       $0004   ;bg is low byte, bounds is high byte
-    ;roomroutineptr            =       $0006
+    ;roomspecialptr            =       $0006
     
     ;argument:
         ;room pointer in !roomptr

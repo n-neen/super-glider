@@ -640,6 +640,8 @@ loadingtable: {
             %loadtablentry(#bg6gfx,                 $4000, !bg2start,               $06)     ;skywalk           = 06
             %loadtablentry(#bg7gfx,                 $4000, !bg2start,               $07)     ;swingers room ;]  = 07
             %loadtablentry(#bg8gfx,                 $8000, !bg2start,               $08)     ;ending            = 08
+            %loadtablentry(#bg9gfx,                 $4000, !bg2start,               $09)     ;unfinished room   = 09
+            %loadtablentry(#bgagfx,                 $4000, !bg2start,               $0a)     ;sewer             = 0a
         }
         
         ..tilemaps: {
@@ -652,6 +654,8 @@ loadingtable: {
             %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $06)     ;bg6    = 06
             %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $07)     ;bg7    = 07
             %loadtablentry(!layer2tilemap,          $0001, !bg2tilemap,             $08)     ;bg8    = 08 [ending, uses special tilemaps]
+            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $09)     ;bg9    = 09
+            %loadtablentry(!layer2tilemap,          $0800, !bg2tilemap,             $0a)     ;bga    = 0a
         }       
                 
         ..palettes: {
@@ -664,7 +668,8 @@ loadingtable: {
             %loadtablentry(#bg6palette,             $0100, !palettes,               $06)     ;bg6    = 06
             %loadtablentry(#bg7palette,             $0100, !palettes,               $07)     ;bg7    = 07
             %loadtablentry(#bg8palette,             $0040, !palettes,               $08)     ;bg8    = 08
-            
+            %loadtablentry(#bg9palette,             $0100, !palettes,               $09)     ;bg9    = 09
+            %loadtablentry(#bgapalette,             $0100, !palettes,               $0a)     ;bga    = 0a
         }
     }
     
@@ -679,5 +684,7 @@ loadingtable: {
         dl #bg6tilemap                  : db $06
         dl #bg7tilemap                  : db $07
         dl $000000                      : db $08
+        dl #bg9tilemap                  : db $09
+        dl #bgatilemap                  : db $0a
     }
 }

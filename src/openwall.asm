@@ -65,7 +65,9 @@ openwall: {
            openwall_tilemaps_bg5,
            openwall_tilemaps_bg6,
            openwall_tilemaps_bg7,
-           $0000                    ;8 is ending scene, skip
+           $0000,                   ;8 is ending scene, skip
+           openwall_tilemaps_bg9,
+           openwall_tilemaps_bga
     }
     
     .widthlist: {
@@ -77,10 +79,13 @@ openwall: {
            $0006,       ;bg5
            $0004,       ;bg6
            $0006,       ;bg7
-           $0000        ;bg8 is ending scene, do not use
+           $0000,       ;bg8 is ending scene, do not use
+           $0006,       ;bg9
+           $0004        ;bga
     }
     
     .tilemaps: {
+        ;see objects.asm for macro definition
         ..bg2:
             %objtilemapentry(openwall/openwall_bg2)
         ..bg3:
@@ -93,6 +98,10 @@ openwall: {
             %objtilemapentry(openwall/openwall_bg6)
         ..bg7:
             %objtilemapentry(openwall/openwall_bg7)
+        ..bg9:
+            %objtilemapentry(openwall/openwall_bg9)
+        ..bga:
+            %objtilemapentry(openwall/openwall_bga)
     }
     
     .spawner: {

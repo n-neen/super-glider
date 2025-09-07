@@ -153,7 +153,9 @@ enemy: {
     
     .dynamicspawn: {
         
-        
+        ;we already do this in a couple places but there's not really
+        ;a routine to do it
+        ;see candle flame, bands, glider being on fire, drip
         
         rts
     }

@@ -56,6 +56,18 @@ org $8b8000
     bg8palette:
         incbin "./data/palettes/bg8.pal"
         
+    bg9palette:
+        incbin "./data/palettes/bg9.pal"
+        incbin "./data/palettes/stairs.pal"
+        incbin "./data/palettes/obj.pal"
+        incbin "./data/palettes/obj2.pal"
+        
+    bgapalette:
+        incbin "./data/palettes/bga.pal"
+        incbin "./data/palettes/stairs.pal"
+        incbin "./data/palettes/obj.pal"
+        incbin "./data/palettes/obj2.pal"
+        
 ;===========================================================================================
 ;===============================   S P R I T E   D A T A   =================================
 ;===========================================================================================
@@ -109,5 +121,11 @@ bg6tilemap:
     
 bg7tilemap:
     incbin "./data/tilemaps/bg7.map"
+    
+bg9tilemap:
+    incbin "./data/tilemaps/bg9.map"
+    
+bgatilemap:
+    incbin "./data/tilemaps/bga.map"
 
 print "bank $8b end: ", pc

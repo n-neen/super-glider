@@ -1,0 +1,3 @@
+C:\Users\keenan\Desktop\superfamiconv.exe -i "C:\Users\keenan\Desktop\glider pro snes\snes\asset work\unfinishedroom\unfinishedroom.png" -p "C:\Users\keenan\Desktop\glider pro snes\snes\asset work\unfinishedroom\unfinishedroom.pal" -t "C:\Users\keenan\Desktop\glider pro snes\snes\asset work\unfinishedroom\unfinishedroom.gfx" -m "C:\Users\keenan\Desktop\glider pro snes\snes\asset work\unfinishedroom\unfinishedroom.map" -v
+
+pause

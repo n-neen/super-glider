@@ -9,11 +9,6 @@ room: {
 
 
 
-;specialtilemaps_1&$7fff
-;specialtilemaps_2&$7fff
-;specialtilemaps_3&$7fff
-;specialtilemaps_4&$7fff
-;specialtilemaps_5&$7fff
 
 
 
