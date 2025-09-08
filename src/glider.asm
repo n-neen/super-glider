@@ -387,6 +387,7 @@ glider: {
                 
                 bra ..bounds
             ...down:
+                ;print pc
                 lda !glidery
                 cmp !kfloor
                 bpl ...hitfloor
@@ -410,6 +411,7 @@ glider: {
             stz !gliderliftstate
             lda !kgliderstatelostlife
             sta !gliderstate
+            sta !glidernextstate
             
         }   ;fall through to ..bounds
         

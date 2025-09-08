@@ -32,6 +32,7 @@ incsrc "./src/defines.asm"
 ;===================================               =========================================
 ;===========================================================================================
 
+
 org $808000
     incsrc "./src/main.asm"
     incsrc "./src/loading.asm"
@@ -73,17 +74,17 @@ org $838000
 
     
 ;data
-incsrc "./data/inc/bank84.asm"          ;hud data
+incsrc "./data/inc/bank84.asm"          ;hud data, background graphics, enemy data
 incsrc "./data/inc/bank85.asm"          ;sprite data: balloon, prizes, dart
 incsrc "./data/inc/bank86.asm"          ;cat data
-incsrc "./data/inc/bank87.asm"          ;
-incsrc "./data/inc/bank88.asm"          ;
-incsrc "./data/inc/bank89.asm"          ;
+incsrc "./data/inc/bank87.asm"          ;background graphics
+incsrc "./data/inc/bank88.asm"          ;special tilemaps
+incsrc "./data/inc/bank89.asm"          ;enemy data
 incsrc "./data/inc/bank8a.asm"          ;splash screen graphics
-incsrc "./data/inc/bank8b.asm"          ;palettes, sprite data, background tilemaps
+incsrc "./data/inc/bank8b.asm"          ;palettes, enemy data, background tilemaps
 incsrc "./data/inc/bank8c.asm"          ;background graphics
 incsrc "./data/inc/bank8d.asm"          ;background graphics
-incsrc "./data/inc/bank8e.asm"          ;tile object graphics
+incsrc "./data/inc/bank8e.asm"          ;tile object graphics, background graphics
 incsrc "./data/inc/bank8f.asm"          ;background graphics
 
 
@@ -100,10 +101,10 @@ org $80ffc0                             ;game header
     db "super glider         "          ;cartridge name
     db $30                              ;fastrom, lorom
     db $02                              ;rom + ram + sram
-    db $12                              ;rom size = 4mb
-    db $03                              ;sram size 4kb
+    db $09                              ;rom size = 512k
+    db $00                              ;sram size 0
     db $00                              ;country code
-    db $69                              ;developer code
+    db $ff                              ;developer code
     db $00                              ;rom version
     dw $FFFF                            ;checksum complement
     dw $FFFF                            ;checksum
