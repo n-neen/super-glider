@@ -49,6 +49,7 @@ game: {
         
         
         lda !roomspecialptr
+        cmp #$ffff
         beq +
         bpl ++
         

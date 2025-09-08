@@ -8,10 +8,10 @@ specialtilemaploading: {
     plb : plb           ;db = bank where special tilemaps are stored
         
     lda !roomspecialptr
-    bmi +
-    beq +
-    ;if contents of roomspecialptr is zero or negative, exit
-    ;else, it's a pointer to a special tilemap
+    ;cmp #$ffff          ;ffff is marker for null, can't use 0000
+    ;beq +               ;because $8000&$7fff = 0 and we need to store
+    bmi +                ;a tilemap at $8000. wooooops
+                         ;oh also we don't need to do both checks haha
         
     ora #$8000
     sta !localtempvar

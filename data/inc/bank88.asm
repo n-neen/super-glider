@@ -6,7 +6,6 @@ org $888000
 ;===============================   SPECIAL TILEMAPS   ======================================
 ;===========================================================================================
 
-dw $6969
 ;have to do this so that the pointer to specialtilemaps_1
 ;doesn't end up being zero. because we store it without the msb
 
