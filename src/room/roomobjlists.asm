@@ -14,11 +14,11 @@
     ..1: {
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
-        dw #obj_ptr_fanL,       $0011, $000e,  $0800,   $0013
-        dw #obj_ptr_shelf,      $000b, $0015,  $0800,   $0008
+        ;dw #obj_ptr_fanL,       $0011, $000e,  $0800,   $0013
+        dw #obj_ptr_varitable,  $0004, $0004,  $0800,   $0408
         dw #obj_ptr_vent,       $0005, $001a,  $0000,   $0013
         dw #obj_ptr_vent,       $0016, $001a,  $0000,   $0013
-        dw #obj_ptr_lamp,       $000b, $000f,  $1400,   $0000
+        ;dw #obj_ptr_lamp,       $000b, $000f,  $1400,   $0000
         dw $ffff
     }
     

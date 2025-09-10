@@ -136,7 +136,8 @@ print "enemy ram end: ", hex(!enemyproperty3+!enemyarraysize+2)
 !oamhightable            =      !oambuffer+$200
 ;end: $720
 
-!objdyntilemap      =       $730
+!objdyntilemap           =       $730   ;up to $80
+!objdyntilemapsize       =       $0080
 
 !housestart              =      $800
 !houseptr                =      !housestart
