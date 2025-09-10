@@ -11,13 +11,12 @@ todo: {
         microwave
         filing cabinet
         hip-pole lamp
+        new table object which is variable in size
+        other furniture
     }
     
     backgrounds: {
-        swinger's room
-        unfinished room
-        many-windowed room
-        library
+        library     ;not really possible without redrawing a bunch of it
     }
     
     other: {

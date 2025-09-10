@@ -154,6 +154,7 @@ print "enemy ram end: ", hex(!enemyproperty3+!enemyarraysize+2)
 !roomspecialptr          =      !housestart+24
 
 !enemydynamicspawnslot   =      $0880
+!objectdynamicspawnslot  =      $08a0
 
 ;catram
 

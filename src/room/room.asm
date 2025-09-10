@@ -1,5 +1,6 @@
 room: {
     incsrc "./src/room/roomloading.asm"
+    ;print pc ;816a ;93B2
     incsrc "./src/room/roomlist.asm"
     incsrc "./src/room/roomentries.asm"
     incsrc "./src/room/roomobjlists.asm"

@@ -49,54 +49,6 @@ obj: {
     }
     
     
-    .init: {
-        ;creates instance of an object
-        ;takes argument:
-        ;a = object header pointer
-        
-        ;returns: next item slot in !nextobj
-        
-        ;this hasn't been used yet, so is untested!
-        
-        phx
-        phy
-        phb
-        
-        phk                         ;db = $84
-        plb
-        
-        pha
-        ..findslot: {
-            ldx #!objectarraysize+2     ;currently $0030
-        -
-            dex : dex                   ;we want the zero flag from lda
-            lda !objID,x                ;so the loop starts at ammount+2 (dex would affect zero flag)
-            bmi -
-            ;after we exit this loop, x will be the first available slot
-        }
-        pla
-        
-        stx !nextobj
-        
-        sta !objID,x                ;store object ID
-        tay
-        
-        lda $0000,y
-        sta !objtilemapointer,x     ;store tilemap pointer
-        
-        lda $0002,y
-        sta !objysize,x             ;store object x size (length of rows)
-        
-        lda $0004,y
-        sta !objxsize,x             ;store object y size (number of rows)
-        
-        ply
-        plb
-        plx
-        rtl
-    }
-    
-    
     .clear: {
         ;deals with an instance of an object. clears all array slots
         ;argument: x = obj index
@@ -485,8 +437,41 @@ obj: {
             sta !objtilemap+4,x
             rts
         }
+    }
+    
+    .findslot: {
+        ;returns x = object slot
+        ldx #!objectarraysize
+        -
+        lda !objID,x
+        beq +               ;slot found
+        dex : dex
+        bpl -               ;next slot
+        bmi ..noslot        ;no slots at all
         
+        +
+        ;x = open slot
+        rts
         
+        ..noslot:
+        ;todo: care about this
+        ldx #$ffff
+        rts
+    }
+    
+    .dynamicspawn: {
+        ;expects a filled out !objectdynamicspawnslot
+        phx
+        phy
+        
+        jsr obj_findslot        ;returns x = object slot
+        txy
+        ldx.w #!objectdynamicspawnslot
+        jsr obj_spawn           ;needs y = object slot, x = object list entry
+        
+        plx
+        ply
+        rts
     }
     
     .spawn: {
@@ -627,9 +612,12 @@ obj: {
         ..ozma:             dw obj_headers_ozma
         ..lamp:             dw obj_headers_lamp
         ..table:            dw obj_headers_table
+        
+        ;todo: start these over
         ..table2:           dw obj_headers_table2           ;unfinished
         ..tabletop:         dw obj_headers_tabletop         ;unfinished
         ..tablepole:        dw obj_headers_tablepole        ;unfinished
+        
         ..fishbowl:         dw obj_headers_fishbowl
         ..openwall:         dw openwall_header
         ..openwindow:       dw obj_headers_openwindow
@@ -677,7 +665,7 @@ obj: {
             dw #obj_tilemaps_table,         $0009, $000d, obj_routines_delete,      $0000
         
         ..table2:       ;unimpl
-            dw #obj_tilemaps_table2,        $000b, $0008, obj_routines_none,        $0000
+            dw #obj_tilemaps_null,          $0000, $0000, obj_routines_varitable,   $0000
         
         ..tabletop:     ;unimpl
             dw !objdyntilemap,              $0000, $0000, obj_routines_none,        $4000
@@ -704,11 +692,113 @@ obj: {
     ;===========================================================================================
     
     .routines: {
+        ..varitable: {
+            ;!objectdynamicspawnslot    =   $08a0
+            ;
+            ;
+            ;variable = xxyy
+            ;xx = x size (tabletop width)
+            ;yy = y size (table pole length)
+            
+            jsr obj_routines_varitable_spawntop
+            jsr obj_routines_varitable_spawnpole
+            jsr obj_routines_varitable_spawnbase
+            
+            jsr obj_clear
+            
+            rts
+            
+            ...spawntop: {
+                ;0              2       4       6           8
+                ;dw objtype,    xxxx,   yyyy,   palette,    variable
+                phx
+                
+                lda #obj_headers_tabletop
+                sta !objectdynamicspawnslot
+                
+                lda !objxpos,x
+                sta !objectdynamicspawnslot+2
+                
+                lda !objypos,x
+                sta !objectdynamicspawnslot+4
+                
+                lda #$0800
+                sta !objectdynamicspawnslot+6
+                
+                lda !objvariable,x
+                and #$ff00
+                xba
+                sta !objectdynamicspawnslot+8
+                
+                ;todo: write !objdynamictilemap before calling
+                
+                jsr obj_dynamicspawn
+                
+                plx
+                rts
+            }
+            
+            ...spawnpole: {
+                ;0              2       4       6           8
+                ;dw objtype,    xxxx,   yyyy,   palette,    variable
+                phx
+                
+                lda #obj_headers_tablepole
+                sta !objectdynamicspawnslot
+                
+                lda !objxpos,x      ;todo: offset these
+                sta !objectdynamicspawnslot+2
+                
+                lda !objypos,x      ;todo: offset these
+                sta !objectdynamicspawnslot+4
+                
+                lda #$0800
+                sta !objectdynamicspawnslot+6
+                
+                lda !objvariable,x
+                and #$00ff
+                sta !objectdynamicspawnslot+8
+                
+                ;todo: write !objdynamictilemap before calling
+                
+                jsr obj_dynamicspawn
+                
+                plx
+                rts
+            }
+            
+            ...spawnbase: {
+                ;0              2       4       6           8
+                ;dw objtype,    xxxx,   yyyy,   palette,    variable
+                phx
+                
+                lda #obj_headers_tablebase
+                sta !objectdynamicspawnslot
+                
+                lda !objxpos,x      ;todo: offset these
+                sta !objectdynamicspawnslot+2
+                
+                lda !objypos,x      ;todo: offset these
+                sta !objectdynamicspawnslot+4
+                
+                lda #$0800
+                sta !objectdynamicspawnslot+6
+                
+                stz !objectdynamicspawnslot+8
+                
+                jsr obj_dynamicspawn
+                
+                plx
+                rts
+            }
+        }
+        
         ..openwindow: {
             jsr obj_touch
             
             bcc +
             
+            ;todo: make this take the object's room parameter
             lda #$00d5              ;first room of ending scene
             sta !roomindex
             
@@ -871,13 +961,13 @@ obj: {
         }
             
         ..tablebase: {
-            lda obj_ptr_tabletop
-            jsl obj_init
-            jsl obj_spawn
+            ;lda obj_ptr_tabletop
+            ;jsl obj_init
+            ;jsl obj_spawn
             
-            lda obj_ptr_tablepole
-            jsl obj_init
-            jsl obj_spawn
+            ;lda obj_ptr_tablepole
+            ;jsl obj_init
+            ;jsl obj_spawn
             rts
         }
         
