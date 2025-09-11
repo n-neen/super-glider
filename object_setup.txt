@@ -1,0 +1,14 @@
+;object setup
+
+varitable: {
+    ;example object list entry: 
+    ;object type            x pos, y pos,  palette,  xxyy
+    dw #obj_ptr_varitable,  $0006, $000b,  $0800,   $0803
+    last word (variable) is xxyy, where:
+        xx = x size (width of tabletop)
+        yy = y size (height of pole)
+    
+    object varitable spawns three dependant objects:
+    tabletop, tablepole, tablebase
+    uses dynamic object tilemap array as a buffer to draw tilemap
+}

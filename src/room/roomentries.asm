@@ -3,7 +3,7 @@
              ;objs            enemies          bounds,bg;   special ptr
     ..0:  dw room_objlist_0,  room_enemylist_0,  $c204,     $ffff
     ..1:  dw room_objlist_1,  room_enemylist_1,  $c004,     $ffff
-    ..2:  dw room_objlist_2,  room_enemylist_2,  $c004,     $ffff
+    ..2:  dw room_objlist_2,  room_enemylist_2,  $c104,     $ffff
     ..3:  dw room_objlist_3,  room_enemylist_3,  $c004,     $ffff
     ..4:  dw room_objlist_4,  room_enemylist_4,  $c004,     $ffff
     ..5:  dw room_objlist_5,  room_enemylist_5,  $c004,     $ffff

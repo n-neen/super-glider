@@ -754,14 +754,14 @@ obj: {
             tay
             
             lda #$0025
-            sta !objdyntilemap+2,y  ;right edge of table
+            sta !objdyntilemap+4,y  ;right edge of table
             
             lda #$ffff
-            sta !objdyntilemap+4,y  ;terminator
+            sta !objdyntilemap+6,y  ;terminator
             
             lda #$0024
             -
-            sta !objdyntilemap,y
+            sta !objdyntilemap+2,y
             dey : dey
             bpl -
             
@@ -842,10 +842,22 @@ obj: {
                 lda #obj_ptr_tablepole
                 sta !objectdynamicspawnslot
                 
-                lda !objxpos,x
+                lda !objvariable,x
+                and #$ff00
+                xba
+                dec
+                sta !localtempvar
+                
+                lda !objxsize,x
+                lsr
+                clc
+                adc !objxpos,x
+                clc
+                adc !localtempvar
                 sta !objectdynamicspawnslot+2
                 
                 lda !objypos,x
+                inc
                 sta !objectdynamicspawnslot+4
                 
                 lda #$0800
@@ -882,15 +894,16 @@ obj: {
                 lda !objvariable,x
                 and #$ff00
                 xba
-                lsr
+                ;lsr
                 adc !objxpos,x
                 sec
-                sbc #$0004
+                sbc #$0005
                 sta !objectdynamicspawnslot+2
                 
                 lda !objvariable,x
                 and #$00ff
                 adc !objypos,x
+                inc
                 sta !objectdynamicspawnslot+4
                 
                 lda #$0800
