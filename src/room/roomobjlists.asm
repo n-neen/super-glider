@@ -177,6 +177,7 @@
         dw #obj_ptr_vent,       $0008, $001a,  $0000,   $0013
         dw #obj_ptr_window,     $0010, $0008,  $0c00,   $0033
         dw #obj_ptr_candle,     $000f, $000f,  $0800,   $0000
+        dw #obj_ptr_trashcan,   $000c, $0013,  $0800,   $0000
         dw $ffff
     }
 

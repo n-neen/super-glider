@@ -638,15 +638,16 @@ obj: {
         ..lamp:             dw obj_headers_lamp
         ..table:            dw obj_headers_table
         
-        ;todo:
-        ..varitable:        dw obj_headers_varitable        ;unfinished
-        ..tabletop:         dw obj_headers_tabletop         ;unfinished
-        ..tablepole:        dw obj_headers_tablepole        ;unfinished
-        ..tablebase:        dw obj_headers_tablebase        ;unfinished     
+        ..varitable:        dw obj_headers_varitable
+        ..tabletop:         dw obj_headers_tabletop
+        ..tablepole:        dw obj_headers_tablepole
+        ..tablebase:        dw obj_headers_tablebase 
         
         ..fishbowl:         dw obj_headers_fishbowl
         ..openwall:         dw openwall_header
         ..openwindow:       dw obj_headers_openwindow
+        ..trashcan:         dw obj_headers_trashcan
+        
         ..windowtouchbox:   dw obj_headers_windowtouchbox
     }
     
@@ -710,6 +711,9 @@ obj: {
             
         ..windowtouchbox:
             dw #obj_tilemaps_null,          $000b, $0005, obj_routines_openwindow,  $8000
+            
+        ..trashcan:
+            dw #obj_tilemaps_trashcan,      $0007, $0008, obj_routines_delete,      $0000
     }
     
     ;===========================================================================================
@@ -1241,6 +1245,7 @@ obj: {
         ..tablebase:    %objtilemapentry(tablebase)
         ..fishbowl:     %objtilemapentry(fishbowl)
         ..openwindow:   %objtilemapentry(openwindow)
+        ..trashcan:     %objtilemapentry(trashcan)
     }
     
 }

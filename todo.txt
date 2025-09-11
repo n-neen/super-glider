@@ -11,8 +11,8 @@ todo: {
         microwave
         filing cabinet
         hip-pole lamp
-        new table object which is variable in size
-        other furniture
+        cabinet?
+        dresser?
     }
     
     backgrounds: {
@@ -20,7 +20,6 @@ todo: {
     }
     
     other: {
-        end of game, window (w/ cat)
         improve title screen
         options, menus
     }
@@ -30,7 +29,6 @@ todo: {
     }
     
     bugs: {
-        dynamic enemy spawning palette bug  <----------- i think this is fixed
         candle object spawns flame enemy, but the routine has to run three times before it actually works (lmao)
     }
     
