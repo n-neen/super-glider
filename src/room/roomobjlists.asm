@@ -19,6 +19,7 @@
         dw #obj_ptr_vent,       $0005, $001a,  $0000,   $0013
         dw #obj_ptr_vent,       $0016, $001a,  $0000,   $0013
         dw #obj_ptr_lamp,       $000b, $000e,  $1400,   $0000
+        ;dw #obj_ptr_manholetop, $0008, $0001,  $0000,   $0000
         dw $ffff
     }
     

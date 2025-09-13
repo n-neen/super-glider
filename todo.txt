@@ -13,6 +13,10 @@ todo: {
         hip-pole lamp
         cabinet?
         dresser?
+        
+        manholes: {
+            room transition
+        }
     }
     
     backgrounds: {

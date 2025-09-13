@@ -647,6 +647,8 @@ obj: {
         ..openwall:         dw openwall_header
         ..openwindow:       dw obj_headers_openwindow
         ..trashcan:         dw obj_headers_trashcan
+        ..manholetop:       dw obj_headers_manholetop
+        ..manholebottom:    dw obj_headers_manholebottom
         
         ..windowtouchbox:   dw obj_headers_windowtouchbox
     }
@@ -714,6 +716,12 @@ obj: {
             
         ..trashcan:
             dw #obj_tilemaps_trashcan,      $0007, $0008, obj_routines_delete,      $0000
+            
+        ..manholebottom:
+            dw #obj_tilemaps_manholetop,    $000f, $0003, obj_routines_delete,      $8000
+            
+        ..manholetop:
+            dw #obj_tilemaps_manholetop,    $000f, $0003, obj_routines_delete,      $8000
     }
     
     ;===========================================================================================
@@ -1229,23 +1237,25 @@ obj: {
             dw $ffff
         endmacro
         
-        ..null:         dw $ffff
-        ..vent:         %objtilemapentry(floorvent)
-        ..table2:       %objtilemapentry(table2)
-        ..candle:       %objtilemapentry(candle)
-        ..fanR:         %objtilemapentry(fanR)
-        ..fanL:         %objtilemapentry(fanL)
-        ..table:        %objtilemapentry(table)
-        ..tallcandle:   %objtilemapentry(tallcandle)
-        ..upstairs:     %objtilemapentry(up_stairs)
-        ..dnstairs:     %objtilemapentry(down_stairs)
-        ..window:       %objtilemapentry(window)
-        ..ozma:         %objtilemapentry(ozma)
-        ..lamp:         %objtilemapentry(lamp)
-        ..tablebase:    %objtilemapentry(tablebase)
-        ..fishbowl:     %objtilemapentry(fishbowl)
-        ..openwindow:   %objtilemapentry(openwindow)
-        ..trashcan:     %objtilemapentry(trashcan)
+        ..null:             dw $ffff
+        ..vent:             %objtilemapentry(floorvent)
+        ..table2:           %objtilemapentry(table2)
+        ..candle:           %objtilemapentry(candle)
+        ..fanR:             %objtilemapentry(fanR)
+        ..fanL:             %objtilemapentry(fanL)
+        ..table:            %objtilemapentry(table)
+        ..tallcandle:       %objtilemapentry(tallcandle)
+        ..upstairs:         %objtilemapentry(up_stairs)
+        ..dnstairs:         %objtilemapentry(down_stairs)
+        ..window:           %objtilemapentry(window)
+        ..ozma:             %objtilemapentry(ozma)
+        ..lamp:             %objtilemapentry(lamp)
+        ..tablebase:        %objtilemapentry(tablebase)
+        ..fishbowl:         %objtilemapentry(fishbowl)
+        ..openwindow:       %objtilemapentry(openwindow)
+        ..trashcan:         %objtilemapentry(trashcan)
+        ..manholetop:       %objtilemapentry(manhole_top)
+        ..manholebottom:    %objtilemapentry(manhole_bottom)
     }
     
 }
