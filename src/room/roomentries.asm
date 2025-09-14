@@ -72,7 +72,7 @@
     ..42: dw room_objlist_42, room_enemylist_42, $c203,     $ffff
     ..43: dw room_objlist_43, room_enemylist_43, $c002,     $ffff
     ..44: dw room_objlist_44, room_enemylist_44, $c002,     $ffff
-    ..45: dw room_objlist_45, room_enemylist_45, $c002,     $ffff
+    ..45: dw room_objlist_45, room_enemylist_45, $c007,     $ffff
     ..46: dw room_objlist_46, room_enemylist_46, $c102,     $ffff
     ..47: dw room_objlist_47, room_enemylist_47, $c102,     $ffff
     ..48: dw room_objlist_48, room_enemylist_48, $c102,     $ffff

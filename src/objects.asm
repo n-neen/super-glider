@@ -649,6 +649,7 @@ obj: {
         ..trashcan:         dw obj_headers_trashcan
         ..manholetop:       dw obj_headers_manholetop
         ..manholebottom:    dw obj_headers_manholebottom
+        ..fireplace:        dw obj_headers_fireplace
         
         ..windowtouchbox:   dw obj_headers_windowtouchbox
     }
@@ -722,6 +723,9 @@ obj: {
             
         ..manholetop:
             dw #obj_tilemaps_manholetop,    $000f, $0003, obj_routines_delete,      $8000
+            
+        ..fireplace:
+            dw #obj_tilemaps_fireplace,     $0011, $0008, obj_routines_delete,      $8000
     }
     
     ;===========================================================================================
@@ -1256,6 +1260,7 @@ obj: {
         ..trashcan:         %objtilemapentry(trashcan)
         ..manholetop:       %objtilemapentry(manhole_top)
         ..manholebottom:    %objtilemapentry(manhole_bottom)
+        ..fireplace:        %objtilemapentry(fireplace)
     }
     
 }

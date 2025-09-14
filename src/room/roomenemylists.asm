@@ -297,6 +297,11 @@
     }
     
     ..45: {
+        ;dw enemy_ptr_bandspack,     $0040,    $0058,    $0000,  $0000,  $0001
+        dw enemy_ptr_clock,         $007a,    $0048,    $01f4,  $0006,  $0002
+        dw enemy_ptr_paper,         $0058,    $0058,    $0000,  $0006,  $0004
+        dw enemy_ptr_paper,         $0098,    $0058,    $0000,  $0006,  $0008
+        dw enemy_ptr_lightswitch,   $00d0,    $0048,    $0000,  $0004,  $0000
         dw $ffff
     }
     

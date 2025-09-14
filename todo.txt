@@ -4,6 +4,8 @@ todo: {
         basketball
         toaster
         the cat
+        
+        copter hitbox is extremely bad
     }
     
     objects: {

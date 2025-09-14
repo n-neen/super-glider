@@ -339,6 +339,9 @@
 
     ..45: {
         dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $8000
+        dw #obj_ptr_vent,       $0016, $001a,  $0000,   $0043
+        dw #obj_ptr_vent,       $0003, $001a,  $0000,   $0043
+        dw #obj_ptr_fireplace,  $0007, $000e,  $1000,   $0000
         dw $ffff
     }
 

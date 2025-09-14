@@ -52,6 +52,7 @@ org $8b8000
         incbin "./data/palettes/stairs.pal"
         incbin "./data/palettes/obj.pal"
         incbin "./data/palettes/obj2.pal"
+        incbin "./data/palettes/fireplace.pal"
         
     bg8palette:
         incbin "./data/palettes/bg8.pal"
