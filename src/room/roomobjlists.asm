@@ -315,9 +315,10 @@
     }
 
     ..42: {
-        dw #obj_ptr_upstairs,   $000e, $0005,  $0400,   $0000
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
-        dw #obj_ptr_vent,       $000a, $001a,  $0000,   $0013
+        dw #obj_ptr_upstairs,   $0012, $0005,  $0400,   $0000
+        dw #obj_ptr_vent,       $0012, $001a,  $0000,   $0013
+        dw #obj_ptr_solidrect,  $000b, $0000,  $0000,   $021f
         dw $ffff
     }
 

@@ -292,9 +292,9 @@ newgame: {
     
     jsr fixlayerscroll
     
-    ;lda #$0020             ;real starting room
+    lda #$0020             ;real starting room
     ;lda #$00d3             ;temp for testing ending
-    lda #$0044              ;other temp
+    ;lda #$0044              ;other temp
     sta !roomindex
     asl
     tax

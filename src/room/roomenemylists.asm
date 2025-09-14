@@ -285,6 +285,11 @@
     }
     
     ..42: {
+        dw enemy_ptr_paper,         $0020,    $0058,    $0000,  $0006,  $0001
+        dw enemy_ptr_battery,       $0020,    $0078,    $0000,  $0006,  $0002
+        ;these ducts are not yet linked!
+        dw enemy_ptr_duct,          $0028,    $0008,    $0000,  $8004,  $0000
+        dw enemy_ptr_duct,          $002a,    $00c8,    $0000,  $0004,  $0000
         dw $ffff
     }
     

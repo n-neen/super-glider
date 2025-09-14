@@ -652,6 +652,7 @@ obj: {
         ..fireplace:        dw obj_headers_fireplace
         
         ..windowtouchbox:   dw obj_headers_windowtouchbox
+        ..solidrect:        dw obj_headers_solidrect
     }
     
     
@@ -726,6 +727,10 @@ obj: {
             
         ..fireplace:
             dw #obj_tilemaps_fireplace,     $0011, $0008, obj_routines_delete,      $8000
+            
+        ..solidrect:
+            dw #obj_tilemaps_null,          $0000, $0000, obj_routines_solidrect,   $8000
+            
     }
     
     ;===========================================================================================
@@ -734,6 +739,84 @@ obj: {
     ;===========================================================================================
     
     .routines: {
+        ..solidrect: {
+            lda !objvariable,x
+            beq +
+            and #$00ff
+            sta !objysize,x
+            
+            lda !objvariable,x
+            and #$ff00
+            xba
+            sta !objxsize,x
+            
+            stz !objvariable,x      ;clear this so we don't keep repeatedly
+                                    ;transferring variable to x/y size
+            
+            +
+            
+            jsr obj_touch
+            bcc ++
+            
+            ;if hit:
+            
+            lda !gliderstate
+            cmp !kgliderstateright
+            beq ...right
+            cmp !kgliderstateleft
+            beq ...left
+            
+            jsr obj_routines_solidrect_eject
+            
+            ++
+            rts
+            
+            ...right:
+                lda !kgliderstateleft
+                sta !gliderstate
+                sta !glidernextstate
+                lda !khitboundright
+
+                bra +
+            ...left:
+                lda !kgliderstateright
+                ;sta !gliderstate
+                sta !glidernextstate
+                
+                lda !khitboundleft
+                
+                +
+                sta !gliderhitbound
+                rts
+                
+            ...eject: {
+                
+                phb
+                phx
+                
+                phk
+                plb
+                
+                lda !gliderdir
+                asl
+                tax
+                lda obj_routines_solidrect_eject_table,x
+                clc
+                adc !gliderx
+                sta !gliderx
+                
+                plx
+                plb
+                rts
+                
+                ....table:
+                    ;  null,  left   right
+                    dw $fffe, $0002, $fffe
+            }
+        }
+            
+            
+        
         
         ..tablepole: {
             phy
