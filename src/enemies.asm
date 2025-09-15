@@ -782,9 +782,9 @@ enemy: {
         ..clock:        dw enemy_headers_clock                  ;
         ..battery:      dw enemy_headers_battery                ;
         ..bandspack:    dw enemy_headers_bandspack              ;
-        ..dart:         dw enemy_headers_dart                   ; all exist in this file
+        ..dart:         dw enemy_headers_dart                   ;
         ..duct:         dw enemy_headers_duct                   ;
-        ..band:         dw enemy_headers_band                   ;
+        ..band:         dw enemy_headers_band                   ; all exist in this file
         ..lightswitch:  dw enemy_headers_lightswitch            ;
         ..switch:       dw enemy_headers_switch                 ;
         ..drip:         dw enemy_headers_drip                   ;
@@ -792,12 +792,13 @@ enemy: {
         ..foil:         dw enemy_headers_foil                   ;
         ..fire:         dw enemy_headers_fire                   ;
         ..candleflame:  dw enemy_headers_candleflame            ;
+        ..samantha:     dw enemy_headers_samantha               ;
         
         ..catbody:          dw cat_bodyheader                       ;
         ..catpaw:           dw cat_pawheader                        ;
-        ..cattail:          dw cat_tailheader                       ; exist in their own files
+        ..cattail:          dw cat_tailheader                       ;
         ..fish:             dw fish_header                          ;
-        ..copter:           dw copter_header                        ;
+        ..copter:           dw copter_header                        ; exist in their own files
         ..teddy:            dw teddy_header                         ;
         ..gfxloader:        dw gfxloader_header                     ;
         ..star:             dw star_header                          ;
@@ -930,6 +931,14 @@ enemy: {
                 enemy_touch_candleflame,                ;touch,
                 $0000                                   ;shot
                 
+        ..samantha:
+            dw  spritemap_pointers_samantha,            ;spritemap ptr
+                $0030,                                  ;xsize,
+                $0030,                                  ;ysize,
+                enemy_init_samantha,                    ;init routine,
+                $0000,                                  ;main routine,
+                $0000,                                  ;touch,
+                $0000                                   ;shot
     }
 
 
@@ -940,6 +949,13 @@ enemy: {
 ;===========================================================================================
     
     .init: {
+        ..samantha: {
+            lda #$000b
+            jsl load_sprite         ;load sprite data 8 (samantha)
+            rts
+        }
+        
+        
         ..fire: {
             lda !kgliderstateonfire
             sta !glidernextstate

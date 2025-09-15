@@ -285,7 +285,7 @@
     }
     
     ..42: {
-        dw enemy_ptr_paper,         $0020,    $0058,    $0000,  $0006,  $0001
+        dw enemy_ptr_paper,         $0024,    $0058,    $0000,  $0006,  $0001
         dw enemy_ptr_battery,       $0020,    $0078,    $0000,  $0006,  $0002
         ;these ducts are not yet linked!
         dw enemy_ptr_duct,          $0028,    $0008,    $0000,  $8004,  $0000
@@ -912,8 +912,10 @@
 
     ..d9: {
         dw enemy_ptr_cutscenehandler,   $0000,      $0000,  $8000,      $0000,      $0000
-        dw enemy_ptr_teddy,             $0052,      $0011,  $0000,      $0000,      $0000
         dw enemy_ptr_star,              $00a2,      $0011,  $0000,      $0000,      $0000
+        
+        ;dw enemy_ptr_teddy,             $0052,      $0011,  $0000,      $0000,      $0000
+        dw enemy_ptr_samantha,          $0052,      $0011,  $0000,      $0000,      $0000
         dw $ffff
     }
 

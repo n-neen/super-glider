@@ -75,11 +75,11 @@ org $8b8000
 
 
 gliderdata:
-    .header:
+    .header: ;i don't think this is not used for anything
         dw #.graphics, #.palette, #.hitbox
         
-    .hitbox:                ;radii
-        db $0a, $05         ;x, y
+    .hitbox: ;same with this
+        db $0a, $05
         
     .graphics:
         incbin "./data/sprites/glider.gfx"

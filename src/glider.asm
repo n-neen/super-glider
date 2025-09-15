@@ -333,6 +333,7 @@ glider: {
         ;or pose update
         ;then go to state handler
         
+        
         lda !iframecounter
         beq ..nodec
         
@@ -607,6 +608,8 @@ glider: {
     ++  stz !glidernextstate
         stz !gliderstate
         stz !glidermovetimer
+        
+        ;jsl glider_eject
         rts
     }
     
@@ -646,6 +649,8 @@ glider: {
     ++  stz !glidernextstate
         stz !gliderstate
         stz !glidermovetimer
+        
+        ;jsl glider_eject
         rts
     }
     
@@ -697,6 +702,34 @@ glider: {
         lda !kliftstatedown
         sta !gliderliftstate
         rts
+    }
+    
+    
+    .eject: {
+        phb
+        phx
+        
+        phk
+        plb
+        
+        lda !gliderdir
+        asl
+        tax
+        lda glider_eject_table,x
+        clc
+        adc !gliderx
+        sta !gliderx
+        
+        stz !glidernextstate
+        stz !gliderstate
+        
+        plx
+        plb
+        rtl
+        
+        ..table:
+            ;  null,  left   right
+            dw $fffe, $0002, $fffe
     }
 }
 

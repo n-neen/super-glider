@@ -765,8 +765,10 @@ obj: {
             beq ...right
             cmp !kgliderstateleft
             beq ...left
+            cmp !kgliderstateonfire
+            beq ...fire
             
-            jsr obj_routines_solidrect_eject
+            jsl glider_eject
             
             ++
             rts
@@ -789,30 +791,11 @@ obj: {
                 sta !gliderhitbound
                 rts
                 
-            ...eject: {
-                
-                phb
-                phx
-                
-                phk
-                plb
-                
-                lda !gliderdir
-                asl
-                tax
-                lda obj_routines_solidrect_eject_table,x
-                clc
-                adc !gliderx
-                sta !gliderx
-                
-                plx
-                plb
+            ...fire:
+                lda !kgliderstatelostlife
+                sta !glidernextstate
                 rts
                 
-                ....table:
-                    ;  null,  left   right
-                    dw $fffe, $0002, $fffe
-            }
         }
             
             
