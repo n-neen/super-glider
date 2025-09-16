@@ -644,15 +644,17 @@ obj: {
         ..tablebase:        dw obj_headers_tablebase 
         
         ..fishbowl:         dw obj_headers_fishbowl
-        ..openwall:         dw openwall_header
         ..openwindow:       dw obj_headers_openwindow
         ..trashcan:         dw obj_headers_trashcan
         ..manholetop:       dw obj_headers_manholetop
         ..manholebottom:    dw obj_headers_manholebottom
         ..fireplace:        dw obj_headers_fireplace
         
+        ;utility objects
         ..windowtouchbox:   dw obj_headers_windowtouchbox
         ..solidrect:        dw obj_headers_solidrect
+        ..openwall:         dw openwall_header
+        ..wall:             dw wall_header
     }
     
     

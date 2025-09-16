@@ -316,10 +316,13 @@
 
     ..42: {
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
-        dw #obj_ptr_upstairs,   $0012, $0005,  $0400,   $0000
-        dw #obj_ptr_vent,       $0012, $001a,  $0000,   $0013
-        dw #obj_ptr_solidrect,  $000b, $0000,  $0000,   $021f
+        dw #obj_ptr_upstairs,   $0014, $0005,  $0400,   $0000
+        dw #obj_ptr_vent,       $0014, $001a,  $0000,   $0013
         dw #obj_ptr_shelf,      $0002, $000e,  $0800,   $0001
+        
+        dw #obj_ptr_solidrect,  $000d, $0000,  $0000,   $021f
+        dw #obj_ptr_wall,       $000f, $0001,  $0000,   $8000   ;left
+        dw #obj_ptr_wall,       $0009, $0001,  $0000,   $0008   ;right
         dw $ffff
     }
 

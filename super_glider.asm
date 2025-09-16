@@ -67,7 +67,10 @@ org $828000
     
 org $838000
     incsrc "./src/objects.asm"
-    incsrc "./src/openwall.asm"
+    
+    incsrc "./src/objects/openwall.asm"
+    incsrc "./src/objects/wall.asm"
+    
     incsrc "./src/roomlink.asm"
     print "bank $83 end: ", pc
     

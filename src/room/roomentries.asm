@@ -69,7 +69,7 @@
              ;objs            enemies          bounds,bg;   special ptr
     ..40: dw room_objlist_40, room_enemylist_40, $c203,     $ffff
     ..41: dw room_objlist_41, room_enemylist_41, $c003,     $ffff
-    ..42: dw room_objlist_42, room_enemylist_42, $c202,     specialtilemaps_6&$7fff
+    ..42: dw room_objlist_42, room_enemylist_42, $c209,     $ffff
     ..43: dw room_objlist_43, room_enemylist_43, $c002,     $ffff
     ..44: dw room_objlist_44, room_enemylist_44, $c002,     $ffff
     ..45: dw room_objlist_45, room_enemylist_45, $c007,     $ffff
