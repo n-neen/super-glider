@@ -637,12 +637,6 @@ obj: {
         ..ozma:             dw obj_headers_ozma
         ..lamp:             dw obj_headers_lamp
         ..table:            dw obj_headers_table
-        
-        ..varitable:        dw obj_headers_varitable
-        ..tabletop:         dw obj_headers_tabletop
-        ..tablepole:        dw obj_headers_tablepole
-        ..tablebase:        dw obj_headers_tablebase 
-        
         ..fishbowl:         dw obj_headers_fishbowl
         ..openwindow:       dw obj_headers_openwindow
         ..trashcan:         dw obj_headers_trashcan
@@ -650,9 +644,17 @@ obj: {
         ..manholebottom:    dw obj_headers_manholebottom
         ..fireplace:        dw obj_headers_fireplace
         
+        ;variable size table related objects
+        ..varitable:        dw obj_headers_varitable
+        ..tabletop:         dw obj_headers_tabletop
+        ..tablepole:        dw obj_headers_tablepole
+        ..tablebase:        dw obj_headers_tablebase 
+        
         ;utility objects
         ..windowtouchbox:   dw obj_headers_windowtouchbox
         ..solidrect:        dw obj_headers_solidrect
+        ..killrect:         dw obj_headers_killrect
+        ..liftrect:         dw obj_headers_liftrect
         ..openwall:         dw openwall_header
         ..wall:             dw wall_header
     }
@@ -732,7 +734,12 @@ obj: {
             
         ..solidrect:
             dw #obj_tilemaps_null,          $0000, $0000, obj_routines_solidrect,   $8000
+        
+        ..killrect:
+            dw #obj_tilemaps_null,          $0000, $0000, obj_routines_killrect,    $8000
             
+        ..liftrect:
+            dw #obj_tilemaps_null,          $0000, $0000, obj_routines_liftrect,    $8000
     }
     
     ;===========================================================================================
@@ -741,6 +748,57 @@ obj: {
     ;===========================================================================================
     
     .routines: {
+        ..liftrect: {
+            lda !objvariable,x
+            beq +
+            and #$00ff
+            sta !objysize,x
+            
+            lda !objvariable,x
+            and #$ff00
+            xba
+            sta !objxsize,x
+            
+            stz !objvariable,x      ;clear this so we don't keep repeatedly
+                                    ;transferring variable to x/y size
+            +
+            jsr obj_touch
+            
+            bcc ++
+            ;if hit:
+            lda !kliftstateup
+            sta !gliderliftstate
+            
+            ++
+            rts
+        }
+        
+        ..killrect: {
+            lda !objvariable,x
+            beq +
+            and #$00ff
+            sta !objysize,x
+            
+            lda !objvariable,x
+            and #$ff00
+            xba
+            sta !objxsize,x
+            
+            stz !objvariable,x      ;clear this so we don't keep repeatedly
+                                    ;transferring variable to x/y size
+            +
+            jsr obj_touch
+            
+            bcc ++
+            ;if hit:
+            lda !kgliderstatelostlife
+            sta !glidernextstate
+            
+            ++
+            rts
+        }
+        
+        
         ..solidrect: {
             lda !objvariable,x
             beq +

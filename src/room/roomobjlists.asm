@@ -322,7 +322,7 @@
         
         dw #obj_ptr_solidrect,  $000d, $0000,  $0000,   $021f
         dw #obj_ptr_wall,       $000f, $0001,  $0000,   $8000   ;left
-        dw #obj_ptr_wall,       $0009, $0001,  $0000,   $0008   ;right
+        dw #obj_ptr_wall,       $000a, $0001,  $0000,   $0008   ;right
         dw $ffff
     }
 
@@ -347,6 +347,7 @@
         dw #obj_ptr_vent,       $0016, $001a,  $0000,   $0043
         dw #obj_ptr_vent,       $0003, $001a,  $0000,   $0043
         dw #obj_ptr_fireplace,  $0007, $000e,  $1000,   $0000
+        dw #obj_ptr_liftrect,   $0008, $0008,  $0000,   $0204
         dw $ffff
     }
 
