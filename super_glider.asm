@@ -47,9 +47,7 @@ org $828000
     incsrc "./src/gameplay.asm"
     incsrc "./src/glider.asm"
     incsrc "./src/bands.asm"
-    
     incsrc "./src/enemies.asm"
-    
     incsrc "./src/enemies/cat.asm"
     incsrc "./src/enemies/fish.asm"
     incsrc "./src/enemies/copter.asm"
@@ -57,20 +55,17 @@ org $828000
     incsrc "./src/enemies/gfxloader.asm"
     incsrc "./src/enemies/star.asm"
     incsrc "./src/enemies/cutscenehandler.asm"
-    
-    incsrc "./src/enemies/instructionlisthandler.asm"       ;unfinished
-    
     incsrc "./data/sprites/spritemaps.asm"
     incsrc "./src/roomroutines.asm"
     incsrc "./src/specialtilemaps.asm"
+    
+    incsrc "./src/enemies/instructionlisthandler.asm"       ;unfinished
     print "bank $82 end: ", pc
     
 org $838000
     incsrc "./src/objects.asm"
-    
     incsrc "./src/objects/openwall.asm"
     incsrc "./src/objects/wall.asm"
-    
     incsrc "./src/roomlink.asm"
     print "bank $83 end: ", pc
     
@@ -79,7 +74,7 @@ org $838000
 ;data
 incsrc "./data/inc/bank84.asm"          ;hud data, background graphics, enemy data
 incsrc "./data/inc/bank85.asm"          ;sprite data: balloon, prizes, dart
-incsrc "./data/inc/bank86.asm"          ;cat data
+incsrc "./data/inc/bank86.asm"          ;enemy data
 incsrc "./data/inc/bank87.asm"          ;background graphics
 incsrc "./data/inc/bank88.asm"          ;special tilemaps
 incsrc "./data/inc/bank89.asm"          ;enemy data

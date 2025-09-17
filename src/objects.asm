@@ -724,7 +724,7 @@ obj: {
             dw #obj_tilemaps_trashcan,      $0007, $0008, obj_routines_delete,      $0000
             
         ..manholebottom:
-            dw #obj_tilemaps_manholetop,    $000f, $0003, obj_routines_delete,      $8000
+            dw #obj_tilemaps_manholebottom, $000f, $0003, obj_routines_delete,      $8000
             
         ..manholetop:
             dw #obj_tilemaps_manholetop,    $000f, $0003, obj_routines_delete,      $8000
@@ -1361,6 +1361,7 @@ obj: {
         
     }
     
+    ;print "object tilemaps start: ", pc
     .tilemaps: {
         macro objtilemapentry(filename)
             incbin "./data/tilemaps/objects/<filename>.map"
@@ -1388,5 +1389,5 @@ obj: {
         ..manholebottom:    %objtilemapentry(manhole_bottom)
         ..fireplace:        %objtilemapentry(fireplace)
     }
-    
+    ;print "object tilemaps end:   ", pc
 }

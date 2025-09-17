@@ -3,9 +3,9 @@
              ;objs            enemies          bounds,bg;   special ptr
     ..0:  dw room_objlist_0,  room_enemylist_0,  $c204,     $ffff
     ..1:  dw room_objlist_1,  room_enemylist_1,  $c004,     $ffff
-    ..2:  dw room_objlist_2,  room_enemylist_2,  $c104,     $ffff
-    ..3:  dw room_objlist_3,  room_enemylist_3,  $c004,     $ffff
-    ..4:  dw room_objlist_4,  room_enemylist_4,  $c004,     $ffff
+    ..2:  dw room_objlist_2,  room_enemylist_2,  $c004,     $ffff
+    ..3:  dw room_objlist_3,  room_enemylist_3,  $c00a,     $ffff
+    ..4:  dw room_objlist_4,  room_enemylist_4,  $c00a,     $ffff
     ..5:  dw room_objlist_5,  room_enemylist_5,  $c004,     $ffff
     ..6:  dw room_objlist_6,  room_enemylist_6,  $c004,     $ffff
     ..7:  dw room_objlist_7,  room_enemylist_7,  $c004,     $ffff
@@ -134,7 +134,7 @@
     ..7f: dw room_objlist_7f, room_enemylist_7f, $c102,     $ffff
              ;objs            enemies          bounds,bg;   special ptr
     ..80: dw room_objlist_80, room_enemylist_80, $c203,     $ffff
-    ..81: dw room_objlist_81, room_enemylist_81, $c003,     $ffff
+    ..81: dw room_objlist_81, room_enemylist_81, $c002,     specialtilemaps_6&$7fff
     ..82: dw room_objlist_82, room_enemylist_82, $c005,     $ffff
     ..83: dw room_objlist_83, room_enemylist_83, $c006,     $ffff
     ..84: dw room_objlist_84, room_enemylist_84, $c006,     $ffff

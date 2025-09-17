@@ -930,7 +930,6 @@ enemy: {
                 enemy_main_candleflame,                 ;main routine,
                 enemy_touch_candleflame,                ;touch,
                 $0000                                   ;shot
-                
         ..samantha:
             dw  spritemap_pointers_samantha,            ;spritemap ptr
                 $0030,                                  ;xsize,

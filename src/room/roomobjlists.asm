@@ -19,7 +19,6 @@
         dw #obj_ptr_vent,       $0005, $001a,  $0000,   $0013
         dw #obj_ptr_vent,       $0016, $001a,  $0000,   $0013
         dw #obj_ptr_lamp,       $000b, $000e,  $1400,   $0000
-        ;dw #obj_ptr_manholetop, $0008, $0001,  $0000,   $0000
         dw $ffff
     }
     
@@ -31,6 +30,9 @@
     }
     
     ..3: {
+        dw #obj_ptr_manholetop,     $0008, $0001,  $0000,   $0000
+        dw #obj_ptr_manholebottom,  $0008, $001a,  $0000,   $0000
+        dw #obj_ptr_openwall,       $0000, $0000,  $0000,   $8000
         dw $ffff
     }
     
@@ -347,7 +349,7 @@
         dw #obj_ptr_vent,       $0016, $001a,  $0000,   $0043
         dw #obj_ptr_vent,       $0003, $001a,  $0000,   $0043
         dw #obj_ptr_fireplace,  $0007, $000e,  $1000,   $0000
-        dw #obj_ptr_liftrect,   $0008, $0008,  $0000,   $0204
+        dw #obj_ptr_liftrect,   $0007, $000e,  $0000,   $0b06
         dw $ffff
     }
 
@@ -604,11 +606,15 @@
     }
 
     ..81: {
+        dw #obj_ptr_openwall,   $0000, $0001,  $0000,   $0000
+        dw #obj_ptr_vent,       $0014, $001a,  $0000,   $0013
+        dw #obj_ptr_solidrect,  $000d, $0000,  $0000,   $021f
         dw $ffff
     }
 
     ..82: {
-        dw #obj_ptr_dnstairs,   $0005, $0005,  $0400,   $0000
+        dw #obj_ptr_openwall,   $0000, $0001,  $0000,   $8000
+        dw #obj_ptr_dnstairs,   $0007, $0005,  $0400,   $0000
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
         dw #obj_ptr_vent,       $0003, $001a,  $0000,   $0013
         dw $ffff

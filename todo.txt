@@ -28,6 +28,8 @@ todo: {
     other: {
         improve title screen
         options, menus
+        all background tilemaps are 32x32 but only need to be 32x28
+            this will save $100 bytes per tilemap
     }
     
     room: {
