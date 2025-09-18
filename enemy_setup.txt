@@ -15,7 +15,7 @@ balloon: {
 
 duct: {
     palette bitmask high byte (properties 2)
-        $8000 bit = floor or ceiling duct
+        $8000 bit = ceiling duct
         
     property
         00ff
@@ -23,6 +23,8 @@ duct: {
         
         ff00
         high byte = output x position
+        
+    property3 didn't exist when i wrote this, so it could be used for output y pos
 }
 
 battery: {

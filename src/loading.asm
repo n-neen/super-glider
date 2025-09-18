@@ -634,7 +634,7 @@ loadingtable: {
     .bg: {
         ..gfx: {
             %loadtablentry(#objgfx,                 $4000, !bg1start,               $00)     ;object layer      = 00
-            %loadtablentry(#splashgfx,              $8000, !bg2start,               $01)     ;splash            = 01
+            %loadtablentry(#splashgfx,              $3000, !bg2start,               $01)     ;splash            = 01
             %loadtablentry(#bg2gfx,                 $4000, !bg2start,               $02)     ;simple room       = 02
             %loadtablentry(#bg3gfx,                 $4000, !bg2start,               $03)     ;panneled room     = 03
             %loadtablentry(#bg4gfx,                 $4000, !bg2start,               $04)     ;basement          = 04

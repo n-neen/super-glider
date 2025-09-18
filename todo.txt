@@ -6,6 +6,10 @@ todo: {
         the cat
         
         copter hitbox is extremely bad
+        
+        duct:
+        property3 to be used for output y pos?
+
     }
     
     objects: {

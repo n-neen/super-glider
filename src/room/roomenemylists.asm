@@ -54,6 +54,7 @@
     }
     
     ..c: {
+        ;enemy type             x,        y,        property,  prop2,       property3
         dw $ffff
     }
     
@@ -548,6 +549,9 @@
     }
 
     ..81: {
+        ;enemy type             x,        y,        property,   prop2,      property3
+        dw enemy_ptr_balloon,   $0018,    $0028,    $0cf0,      $1002,      $0000
+        dw enemy_ptr_duct,      $00d0,    $00c8,    $200c,      $0004,      $0000
         dw $ffff
     }
 

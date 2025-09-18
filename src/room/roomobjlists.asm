@@ -30,8 +30,8 @@
     }
     
     ..3: {
-        dw #obj_ptr_manholetop,     $0008, $0001,  $0000,   $0000
-        dw #obj_ptr_manholebottom,  $0008, $001a,  $0000,   $0000
+        ;dw #obj_ptr_manholetop,     $0008, $0001,  $0000,   $0000
+        ;dw #obj_ptr_manholebottom,  $0008, $001a,  $0000,   $0000
         dw #obj_ptr_openwall,       $0000, $0000,  $0000,   $8000
         dw $ffff
     }
@@ -69,30 +69,59 @@
     }
 
     ..c: {
+        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
+        dw #obj_ptr_candle,     $0010, $0017,  $0000,   $0000
+        dw #obj_ptr_liftrect,   $0010, $0008,  $0000,   $0007
         dw $ffff
     }
 
     ..d: {
+        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
+        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
+        dw #obj_ptr_candle,     $0014, $0017,  $0800,   $0000
+        dw #obj_ptr_liftrect,   $0014, $0008,  $0000,   $0007
+        dw #obj_ptr_sewergrate, $0003, $001a,  $0800,   $0028
         dw $ffff
     }
 
     ..e: {
+        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
+        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
+        dw #obj_ptr_candle,     $0010, $0017,  $0000,   $0000
+        dw #obj_ptr_liftrect,   $0010, $0008,  $0000,   $0007
         dw $ffff
     }
 
     ..f: {
+        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
+        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
+        dw #obj_ptr_candle,     $0010, $0017,  $0000,   $0000
+        dw #obj_ptr_liftrect,   $0010, $0008,  $0000,   $0007
         dw $ffff
     }
 
     ..10: {
+        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
+        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
+        dw #obj_ptr_candle,     $0010, $0017,  $0000,   $0000
+        dw #obj_ptr_liftrect,   $0010, $0008,  $0000,   $0007
         dw $ffff
     }
 
     ..11: {
+        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
+        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
+        dw #obj_ptr_candle,     $0010, $0017,  $0000,   $0000
+        dw #obj_ptr_liftrect,   $0010, $0008,  $0000,   $0007
         dw $ffff
     }
 
     ..12: {
+        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
+        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
+        dw #obj_ptr_manholetop, $0008, $0001,  $0000,   $0000
+        dw #obj_ptr_candle,     $0010, $0017,  $0000,   $0000
+        dw #obj_ptr_liftrect,   $0010, $0004,  $0000,   $000c
         dw $ffff
     }
 
@@ -251,14 +280,19 @@
     }
 
     ..32: {
+        dw #obj_ptr_openwall,       $0000, $0001,  $0000,   $0000
+        dw #obj_ptr_manholebottom,  $0008, $001a,  $0000,   $0000
+        dw #obj_ptr_liftrect,       $0010, $0006,  $0000,   $000f
         dw $ffff
     }
 
     ..33: {
+        dw #obj_ptr_openwall,       $0000, $0001,  $0000,   $0000
         dw $ffff
     }
 
     ..34: {
+        dw #obj_ptr_openwall,       $0000, $0001,  $0000,   $0000
         dw $ffff
     }
 
@@ -607,7 +641,7 @@
 
     ..81: {
         dw #obj_ptr_openwall,   $0000, $0001,  $0000,   $0000
-        dw #obj_ptr_vent,       $0014, $001a,  $0000,   $0013
+        dw #obj_ptr_vent,       $0013, $001a,  $0000,   $0013
         dw #obj_ptr_solidrect,  $000d, $0000,  $0000,   $021f
         dw $ffff
     }

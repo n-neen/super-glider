@@ -643,6 +643,7 @@ obj: {
         ..manholetop:       dw obj_headers_manholetop
         ..manholebottom:    dw obj_headers_manholebottom
         ..fireplace:        dw obj_headers_fireplace
+        ..sewergrate:       dw obj_headers_sewergrate
         
         ;variable size table related objects
         ..varitable:        dw obj_headers_varitable
@@ -664,82 +665,85 @@ obj: {
     .headers: {
         ;object types
         ..vent:       ;tilemap pointer,     xsize, ysize, routine,                  properties
-            dw #obj_tilemaps_vent,          $0006, $0003, obj_routines_vent,        $8000
-        
-        ..candle:
-            dw #obj_tilemaps_candle,        $0004, $0004, obj_routines_candle,      $0000
-        
-        ..fanR:
-            dw #obj_tilemaps_fanR,          $0004, $0007, $0000,                    $0000
-        
-        ..fanL:
-            dw #obj_tilemaps_fanL,          $0005, $0007, $0000,                    $0000
-        
-        ..tallcandle:   ;unfinished
-            dw #obj_tilemaps_tallcandle,    $0002, $0008, $0000,                    $0000
-        
-        ..shelf:
-            dw !objdyntilemap,              $0030, $0001, obj_routines_shelf,       $0000
-        
-        ..upstairs:
-            dw #obj_tilemaps_upstairs,      $000c, $0014, obj_routines_upstairs,    $8000
-        
-        ..dnstairs
-            dw #obj_tilemaps_dnstairs,      $000c, $0014, obj_routines_dnstairs,    $8000
-        
-        ..window:
-            dw #obj_tilemaps_window,        $0006, $0008, obj_routines_delete,      $8000
-        
-        ..ozma:
-            dw #obj_tilemaps_ozma,          $000c, $000b, obj_routines_delete,      $8000
-        
-        ..lamp:
-            dw #obj_tilemaps_lamp,          $0004, $0005, obj_routines_delete,      $0000
-        
-        ..table:
-            dw #obj_tilemaps_table,         $0009, $000d, obj_routines_delete,      $0000
-        
-        ..varitable:    ;unimpl
-            dw #obj_tilemaps_null,          $0000, $0000, obj_routines_varitable,   $0000
-        
-        ..tabletop:     ;unimpl
-            dw !objdyntilemap,              $0000, $0001, obj_routines_tabletop,    $0000
-        
-        ..tablepole:    ;uniplm
-            dw !objdyntilemap,              $0001, $0008, obj_routines_tablepole,   $0000
-        
-        ..tablebase:    ;unimpl
-            dw #obj_tilemaps_tablebase,     $0009, $0003, obj_routines_none,        $0000
-        
-        ..fishbowl:
-            dw #obj_tilemaps_fishbowl,      $0005, $0004, obj_routines_fishbowl,    $0000
+            dw #obj_tilemaps_vent,          $0006, $0003, obj_routines_vent,            $8000
             
-        ..openwindow:
-            dw #obj_tilemaps_openwindow,    $000c, $000d, obj_routines_delete,      $8000
+        ..candle:   
+            dw #obj_tilemaps_candle,        $0004, $0004, obj_routines_candle,          $0000
             
-        ..windowtouchbox:
-            dw #obj_tilemaps_null,          $000b, $0005, obj_routines_openwindow,  $8000
+        ..fanR: 
+            dw #obj_tilemaps_fanR,          $0004, $0007, $0000,                        $0000
             
-        ..trashcan:
-            dw #obj_tilemaps_trashcan,      $0007, $0008, obj_routines_delete,      $0000
+        ..fanL: 
+            dw #obj_tilemaps_fanL,          $0005, $0007, $0000,                        $0000
+            
+        ..tallcandle:   ;unfinished 
+            dw #obj_tilemaps_tallcandle,    $0002, $0008, $0000,                        $0000
+            
+        ..shelf:    
+            dw !objdyntilemap,              $0030, $0001, obj_routines_shelf,           $0000
+            
+        ..upstairs: 
+            dw #obj_tilemaps_upstairs,      $000c, $0014, obj_routines_upstairs,        $8000
+            
+        ..dnstairs  
+            dw #obj_tilemaps_dnstairs,      $000c, $0014, obj_routines_dnstairs,        $8000
+            
+        ..window:   
+            dw #obj_tilemaps_window,        $0006, $0008, obj_routines_delete,          $8000
+            
+        ..ozma: 
+            dw #obj_tilemaps_ozma,          $000c, $000b, obj_routines_delete,          $8000
+            
+        ..lamp: 
+            dw #obj_tilemaps_lamp,          $0004, $0005, obj_routines_delete,          $0000
+            
+        ..table:    
+            dw #obj_tilemaps_table,         $0009, $000d, obj_routines_delete,          $0000
+            
+        ..varitable:    ;unimpl 
+            dw #obj_tilemaps_null,          $0000, $0000, obj_routines_varitable,       $0000
+            
+        ..tabletop:     ;unimpl 
+            dw !objdyntilemap,              $0000, $0001, obj_routines_tabletop,        $0000
+            
+        ..tablepole:    ;uniplm 
+            dw !objdyntilemap,              $0001, $0008, obj_routines_tablepole,       $0000
+            
+        ..tablebase:    ;unimpl 
+            dw #obj_tilemaps_tablebase,     $0009, $0003, obj_routines_none,            $0000
+            
+        ..fishbowl: 
+            dw #obj_tilemaps_fishbowl,      $0005, $0004, obj_routines_fishbowl,        $0000
+                
+        ..openwindow:   
+            dw #obj_tilemaps_openwindow,    $000c, $000d, obj_routines_delete,          $8000
+                
+        ..windowtouchbox:   
+            dw #obj_tilemaps_null,          $000b, $0005, obj_routines_openwindow,      $8000
+                
+        ..trashcan: 
+            dw #obj_tilemaps_trashcan,      $0007, $0008, obj_routines_delete,          $0000
             
         ..manholebottom:
-            dw #obj_tilemaps_manholebottom, $000f, $0003, obj_routines_delete,      $8000
+            dw #obj_tilemaps_manholebottom, $000f, $0002, obj_routines_manholebottom,   $8000
             
         ..manholetop:
-            dw #obj_tilemaps_manholetop,    $000f, $0003, obj_routines_delete,      $8000
+            dw #obj_tilemaps_manholetop,    $000f, $0002, obj_routines_manholetop,      $8000
             
         ..fireplace:
-            dw #obj_tilemaps_fireplace,     $0011, $0008, obj_routines_delete,      $8000
+            dw #obj_tilemaps_fireplace,     $0011, $0008, obj_routines_delete,          $8000
             
         ..solidrect:
-            dw #obj_tilemaps_null,          $0000, $0000, obj_routines_solidrect,   $8000
+            dw #obj_tilemaps_null,          $0000, $0000, obj_routines_solidrect,       $8000
         
         ..killrect:
-            dw #obj_tilemaps_null,          $0000, $0000, obj_routines_killrect,    $8000
+            dw #obj_tilemaps_null,          $0000, $0000, obj_routines_killrect,        $8000
             
         ..liftrect:
-            dw #obj_tilemaps_null,          $0000, $0000, obj_routines_liftrect,    $8000
+            dw #obj_tilemaps_null,          $0000, $0000, obj_routines_liftrect,        $8000
+            
+        ..sewergrate:
+            dw #obj_tilemaps_sewergrate,    $0004, $0002, obj_routines_vent,            $0000
     }
     
     ;===========================================================================================
@@ -748,6 +752,32 @@ obj: {
     ;===========================================================================================
     
     .routines: {
+        ..manholetop: {
+            jsr obj_touch
+            bcc +
+            
+            lda !kroomtranstypeup
+            sta !roomtranstype
+            lda !kstateroomtrans
+            sta !gamestate
+            
+            +
+            rts
+        }
+        
+        ..manholebottom: {
+            jsr obj_touch
+            bcc +
+            
+            lda !kroomtranstypedown
+            sta !roomtranstype
+            lda !kstateroomtrans
+            sta !gamestate
+            
+            +
+            rts
+        }
+        
         ..liftrect: {
             lda !objvariable,x
             beq +
@@ -1388,6 +1418,7 @@ obj: {
         ..manholetop:       %objtilemapentry(manhole_top)
         ..manholebottom:    %objtilemapentry(manhole_bottom)
         ..fireplace:        %objtilemapentry(fireplace)
+        ..sewergrate:       %objtilemapentry(sewergrate)
     }
     ;print "object tilemaps end:   ", pc
 }
