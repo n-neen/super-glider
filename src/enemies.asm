@@ -459,10 +459,50 @@ enemy: {
 ;===========================================================================================
     
     .instruction: {
+        
         ..off: {
             ;do something like wait to be reactivated
             rts
         }
+        
+        ;=====================================  DART  ======================================
+        
+        ..dart: {
+            ...checklateral: {
+                ;x = enemy index
+                lda !enemyx,x
+                cmp !kleftbound
+                bmi +
+                cmp !krightbound
+                bpl +
+                rts
+                
+                +
+                lda !enemyvariable,x
+                sta !enemyx,x
+                
+                rts
+            }
+            
+            ...checkvertical: {
+                lda !enemyy,x
+                cmp !kceiling
+                bmi +
+                cmp !kfloor
+                bpl +
+                rts
+                
+                +
+                lda !enemyrespawnpoint,x
+                sta !enemyy,x
+                
+                lda !enemyvariable,x
+                sta !enemyx,x
+                rts
+            }
+
+        }
+        
         
         ;=====================================  DRIP  ======================================
         
@@ -925,7 +965,7 @@ enemy: {
         ..candleflame:
             dw  spritemap_pointers_candleflame,         ;spritemap ptr
                 $0030,                                  ;xsize,
-                $0030,                                  ;ysize,
+                $0020,                                  ;ysize,
                 $0000,                                  ;init routine,
                 enemy_main_candleflame,                 ;main routine,
                 enemy_touch_candleflame,                ;touch,
@@ -950,7 +990,7 @@ enemy: {
     .init: {
         ..samantha: {
             lda #$000b
-            jsl load_sprite         ;load sprite data 8 (samantha)
+            jsl load_sprite         ;load sprite data b (samantha)
             rts
         }
         
@@ -1012,6 +1052,12 @@ enemy: {
         }
         
         ..dart: {
+            lda !enemyy,x
+            sta !enemyrespawnpoint,x
+            
+            lda !enemyx,x
+            sta !enemyvariable,x
+            
             lda !enemyproperty,x
             bmi +
             ; if not $8000 bit, it's a left dart
@@ -1225,31 +1271,72 @@ enemy: {
         }
         
         ..dart: {
+            !tempspeed      =   !localtempvar
+            !tempsubspeed   =   !localtempvar2
+            
+            
+            jsr enemy_instruction_dart_checklateral
+            jsr enemy_instruction_dart_checkvertical
+            
+            ;vertical drop
+            ;this is subspeed, but we only get the top byte
+            ;so, it's ff00 max subspeed
+            
+            lda !enemyproperty2,x
+            and #$ff00
+            sta !tempsubspeed
+            
+            lda !enemysuby,x
+            clc
+            adc !tempsubspeed
+            sta !enemysuby,x
+            
+            lda !enemyy,x
+            adc #$0000              ;use carry from subspeed math
+            sta !enemyy,x
+            
+            ;get enemy speed/subspeeds from property3
+            ;and shift them into place
+            ;this is the same x.yyy as balloovement
+            
+            lda !enemyproperty3,x
+            and #$f000
+            xba
+            lsr #4
+            sta !tempspeed
+            
+            lda !enemyproperty3,x
+            and #$0fff
+            asl #4
+            sta !tempsubspeed
+            
             lda !enemyproperty,x
             bmi +
             
-            ;left dart
+            ;left movement
+            
+            lda !enemysubx,x
+            sec
+            sbc !tempsubspeed
+            sta !enemysubx,x
             
             lda !enemyx,x
-            dec : dec
-            and #$00ff
+            sbc !tempspeed  ;use carry from previous math
             sta !enemyx,x
-            
-            ;lda !kdartsubspeed         ;do somethin like that eventually
-            ;jsr enemy_inst_moveleft
             
             rts
             
-            ;right dart
+            ;right movement
             +
             
-            lda !enemyx,x
-            inc : inc
-            and #$00ff
-            sta !enemyx,x
+            lda !enemysubx,x
+            clc
+            adc !tempsubspeed
+            sta !enemysubx,x
             
-            ;lda !kdartsubspeed
-            ;jsr enemy_inst_moveright
+            lda !enemyx,x
+            adc !tempspeed  ;use carry from previous math
+            sta !enemyx,x
             
             rts
         }

@@ -125,7 +125,8 @@ print "enemy ram start: ", hex(!enemystart)
 !enemytimer             =       !enemyshotptr+!enemyarraysize+2
 !enemyvariable          =       !enemytimer+!enemyarraysize+2
 !enemyproperty3         =       !enemyvariable+!enemyarraysize+2
-print "enemy ram end: ", hex(!enemyproperty3+!enemyarraysize+2)
+!enemyrespawnpoint      =       !enemyproperty3+!enemyarraysize+2
+print "enemy ram end: ", hex(!enemyrespawnpoint+!enemyarraysize+2)
 
 ;length of data in room file for each enemy entry
 !kenemyentrylength  =       #$000c

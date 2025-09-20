@@ -70,8 +70,26 @@
 
     ..c: {
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
-        dw #obj_ptr_candle,     $0010, $0017,  $0000,   $0000
-        dw #obj_ptr_liftrect,   $0010, $0008,  $0000,   $0007
+        dw #obj_ptr_sewergrate, $0004, $001a,  $0800,   $0028
+        dw #obj_ptr_sewergrate, $0018, $001a,  $0800,   $0050
+        ;dw #obj_ptr_candle,     $0010, $0017,  $0000,   $0000
+        ;dw #obj_ptr_liftrect,   $0010, $0008,  $0000,   $0007
+        
+        dw #obj_ptr_shelf,      $000c, $0011,  $0800,   $0001
+        dw #obj_ptr_shelf,      $000d, $0012,  $0800,   $0002
+        dw #obj_ptr_shelf,      $000e, $0013,  $0800,   $0003
+        dw #obj_ptr_shelf,      $000f, $0014,  $0800,   $0004
+        dw #obj_ptr_shelf,      $0010, $0015,  $0800,   $0005
+        dw #obj_ptr_shelf,      $0011, $0016,  $0800,   $0006
+        dw #obj_ptr_shelf,      $0012, $0017,  $0800,   $0007
+        
+        dw #obj_ptr_shelf,      $000c, $000a,  $0800,   $0001
+        dw #obj_ptr_shelf,      $000d, $0009,  $0800,   $0002
+        dw #obj_ptr_shelf,      $000e, $0008,  $0800,   $0003
+        dw #obj_ptr_shelf,      $000f, $0007,  $0800,   $0004
+        dw #obj_ptr_shelf,      $0010, $0006,  $0800,   $0005
+        dw #obj_ptr_shelf,      $0011, $0005,  $0800,   $0006
+        dw #obj_ptr_shelf,      $0012, $0004,  $0800,   $0007
         dw $ffff
     }
 

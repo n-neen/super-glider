@@ -55,6 +55,8 @@
     
     ..c: {
         ;enemy type                 x,        y,        property,    prop2, property3
+        dw enemy_ptr_balloon,       $0070,    $00d0,    $191f,      $3002,  $0000
+        dw enemy_ptr_dart,          $00c0,    $0020,    $0000,      $6000,  $1800
         dw $ffff
     }
     
