@@ -644,6 +644,7 @@ obj: {
         ..manholebottom:    dw obj_headers_manholebottom
         ..fireplace:        dw obj_headers_fireplace
         ..sewergrate:       dw obj_headers_sewergrate
+        ..cabinet:          dw obj_headers_cabinet
         
         ;variable size table related objects
         ..varitable:        dw obj_headers_varitable
@@ -700,16 +701,16 @@ obj: {
         ..table:    
             dw #obj_tilemaps_table,         $0009, $000d, obj_routines_delete,          $0000
             
-        ..varitable:    ;unimpl 
+        ..varitable:
             dw #obj_tilemaps_null,          $0000, $0000, obj_routines_varitable,       $0000
             
-        ..tabletop:     ;unimpl 
+        ..tabletop: 
             dw !objdyntilemap,              $0000, $0001, obj_routines_tabletop,        $0000
             
-        ..tablepole:    ;uniplm 
+        ..tablepole: 
             dw !objdyntilemap,              $0001, $0008, obj_routines_tablepole,       $0000
             
-        ..tablebase:    ;unimpl 
+        ..tablebase:
             dw #obj_tilemaps_tablebase,     $0009, $0003, obj_routines_none,            $0000
             
         ..fishbowl: 
@@ -744,6 +745,10 @@ obj: {
             
         ..sewergrate:
             dw #obj_tilemaps_sewergrate,    $0004, $0002, obj_routines_vent,            $0000
+        
+        ..cabinet:
+            dw $0000,                       $0000, $0000, obj_routines_cabinet,         $0000
+        
     }
     
     ;===========================================================================================
@@ -752,6 +757,48 @@ obj: {
     ;===========================================================================================
     
     .routines: {
+        ..cabinet: {
+            ;x = obj index
+            
+            phb
+            phy
+            
+            phk
+            plb
+            
+            lda !objvariable,x
+            asl                 ;y = cabinet type index
+            tay                 ;for width and tilemap pointer         
+            
+            lda obj_routines_cabinet_tilemaptable,y
+            sta !objtilemapointer,x
+            
+            lda obj_routines_cabinet_widthlist,y
+            sta !objxsize,x
+            
+            jsr obj_draw
+            jsr obj_clear
+            
+            ply
+            plb
+            rts
+            
+            ...tilemaptable: {
+                dw obj_tilemaps_cabinet_0,
+                   obj_tilemaps_cabinet_1,
+                   obj_tilemaps_cabinet_2,
+                   obj_tilemaps_cabinet_3
+            }
+            
+            ...widthlist: {
+                dw $0004,           ;0
+                   $0006,           ;1
+                   $000c,           ;2
+                   $000a            ;3
+            }
+        }
+        
+        
         ..manholetop: {
             jsr obj_touch
             bcc +
@@ -1419,6 +1466,13 @@ obj: {
         ..manholebottom:    %objtilemapentry(manhole_bottom)
         ..fireplace:        %objtilemapentry(fireplace)
         ..sewergrate:       %objtilemapentry(sewergrate)
+        
+        ..cabinet: {
+            ...0: %objtilemapentry(cabinet0)
+            ...1: %objtilemapentry(cabinet1)
+            ...2: %objtilemapentry(cabinet2)
+            ...3: %objtilemapentry(cabinet3)
+        }
     }
     ;print "object tilemaps end:   ", pc
 }

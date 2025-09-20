@@ -78,9 +78,12 @@
     ..d: {
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
-        dw #obj_ptr_candle,     $0014, $0017,  $0800,   $0000
-        dw #obj_ptr_liftrect,   $0014, $0008,  $0000,   $0007
+        dw #obj_ptr_candle,     $000c, $0017,  $0800,   $0000
+        dw #obj_ptr_liftrect,   $000c, $0014,  $0000,   $0003
         dw #obj_ptr_sewergrate, $0003, $001a,  $0800,   $0028
+        dw #obj_ptr_sewergrate, $0013, $001a,  $0800,   $00a0
+        dw #obj_ptr_sewergrate, $0018, $001a,  $0800,   $00a0
+        dw #obj_ptr_cabinet,    $0010, $0003,  $0800,   $0003
         dw $ffff
     }
 
@@ -189,12 +192,11 @@
     }
 
     ..21: {
-        dw #obj_ptr_shelf,      $0010, $0011,  $0800,   $0008
+        ;dw #obj_ptr_shelf,      $0010, $0011,  $0800,   $0008
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
-        ;dw #obj_ptr_shelf,      $0010, $0013,  $0800,   $0006
-        ;dw #obj_ptr_shelf,      $0010, $0015,  $0800,   $0004
-        ;dw #obj_ptr_shelf,      $0010, $0017,  $0800,   $0002
+        
+        dw #obj_ptr_cabinet,    $0010, $0010,  $0800,   $0002
         
         dw #obj_ptr_vent,       $0008, $001a,  $0000,   $0013
         dw #obj_ptr_vent,       $0013, $001a,  $0000,   $0013

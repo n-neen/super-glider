@@ -813,7 +813,7 @@ enemy: {
         ..balloon:
             dw  spritemap_pointers_balloon,      ;spritemap ptr
                 $0030,                           ;xsize,
-                $0028,                           ;ysize,
+                $0030,                           ;ysize,
                 $0000,                           ;init routine,
                 enemy_main_balloon,              ;main routine,
                 enemy_touch_kill,                ;touch,
@@ -1321,6 +1321,7 @@ enemy: {
             
             lda !kgliderstatelostlife
             sta !glidernextstate
+            sta !gliderstate
             
             ...foilreturn:
             rts

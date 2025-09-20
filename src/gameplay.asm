@@ -18,18 +18,20 @@ game: {
         jsl oam_hightablejank
         jsl getinput
         
+        jsl glider_draw
+        
+        jsl enemy_top
+        
         jsl obj_handle
         jsl obj_collision
         
         jsr bands_handle
         
         jsr glider_handle
-        jsl glider_draw
         jsr glider_checktrans
         
         jsl obj_collision
         
-        jsl enemy_top
         
         ;jsl coolmode
         

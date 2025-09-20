@@ -54,11 +54,14 @@
     }
     
     ..c: {
-        ;enemy type             x,        y,        property,  prop2,       property3
+        ;enemy type                 x,        y,        property,    prop2, property3
         dw $ffff
     }
     
     ..d: {
+        dw enemy_ptr_copter,        $00a0,    $0020,    $00a0,      $0100,  $00a0
+        dw enemy_ptr_balloon,       $0088,    $00d0,    $191f,      $3002,  $0000
+        dw enemy_ptr_balloon,       $00a8,    $0048,    $0f1f,      $1002,  $0000
         dw $ffff
     }
     
