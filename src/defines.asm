@@ -58,7 +58,7 @@
 !multresult         =       $102
 
 ;glider ram
-!gliderramstart     =       $0180                   ;base address
+!gliderramstart     =       $0160                   ;base address
 print "glider ram start: ", hex(!gliderramstart)
 !gliderx            =       !gliderramstart         ;x coord
 !glidery            =       !gliderramstart+2       ;y coord
@@ -105,7 +105,7 @@ print "glider ram start: ", hex(!gliderramstart)
 print "glider ram end: ", hex(!bandtimer)
 
 ;enemy ram
-!enemystart             =       $200
+!enemystart             =       $1d0
 print "enemy ram start: ", hex(!enemystart)
 !enemyarraysize         =       $0028
 !enemyID                =       !enemystart

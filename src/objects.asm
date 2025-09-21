@@ -1167,6 +1167,9 @@ obj: {
             ;spawn fish
             phy
             
+            lda !objproperty,x                  ;we have to wait a frame for enemies to be spawned
+            beq +                               ;normally. then we can spawn the fish. ugh
+            
             lda #enemy_ptr_fish
             sta !enemydynamicspawnslot          ;enemy type
             
@@ -1198,6 +1201,9 @@ obj: {
             ;clear routine
             stz !objroutineptr,x
             
+            +
+            
+            inc !objproperty,x
             ply
             rts
         }

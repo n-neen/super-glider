@@ -54,20 +54,25 @@
     }
     
     ..c: {
-        ;enemy type                 x,        y,        property,    prop2, property3
-        dw enemy_ptr_balloon,       $0070,    $00d0,    $191f,      $3002,  $0000
-        dw enemy_ptr_dart,          $00c0,    $0020,    $0000,      $6000,  $1800
+        ;enemy type                 x,      y,      property,   prop2,  property3
+        dw enemy_ptr_balloon,       $0070,  $00d0,  $191f,      $3002,  $0000
+        dw enemy_ptr_dart,          $00c0,  $0020,  $0000,      $6000,  $1800
         dw $ffff
     }
     
     ..d: {
-        dw enemy_ptr_copter,        $00a0,    $0020,    $00a0,      $0100,  $00a0
-        dw enemy_ptr_balloon,       $0088,    $00d0,    $191f,      $3002,  $0000
-        dw enemy_ptr_balloon,       $00a8,    $0048,    $0f1f,      $1002,  $0000
+        dw enemy_ptr_copter,        $00a0,  $0020,  $00a0,      $0100,  $00a0
+        dw enemy_ptr_balloon,       $0088,  $00d0,  $191f,      $3002,  $0000
+        dw enemy_ptr_balloon,       $00a8,  $0048,  $0f1f,      $1002,  $0000
         dw $ffff
     }
     
     ..e: {
+        dw enemy_ptr_drip,          $0050,  $0010,  $0141,      $0002,  $0800
+        dw enemy_ptr_drip,          $0068,  $0010,  $0170,      $0002,  $2000
+        dw enemy_ptr_drip,          $0089,  $0010,  $0079,      $0002,  $4000
+        dw enemy_ptr_drip,          $0090,  $0010,  $017a,      $0002,  $7f00
+        dw enemy_ptr_drip,          $0098,  $0010,  $00a3,      $0002,  $2900
         dw $ffff
     }
     
@@ -162,15 +167,19 @@
     
     ..22: {
         dw enemy_ptr_drip,          $0060,    $0008,   $0070,       $0002,             $0000
+        dw enemy_ptr_balloon,       $0060,    $0028,   $0f80,       $3002,             $0000
+        dw enemy_ptr_copter,        $00a0,    $0020,   $00a0,       $0100,             $00a0
         ;dw enemy_ptr_foil,          $0050,    $0058,   $0070,       $0002,             $0000
         dw $ffff
     }
     
     ..23: {
+        dw enemy_ptr_copter,        $00a0,    $0008,   $00a0,       $0000,             $00a0
         dw $ffff
     }
     
     ..24: {
+        
         dw $ffff
     }
     

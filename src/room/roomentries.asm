@@ -38,7 +38,7 @@
     ..21: dw room_objlist_21, room_enemylist_21, $c003,     $ffff
     ..22: dw room_objlist_22, room_enemylist_22, $c003,     $ffff
     ..23: dw room_objlist_23, room_enemylist_23, $c003,     $ffff
-    ..24: dw room_objlist_24, room_enemylist_24, $c102,     $ffff
+    ..24: dw room_objlist_24, room_enemylist_24, $c003,     $ffff
     ..25: dw room_objlist_25, room_enemylist_25, $c102,     $ffff
     ..26: dw room_objlist_26, room_enemylist_26, $c102,     $ffff
     ..27: dw room_objlist_27, room_enemylist_27, $c102,     $ffff

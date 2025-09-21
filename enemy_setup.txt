@@ -93,6 +93,13 @@ copter: {
             bb = bb00 subspeed
 }
 
+drip: {
+    property = timer
+    property3 is passed to drop enemy as property
+        used as subspeed
+        drop speed is 2.xxxx, where x is the property3 of the drip that spawns it
+}
+
 dart:
     unfinished, todo
     

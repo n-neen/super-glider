@@ -611,6 +611,7 @@ loadingtable: {
             %loadtablentry(#teddydata_graphics,     $0800, !spritestart+$0500,      $09)     ;teddy         = 09
             %loadtablentry(#stardata_gfx,           $1000, !spritestart+$1000,      $0a)     ;star          = 0a
             %loadtablentry(#samanthadata_gfx,       $0800, !spritestart+$0500,      $0b)     ;samantha      = 0b
+            %loadtablentry(#pressstartdata_gfx,     $1000, !spritestart+$0000,      $0c)     ;press start   = 0c
             
         }
         
@@ -625,8 +626,9 @@ loadingtable: {
            %loadtablentry(#fishdata_palette,        $0001, !spritepalette+$0000,    $07)     ;dummy palette 
            %loadtablentry(#copterdata_palette,      $0001, !spritepalette+$0000,    $08)     ;dummy palette 
            %loadtablentry(#teddydata_palette,       $0020, !spritepalette+$0000,    $09)     ;teddy         = 09
-           %loadtablentry(#stardata_palette,        $0010, !spritepalette+$0010,    $0a)     ;star          = 0a
+           %loadtablentry(#stardata_palette,        $0020, !spritepalette+$0010,    $0a)     ;star          = 0a
            %loadtablentry(#samanthadata_palette,    $0020, !spritepalette+$0030,    $0b)     ;samantha      = 0b
+           %loadtablentry(#pressstartdata_palette,  $0100, !spritepalette+$0000,    $0c)     ;press start   = 0c
            
         }
     }

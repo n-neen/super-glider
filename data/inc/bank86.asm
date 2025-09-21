@@ -20,5 +20,12 @@ samanthadata: {
         incbin "./data/sprites/samantha.gfx"
 }
 
+pressstartdata: {
+    .gfx:
+        incbin "./data/sprites/press_start.gfx"
+    .palette:
+        incbin "./data/sprites/press_start.pal"
+}
+
 
 print "bank $86 end: ", pc

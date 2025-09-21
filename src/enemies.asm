@@ -564,6 +564,9 @@ enemy: {
                 lda !enemyy,x
                 sta !enemydynamicspawnslot+4
                 
+                lda !enemyproperty3,x
+                sta !enemydynamicspawnslot+6    ;pass property3 to property of spawned drop, as subspeed
+                
                 lda #$0002
                 sta !enemydynamicspawnslot+8
                 
@@ -965,7 +968,7 @@ enemy: {
         ..candleflame:
             dw  spritemap_pointers_candleflame,         ;spritemap ptr
                 $0030,                                  ;xsize,
-                $0020,                                  ;ysize,
+                $0030,                                  ;ysize,
                 $0000,                                  ;init routine,
                 enemy_main_candleflame,                 ;main routine,
                 enemy_touch_candleflame,                ;touch,
@@ -1181,10 +1184,12 @@ enemy: {
             adc #spritemap_pointers_drip+10
             sta !enemyspritemapptr,x
             
-            lda !enemysuby,x
+            lda !enemyproperty,x
+            sta !localtempvar
             
+            lda !enemysuby,x
             clc
-            adc #$8000
+            adc !localtempvar
             sta !enemysuby,x
             
             lda !enemyy,x

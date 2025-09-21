@@ -96,8 +96,8 @@
     ..d: {
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
-        dw #obj_ptr_candle,     $000c, $0017,  $0800,   $0000
-        dw #obj_ptr_liftrect,   $000c, $0014,  $0000,   $0003
+        dw #obj_ptr_candle,     $000a, $0017,  $0800,   $0000
+        dw #obj_ptr_liftrect,   $000a, $0014,  $0000,   $0003
         dw #obj_ptr_sewergrate, $0003, $001a,  $0800,   $0028
         dw #obj_ptr_sewergrate, $0013, $001a,  $0800,   $00a0
         dw #obj_ptr_sewergrate, $0018, $001a,  $0800,   $00a0
@@ -108,8 +108,13 @@
     ..e: {
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
-        dw #obj_ptr_candle,     $0010, $0017,  $0000,   $0000
-        dw #obj_ptr_liftrect,   $0010, $0008,  $0000,   $0007
+        dw #obj_ptr_sewergrate, $0004, $001a,  $0800,   $0028
+        dw #obj_ptr_sewergrate, $0016, $001a,  $0800,   $0028
+        dw #obj_ptr_sewergrate, $0011, $001a,  $0800,   $0090
+        dw #obj_ptr_cabinet,    $000d, $0003,  $0800,   $0003
+        ;dw #obj_ptr_cabinet,    $0018, $0003,  $0800,   $0002
+        ;dw #obj_ptr_candle,     $0010, $0017,  $0000,   $0000
+        ;dw #obj_ptr_liftrect,   $0010, $0008,  $0000,   $0007
         dw $ffff
     }
 
@@ -230,6 +235,7 @@
         dw #obj_ptr_window,     $0010, $0008,  $0c00,   $0033
         dw #obj_ptr_candle,     $000f, $000f,  $0800,   $0000
         dw #obj_ptr_trashcan,   $000c, $0013,  $0800,   $0000
+        dw #obj_ptr_cabinet,    $001a, $0004,  $0800,   $0001
         dw $ffff
     }
 
@@ -239,11 +245,23 @@
         dw #obj_ptr_openwall,   $0000, $0001,  $0000,   $8000
         dw #obj_ptr_upstairs,   $000e, $0005,  $0400,   $0000
         dw #obj_ptr_vent,       $0010, $001a,  $0000,   $0013
-        dw #obj_ptr_fishbowl,   $0018, $0016,  $0800,   $0010
+        dw #obj_ptr_vent,       $0003, $001a,  $0000,   $0078
+        dw #obj_ptr_varitable,  $000d, $000b,  $0800,   $0402
+        dw #obj_ptr_fishbowl,   $0018, $0010,  $0800,   $0010
+        dw #obj_ptr_cabinet,    $0002, $0004,  $0800,   $0001
         dw $ffff
     }
 
     ..24: {
+        dw #obj_ptr_openwall,   $0000, $0001,  $0000,   $0000
+        dw #obj_ptr_openwall,   $0000, $0001,  $0000,   $8000
+        dw #obj_ptr_vent,       $0010, $001a,  $0000,   $0028
+        dw #obj_ptr_vent,       $0003, $001a,  $0000,   $0028
+        dw #obj_ptr_varitable,  $0002, $000b,  $0800,   $0f02
+        dw #obj_ptr_fishbowl,   $0006, $0010,  $0800,   $0010
+        dw #obj_ptr_fishbowl,   $000d, $0010,  $0800,   $0010
+        dw #obj_ptr_fishbowl,   $0012, $0010,  $0800,   $0010
+        dw #obj_ptr_fishbowl,   $0018, $0010,  $0800,   $0010
         dw $ffff
     }
 

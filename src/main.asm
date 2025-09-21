@@ -209,6 +209,9 @@ splashsetup: {
     lda #$0001              ;load gfx, tilemap, and palettes
     jsl load_background     ;for background 01 (splash screen)
     
+    lda #$000c
+    jsl load_sprite         ;"press start" sprite graphics
+    
     jsr screenon
     lda #$0001
     sta !gamestate          ;advance to game state 1 (splash screen)
