@@ -1,11 +1,8 @@
 todo: {
     enemies: {
-        dart
         basketball
         toaster
         the cat
-        
-        copter hitbox is extremely bad
         
         duct:
         property3 to be used for output y pos?
@@ -34,6 +31,9 @@ todo: {
         options, menus
         all background tilemaps are 32x32 but only need to be 32x28
             this will save $100 bytes per tilemap
+        
+        implement sprite index constant defines in defines.asm
+        
     }
     
     room: {

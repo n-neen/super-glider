@@ -174,12 +174,16 @@
     }
     
     ..23: {
-        dw enemy_ptr_copter,        $00a0,    $0008,   $00a0,       $0000,             $00a0
+        dw enemy_ptr_copter,        $0020,    $0028,   $00a0,       $0000,             $00a0
         dw $ffff
     }
     
     ..24: {
-        
+        ;enemy type                 x,        y,       property,    property2,         property3
+        dw enemy_ptr_drip,          $0040,    $0010,   $0090,       $0002,             $f000
+        dw enemy_ptr_drip,          $0068,    $0010,   $0020,       $0002,             $8000
+        dw enemy_ptr_drip,          $0090,    $0010,   $0040,       $0002,             $4000
+        dw enemy_ptr_drip,          $00c0,    $0010,   $0080,       $0002,             $0000
         dw $ffff
     }
     

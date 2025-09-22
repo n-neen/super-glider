@@ -33,7 +33,7 @@ lorom
     stz $4200               ;disable interrupts
     rep #$20
     
-    jsl obj_clearall
+    ;jsl obj_clearall
     ;jsl obj_tilemap_init
     
     ldx !roomptr
@@ -104,7 +104,9 @@ lorom
     lda room_list,x
     sta !roomptr
     
+    jsl obj_clearall
     jsl enemy_clearall
+    jsl enemy_cleardynamicspawn
     stz !oamentrypoint
     ;jsl oam_cleantable
     jsl oam_fillbuffer

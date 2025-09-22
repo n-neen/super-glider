@@ -32,15 +32,11 @@ game: {
         
         jsl obj_collision
         
-        
         ;jsl coolmode
-        
         ;jsl iframecolormath
         jsl handlecolormath
         
         jsr handlehud
-        
-
         
         rtl
     }
@@ -48,7 +44,6 @@ game: {
     .runroomroutine: {
         ;only run this routine if the contents of roomspecialptr is negative
         ;if it's zero of positive, exit
-        
         
         lda !roomspecialptr
         cmp #$ffff

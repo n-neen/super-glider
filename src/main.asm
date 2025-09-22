@@ -301,7 +301,7 @@ newgame: {
     sta !roomindex
     asl
     tax
-    lda room_list,x
+    lda.l room_list,x
     sta !roomptr
     
     jsl obj_clearall

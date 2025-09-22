@@ -258,6 +258,7 @@
         dw #obj_ptr_vent,       $0010, $001a,  $0000,   $0028
         dw #obj_ptr_vent,       $0003, $001a,  $0000,   $0028
         dw #obj_ptr_varitable,  $0002, $000b,  $0800,   $0f02
+        
         dw #obj_ptr_fishbowl,   $0006, $0010,  $0800,   $0010
         dw #obj_ptr_fishbowl,   $000d, $0010,  $0800,   $0010
         dw #obj_ptr_fishbowl,   $0012, $0010,  $0800,   $0010

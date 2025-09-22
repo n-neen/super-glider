@@ -349,6 +349,29 @@ print "object ram start: ", hex(!objvariable+!objectarraysize+2)
 
 !kpausewait                 =       #$0030
 
+
+;sprite index constants
+;unimplemented
+;just gotta copy and paste, mostly in main.asm
+;but also need to look at enemies that load graphics
+;ctrl-f "jsl load_sprite" to find where the callsites are
+
+!kspriteglider        = #$0000
+!kspriteballoon       = #$0001
+!kspriteprizes        = #$0002
+!kspritedart          = #$0003
+!kspritedrip          = #$0004
+!kspritefoilglider    = #$0005
+!kspritecat           = #$0006
+!kspritefish          = #$0007
+!kspritecopter        = #$0008
+!kspriteteddy         = #$0009
+!kspritestar          = #$000a
+!kspritesamantha      = #$000b
+!kspritepressstart    = #$000c
+
+
+
 ;room loading constants:
 ;how far into the room header are these things:
 

@@ -151,6 +151,17 @@ enemy: {
         rtl
     }
     
+    .cleardynamicspawn: {
+        stz !enemydynamicspawnslot
+        stz !enemydynamicspawnslot+2
+        stz !enemydynamicspawnslot+4
+        stz !enemydynamicspawnslot+6
+        stz !enemydynamicspawnslot+8
+        stz !enemydynamicspawnslot+10
+        stz !enemydynamicspawnslot+12
+        rtl
+    }
+    
     .dynamicspawn: {
         
         ;we already do this in a couple places but there's not really

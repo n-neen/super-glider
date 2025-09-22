@@ -1,3 +1,3 @@
-C:\Users\keenan\Desktop\superfamiconv.exe -i "C:\Users\keenan\Desktop\glider pro snes\snes\asset work\tiled_room\tiled_room.png" -p "C:\Users\keenan\Desktop\glider pro snes\snes\asset work\tiled_room\tiled_room.pal" -t "C:\Users\keenan\Desktop\glider pro snes\snes\asset work\tiled_room\tiled_room.gfx" -m "C:\Users\keenan\Desktop\glider pro snes\snes\asset work\tiled_room\tiled_room.map" -v
+C:\Users\keenan\Desktop\superfamiconv.exe -i "C:\Users\keenan\Desktop\glider pro snes\snes\asset work\tiled_room\tiled_room.png" -p "C:\Users\keenan\Desktop\glider pro snes\snes\asset work\tiled_room\tiled_roomtest.pal" -t "C:\Users\keenan\Desktop\glider pro snes\snes\asset work\tiled_room\tiled_roomtest.gfx" -m "C:\Users\keenan\Desktop\glider pro snes\snes\asset work\tiled_room\tiled_roomtest.map" -v --bpp 8 --mode snes_mode7
 
 pause
