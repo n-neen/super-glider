@@ -1203,6 +1203,7 @@
     }
 
     ..ff: {
+        dw #obj_ptr_liftrect,   $0000, $000e,  $0000,   $1f06
         dw $ffff
     }
 }

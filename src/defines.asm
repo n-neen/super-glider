@@ -388,6 +388,8 @@ print "object ram start: ", hex(!objvariable+!objectarraysize+2)
 !kroomtranstypeending       =       #$0005
 !kroomtranstypewindow       =       #$0006
 
+!kmaxroomindex              =       #$00ff
+
 !ktranstimer                =       #$0030
 
 ;object constants

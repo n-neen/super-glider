@@ -98,7 +98,13 @@ lorom
     tax
     jsr (room_transition_table,x)
     
+    ;if roomindex > maxroomindex, then roomindex = maxroomindex
     lda !roomindex
+    cmp !kmaxroomindex      
+    bcc +
+    lda !kmaxroomindex
+    sta !roomindex
+    +
     asl
     tax
     lda room_list,x

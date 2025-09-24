@@ -265,6 +265,6 @@
     ..fc: dw room_objlist_fc, room_enemylist_fc, $e102,     $ffff
     ..fd: dw room_objlist_fd, room_enemylist_fd, $e102,     $ffff
     ..fe: dw room_objlist_fe, room_enemylist_fe, $e102,     $ffff
-    ..ff: dw room_objlist_ff, room_enemylist_ff, $e102,     $ffff
+    ..ff: dw room_objlist_ff, room_enemylist_ff, $c003,     specialtilemaps_7&$7fff
     
 }
