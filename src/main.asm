@@ -10,6 +10,7 @@ lorom
 
 !gamestate              =           $30
 !debugstate             =           $32
+!gamesubstate           =           $34
 !maincounter            =           $20
 !nmiflag                =           $22
 !nmicounter             =           $24
@@ -170,6 +171,7 @@ init:
 main: {
     .stateinit: {
         stz !gamestate
+        stz !gamefadecounter
     }
         
     .statehandle: {
@@ -194,6 +196,8 @@ main: {
         dw #loadroom        ;6
         dw #pause           ;7
         dw #transition      ;8
+        dw #fade_out        ;9
+        dw #fade_in         ;a
     }
 }
 
@@ -336,9 +340,12 @@ fixlayerscroll: {
 ;===========================================================================================
 
 transition: {
-    ;leave force blank on
+    jsr waitfornmi
+    jsr halfbrightness
+    jsr waitfornmi
     jsr waitfornmi
     jsr screenoff
+    ;leave force blank on
     
     jsl room_transition
     
@@ -351,6 +358,77 @@ transition: {
     rts
 }
 
+;===========================================================================================
+;================================  STATE 9:  FADE IN/OUT  ==================================
+;===========================================================================================
+
+;unimplemented
+
+fade: {
+
+    .in:
+        lda !kstatefadein
+        sta !gamesubstate
+        ;fall through
+    
+    .out: {
+        phb
+        php
+        
+        phk
+        plb
+        
+        sep #$20
+        
+        jsr waitfornmi
+        
+        lda !gamefadecounter
+        inc
+        sta !gamefadecounter
+        cmp !kfadeamount
+        beq +
+        
+        
+        lda !gamesubstate
+        ;if this is 0, we are fading out
+        beq ++
+        ;else, we are fading in
+        ;change sign
+        lda !gamefadecounter    ;fade counter = -|fadecounter| + max fade
+        eor #$ffff
+        inc
+        clc
+        adc !kfadeamount
+        tax
+        
+        ++
+        ldx !gamefadecounter
+        lda fade_table,x
+        sta !ppubrightnessmirror
+        
+        
+        -
+        plp
+        plb
+        rts
+        
+        +
+        stz !gamefadecounter
+        rep #$20
+        lda !kstateroomtrans
+        sta !gamestate
+        bra -
+        
+    }
+    
+    .table: {
+     db $0f,
+        $0b,
+        $07,
+        $03,
+        $01
+    }
+}
 
 ;===========================================================================================
 ;================================== STATE 3:  PLAYGAME  ====================================
@@ -715,10 +793,13 @@ loadroom: {
     stz !roomcounter
     jsl room_load
     
+    ;jsl oam_hightablejank
+    ;jsl oam_cleantable
+    jsl glider_draw
+    jsl enemy_top
+    
     jsl game_runroomroutine
     
-    jsl oam_cleantable
-    ;jsl oam_hightablejank
     jsr waitfornmi
     jsr screenon
     
@@ -859,6 +940,15 @@ screenoff: {        ;enable forced blank
     rts
 }
 
+halfbrightness: {
+    php
+    sep #$20
+    lda #$04
+    sta $2100
+    plp
+    rts
+}
+
 
 readcontroller: {
     php
@@ -907,6 +997,9 @@ updateppuregisters: { ;transfer wram mirrors to their registers
     lda !bg2y
     sta $2110
     sta $2110
+    
+    ;lda !ppubrightnessmirror
+    ;sta $2100
     
     lda !gamestate
     cmp !kstateplaygame8

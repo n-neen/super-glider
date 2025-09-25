@@ -110,6 +110,11 @@ lorom
     lda room_list,x
     sta !roomptr
     
+    lda !roombg
+    sta !previousroombg
+    
+    stz !gamesubstate
+    
     jsl obj_clearall
     jsl enemy_clearall
     jsl enemy_cleardynamicspawn

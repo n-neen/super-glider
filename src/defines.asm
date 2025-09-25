@@ -33,6 +33,8 @@
 
 ;one byte color math ppu register mirrors
 ;and related schtuffe
+!ppubrightnessmirror    =       $ac
+!gamefadecounter        =       $ae
 !mainscreenlayers       =       $b0     ;$212c
 !subscreenlayers        =       $b1     ;$212d
 !colormathlayers        =       $b2     ;$2131
@@ -44,7 +46,7 @@
 !subscreenbackdropblue  =       $b9
 !colormathmodebackup    =       $ba
 !hudupdateflag          =       $bc     ;booleans, zero or nonzero
-!objupdateflag          =       $be     ;signals to nmi handler to dma to vram
+!objupdateflag          =       $be     ;signals to nmi handler to dma to vram   
 
 
 !oamentrypointbckp  =       $ec
@@ -154,6 +156,7 @@ print "enemy ram end: ", hex(!enemyrespawnpoint+!enemyarraysize+2)
 !ductoutputxpos          =      !housestart+20
 !roomcounter             =      !housestart+22
 !roomspecialptr          =      !housestart+24
+!previousroombg          =      !housestart+26
 
 !enemydynamicspawnslot   =      $0880
 !objectdynamicspawnslot  =      $08a0
@@ -346,9 +349,11 @@ print "object ram start: ", hex(!objvariable+!objectarraysize+2)
 !kstateloadroom             =       #$0006
 !kstatepause                =       #$0007
 !kstateroomtrans            =       #$0008
+!kstatefadeout              =       #$0009
+!kstatefadein               =       #$000a
 
 !kpausewait                 =       #$0030
-
+!kfadeamount                =       #$04
 
 ;sprite index constants
 ;unimplemented
