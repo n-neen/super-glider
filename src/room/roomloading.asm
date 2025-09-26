@@ -29,13 +29,6 @@ lorom
     phk
     plb
     
-    sep #$20
-    stz $4200               ;disable interrupts
-    rep #$20
-    
-    ;jsl obj_clearall
-    ;jsl obj_tilemap_init
-    
     ldx !roomptr
     
     lda $0000,x
@@ -65,20 +58,19 @@ lorom
     jsl obj_tilemap_requestupdate
     jsl layer2draw          ;make sure to update layer 2 tilemap
                             ;since nmi does not
-                            
+    
     jsl oam_fillbuffer
+    jsl oam_cleantable
+    
     jsl glider_draw
     jsl enemy_spawnall
     jsl enemy_runinit
-    
+    jsl enemy_drawall
     jsl link_handle
-            
-    sep #$20
-    lda #$80
-    sta $4200               ;enable interrupts
-    rep #$20
+    jsl game_runroomroutine
     
-    jsl oam_cleantable
+    ;jsl oam_cleantable
+    jsl oam_write
     
     ply
     plx
@@ -110,17 +102,9 @@ lorom
     lda room_list,x
     sta !roomptr
     
-    lda !roombg
-    sta !previousroombg
-    
-    stz !gamesubstate
-    
     jsl obj_clearall
     jsl enemy_clearall
     jsl enemy_cleardynamicspawn
-    stz !oamentrypoint
-    ;jsl oam_cleantable
-    jsl oam_fillbuffer
     
     plb
     rtl

@@ -460,7 +460,7 @@ enemy: {
         stz !enemytimer,x
         stz !enemyvariable,x
         stz !enemyproperty3,x
-
+        
         rts
     }
     

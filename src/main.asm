@@ -341,16 +341,12 @@ fixlayerscroll: {
 
 transition: {
     jsr waitfornmi
-    jsr halfbrightness
-    jsr waitfornmi
-    jsr waitfornmi
     jsr screenoff
     ;leave force blank on
     
+    jsr disablenmi
     jsl room_transition
-    
-    ;jsr waitfornmi
-    ;jsr screenon
+    jsr enablenmi
     
     lda !kstateloadroom
     sta !gamestate
@@ -359,7 +355,7 @@ transition: {
 }
 
 ;===========================================================================================
-;================================  STATE 9:  FADE IN/OUT  ==================================
+;===============================  STATE 9/A:  FADE IN/OUT  =================================
 ;===========================================================================================
 
 ;unimplemented
@@ -367,66 +363,64 @@ transition: {
 fade: {
 
     .in:
-        lda !kstatefadein
-        sta !gamesubstate
-        ;fall through
-    
     .out: {
-        phb
-        php
         
-        phk
-        plb
+        inc !gamefadecounter
         
+        lda !gamestate
+        cmp !kstatefadeout
         sep #$20
+        beq +                           ;if fading out
         
-        jsr waitfornmi
-        
-        lda !gamefadecounter
-        inc
-        sta !gamefadecounter
-        cmp !kfadeamount
-        beq +
-        
-        
-        lda !gamesubstate
-        ;if this is 0, we are fading out
-        beq ++
-        ;else, we are fading in
-        ;change sign
-        lda !gamefadecounter    ;fade counter = -|fadecounter| + max fade
-        eor #$ffff
-        inc
-        clc
-        adc !kfadeamount
-        tax
-        
-        ++
-        ldx !gamefadecounter
-        lda fade_table,x
+        ldx !gamefadecounter            ;else, use fading in table
+        lda.l fade_intable,x
+        bmi ..end
         sta !ppubrightnessmirror
-        
-        
-        -
-        plp
-        plb
-        rts
+        bra ..return
         
         +
-        stz !gamefadecounter
+        ldx !gamefadecounter            ;use fading out table
+        lda.l fade_outtable,x
+        bmi ..end
+        sta !ppubrightnessmirror
+
+
+        ..return:
         rep #$20
-        lda !kstateroomtrans
+        ;jsr waitfornmi
+        rts
+        
+        ..end:
+        rep #$20
+        
+        stz !gamefadecounter
+        
+        lda !gamestate
+        cmp !kstatefadein       ;if fading in,
+        beq +
+        
+        lda !kstateroomtrans            ;else (fading out), proceed to room transition game state
         sta !gamestate
-        bra -
+        bra ..return
+        
+        +
+        lda !kstateplaygame     ;go to gameplay
+        sta !gamestate
+        bra ..return
         
     }
     
-    .table: {
+    .outtable: {
      db $0f,
-        $0b,
-        $07,
         $03,
-        $01
+        $80
+    }
+    
+    .intable: {
+     db $01,
+        $02,
+        $0f,
+        $80
     }
 }
 
@@ -444,7 +438,7 @@ playgame: {
     
     .out:
         lda #$0004
-        sta !gamestate      ;advance gamestate from 3 (playgame) to 4 (endgame)
+        sta !gamestate  ;unimplemented, old
         rts
 }
 
@@ -786,24 +780,19 @@ scroll: {
 ;===========================================================================================
 
 loadroom: {
-    
     jsr waitfornmi
     jsr screenoff
+    jsr disablenmi
     
     stz !roomcounter
     jsl room_load
     
-    ;jsl oam_hightablejank
-    ;jsl oam_cleantable
-    jsl glider_draw
-    jsl enemy_top
-    
-    jsl game_runroomroutine
-    
+    jsr enablenmi
     jsr waitfornmi
     jsr screenon
     
-    lda #$0003
+    ;lda !kstatefadein
+    lda !kstateplaygame
     sta !gamestate
     rts
 }
@@ -933,17 +922,32 @@ screenon: {         ;turn screen brightness on and disable forced blank
 screenoff: {        ;enable forced blank
     pha
     sep #$20
-    lda #$8f
+    lda #$80
     sta $2100
     rep #$20
     pla
     rts
 }
 
+disablenmi: {
+    sep #$20
+    stz $4200
+    rep #$20
+    rts
+}
+
+enablenmi: {
+    sep #$20
+    lda #$80
+    sta $4200
+    rep #$20
+    rts
+}
+
 halfbrightness: {
     php
     sep #$20
-    lda #$04
+    lda #$02
     sta $2100
     plp
     rts
@@ -998,8 +1002,11 @@ updateppuregisters: { ;transfer wram mirrors to their registers
     sta $2110
     sta $2110
     
-    ;lda !ppubrightnessmirror
-    ;sta $2100
+    lda !gamefadecounter
+    beq .nofade
+    lda !ppubrightnessmirror
+    sta $2100
+    .nofade:
     
     lda !gamestate
     cmp !kstateplaygame8

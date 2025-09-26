@@ -109,7 +109,7 @@
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
         dw #obj_ptr_sewergrate, $0004, $001a,  $0800,   $0028
-        dw #obj_ptr_sewergrate, $0016, $001a,  $0800,   $0028
+        dw #obj_ptr_sewergrate, $0018, $001a,  $0800,   $0028
         dw #obj_ptr_sewergrate, $0011, $001a,  $0800,   $0090
         dw #obj_ptr_cabinet,    $000d, $0003,  $0800,   $0003
         ;dw #obj_ptr_cabinet,    $0018, $0003,  $0800,   $0002

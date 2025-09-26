@@ -219,7 +219,7 @@ oam: {
         ;ldx #$80                    ;1      dma control
         ;stx $2104
         
-        ;stz $2102                   ;1      oam high starting addr = 0
+        stz $2102                   ;1      oam high starting addr = 0
         
         ldx #$00                    ;1      transfur mode
         stx $4300
@@ -227,10 +227,10 @@ oam: {
         ldx #$04                    ;1      register dest (oam add)
         stx $4301
         
-        ldx #$00                    ;1      source bank
+        ldx #$80                    ;1      source bank
         stx $4304
         
-        lda #!oambuffer             ;2      source addr
+        lda.w #!oambuffer           ;2      source addr
         sta $4302
         
         lda #$0220                  ;2      transfur size = 544 bytes (oam table size)
@@ -268,7 +268,7 @@ oam: {
         phx
         
         lda #$e0e0
-        ldx #$0200
+        ldx #$01fe
         
         -
         sta !oambuffer,x
@@ -281,7 +281,7 @@ oam: {
 
     .hightablejank: {
         phx
-        ldx #$0020
+        ldx #$001e
         lda #$aaaa
     -   sta !oamhightable,x
         dex : dex
@@ -295,16 +295,25 @@ oam: {
         ;sec
         ;sbc !oamentrypoint
         ;tax
+        phx
+        
         
         ldx !oamentrypoint
-        
         -
         lda #$e0e0
         sta !oambuffer,x
         inx : inx
-        cpx #$0220
+        cpx #$0200
         bne -
         
+        ;ldx #$001e
+        ;lda #$aaaa
+        ;--
+        ;sta !oamhightable,x
+        ;dex : dex
+        ;bpl --
+        
+        plx
         rtl
     }
 

@@ -205,7 +205,7 @@ glider: {
         stz !spriteindex
         stz !numberofsprites
         
-        lda !gliderdir                ;see glider constants in defines.asm
+        lda !gliderdir                  ;see glider constants in defines.asm
         
         asl
         tax
@@ -260,8 +260,8 @@ glider: {
         rtl
         
         ..cleartable: {
-            stz !oamentrypoint
-            jsl oam_cleantable
+            ;stz !oamentrypoint
+            ;jsl oam_cleantable
             rts
         }
     }
@@ -740,8 +740,13 @@ roomtransitionstart: {
     beq +
     cmp !kgliderstatefirestarted
     beq +
+    
+    
     lda !kstateroomtrans
+    ;lda !kstatefadeout
     sta !gamestate
+    
+    
     rts
     
     +
