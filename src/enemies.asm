@@ -18,6 +18,12 @@ enemy: {
         rtl
     }
     
+    .title: {
+        jsr enemy_handle
+        jsl enemy_drawall
+        rtl
+    }
+    
     
     .collision: {
         phx
@@ -857,6 +863,8 @@ enemy: {
         ..gfxloader:        dw gfxloader_header                     ;
         ..star:             dw star_header                          ;
         ..cutscenehandler:  dw cutscenehandler_header               ;
+        ..pressstart:       dw pressstart_header                    ;
+        
         
         ;todo: basketball
         ;todo: toaster

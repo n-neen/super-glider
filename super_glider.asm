@@ -55,7 +55,10 @@ org $828000
     incsrc "./src/enemies/gfxloader.asm"
     incsrc "./src/enemies/star.asm"
     incsrc "./src/enemies/cutscenehandler.asm"
+    incsrc "./src/enemies/press_start.asm"
+    
     incsrc "./data/sprites/spritemaps.asm"
+    
     incsrc "./src/roomroutines.asm"
     incsrc "./src/specialtilemaps.asm"
     

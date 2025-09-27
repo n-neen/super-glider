@@ -267,4 +267,6 @@
     ..fe: dw room_objlist_fe, room_enemylist_fe, $e102,     $ffff
     ..ff: dw room_objlist_ff, room_enemylist_ff, $c003,     specialtilemaps_7&$7fff
     
+    ..title: dw $0000, room_enemylist_title, $0000, $ffff
 }
+

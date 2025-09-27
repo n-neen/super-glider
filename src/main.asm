@@ -216,6 +216,17 @@ splashsetup: {
     lda #$000c
     jsl load_sprite         ;"press start" sprite graphics
     
+    lda #$0001
+    jsl load_sprite         ;load sprite data 1 (balloon)
+    
+    lda #room_entry_title
+    sta !roomptr
+    
+    jsl enemy_clearall
+    jsl enemy_spawnall
+    jsl enemy_runinit
+    jsl enemy_drawall
+    
     jsr screenon
     lda #$0001
     sta !gamestate          ;advance to game state 1 (splash screen)
@@ -231,6 +242,11 @@ splashsetup: {
 splash: {
     
     waitforstart: {
+        stz !oamentrypoint
+        jsl oam_fillbuffer
+        jsl oam_hightablejank
+        jsl enemy_title
+        
         jsr waitfornmi
         lda !controller
         cmp #$1000

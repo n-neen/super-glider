@@ -147,6 +147,11 @@ spritemap: {
         ..samantha: {
             dw spritemap_samantha
         }
+        
+        ..pressstart: {
+            dw spritemap_pressstart_press,
+               spritemap_pressstart_start
+        }
     }
     
     
@@ -676,7 +681,15 @@ spritemap: {
         db $10, $30, $75,   %00110110,  %00000010
         db $18, $30, $76,   %00110110,  %00000010
         
+    }
+    
+    .pressstart: {
+        ..press: {
+            db $00
+        }
         
-        
+        ..start: {
+            db $00
+        }
     }
 }
