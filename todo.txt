@@ -42,6 +42,10 @@ todo: {
     
     bugs: {
         candle object spawns flame enemy, but the routine has to run three times before it actually works (lmao)
+        tablepole object takes an extra frame to draw
+            if we handle objects twice during room load it doesn't happen. weird
+        table in room $20 takes an extra frame to draw
+            but only when starting the game
     }
     
     

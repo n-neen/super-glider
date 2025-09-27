@@ -207,9 +207,9 @@
 
     ..20: {
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
+        dw #obj_ptr_table,      $0004, $0011,  $0800,   $0000
         dw #obj_ptr_dnstairs,   $0010, $0005,  $0400,   $0000
         dw #obj_ptr_vent,       $0011, $001a,  $0000,   $0013
-        dw #obj_ptr_table,      $0004, $0011,  $0800,   $0000
         dw #obj_ptr_candle,     $0004, $000d,  $0800,   $0000
         dw $ffff
     }

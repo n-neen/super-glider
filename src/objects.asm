@@ -613,6 +613,7 @@ obj: {
         
         lda #$0001
         sta !objupdateflag
+        sta !objdynamicprocessingflag
         
         rts
     }
@@ -711,7 +712,7 @@ obj: {
             dw !objdyntilemap,              $0001, $0008, obj_routines_tablepole,       $0000
             
         ..tablebase:
-            dw #obj_tilemaps_tablebase,     $0009, $0003, obj_routines_none,            $0000
+            dw #obj_tilemaps_tablebase,     $0009, $0003, obj_routines_delete,          $0000
             
         ..fishbowl: 
             dw #obj_tilemaps_fishbowl,      $0005, $0004, obj_routines_fishbowl,        $0000

@@ -53,24 +53,33 @@ lorom
     jsl specialtilemaploading
     
     jsl obj_spawnall
+    jsl enemy_spawnall
+    jsl link_handle
+    
     jsl obj_handle
+    
+    ;dynamically spawned objects need another round of processing to actually run
+    lda !objdynamicprocessingflag
+    beq +
+    jsl obj_handle
+    stz !objdynamicprocessingflag
+    +
+    
     jsl obj_drawall
     jsl obj_tilemap_requestupdate
     jsl layer2draw          ;make sure to update layer 2 tilemap
                             ;since nmi does not
     
     jsl oam_fillbuffer
-    jsl oam_cleantable
     
-    jsl glider_draw
-    jsl enemy_spawnall
+    jsl glider_draw         ;drawing must happen in this order
     jsl enemy_runinit
-    jsl enemy_drawall
-    jsl link_handle
+    jsl enemy_drawall       ;since glider always starts at oam 0
     jsl game_runroomroutine
     
-    ;jsl oam_cleantable
+    
     jsl oam_write
+    
     
     ply
     plx

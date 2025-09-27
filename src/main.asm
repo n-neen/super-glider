@@ -156,8 +156,9 @@ init:
         rep #$20
         
         jsl dma_clearvram
-        jsl oam_fillbuffer
         jsl dma_clearcgram
+        jsl oam_fillbuffer
+        jsl oam_hightablejank
         
     ;fall through to main
 
@@ -210,14 +211,18 @@ splashsetup: {
     jsr waitfornmi
     jsr screenoff           ;enable forced blank to to the following dmas
     
+    jsr disablenmi
+    
+    sep #$20
+    lda #%00010010
+    sta !mainscreenlayers
+    rep #$20
+    
     lda #$0001              ;load gfx, tilemap, and palettes
     jsl load_background     ;for background 01 (splash screen)
     
     lda #$000c
     jsl load_sprite         ;"press start" sprite graphics
-    
-    lda #$0001
-    jsl load_sprite         ;load sprite data 1 (balloon)
     
     lda #room_entry_title
     sta !roomptr
@@ -226,6 +231,10 @@ splashsetup: {
     jsl enemy_spawnall
     jsl enemy_runinit
     jsl enemy_drawall
+    
+    
+    jsr enablenmi
+    jsr waitfornmi
     
     jsr screenon
     lda #$0001
@@ -270,6 +279,8 @@ newgame: {
     jsr waitfornmi
     jsr screenoff           ;enable forced blank to do the following loading
     
+    jsr disablenmi
+    
     jsr hud_copytilemaptobuffer
     jsr hud_uploadgfx
     jsr hud_uploadtilemap
@@ -313,6 +324,7 @@ newgame: {
     stz !colormathmodebackup
     jsl handlecolormath
     
+    
     jsr fixlayerscroll
     
     lda #$0020             ;real starting room
@@ -325,8 +337,10 @@ newgame: {
     sta !roomptr
     
     jsl obj_clearall
-    
     jsl link_clearall
+    
+    jsr enablenmi
+    jsr waitfornmi
     
     lda #$0006
     sta !gamestate          ;advance to game state 6 (load room)
@@ -807,6 +821,8 @@ loadroom: {
     jsr waitfornmi
     jsr screenon
     
+    ;jsl game_play      ;not sure if this is a good idea or not
+    
     ;lda !kstatefadein
     lda !kstateplaygame
     sta !gamestate
@@ -1024,9 +1040,9 @@ updateppuregisters: { ;transfer wram mirrors to their registers
     sta $2100
     .nofade:
     
-    lda !gamestate
-    cmp !kstateplaygame8
-    bne +
+    ;lda !gamestate
+    ;cmp !kstateplaygame8
+    ;bne +
     
     lda !mainscreenlayers
     sta $212c

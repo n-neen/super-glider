@@ -948,7 +948,7 @@ enemy: {
             dw  spritemap_pointers_switch,
                 $0030,
                 $0020,
-                $0000,
+                enemy_init_switch,
                 enemy_main_switch,
                 enemy_touch_switch,
                 enemy_touch_switch
@@ -1013,6 +1013,17 @@ enemy: {
         ..samantha: {
             lda #$000b
             jsl load_sprite         ;load sprite data b (samantha)
+            rts
+        }
+        
+        ..switch: {
+            lda !enemyproperty2,x
+            and #$0f00
+            xba
+            clc
+            adc #spritemap_pointers_switch
+            
+            sta !enemyspritemapptr,x
             rts
         }
         
@@ -1248,11 +1259,6 @@ enemy: {
         }
         
         ..switch: {
-            phb
-            
-            pea.w !spritemapbankword
-            plb : plb
-            
             lda !enemyproperty2,x
             and #$0f00
             xba
@@ -1263,7 +1269,6 @@ enemy: {
             
             jsr enemy_main_switchcommon
             
-            plb
             rts
         }
         

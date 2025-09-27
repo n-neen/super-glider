@@ -1,10 +1,8 @@
 
 .enemylist: {
     ..title: {
-        dw enemy_ptr_balloon,       $00a8,    $0048,   $1234,       $1002,             $0000
-        dw enemy_ptr_balloon,       $0088,    $0048,   $2234,       $1002,             $0000
-        dw enemy_ptr_balloon,       $0048,    $0048,   $331f,       $0802,             $0000
-        dw enemy_ptr_balloon,       $0028,    $0028,   $4cf0,       $1002,             $0000
+        ;enemy type                 x,      y,      prop,   prop2,  prop3
+        dw enemy_ptr_pressstart,    $0040,  $0080,  $0000,  $0000,  $0000
         dw $ffff
     }
     
