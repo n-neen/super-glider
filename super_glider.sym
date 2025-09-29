@@ -1838,7 +1838,7 @@
 83:A180 wall_widthlist
 
 [source files]
-0000 789045fb c:/users/keenan/desktop/glider pro snes/snes/src/main.asm
+0000 31dbd436 c:/users/keenan/desktop/glider pro snes/snes/src/main.asm
 0001 6bc726a0 c:/users/keenan/desktop/glider pro snes/snes/src/loading.asm
 0002 1a951245 c:/users/keenan/desktop/glider pro snes/snes/src/hud.asm
 0003 eace6ca2 ./src/room/roomloading.asm
@@ -1881,7 +1881,7 @@
 0028 57cc97a7 c:/users/keenan/desktop/glider pro snes/snes/super_glider.asm
 
 [rom checksum]
-6fedcc79
+5db0fa24
 
 [addr-to-line mapping]
 80:8000 0000:00000033
