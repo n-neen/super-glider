@@ -189,6 +189,7 @@ print "enemy ram end: ", hex(!enemyrespawnpoint+!enemyarraysize+2)
 
 !stairleft          =       $0f00
 !stairright         =       $0f02
+!linkhandleflag     =       $0f04
 
 !objdrawpalette     =       $0ff2
 !rowlengthcounter   =       $0ff4
@@ -197,6 +198,7 @@ print "enemy ram end: ", hex(!enemyrespawnpoint+!enemyarraysize+2)
 !objdrawrowlength   =       $0ffa
 !objdrawanchor      =       $0ffc
 !nextobj            =       $0ffe
+
 
 !objectarraystart   =       $1000
 !objectarraysize    =       $0030
@@ -415,6 +417,7 @@ print "object ram start: ", hex(!objvariable+!objectarraysize+2)
 !kcolormathlightsout        =       #$0001
 !kcolormathiframes          =       #$0002
 !kcolormathcoolmode         =       #$0003
+!kcolormathcolorfade        =       #$0004
 
 
 ;module label-derived defines

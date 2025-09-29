@@ -45,7 +45,7 @@ lorom
 ;======================================  B O O T  ==========================================
 ;===========================================================================================
 
-!showcpuflag  =   #$0000
+!showcpuflag  =   #$0001
 
 debugflag:
     dw $0000
@@ -142,6 +142,9 @@ init:
         lda.b #!bg3start>>12        ;bg3 tiles base address
         sta $210c
         
+        lda #$0f
+        sta !ppubrightnessmirror
+        
         lda #$ff                    ;gotta set the bg scroll
         sta $210e                   ;to -1 because of course we do
         sta $210e
@@ -216,7 +219,14 @@ splashsetup: {
     sep #$20
     lda #%00010010
     sta !mainscreenlayers
+    
+    sta !subscreenbackdropblue
+    sta !subscreenbackdropred
+    sta !subscreenbackdropgreen
     rep #$20
+    
+    lda !kcolormathcolorfade
+    sta !colormathmode
     
     lda #$0001              ;load gfx, tilemap, and palettes
     jsl load_background     ;for background 01 (splash screen)
@@ -255,15 +265,15 @@ splash: {
         jsl oam_fillbuffer
         jsl oam_hightablejank
         jsl enemy_title
+        jsl handlecolormath
         
-        jsr waitfornmi
         lda !controller
-        cmp #$1000
-        beq proceed
+        bit !kst
+        bne proceed
         rts
     }
     proceed:                ;proceed to
-    lda #$0002
+    lda !kstatenewgame
     sta !gamestate          ;advance to game state 2 (newgame)
     rts
 }
@@ -324,7 +334,6 @@ newgame: {
     stz !colormathmodebackup
     jsl handlecolormath
     
-    
     jsr fixlayerscroll
     
     lda #$0020             ;real starting room
@@ -342,8 +351,8 @@ newgame: {
     jsr enablenmi
     jsr waitfornmi
     
-    lda #$0006
-    sta !gamestate          ;advance to game state 6 (load room)
+    lda !kstateloadroom
+    sta !gamestate
     
     lda debugflag
     beq +
@@ -491,7 +500,35 @@ colormathmode: {
         dw  .normal,             ;0
             .lightsout,          ;1
             .iframes,            ;2
-            .coolmode            ;3
+            .coolmode,           ;3
+            .colorfade           ;4
+    }
+    
+    .colorfade: {
+        ;!subscreenbackdropblue
+        ;!subscreenbackdropred
+        ;!subscreenbackdropgreen
+        
+        ;lda.b !nmicounter
+        ;bit #$11
+        ;bne +
+        
+        lda !subscreenbackdropblue
+        ror
+        inc
+        sta !subscreenbackdropblue
+        
+        lda !subscreenbackdropred
+        rol
+        inc
+        sta !subscreenbackdropred
+        
+        ror !subscreenbackdropgreen
+        
+        lda #%00010000          ;color math on sprites, 2
+        sta !colormathlayers
+        +
+        rts
     }
     
     
@@ -658,7 +695,7 @@ gameover: {
 debug: {
     .showcpu: {
         jsr screenoff
-        nop #40
+        nop #80
         jsr screenon
         rts
     }
@@ -943,7 +980,8 @@ waitfornmi: {
 screenon: {         ;turn screen brightness on and disable forced blank
     pha
     sep #$20
-    lda #$0f
+    lda !ppubrightnessmirror
+    and #$7f
     sta $2100
     rep #$20
     pla
@@ -954,7 +992,8 @@ screenon: {         ;turn screen brightness on and disable forced blank
 screenoff: {        ;enable forced blank
     pha
     sep #$20
-    lda #$80
+    lda !ppubrightnessmirror
+    ora #$80
     sta $2100
     rep #$20
     pla

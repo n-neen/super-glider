@@ -12,6 +12,7 @@ game: {
         stz !batteryactive      ;find a better place to do this
         inc !roomcounter
         
+        
         jsl game_runroomroutine
         
         jsl oam_fillbuffer
@@ -37,6 +38,7 @@ game: {
         jsl handlecolormath
         
         jsr handlehud
+        ;jsr game_checklinkflag
         
         rtl
     }
@@ -58,6 +60,16 @@ game: {
         ;maybe do something else if it's not a pointer
         +
         rtl
+    }
+    
+    .checklinkflag: {
+        lda !linkhandleflag
+        beq +
+        jsl link_handle
+        stz !linkhandleflag
+        
+        +
+        rts
     }
     
     
@@ -122,9 +134,8 @@ getinput: {
     .sl: {
         bit !ksl
         beq ..nosl
-            
-            ldx !kgliderstatefirestarted
-            stx !glidernextstate
+            ;
+            ;
         ..nosl:
     }
     

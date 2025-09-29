@@ -410,10 +410,10 @@
     }
 
     ..44: {
-        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
-        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
-        dw #obj_ptr_upstairs,   $000e, $0005,  $0400,   $0000
-        dw #obj_ptr_vent,       $0010, $001a,  $0000,   $0043
+        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000   ;30
+        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000   ;2e
+        dw #obj_ptr_upstairs,   $000e, $0005,  $0400,   $0000   ;2c
+        dw #obj_ptr_vent,       $0010, $001a,  $0000,   $0043   ;2a
         dw $ffff
     }
 
@@ -422,7 +422,7 @@
         dw #obj_ptr_vent,       $0016, $001a,  $0000,   $0043
         dw #obj_ptr_vent,       $0003, $001a,  $0000,   $0043
         dw #obj_ptr_fireplace,  $0007, $000e,  $1000,   $0000
-        dw #obj_ptr_liftrect,   $0007, $000e,  $0000,   $0b06
+        ;dw #obj_ptr_liftrect,   $0007, $000e,  $0000,   $0b06
         dw $ffff
     }
 
@@ -692,8 +692,7 @@
         dw #obj_ptr_vent,       $0003, $001a,  $0000,   $0013
         dw #obj_ptr_vent,       $0013, $001a,  $0000,   $0023
         dw #obj_ptr_vent,       $0019, $001a,  $0000,   $0023
-        
-        dw #obj_ptr_cabinet,    $0011, $000c,  $0800,   $0003
+        dw #obj_ptr_cabinet,    $0015, $000c,  $0800,   $0003
         ;dw #obj_ptr_varitable,  $0006, $000b,  $0800,   $0803
         dw $ffff
     }
@@ -701,7 +700,8 @@
     ..83: {
         dw #obj_ptr_vent,       $0008, $001a,  $0000,   $0013
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
-        dw #obj_ptr_cabinet,    $0002, $000c,  $0800,   $0003
+        dw #obj_ptr_varitable,  $0002, $0007,  $0800,   $040a
+        ;dw #obj_ptr_cabinet,    $0002, $000c,  $0800,   $0003
         dw $ffff
     }
 

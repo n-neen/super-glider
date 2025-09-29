@@ -1018,7 +1018,7 @@ enemy: {
         
         ..switch: {
             lda !enemyproperty2,x
-            and #$0f00
+            and #$0200
             xba
             clc
             adc #spritemap_pointers_switch
@@ -1246,7 +1246,7 @@ enemy: {
         
         
         ..drip: {
-            lda #enemy_instruction_drip_wait
+            lda #enemy_instruction_drip_prepare ;prepare to drop
             sta !enemymainptr,x
             rts
         }
@@ -1259,8 +1259,9 @@ enemy: {
         }
         
         ..switch: {
+            ;print pc
             lda !enemyproperty2,x
-            and #$0f00
+            and #$0200
             xba
             clc
             adc #spritemap_pointers_switch
@@ -1480,18 +1481,25 @@ enemy: {
         
         ..switch: {
             ;x = enemy index
+            
             lda !enemytimer,x
             bne +
             lda #$0030
             sta !enemytimer,x
             
+            ;make the table entry that pertains to the object or enemy in target room
             lda !enemyproperty3,x
             tay                         ;y = room/enemy index target for link data
             lda !enemyproperty,x        ;a = enemy data for target
             jsl link_make
+            jsl link_process            ;process the link just made
             
+            ;switch switch's spritemap
             lda !enemyproperty2,x
             eor #$0200                  ;spritemap selection
+            ;bne ++
+            eor #$1000                  ;this prevents the made link from being 0, which we don't want (because it will be deleted) ((except it doesn't work))
+            ++
             sta !enemyproperty2,x
             
             ;make table entry which keeps switch switched
@@ -1504,7 +1512,11 @@ enemy: {
             tay
             
             lda !enemyproperty2,x
+            ;bit #$1000
+            ;beq +
             jsl link_make
+            ;jsl link_process
+            ;jsl link_handle
             
         +   rts
         }

@@ -89,6 +89,32 @@ pressstart: {
         }
         ..noright:
         
+        bit !ka
+        beq ..noa
+        {
+            ;if A pressed go here
+            
+        }
+        ..noa:
+        
+        
+        sep #$20
+        
+        lda !enemyx,x
+        and #%00011111
+        sta !subscreenbackdropred
+        
+        lda !enemyy,x
+        and #%00011111
+        sta !subscreenbackdropblue
+        
+        lda !nmicounter
+        and #%00011111
+        sta !subscreenbackdropgreen
+        
+        rep #$20
+        
+        
         rts
     }
 }

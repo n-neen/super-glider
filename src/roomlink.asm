@@ -26,15 +26,41 @@
 
 ;lda !enemyproperty,x
 ;tay                        ;y = room/enemy index target for link data
-;lda #$data                 ;a = enemy data for target
-;lda #$data|#$0001          ;a = room object data for target
+;lda #$data                 ;a = >enemy< data for target
+;   or
+;lda #$data|#$0001          ;a = >object< data for target
 ;jsl link_make
-;
-;rts
+;and then
+;jsl link_process
+
 
 
 link: {
+    .process: {
+        ;y = table entry index
+        ;processes a single entry
+        
+        phx
+        tyx
+        
+        lda.l !linktargetlong,x
+        jsr link_handle_checkroom
+        bcc ++
+        
+        bit #$0001                     ;if #$0001 bit, this is for a room object
+        bne +
+        jsr link_handle_checkenemy     ;if not, it's for an enemy
+        bra ++
+        +
+        jsr link_handle_checkobject
+        ++
+        plx
+        rtl
+    }
+    
+    
     .handle: {
+        ;processes all entries
         phb
         phx
         phy
@@ -274,6 +300,8 @@ link: {
         ..checkfordupes: {
             ;check table for any target entries which have this value
             ;if we one, delete it and abort back a level
+            ;y = link target
+            
             !linktargetargument     =   !localtempvar2
             
             sty !linktargetargument

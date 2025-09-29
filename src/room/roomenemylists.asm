@@ -2,7 +2,7 @@
 .enemylist: {
     ..title: {
         ;enemy type                 x,      y,      prop,   prop2,  prop3
-        dw enemy_ptr_pressstart,    $0040,  $0080,  $0000,  $0000,  $0000
+        dw enemy_ptr_pressstart,    $0000,  $0000,  $0000,  $0000,  $0000
         dw $ffff
     }
     
@@ -323,6 +323,8 @@
     }
     
     ..44: {
+        ;enemy type                 x,        y,       prop,    prop2,  prop3
+        dw enemy_ptr_switch,        $0030,    $0060,   $0013,   $0200,  $442a|$0001
         dw $ffff
     }
     
@@ -332,6 +334,7 @@
         dw enemy_ptr_paper,         $0058,    $0058,    $0000,  $0006,  $0004
         dw enemy_ptr_paper,         $0098,    $0058,    $0000,  $0006,  $0008
         dw enemy_ptr_lightswitch,   $00d0,    $0048,    $0000,  $0004,  $0000
+        ;dw enemy_ptr_switch,        $0040,    $0050,   $0013,   $0200,  $442a|$0001
         dw $ffff
     }
     
@@ -582,6 +585,7 @@
 
     ..82: {
         dw enemy_ptr_paper,     $00a0,    $0048,   $0000,       $0006,      $0001
+        dw enemy_ptr_drip,      $00a0,    $0010,   $0040,       $0002,      $f000
         dw $ffff
     }
 
