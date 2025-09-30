@@ -61,7 +61,11 @@ switch: {
         spritemap select
             0000 = on
             0002 = off
+}
 
+thermostat: {
+    property   = object index target
+    property 3 = data to pass to object's variable
 }
 
 all prizes: {

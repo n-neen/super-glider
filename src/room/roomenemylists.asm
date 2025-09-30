@@ -2,18 +2,18 @@
 .enemylist: {
     ..title: {
         ;enemy type                 x,      y,      prop,   prop2,  prop3
-        dw enemy_ptr_pressstart,    $0000,  $0000,  $0000,  $0000,  $0000
+        dw enemy_ptr_pressstart,    $0000,  $fffc,  $0000,  $0000,  $0000
         dw $ffff
     }
     
     ..0: {
-        ;enemy type             x,        y,        property,  prop2,       property3
+        ;enemy type             x,        y,        property,   prop2,      property3
         dw enemy_ptr_duct,      $0020,    $0008,    $9021,      $8004,      $0000
         dw $ffff                                                 
     }                                                            
                                                                  
     ..1: {                                                       
-        dw enemy_ptr_bandspack, $0040,    $0058,    $0000,      $0000,      $0001
+        dw enemy_ptr_bandspack, $0040,    $0058,    $0000,      $0006,      $0001
         dw $ffff
     }
     
@@ -158,6 +158,7 @@
         dw enemy_ptr_clock,         $0048,    $0060,   $01f4,       $0006,             $0001
         dw enemy_ptr_paper,         $0038,    $0070,   $0000,       $0006,             $0002
         dw enemy_ptr_lightswitch,   $0060,    $0060,   $0000,       $0004,             $0000
+        dw enemy_ptr_thermostat,    $0060,    $0020,   $002a,       $0000,             $0053
         dw enemy_ptr_switch,        $0060,    $0040,   $0013,       $0200,             $0030|$0001      ;room 0, object $30
         dw $ffff                                      
     }                                                 
@@ -324,17 +325,17 @@
     
     ..44: {
         ;enemy type                 x,        y,       prop,    prop2,  prop3
-        dw enemy_ptr_switch,        $0030,    $0060,   $0013,   $0200,  $442a|$0001
+       ;dw enemy_ptr_switch,        $0030,    $0060,   $0013,   $0200,  $442a|$0001
         dw $ffff
     }
     
     ..45: {
-        ;dw enemy_ptr_bandspack,     $0040,    $0058,    $0000,  $0000,  $0001
+       ;dw enemy_ptr_bandspack,     $0040,    $0058,    $0000,  $0000,  $0001
         dw enemy_ptr_clock,         $007a,    $0048,    $01f4,  $0006,  $0002
         dw enemy_ptr_paper,         $0058,    $0058,    $0000,  $0006,  $0004
         dw enemy_ptr_paper,         $0098,    $0058,    $0000,  $0006,  $0008
-        dw enemy_ptr_lightswitch,   $00d0,    $0048,    $0000,  $0004,  $0000
-        ;dw enemy_ptr_switch,        $0040,    $0050,   $0013,   $0200,  $442a|$0001
+       ;dw enemy_ptr_lightswitch,   $00d0,    $0048,    $0000,  $0004,  $0000
+        dw enemy_ptr_switch,        $00d0,    $0068,    $0013,  $0200,  $442a|$0001
         dw $ffff
     }
     
@@ -464,6 +465,7 @@
     }
     
     ..65: {
+        dw enemy_ptr_foil,          $00b0,    $0088,   $0070,       $0002,             $0001
         dw $ffff
     }
     

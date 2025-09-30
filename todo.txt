@@ -6,7 +6,8 @@ todo: {
         
         duct:
         property3 to be used for output y pos?
-
+        
+        foil does not use item bits
     }
     
     objects: {
@@ -37,7 +38,7 @@ todo: {
     }
     
     room: {
-        ;
+        copter in room 21 needs to be moved away from duct (die on entering room from it)
     }
     
     bugs: {
@@ -50,6 +51,7 @@ todo: {
             but only when starting the game
             
         switches acting on enemies or objects in the same room is pretty broken
+            ok it kinda works but it can desync ugh
     }
     
     

@@ -151,6 +151,10 @@ spritemap: {
         ..pressstart: {
             dw spritemap_pressstart
         }
+        
+        ..thermostat: {
+            dw spritemap_thermostat
+        }
     }
     
     
@@ -717,6 +721,11 @@ spritemap: {
         db $40, $30, $60+6,   %00111110,  %00000010
         db $50, $30, $62+6,   %00111110,  %00000010
         db $60, $30, $64+6,   %00111110,  %00000010
-        
+    }
+    
+    .thermostat: {
+        db $02
+        db $00, $00, $2e,   %00110100,  %00000010
+        db $00, $08, $3e,   %00110100,  %00000010
     }
 }

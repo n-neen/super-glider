@@ -206,11 +206,11 @@
 ;==================================================== SECOND FLOOR =======================================================
 
     ..20: {
-        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
-        dw #obj_ptr_table,      $0004, $0011,  $0800,   $0000
-        dw #obj_ptr_dnstairs,   $0010, $0005,  $0400,   $0000
-        dw #obj_ptr_vent,       $0011, $001a,  $0000,   $0013
-        dw #obj_ptr_candle,     $0004, $000d,  $0800,   $0000
+        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000   ;30
+        dw #obj_ptr_table,      $0004, $0011,  $0800,   $0000   ;2e
+        dw #obj_ptr_dnstairs,   $0010, $0005,  $0400,   $0000   ;2c
+        dw #obj_ptr_vent,       $0011, $001a,  $0000,   $0013   ;2a
+        dw #obj_ptr_candle,     $0004, $000d,  $0800,   $0000   ;28
         dw $ffff
     }
 
@@ -420,7 +420,7 @@
     ..45: {
         dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $8000
         dw #obj_ptr_vent,       $0016, $001a,  $0000,   $0043
-        dw #obj_ptr_vent,       $0003, $001a,  $0000,   $0043
+        dw #obj_ptr_vent,       $0003, $001a,  $0000,   $0018
         dw #obj_ptr_fireplace,  $0007, $000e,  $1000,   $0000
         ;dw #obj_ptr_liftrect,   $0007, $000e,  $0000,   $0b06
         dw $ffff
@@ -562,6 +562,7 @@
 
     ..65: {
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
+        dw #obj_ptr_varitable,  $000b, $000b,  $0800,   $0402
         dw #obj_ptr_vent,       $0018, $001a,  $0000,   $0013
         dw #obj_ptr_vent,       $0003, $001a,  $0000,   $0013
         ;dw #obj_ptr_table,      $000d, $0010,  $0800,   $0000

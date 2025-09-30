@@ -853,6 +853,7 @@ enemy: {
         ..fire:         dw enemy_headers_fire                   ;
         ..candleflame:  dw enemy_headers_candleflame            ;
         ..samantha:     dw enemy_headers_samantha               ;
+        ..thermostat:   dw enemy_headers_thermostat             ;
         
         ..catbody:          dw cat_bodyheader                       ;
         ..catpaw:           dw cat_pawheader                        ;
@@ -868,6 +869,7 @@ enemy: {
         
         ;todo: basketball
         ;todo: toaster
+        ;might not be happenin
     }
     
     
@@ -1000,6 +1002,14 @@ enemy: {
                 $0000,                                  ;main routine,
                 $0000,                                  ;touch,
                 $0000                                   ;shot
+        ..thermostat:
+            dw  spritemap_pointers_thermostat,          ;spritemap ptr
+                $0030,                                  ;xsize,
+                $0020,                                  ;ysize,
+                $0000,                                  ;init routine,
+                enemy_main_thermostat,                  ;main routine,
+                enemy_touch_thermostat,                 ;touch,
+                enemy_touch_thermostat                  ;shot
     }
 
 
@@ -1142,6 +1152,13 @@ enemy: {
 ;===========================================================================================
     
     .main: {
+        ..thermostat: {
+            ;
+            jsr enemy_main_switchcommon
+            rts
+        }
+        
+        
         ..candleflame: {
             lda !roomcounter
             and #$0008
@@ -1379,6 +1396,34 @@ enemy: {
 ;===========================================================================================
     
     .touch: {
+        ..thermostat: {
+            ;x = enemy index
+            phx
+            
+            lda !enemytimer,x
+            bne +
+            
+            lda #$0030
+            sta !enemytimer,x           ;prevent reactivation for $30 frames
+            
+            ;do the thing when hit
+            lda !enemyproperty3,x       ;top of stack = data to pass to object
+            pha
+            
+            lda !enemyproperty,x
+            and #$00ff
+            tax                         ;x = object index target
+            pla
+            
+            eor !objvariable,x          ;target object's variable eor w/ data from thermostat
+            sta !objvariable,x
+            
+            +
+            plx
+            rts
+        }
+        
+        
         ..candleflame: {
             lda !kgliderstatefirestarted
             sta !glidernextstate
