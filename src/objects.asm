@@ -625,6 +625,7 @@ obj: {
     ;object property:
     ;$8000 bit = draw on layer 2
     ;$4000     = dynamic size
+    ;actually i think that bit is meaningless
     
     .ptr: {
         ..vent:             dw obj_headers_vent
@@ -1157,7 +1158,8 @@ obj: {
             lda !kroomtranstypewindow
             sta !roomtranstype
             
-            lda !kstateroomtrans
+            ;lda !kstateroomtrans
+            lda !kstatefadeout
             sta !gamestate
             
         +   rts
@@ -1345,7 +1347,8 @@ obj: {
             
             lda !kroomtranstypeup
             sta !roomtranstype
-            lda !kstateroomtrans
+            ;lda !kstateroomtrans
+            lda !kstatefadeout
             sta !gamestate
             
         +   rts
@@ -1379,7 +1382,8 @@ obj: {
             
             lda !kroomtranstypedown
             sta !roomtranstype
-            lda !kstateroomtrans
+            ;lda !kstateroomtrans
+            lda !kstatefadeout
             sta !gamestate
             
         +   rts

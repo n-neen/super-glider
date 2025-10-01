@@ -42,8 +42,11 @@ switch: {
          
         r = room index of target
         s = property select of target
-        t = type select: enemy (0) or object(1)
+        t = type select: enemy (0) or object (1)
         i = index of target
+            see defines.asm for array sizes, but currently this is:
+            enemies = $28, objects = $30
+            i.e., first object in room is index $30, second is $2e, etc
         
         table for s:
         
@@ -61,11 +64,15 @@ switch: {
         spritemap select
             0000 = on
             0002 = off
+            
+    only affects enemies and objects in other rooms
 }
 
 thermostat: {
     property   = object index target
     property 3 = data to pass to object's variable
+    
+    only affects an object in the same room
 }
 
 all prizes: {

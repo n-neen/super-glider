@@ -215,7 +215,6 @@ enemy: {
         
         ;enemy data that is based on its definition
         ;enemyID is a pointer to its header
-        ;db = $82
         
         lda !enemyID,y
         tax
@@ -344,7 +343,7 @@ enemy: {
         phb
         phy
         
-        phk         ;db = $82
+        phk
         plb
         
         stz !numberofsprites
@@ -358,7 +357,7 @@ enemy: {
         ;this is actually going to always render the first spritemap
         ;in the list unless the enemy does a
         ;lda !enemyspritemapptr,x
-        ;inc : inc
+        ;do math
         ;sta !enemyspritemapptr,x
         ;to advance animation frames
         ;maybe this is fine?
@@ -974,7 +973,7 @@ enemy: {
             dw  spritemap_pointers_foil,
                 $0048,
                 $0020,
-                $0000,
+                enemy_init_prize,
                 $0000,
                 enemy_touch_foil,
                 $0000
@@ -1458,6 +1457,9 @@ enemy: {
             adc !kfoilpackamount
             sta !foilamount
             
+            lda !enemyproperty3,x
+            jsl itembit_set
+            
             jsr enemy_clear
             rts
         }
@@ -1579,7 +1581,8 @@ enemy: {
             lda !kroomtranstypeduct
             sta !roomtranstype
             
-            lda !kstateroomtrans
+            ;lda !kstateroomtrans
+            lda !kstatefadeout
             sta !gamestate
             rts
         }

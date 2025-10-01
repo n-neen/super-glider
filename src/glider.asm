@@ -742,8 +742,8 @@ roomtransitionstart: {
     beq +
     
     
-    lda !kstateroomtrans
-    ;lda !kstatefadeout
+    ;lda !kstateroomtrans
+    lda !kstatefadeout
     sta !gamestate
     
     

@@ -31,7 +31,7 @@
 ;lda #$data|#$0001          ;a = >object< data for target
 ;jsl link_make
 ;and then
-;jsl link_process
+;jsl link_process if it is in the same room (currently buggy)
 
 
 

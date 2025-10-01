@@ -158,7 +158,7 @@
         dw enemy_ptr_clock,         $0048,    $0060,   $01f4,       $0006,             $0001
         dw enemy_ptr_paper,         $0038,    $0070,   $0000,       $0006,             $0002
         dw enemy_ptr_lightswitch,   $0060,    $0060,   $0000,       $0004,             $0000
-        dw enemy_ptr_thermostat,    $0060,    $0020,   $002a,       $0000,             $0053
+        dw enemy_ptr_thermostat,    $0060,    $0080,   $002a,       $0000,             $00ff            ;this room, object 2a
         dw enemy_ptr_switch,        $0060,    $0040,   $0013,       $0200,             $0030|$0001      ;room 0, object $30
         dw $ffff                                      
     }                                                 

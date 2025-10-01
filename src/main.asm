@@ -334,6 +334,11 @@ newgame: {
     stz !colormathmodebackup
     jsl handlecolormath
     
+    sep #$20
+    lda #$01
+    sta !ppubrightnessmirror
+    rep #$20
+    
     jsr fixlayerscroll
     
     lda #$0020             ;real starting room
@@ -347,6 +352,7 @@ newgame: {
     
     jsl obj_clearall
     jsl link_clearall
+    jsl enemy_clearall
     
     jsr enablenmi
     jsr waitfornmi
@@ -403,6 +409,9 @@ fade: {
 
     .in:
     .out: {
+        ;this is currently buggy because it drops input
+        ;i think because the nmi register is also responsible for controller polling
+        ;jsl game_play
         
         inc !gamefadecounter
         
@@ -443,6 +452,7 @@ fade: {
         bra ..return
         
         +
+        
         lda !kstateplaygame     ;go to gameplay
         sta !gamestate
         bra ..return
@@ -451,13 +461,14 @@ fade: {
     
     .outtable: {
      db $0f,
-        $03,
+        $07,
+        $01,
         $80
     }
     
     .intable: {
      db $01,
-        $02,
+        $07,
         $0f,
         $80
     }
@@ -503,6 +514,8 @@ colormathmode: {
             .coolmode,           ;3
             .colorfade           ;4
     }
+    
+    ;these routines all have sep #$20!
     
     .colorfade: {
         ;!subscreenbackdropblue
@@ -590,13 +603,13 @@ colormathmode: {
         sta !colormathenable
         
         ;0-1f
-        lda #$13
+        lda #$11
         sta !subscreenbackdropblue
         
-        lda #$16
+        lda #$14
         sta !subscreenbackdropred
         
-        lda #$15
+        lda #$11
         sta !subscreenbackdropgreen
         
         rts
@@ -858,10 +871,10 @@ loadroom: {
     jsr waitfornmi
     jsr screenon
     
-    ;jsl game_play      ;not sure if this is a good idea or not
+    jsl game_play      ;not sure if this is a good idea or not
     
-    ;lda !kstatefadein
-    lda !kstateplaygame
+    lda !kstatefadein
+    ;lda !kstateplaygame
     sta !gamestate
     rts
 }
@@ -1055,7 +1068,7 @@ updateppuregisters: { ;transfer wram mirrors to their registers
     ;these scroll updates are probably unnecessary
     ;ugh
     ;no wait they are needed
-    ;i have done this thing where i comment this shit out
+    ;i have done this thing where i comment this out
     ;and then the scroll values of the background layers is wrong
     ;so please just leave this here, okay?
     
