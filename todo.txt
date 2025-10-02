@@ -6,8 +6,6 @@ todo: {
         
         duct:
         property3 to be used for output y pos?
-        
-        foil does not use item bits
     }
     
     objects: {

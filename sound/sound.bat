@@ -1,0 +1,3 @@
+"C:\Users\keenan\Desktop\glider pro snes\terrific-audio-driver-0.1.1-win64\tad-compiler.exe" ca65-export --output-asm "C:\Users\keenan\Desktop\glider pro snes\snes\sound\super_glider_soundtest.asm" --output-bin "C:\Users\keenan\Desktop\glider pro snes\snes\sound\super_glider_soundtest.bin" --lorom --segment sound2 "C:\Users\keenan\Desktop\glider pro snes\snes\sound\super_glider.terrificaudio"
+
+pause

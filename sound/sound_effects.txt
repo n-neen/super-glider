@@ -1,0 +1,5 @@
+=== switch === one uninterruptible
+set_volume 255
+set_instrument switch__2
+
+play_note f4 16

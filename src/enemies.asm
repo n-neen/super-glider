@@ -1027,12 +1027,22 @@ enemy: {
         
         ..switch: {
             lda !enemyproperty2,x
+            pha
             and #$0200
             xba
             clc
             adc #spritemap_pointers_switch
-            
             sta !enemyspritemapptr,x
+            
+            pla
+            bpl +
+            ;if $8000 bit:
+            
+            lda #enemy_touch_localswitch        ;use local switch behavior
+            sta !enemytouchptr,x
+            
+            ;else:
+            +
             rts
         }
         
@@ -1526,6 +1536,41 @@ enemy: {
             }
         }
         
+        ..localswitch: {
+            txy
+            
+            lda !enemytimer,x
+            bne +
+            lda #$0030
+            sta !enemytimer,x
+            
+            lda !enemyproperty2,x
+            eor #$0200                  ;spritemap selection
+            sta !enemyproperty2,x
+            
+            lda !enemyproperty3,x
+            bit #$0001
+            bne ...object               ;if #$0001, it's an object
+            ;else, enemy
+            
+            and #%0000000000111110
+            tay     ;y = target index
+            lda !enemyproperty,x
+            eor !enemyproperty,y
+            sta !enemyproperty,y
+            bra +
+            
+            ...object:
+            and #%0000000000111110
+            tay
+            lda !enemyproperty,x
+            eor !objvariable,y
+            sta !objvariable,y
+            
+            +
+            rts
+        }
+        
         ..switch: {
             ;x = enemy index
             
@@ -1545,7 +1590,7 @@ enemy: {
             lda !enemyproperty2,x
             eor #$0200                  ;spritemap selection
             ;bne ++
-            eor #$1000                  ;this prevents the made link from being 0, which we don't want (because it will be deleted) ((except it doesn't work))
+            ;eor #$1000                  ;this prevents the made link from being 0, which we don't want (because it will be deleted) ((except it doesn't work))
             ++
             sta !enemyproperty2,x
             

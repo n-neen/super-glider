@@ -1,0 +1,45 @@
+{
+  "_about": {
+    "file_type": "Terrific Audio Driver project file",
+    "version": "0.1.1"
+  },
+  "instruments": [
+    {
+      "name": "switch__2",
+      "source": "samples/switch.wav",
+      "freq": 250.0,
+      "loop": "none",
+      "evaluator": "default",
+      "ignore_gaussian_overflow": false,
+      "first_octave": 4,
+      "last_octave": 4,
+      "envelope": "adsr 12 2 2 15",
+      "comment": null
+    }
+  ],
+  "samples": [
+    {
+      "name": "switch",
+      "source": "samples/switch.wav",
+      "loop": "none",
+      "evaluator": "default",
+      "ignore_gaussian_overflow": false,
+      "sample_rates": [
+        32000
+      ],
+      "envelope": "adsr 12 2 2 15",
+      "comment": "test"
+    }
+  ],
+  "default_sfx_flags": {
+    "one_channel": true,
+    "interruptible": true
+  },
+  "high_priority_sound_effects": [
+    "switch"
+  ],
+  "sound_effects": [],
+  "low_priority_sound_effects": [],
+  "sound_effect_file": "sound_effects.txt",
+  "songs": []
+}

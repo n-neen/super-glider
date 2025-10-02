@@ -37,11 +37,12 @@ switch: {
         data for target (its property)
     property2 (enemypal)
         $0200 bit = spritemap selection
+        $8000 bit = local switch
     property3
         %rrrrrrrrssiiiiit
          
-        r = room index of target
-        s = property select of target
+        r = room index of target                        ;ignored if switch is local
+        s = property select of target                   ;not yet implemented if local
         t = type select: enemy (0) or object (1)
         i = index of target
             see defines.asm for array sizes, but currently this is:
