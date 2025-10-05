@@ -15,6 +15,18 @@
       "last_octave": 4,
       "envelope": "adsr 12 2 2 15",
       "comment": null
+    },
+    {
+      "name": "vent_on__2",
+      "source": "samples/vent_on.wav",
+      "freq": 350.0,
+      "loop": "none",
+      "evaluator": "default",
+      "ignore_gaussian_overflow": false,
+      "first_octave": 4,
+      "last_octave": 4,
+      "envelope": "adsr 12 2 2 15",
+      "comment": null
     }
   ],
   "samples": [
@@ -29,6 +41,18 @@
       ],
       "envelope": "adsr 12 2 2 15",
       "comment": "test"
+    },
+    {
+      "name": "vent_on",
+      "source": "samples/vent_on.wav",
+      "loop": "none",
+      "evaluator": "default",
+      "ignore_gaussian_overflow": false,
+      "sample_rates": [
+        44100
+      ],
+      "envelope": "gain F127",
+      "comment": null
     }
   ],
   "default_sfx_flags": {
@@ -36,10 +60,16 @@
     "interruptible": true
   },
   "high_priority_sound_effects": [
-    "switch"
+    "switch",
+    "vent_on"
   ],
   "sound_effects": [],
   "low_priority_sound_effects": [],
   "sound_effect_file": "sound_effects.txt",
-  "songs": []
+  "songs": [
+    {
+      "name": "samples",
+      "source": "samples.mml"
+    }
+  ]
 }

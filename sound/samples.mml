@@ -1,0 +1,13 @@
+#Title How to play samples in MML
+
+#Tempo 120
+
+@conga   switch
+@cowbell vent_on
+
+A @conga
+
+A l4 [ @conga s0     s0     @cowbell s r   ]2
+A l4 [ @conga s0     s0     @cowbell l2 s  ]2
+A l4 [ @conga s0,4   s0,4   @cowbell s,2   ]2
+A l1 [ @conga s0,%24 s0,%24 @cowbell s,%48 ]2

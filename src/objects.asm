@@ -807,7 +807,8 @@ obj: {
             
             lda !kroomtranstypeup
             sta !roomtranstype
-            lda !kstateroomtrans
+            ;lda !kstateroomtrans
+            lda !kstatefadeout
             sta !gamestate
             
             +
@@ -820,7 +821,8 @@ obj: {
             
             lda !kroomtranstypedown
             sta !roomtranstype
-            lda !kstateroomtrans
+            ;lda !kstateroomtrans
+            lda !kstatefadeout
             sta !gamestate
             
             +
@@ -1399,6 +1401,12 @@ obj: {
             !ventleft       =       !localtempvar2
             !ventright      =       !localtempvar3
             
+            phb
+            phy
+            
+            phk
+            plb
+            
             lda !objxpos,x
             asl #2
             
@@ -1418,6 +1426,14 @@ obj: {
             cmp !ventright          ;right lift bound
             bpl +
             
+            ;lda !glidersuby
+            ;sec
+            ;sbc obj_sinetable,y
+            ;sta !glidersuby
+            ;lda !glidery
+            ;sbc #$0000
+            ;sta !glidery
+            
             lda !glidery            ;if glidery < vent height
             cmp !objvariable,x
             bmi +
@@ -1427,22 +1443,33 @@ obj: {
             
             lda !glidersuby
             sec
-            sbc #$9000
+            sbc #$4800
             sta !glidersuby
             lda !glidery
             sbc #$0000
             sta !glidery
             
             lda !maincounter
-            bit #$0002
-            beq +
+            bit #$0003
+            bne +
+            and #$007f
+            inc
+            asl
+            tay
             
             lda !glidersuby
             sec
-            sbc #$8000
+            sbc obj_sinetable,y
             sta !glidersuby
             
-        +   rts
+            lda !glidery
+            sbc #$0000
+            sta !glidery
+            
+        +   ply
+            plb
+            rts
+            
         }
         
         
@@ -1487,4 +1514,15 @@ obj: {
         }
     }
     ;print "object tilemaps end:   ", pc
+    
+    .sinetable: {
+        dw $0000, $0648, $0C8F, $12D5, $1917, $1F56, $258F, $2BC3, $31F1, $3816, $3E33, $4447, $4A4F, $504D, $563E, $5C21,
+           $61F7, $67BD, $6D73, $7319, $78AC, $7E2E, $839B, $88F5, $8E39, $9367, $987F, $9D7F, $A266, $A735, $ABEA, $B085,
+           $B504, $B967, $BDAE, $C1D7, $C5E3, $C9D0, $CD9E, $D14C, $D4DA, $D847, $DB93, $DEBD, $E1C4, $E4A9, $E76A, $EA08,
+           $EC82, $EED7, $F108, $F313, $F4F9, $F6B9, $F852, $F9C6, $FB13, $FC3A, $FD39, $FE12, $FEC3, $FF4D, $FFB0, $FFEB,
+           $FFFF, $FFEB, $FFB0, $FF4D, $FEC3, $FE12, $FD39, $FC3A, $FB13, $F9C6, $F852, $F6B9, $F4F9, $F313, $F108, $EED7,
+           $EC82, $EA08, $E76A, $E4A9, $E1C4, $DEBD, $DB93, $D847, $D4DA, $D14C, $CD9E, $C9D0, $C5E3, $C1D7, $BDAE, $B967,
+           $B504, $B085, $ABEA, $A735, $A266, $9D7F, $987F, $9367, $8E39, $88F5, $839B, $7E2E, $78AC, $7319, $6D73, $67BD,
+           $61F7, $5C21, $563E, $504D, $4A4F, $4447, $3E33, $3816, $31F1, $2BC3, $258F, $1F56, $1917, $12D5, $0C8F, $0648
+    }
 }

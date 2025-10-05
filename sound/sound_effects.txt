@@ -3,3 +3,9 @@ set_volume 255
 set_instrument switch__2
 
 play_note f4 16
+
+=== vent_on === one uninterruptible
+set_volume 255
+set_instrument_and_gain vent_on__2 F127
+
+play_note f4 127

@@ -16,9 +16,6 @@ todo: {
         cabinet?
         dresser?
         
-        manholes: {
-            room transition
-        }
     }
     
     backgrounds: {
@@ -32,7 +29,13 @@ todo: {
             this will save $100 bytes per tilemap
         
         implement sprite index constant defines in defines.asm
-        
+            for loading.asm
+            
+        implement !enemyone, !enemytwo defines
+        !kenemyone = $0028
+        !kenemytwo = $0026
+        etc
+        useful for switches
     }
     
     room: {

@@ -161,7 +161,7 @@
         dw enemy_ptr_thermostat,    $0060,    $0080,   $002a,       $0000,             $00ff            ;this room, object 2a
         dw enemy_ptr_switch,        $0060,    $0040,   $0013,       $0200,             $0030|$0001      ;room 0, object $30
         
-        dw enemy_ptr_switch,        $0090,    $0040,   $1234,       $8200,             $0028           ;this room, enemy $28
+        ;dw enemy_ptr_switch,        $0090,    $0040,   $1234,       $8200,             $0028           ;this room, enemy $28
         dw $ffff                                      
     }                                                 
                                                       
