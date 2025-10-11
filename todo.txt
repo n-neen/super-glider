@@ -1,4 +1,6 @@
 todo: {
+    ===== SOUND =====
+    
     enemies: {
         basketball
         toaster
@@ -36,6 +38,18 @@ todo: {
         !kenemytwo = $0026
         etc
         useful for switches
+        
+        consider expanding room data to include respawn heights
+            one byte each for left, right
+            if 0 then ignore, and use old system
+            
+        add object init routines
+            look at existing types which will benefit from this
+                fishbowl
+                shelf
+                candle
+                objects which delete themselves?
+                    unless they need to draw first
     }
     
     room: {

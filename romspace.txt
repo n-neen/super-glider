@@ -1,26 +1,24 @@
-rom space 9.13.25 8pm
+rom space 10.5.2025 12:46am
+                                    ;free space
+bank $80 end: 808B10                ;74ef
+bank $81 end: 8198A5                ;bank reserved: level data
+bank $82 end: 829AE9                ;6516          ;gameplay/enemies
+bank $83 end: 83B45C                ;bank reserved: object system/tilemaps
+bank $84 end: 850000 FULL           ;
+bank $85 end: 85F3E2                ;c1d
+bank $86 end: 86BB20                ;44df
+bank $87 end: 880000 FULL           ;
+bank $88 end: 88B200                ;bank reserved: special tilemaps
+bank $89 end: 89A020                ;5fdf
+bank $8a end: 8AB000                ;4fff
+bank $8b end: 8BF148                ;eb7
+bank $8c end: 8D0000 FULL           ; 
+bank $8d end: 8E0000 FULL           ;  
+bank $8e end: 8F0000 FULL           ; 
+bank $8f end: 900000 FULL           ;
 
-bank $80 end: 8089CF        ;30256 free
-bank $81 end: 81940A        ;27637
-bank $82 end: 82982A        ;26581
-bank $83 end: 839EBE        ;24897
-bank $84 end: 850000        ;FULL
-bank $85 end: 85F3E2        ;3101
-bank $86 end: 86A200        ;24063
-bank $87 end: 880000        ;FULL
-bank $88 end: 88A800        ;22527
-bank $89 end: 89A020        ;24543
-bank $8a end: 8AAEC0        ;20799
-bank $8b end: 8BF148        ;3767
-bank $8c end: 8D0000        ;FULL
-bank $8d end: 8E0000        ;FULL
-bank $8e end: 8F0000        ;FULL
-bank $8f end: 900000        ;FULL
+total free space: $1e996
+                   125,334 bytes
 
-
-16 banks
-6 completely full
-208171 bytes remain in nonfull banks
-316101 used bytes
-524272 total rom space
-60.29% full
+largest contiguous space: 74ef
+completely full banks: 6

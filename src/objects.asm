@@ -1392,7 +1392,12 @@ obj: {
         }
         
         ..delete: {
+            ;lol
+            lda !roomcounter
+            beq +
             
+            jsr obj_clear
+            +
             rts
         }
         

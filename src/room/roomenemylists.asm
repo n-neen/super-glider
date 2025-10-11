@@ -152,6 +152,7 @@
     
     ..20: {
         ;enemy type                 x,        y,       property,    property2,         property3
+        
         dw enemy_ptr_balloon,       $0058,    $0048,   $1234,       $f002,             $0000
         dw enemy_ptr_balloon,       $0038,    $0048,   $031f,       $1002,             $0000
         dw enemy_ptr_balloon,       $0018,    $0028,   $0cf0,       $1002,             $0000
@@ -457,7 +458,15 @@
         dw $ffff
     }
     
-    ..63: {
+    ..63: {                         ;x        y        prop         prop2       prop3
+        dw enemy_ptr_copter,        $0090,    $0028,   $0008,       $1000,      $0100
+        dw enemy_ptr_copter,        $0090,    $0028,   $0008,       $1100,      $0100
+        
+        dw enemy_ptr_copter,        $0090,    $0028,   $0008,       $2000,      $0180
+        dw enemy_ptr_copter,        $0090,    $0028,   $0008,       $2100,      $0180
+        
+        dw enemy_ptr_battery,       $0020,    $0078,   $0000,       $0006,      $0001
+        dw enemy_ptr_battery,       $0028,    $0078,   $0000,       $0006,      $0001
         dw $ffff
     }
     
@@ -467,7 +476,8 @@
     }
     
     ..65: {
-        dw enemy_ptr_foil,          $00b0,    $0088,   $0070,       $0002,             $0001
+        dw enemy_ptr_foil,          $00b0,    $0088,    $0070,      $0002,  $0001
+        dw enemy_ptr_bandspack,     $00b0,    $0073,    $0000,      $0006,  $0002
         dw $ffff
     }
     

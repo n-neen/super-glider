@@ -97,24 +97,53 @@ pressstart: {
         }
         ..noa:
         
+        phx
         
-        sep #$20
-        
-        lda !enemyx,x
-        and #%00011111
-        sta !subscreenbackdropred
-        
-        lda !enemyy,x
-        and #%00011111
-        sta !subscreenbackdropblue
+        sep #$30
         
         lda !nmicounter
-        and #%00011111
+        bit !enemyx,x
+        bne +
+        and #$3e
+        tax
+        lda.l pressstart_triangletable+4,x
+        sta !subscreenbackdropred
+        +
+        
+        lda !nmicounter
+        bit !enemyy,x
+        bne ++
+        and #$3e
+        tax
+        lda.l pressstart_triangletable+10,x
+        sta !subscreenbackdropblue
+        ++
+        
+        lda !nmicounter
+        and #$3e
+        tax
+        lda.l pressstart_triangletable,x
         sta !subscreenbackdropgreen
         
-        rep #$20
+        rep #$30
         
-        
+        plx
         rts
+    }
+    
+    .triangletable: {   ;$3e entries... plus some 0 cause i'm off by one i guess
+                        ;oh and then double it, too, why not
+        db $01,$02,$03,$04,$05,$06,$07,$08,$09,$0a,$0b,$0c,$0d,$0e,$0f,
+           $11,$12,$13,$14,$15,$16,$17,$18,$19,$1a,$1b,$1c,$1d,$1e,$1f,
+           $1f,$1e,$1d,$1c,$1b,$1a,$19,$18,$17,$16,$15,$14,$13,$12,$11,
+           $0f,$0e,$0d,$0c,$0b,$0a,$09,$08,$07,$06,$05,$04,$03,$02,$01
+        db $00, $00, $00
+        
+        db $01,$02,$03,$04,$05,$06,$07,$08,$09,$0a,$0b,$0c,$0d,$0e,$0f,
+           $11,$12,$13,$14,$15,$16,$17,$18,$19,$1a,$1b,$1c,$1d,$1e,$1f,
+           $1f,$1e,$1d,$1c,$1b,$1a,$19,$18,$17,$16,$15,$14,$13,$12,$11,
+           $0f,$0e,$0d,$0c,$0b,$0a,$09,$08,$07,$06,$05,$04,$03,$02,$01
+        db $00, $00, $00
+           
     }
 }

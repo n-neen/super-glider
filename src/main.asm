@@ -427,7 +427,7 @@ fade: {
         bra ..return
         
         +
-        ldx !gamefadecounter            ;use fading out table
+        ldx !gamefadecounter            ;if fading out, use fading out table
         lda.l fade_outtable,x
         bmi ..end
         sta !ppubrightnessmirror
@@ -530,21 +530,21 @@ colormathmode: {
         ;bit #$11
         ;bne +
         
-        lda !subscreenbackdropblue
-        ror
-        inc
-        sta !subscreenbackdropblue
-        
-        lda !subscreenbackdropred
-        rol
-        inc
-        sta !subscreenbackdropred
-        
-        ror !subscreenbackdropgreen
+        ;lda !subscreenbackdropblue
+        ;ror
+        ;inc
+        ;sta !subscreenbackdropblue
+        ; 
+        ;lda !subscreenbackdropred
+        ;rol
+        ;inc
+        ;sta !subscreenbackdropred
+        ; 
+        ;ror !subscreenbackdropgreen
         
         lda #%00010000          ;color math on sprites, 2
         sta !colormathlayers
-        +
+        ;+
         rts
     }
     
@@ -1109,24 +1109,24 @@ updateppuregisters: { ;transfer wram mirrors to their registers
     lda !colormathlayers
     sta $2131
     
-    lda !colormathbackdrop
-    sta $2132
+    ;lda !colormathbackdrop
+    ;sta $2132
     
     lda !colormathenable
     sta $2130
     
-    lda #$00
-    ora !subscreenbackdropred
+    ;lda #$00
+    lda !subscreenbackdropred
     ora #%00100000
     sta $2132
     
-    lda #$00
-    ora !subscreenbackdropgreen
+    ;lda #$00
+    lda !subscreenbackdropgreen
     ora #%01000000
     sta $2132
     
-    lda #$00
-    ora !subscreenbackdropblue
+    ;lda #$00
+    lda !subscreenbackdropblue
     ora #%10000000
     sta $2132
     

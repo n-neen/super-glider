@@ -478,6 +478,8 @@ enemy: {
         
         ..off: {
             ;do something like wait to be reactivated
+            
+            ;i don't think i'll ever use this lmao
             rts
         }
         
