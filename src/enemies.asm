@@ -1574,6 +1574,8 @@ enemy: {
         }
         
         ..switch: {
+            ;this whole thing is a mess innit
+            
             ;x = enemy index
             
             lda !enemytimer,x

@@ -167,7 +167,7 @@
     }                                                 
                                                       
     ..21: {       
-        dw enemy_ptr_copter,        $00a0,    $0040,   $01a0,       $0100,             $00a0
+        dw enemy_ptr_copter,        $00a0,    $0070,   $01a0,       $0100,             $00a0
         dw enemy_ptr_balloon,       $0060,    $0028,   $0f80,       $3002,             $0000
         dw enemy_ptr_battery,       $0070,    $0070,   $0064,       $0006,             $0001
         dw enemy_ptr_duct,          $0090,    $0008,   $2000,       $8004,             $0000

@@ -97,37 +97,44 @@ pressstart: {
         }
         ..noa:
         
+        lda !nmicounter
+        bit #$0003
+        bne ..end
+        
         phx
         
         sep #$30
         
         lda !nmicounter
-        bit !enemyx,x
-        bne +
+        ora !enemyx,x
         and #$3e
         tax
-        lda.l pressstart_triangletable+4,x
+        lda.l pressstart_triangletable+9,x
         sta !subscreenbackdropred
         +
         
         lda !nmicounter
-        bit !enemyy,x
-        bne ++
+        eor !enemyy,x
+        beq ++
         and #$3e
         tax
-        lda.l pressstart_triangletable+10,x
+        lda.l pressstart_triangletable+3,x
         sta !subscreenbackdropblue
         ++
         
         lda !nmicounter
+        bit #$01
+        beq +++
         and #$3e
         tax
         lda.l pressstart_triangletable,x
         sta !subscreenbackdropgreen
+        +++
         
         rep #$30
-        
         plx
+        
+        ..end:
         rts
     }
     
