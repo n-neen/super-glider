@@ -147,7 +147,7 @@ hud: {
     .drawbattery: {
         ;battery $382a
         ;$74
-        lda #$3c2a
+        lda #$302a
         sta !hudtilemaplong+!kbatteryhudiconspot
         rts
     }
@@ -156,7 +156,7 @@ hud: {
     .drawbands: {
         ;band $382b
         ;$76
-        lda #$3c2b
+        lda #$302b
         sta !hudtilemaplong+!kbandshudiconspot
         rts
     }
@@ -164,7 +164,7 @@ hud: {
     
     .cleartile: {
         ;x=tile index
-        lda #$3c0a
+        lda #$300a
         sta !hudtilemaplong,x
         rts
     }
@@ -198,16 +198,16 @@ hud: {
     
     
     .charactertable: {
-        dw $3c00,       ;0
-           $3c01,       ;1
-           $3c02,       ;2
-           $3c03,       ;3
-           $3c04,       ;4
-           $3c05,       ;5
-           $3c06,       ;6
-           $3c07,       ;7
-           $3c08,       ;8
-           $3c09        ;9
+        dw $3000,       ;0
+           $3001,       ;1
+           $3002,       ;2
+           $3003,       ;3
+           $3004,       ;4
+           $3005,       ;5
+           $3006,       ;6
+           $3007,       ;7
+           $3008,       ;8
+           $3009        ;9
            ;blank tile $3c0a
     }
 }

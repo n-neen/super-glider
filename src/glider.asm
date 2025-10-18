@@ -322,7 +322,7 @@ glider: {
         
         ..htable: {
                ;right  left
-            dw $ffff, $ffff
+            dw $ffff, $ffff     ;yeah, great table
         }
     }
     
