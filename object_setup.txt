@@ -12,3 +12,9 @@ varitable: {
     tabletop, tablepole, tablebase
     uses dynamic object tilemap array as a buffer to draw tilemap
 }
+
+openwall: {
+    variable:
+        $8000 = left
+        $0000 = right
+}

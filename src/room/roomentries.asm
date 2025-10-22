@@ -52,15 +52,15 @@
     ..2f: dw room_objlist_2f, room_enemylist_2f, $c102,     $ffff
     ..30: dw room_objlist_30, room_enemylist_30, $c203,     $ffff
     ..31: dw room_objlist_31, room_enemylist_31, $c003,     $ffff
-    ..32: dw room_objlist_32, room_enemylist_32, $c10a,     $ffff
-    ..33: dw room_objlist_33, room_enemylist_33, $c10a,     $ffff
-    ..34: dw room_objlist_34, room_enemylist_34, $c10a,     $ffff
-    ..35: dw room_objlist_35, room_enemylist_35, $c10a,     $ffff
-    ..36: dw room_objlist_36, room_enemylist_36, $c10a,     $ffff
-    ..37: dw room_objlist_37, room_enemylist_37, $c10a,     $ffff
-    ..38: dw room_objlist_38, room_enemylist_38, $c102,     $ffff
-    ..39: dw room_objlist_39, room_enemylist_39, $c102,     $ffff
-    ..3a: dw room_objlist_3a, room_enemylist_3a, $c102,     $ffff
+    ..32: dw room_objlist_32, room_enemylist_32, $c20a,     $ffff   ;
+    ..33: dw room_objlist_33, room_enemylist_33, $c00a,     $ffff
+    ..34: dw room_objlist_34, room_enemylist_34, $c00a,     $ffff
+    ..35: dw room_objlist_35, room_enemylist_35, $c00a,     $ffff
+    ..36: dw room_objlist_36, room_enemylist_36, $c004,     $ffff
+    ..37: dw room_objlist_37, room_enemylist_37, $c004,     $ffff
+    ..38: dw room_objlist_38, room_enemylist_38, $c004,     $ffff
+    ..39: dw room_objlist_39, room_enemylist_39, $c004,     $ffff
+    ..3a: dw room_objlist_3a, room_enemylist_3a, $c104,     $ffff   ;
     ..3b: dw room_objlist_3b, room_enemylist_3b, $c102,     $ffff
     ..3c: dw room_objlist_3c, room_enemylist_3c, $c102,     $ffff
     ..3d: dw room_objlist_3d, room_enemylist_3d, $c102,     $ffff
@@ -83,13 +83,13 @@
     ..4d: dw room_objlist_4d, room_enemylist_4d, $c102,     $ffff
     ..4e: dw room_objlist_4e, room_enemylist_4e, $c102,     $ffff
     ..4f: dw room_objlist_4f, room_enemylist_4f, $c102,     $ffff
-    ..50: dw room_objlist_50, room_enemylist_50, $c203,     $ffff
+    ..50: dw room_objlist_50, room_enemylist_50, $c203,     $ffff   ;
     ..51: dw room_objlist_51, room_enemylist_51, $c003,     $ffff
-    ..52: dw room_objlist_52, room_enemylist_52, $c103,     $ffff
-    ..53: dw room_objlist_53, room_enemylist_53, $c102,     $ffff
-    ..54: dw room_objlist_54, room_enemylist_54, $c102,     $ffff
-    ..55: dw room_objlist_55, room_enemylist_55, $c102,     $ffff
-    ..56: dw room_objlist_56, room_enemylist_56, $c102,     $ffff
+    ..52: dw room_objlist_52, room_enemylist_52, $c003,     $ffff
+    ..53: dw room_objlist_53, room_enemylist_53, $c003,     $ffff
+    ..54: dw room_objlist_54, room_enemylist_54, $c003,     $ffff
+    ..55: dw room_objlist_55, room_enemylist_55, $c003,     $ffff
+    ..56: dw room_objlist_56, room_enemylist_56, $c103,     $ffff   ;
     ..57: dw room_objlist_57, room_enemylist_57, $c102,     $ffff
     ..58: dw room_objlist_58, room_enemylist_58, $c102,     $ffff
     ..59: dw room_objlist_59, room_enemylist_59, $c102,     $ffff
@@ -138,8 +138,8 @@
     ..82: dw room_objlist_82, room_enemylist_82, $c005,     $ffff
     ..83: dw room_objlist_83, room_enemylist_83, $c006,     $ffff
     ..84: dw room_objlist_84, room_enemylist_84, $c006,     $ffff
-    ..85: dw room_objlist_85, room_enemylist_85, $c106,     $ffff
-    ..86: dw room_objlist_86, room_enemylist_86, $c106,     $ffff
+    ..85: dw room_objlist_85, room_enemylist_85, $c006,     $ffff
+    ..86: dw room_objlist_86, room_enemylist_86, $c006,     $ffff
     ..87: dw room_objlist_87, room_enemylist_87, $c106,     $ffff
     ..88: dw room_objlist_88, room_enemylist_88, $c106,     $ffff
     ..89: dw room_objlist_89, room_enemylist_89, $c106,     $ffff

@@ -604,18 +604,36 @@
     }
 
     ..83: {
+        dw enemy_ptr_balloon,   $0080,    $0050,    $0a00,      $1002,      $0000
+        dw enemy_ptr_balloon,   $0080,    $0070,    $0b00,      $1002,      $0000
+        dw enemy_ptr_balloon,   $0080,    $0090,    $0c00,      $1002,      $0000
+        dw enemy_ptr_balloon,   $0080,    $00b0,    $0d00,      $1002,      $0000
         dw $ffff
     }
 
     ..84: {
+        dw enemy_ptr_drip,      $0070,    $0010,   $0080,       $0002,      $f000
+        dw enemy_ptr_drip,      $00a0,    $0010,   $0100,       $0002,      $e000
+        dw enemy_ptr_drip,      $00d0,    $0010,   $0200,       $0002,      $d000
+        dw enemy_ptr_balloon,   $0088,    $0050,   $0400,       $1002,      $0000
+        dw enemy_ptr_balloon,   $00b8,    $0050,   $0800,       $1002,      $0000
+        dw enemy_ptr_balloon,   $00e8,    $0050,   $0f00,       $1002,      $0000
         dw $ffff
     }
 
     ..85: {
+        dw enemy_ptr_balloon,   $0088,    $0050,   $0200,       $1002,      $0000
+        dw enemy_ptr_balloon,   $0088,    $0050,   $0400,       $1002,      $0000
+        dw enemy_ptr_balloon,   $0088,    $0050,   $0600,       $1002,      $0000
+        dw enemy_ptr_balloon,   $0088,    $0050,   $0800,       $1002,      $0000
+        dw enemy_ptr_balloon,   $0088,    $0050,   $0a00,       $1002,      $0000
+        dw enemy_ptr_balloon,   $0088,    $0050,   $0c00,       $1002,      $0000
+        dw enemy_ptr_balloon,   $0088,    $0050,   $0e00,       $1002,      $0000
         dw $ffff
     }
 
     ..86: {
+        dw enemy_ptr_drip,      $0070,    $0010,   $0080,       $0002,      $f000
         dw $ffff
     }
 

@@ -343,7 +343,8 @@ newgame: {
     
     lda #$0020             ;real starting room
     ;lda #$00d3             ;temp for testing ending
-    ;lda #$0082             ;other temp
+    ;lda #$0083             ;other temp
+    ;lda #$0012
     sta !roomindex
     asl
     tax
