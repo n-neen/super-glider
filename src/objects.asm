@@ -635,17 +635,18 @@ obj: {
         ..shelf:            dw obj_headers_shelf
         ..upstairs:         dw obj_headers_upstairs
         ..dnstairs:         dw obj_headers_dnstairs
-        ..window:           dw obj_headers_window
-        ..ozma:             dw obj_headers_ozma
+        ..window:           dw obj_headers_window               ;bg3, bg2 only
+        ..bigwindow:        dw obj_headers_bigwindow
+        ..ozma:             dw obj_headers_ozma                 ;bg3 only
         ..lamp:             dw obj_headers_lamp
         ..table:            dw obj_headers_table
         ..fishbowl:         dw obj_headers_fishbowl
-        ..openwindow:       dw obj_headers_openwindow
+        ..openwindow:       dw obj_headers_openwindow           ;bg3 only
         ..trashcan:         dw obj_headers_trashcan
-        ..manholetop:       dw obj_headers_manholetop
-        ..manholebottom:    dw obj_headers_manholebottom
-        ..fireplace:        dw obj_headers_fireplace
-        ..sewergrate:       dw obj_headers_sewergrate
+        ..manholetop:       dw obj_headers_manholetop           ;bga only
+        ..manholebottom:    dw obj_headers_manholebottom        ;bga only
+        ..fireplace:        dw obj_headers_fireplace            ;bg7 only
+        ..sewergrate:       dw obj_headers_sewergrate           ;bga only
         ..cabinet:          dw obj_headers_cabinet
         
         ;variable size table related objects
@@ -751,6 +752,8 @@ obj: {
         ..cabinet:
             dw $0000,                       $0000, $0000, obj_routines_cabinet,         $0000
         
+        ..bigwindow:
+            dw #obj_tilemaps_bigwindow,     $000b, $0010, obj_routines_delete,          $8000 
     }
     
     ;===========================================================================================
@@ -1510,6 +1513,7 @@ obj: {
         ..manholebottom:    %objtilemapentry(manhole_bottom)
         ..fireplace:        %objtilemapentry(fireplace)
         ..sewergrate:       %objtilemapentry(sewergrate)
+        ..bigwindow:        %objtilemapentry(bigwindow)
         
         ..cabinet: {
             ...0: %objtilemapentry(cabinet0)

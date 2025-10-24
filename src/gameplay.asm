@@ -9,11 +9,12 @@
 
 game: {
     .play: {
+        
         stz !batteryactive      ;find a better place to do this
         inc !roomcounter
         
-        
-        jsl game_runroomroutine
+        jsl handlecolormath         ;do it in this order so that the room can
+        jsl game_runroomroutine     ;modify the color math settings if you want
         
         jsl oam_fillbuffer
         jsl oam_hightablejank
@@ -35,7 +36,6 @@ game: {
         
         ;jsl coolmode
         ;jsl iframecolormath
-        jsl handlecolormath
         
         jsr handlehud
         ;jsr game_checklinkflag
@@ -45,7 +45,7 @@ game: {
     
     .runroomroutine: {
         ;only run this routine if the contents of roomspecialptr is negative
-        ;if it's zero of positive, exit
+        ;if it's zero or positive, exit
         
         lda !roomspecialptr
         cmp #$ffff
@@ -54,7 +54,6 @@ game: {
         
         jmp (!roomspecialptr)
         ;we will never return here after this jmp
-        ;because the room routine's rts will go back to game_play
         
         ++
         ;maybe do something else if it's not a pointer

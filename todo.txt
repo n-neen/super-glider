@@ -18,6 +18,7 @@ todo: {
         cabinet?
         dresser?
         
+        move window to common graphics section? (stairs area)
     }
     
     backgrounds: {

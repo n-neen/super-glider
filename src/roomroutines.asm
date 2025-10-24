@@ -25,4 +25,24 @@ roomroutines: {
         stz !roomspecialptr
         rtl
     }
+    
+    .coolmode: {
+        lda !kcolormathcoolmode
+        sta !colormathmode
+        
+        rtl
+    }
+    
+    .clearcolormath: {
+        stz !colormathmode
+        
+        rtl
+    }
+    
+    .evencooler: {
+        lda !kcolormathevercooler
+        sta !colormathmode
+        
+        rtl
+    }
 }

@@ -106,13 +106,13 @@
     ..63: dw room_objlist_63, room_enemylist_63, $c203,     $ffff
     ..64: dw room_objlist_64, room_enemylist_64, $c003,     $ffff
     ..65: dw room_objlist_65, room_enemylist_65, $c103,     $ffff
-    ..66: dw room_objlist_66, room_enemylist_66, $c102,     $ffff
-    ..67: dw room_objlist_67, room_enemylist_67, $c102,     $ffff
-    ..68: dw room_objlist_68, room_enemylist_68, $c102,     $ffff
-    ..69: dw room_objlist_69, room_enemylist_69, $c102,     $ffff
-    ..6a: dw room_objlist_6a, room_enemylist_6a, $c102,     $ffff
-    ..6b: dw room_objlist_6b, room_enemylist_6b, $c102,     $ffff
-    ..6c: dw room_objlist_6c, room_enemylist_6c, $c102,     $ffff
+    ..66: dw room_objlist_66, room_enemylist_66, $c202,     roomroutines_coolmode
+    ..67: dw room_objlist_67, room_enemylist_67, $c002,     roomroutines_coolmode
+    ..68: dw room_objlist_68, room_enemylist_68, $c003,     roomroutines_evencooler
+    ..69: dw room_objlist_69, room_enemylist_69, $c003,     roomroutines_evencooler
+    ..6a: dw room_objlist_6a, room_enemylist_6a, $c006,     roomroutines_coolmode
+    ..6b: dw room_objlist_6b, room_enemylist_6b, $c009,     roomroutines_evencooler
+    ..6c: dw room_objlist_6c, room_enemylist_6c, $c107,     roomroutines_coolmode
     ..6d: dw room_objlist_6d, room_enemylist_6d, $c102,     $ffff
     ..6e: dw room_objlist_6e, room_enemylist_6e, $c102,     $ffff
     ..6f: dw room_objlist_6f, room_enemylist_6f, $c102,     $ffff
@@ -140,12 +140,12 @@
     ..84: dw room_objlist_84, room_enemylist_84, $c006,     $ffff
     ..85: dw room_objlist_85, room_enemylist_85, $c006,     $ffff
     ..86: dw room_objlist_86, room_enemylist_86, $c006,     $ffff
-    ..87: dw room_objlist_87, room_enemylist_87, $c106,     $ffff
-    ..88: dw room_objlist_88, room_enemylist_88, $c106,     $ffff
-    ..89: dw room_objlist_89, room_enemylist_89, $c106,     $ffff
-    ..8a: dw room_objlist_8a, room_enemylist_8a, $c102,     $ffff
-    ..8b: dw room_objlist_8b, room_enemylist_8b, $c102,     $ffff
-    ..8c: dw room_objlist_8c, room_enemylist_8c, $c102,     $ffff
+    ..87: dw room_objlist_87, room_enemylist_87, $c005,     $ffff
+    ..88: dw room_objlist_88, room_enemylist_88, $c005,     $ffff
+    ..89: dw room_objlist_89, room_enemylist_89, $c005,     $ffff
+    ..8a: dw room_objlist_8a, room_enemylist_8a, $c002,     $ffff
+    ..8b: dw room_objlist_8b, room_enemylist_8b, $c002,     $ffff
+    ..8c: dw room_objlist_8c, room_enemylist_8c, $c102,     roomroutines_clearcolormath
     ..8d: dw room_objlist_8d, room_enemylist_8d, $c102,     $ffff
     ..8e: dw room_objlist_8e, room_enemylist_8e, $c102,     $ffff
     ..8f: dw room_objlist_8f, room_enemylist_8f, $c102,     $ffff

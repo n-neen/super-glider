@@ -341,10 +341,11 @@ newgame: {
     
     jsr fixlayerscroll
     
-    lda #$0020             ;real starting room
+    ;lda #$0020             ;real starting room
     ;lda #$00d3             ;temp for testing ending
-    ;lda #$0083             ;other temp
+    lda #$0069             ;other temp
     ;lda #$0012
+    ;lda #$0055
     sta !roomindex
     asl
     tax
@@ -361,7 +362,7 @@ newgame: {
     lda !kstateloadroom
     sta !gamestate
     
-    lda debugflag
+    lda.l debugflag
     beq +
     lda #$0005
     sta !gamestate          ;if [debug], goto debug setup mode
@@ -410,9 +411,6 @@ fade: {
 
     .in:
     .out: {
-        ;this is currently buggy because it drops input
-        ;i think because the nmi register is also responsible for controller polling
-        ;jsl game_play
         
         inc !gamefadecounter
         
@@ -517,12 +515,32 @@ colormathmode: {
             .lightsout,          ;1
             .iframes,            ;2
             .coolmode,           ;3
-            .colorfade           ;4
+            .colorfade,          ;4
+            .evencooler          ;5
     }
     
     ;these routines all have sep #$20!
     
+    .evencooler: {
+        lda #%00000010          ;main screen
+        sta !mainscreenlayers
+        
+        lda #%00010101          ;sub screen
+        sta !subscreenlayers
+        
+        lda #%10111111          ;color math layers
+        sta !colormathlayers
+        
+        lda #%00000011
+        sta !colormathenable
+        
+        rts
+    }
+    
     .colorfade: {
+        ;broken nonsense
+        
+        
         ;!subscreenbackdropblue
         ;!subscreenbackdropred
         ;!subscreenbackdropgreen

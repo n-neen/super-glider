@@ -18,3 +18,18 @@ openwall: {
         $8000 = left
         $0000 = right
 }
+
+windows: {
+    can only be properly used in:
+        bg2, bg3, bg4, bg5, bg6, bg9
+        
+        bg7 could work but we have to move the fireplace (whoops)
+}
+
+ozma: {
+    can only be properly used in bg3
+}
+
+fireplace: {
+    can only be properly used in bg7
+}

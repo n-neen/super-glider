@@ -418,6 +418,7 @@ print "object ram start: ", hex(!objvariable+!objectarraysize+2)
 !kcolormathiframes          =       #$0002
 !kcolormathcoolmode         =       #$0003
 !kcolormathcolorfade        =       #$0004
+!kcolormathevercooler       =       #$0005
 
 
 ;module label-derived defines
