@@ -443,6 +443,10 @@
     }
 
     ..46: {
+        dw #obj_ptr_upstairs,   $000e, $0005,  $0c00,   $0000
+        dw #obj_ptr_vent,       $0005, $001a,  $0000,   $0048
+        dw #obj_ptr_vent,       $0013, $001a,  $0000,   $0048
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
         dw $ffff
     }
 
@@ -632,7 +636,17 @@
     ..67: {
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
-        dw #obj_ptr_vent,       $0018, $001a,  $0000,   $0013
+        
+        dw #obj_ptr_shelf,      $0008+5, $000a,  $0800,   $0002
+        dw #obj_ptr_shelf,      $0008+4, $000b,  $0800,   $0004
+        dw #obj_ptr_shelf,      $0008+3, $000c,  $0800,   $0006
+        dw #obj_ptr_shelf,      $0008+2, $000d,  $0800,   $0008
+        dw #obj_ptr_shelf,      $0008+1, $000e,  $0800,   $000a
+        dw #obj_ptr_shelf,      $0008, $000f,  $0800,   $000c
+        
+        dw #obj_ptr_vent,       $0018, $001a,  $0000,   $0073
+        dw #obj_ptr_vent,       $000f, $001a,  $0000,   $0073
+        dw #obj_ptr_vent,       $0005, $001a,  $0000,   $0073
         dw $ffff
     }
 
@@ -658,7 +672,8 @@
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
         dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
         dw #obj_ptr_vent,       $0016, $001a,  $0000,   $0013
-        dw #obj_ptr_candle,     $0010, $000b,  $0000,   $0000
+        dw #obj_ptr_vent,       $0006, $001a,  $0000,   $0043
+        dw #obj_ptr_candle,     $000e, $000b,  $0000,   $0000
         dw $ffff
     }
 

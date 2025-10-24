@@ -33,15 +33,60 @@ roomroutines: {
         rtl
     }
     
-    .clearcolormath: {
-        stz !colormathmode
+    .evencooler: {
+        lda !kcolormathevercooler
+        sta !colormathmode
         
         rtl
     }
     
-    .evencooler: {
+    .coolest: {
         lda !kcolormathevercooler
         sta !colormathmode
+        
+        lda !nmicounter
+        bit #$0007
+        bne ..end
+        
+        phx
+        
+        sep #$30
+        
+        lda !nmicounter
+        ora #$02
+        and #$3e
+        tax
+        lda.l pressstart_triangletable+9,x
+        sta !subscreenbackdropred
+        +
+        
+        lda !nmicounter
+        eor #$01
+        beq ++
+        and #$3e
+        tax
+        lda.l pressstart_triangletable+3,x
+        sta !subscreenbackdropblue
+        ++
+        
+        lda !nmicounter
+        bit #$01
+        beq +++
+        and #$3e
+        tax
+        lda.l pressstart_triangletable,x
+        sta !subscreenbackdropgreen
+        +++
+        
+        rep #$30
+        plx
+        
+        ..end:
+        rtl
+    }
+    
+    .clearcolormath: {
+        stz !colormathmode
         
         rtl
     }

@@ -341,9 +341,9 @@ newgame: {
     
     jsr fixlayerscroll
     
-    ;lda #$0020             ;real starting room
+    lda #$0020             ;real starting room
     ;lda #$00d3             ;temp for testing ending
-    lda #$0069             ;other temp
+    ;lda #$008c             ;other temp
     ;lda #$0012
     ;lda #$0055
     sta !roomindex

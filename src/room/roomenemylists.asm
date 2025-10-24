@@ -507,7 +507,7 @@
     }
     
     ..6c: {                         ;x        y        prop         prop2       prop3
-        dw enemy_ptr_copter,        $00b0,    $0028,   $0008,       $2100,      $0180
+        dw enemy_ptr_copter,        $00b0,    $0028,   $0008,       $2106,      $0180
         dw enemy_ptr_battery,       $00c0,    $0080,   $0064,       $0006,      $0001
         dw enemy_ptr_paper,         $00a0,    $0080,   $0000,       $0006,      $0002
         dw $ffff
