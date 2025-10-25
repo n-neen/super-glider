@@ -39,7 +39,7 @@
     ..22: dw room_objlist_22, room_enemylist_22, $c003,     $ffff
     ..23: dw room_objlist_23, room_enemylist_23, $c003,     $ffff
     ..24: dw room_objlist_24, room_enemylist_24, $c003,     $ffff
-    ..25: dw room_objlist_25, room_enemylist_25, $c102,     $ffff
+    ..25: dw room_objlist_25, room_enemylist_25, $c002,     $ffff
     ..26: dw room_objlist_26, room_enemylist_26, $c102,     $ffff
     ..27: dw room_objlist_27, room_enemylist_27, $c102,     $ffff
     ..28: dw room_objlist_28, room_enemylist_28, $c102,     $ffff
@@ -106,7 +106,7 @@
     ..63: dw room_objlist_63, room_enemylist_63, $c203,     $ffff
     ..64: dw room_objlist_64, room_enemylist_64, $c003,     $ffff
     ..65: dw room_objlist_65, room_enemylist_65, $c103,     $ffff
-    ..66: dw room_objlist_66, room_enemylist_66, $c202,     roomroutines_coolmode
+    ..66: dw room_objlist_66, room_enemylist_66, $c202,     roomroutines_coolest
     ..67: dw room_objlist_67, room_enemylist_67, $c002,     roomroutines_coolmode
     ..68: dw room_objlist_68, room_enemylist_68, $c003,     roomroutines_evencooler
     ..69: dw room_objlist_69, room_enemylist_69, $c003,     roomroutines_evencooler

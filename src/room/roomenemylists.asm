@@ -482,14 +482,23 @@
     }
     
     ..66: {
+        dw enemy_ptr_balloon,       $0080,  $0020,  $0000,      $0002,  $0000
+        dw enemy_ptr_balloon,       $0080,  $0080,  $0000,      $0002,  $0000
+        dw enemy_ptr_balloon,       $0080,  $00c0,  $0000,      $0002,  $0000
         dw $ffff
     }
     
     ..67: {
+        dw enemy_ptr_balloon,       $0040,  $0020,  $0000,      $0002,  $0000
+        dw enemy_ptr_balloon,       $0080,  $0040,  $0000,      $0002,  $0000
+        dw enemy_ptr_balloon,       $00a0,  $0020,  $0000,      $0002,  $0000
         dw $ffff
     }
     
     ..68: {
+        dw enemy_ptr_copter,        $0030,    $0020,   $0000,       $0000,      $0000
+        dw enemy_ptr_copter,        $0060,    $0070,   $0000,       $0000,      $0000
+        dw enemy_ptr_copter,        $0090,    $0090,   $0000,       $0000,      $0000
         dw $ffff
     }
     
@@ -502,7 +511,6 @@
     }
     
     ..6b: {
-        
         dw $ffff
     }
     
