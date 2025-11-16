@@ -105,11 +105,11 @@ print "glider ram start: ", hex(!gliderramstart)
 
 !gliderrespawnx     =       !gliderramstart+68
 !gliderrespawny     =       !gliderramstart+70
-print "glider ram end: ", hex(!bandtimer)
+print "glider ram end:   ", hex(!bandtimer)
 
 ;enemy ram
 !enemystart             =       $1d0
-print "enemy ram start: ", hex(!enemystart)
+print "enemy ram start:  ", hex(!enemystart)
 !enemyarraysize         =       $0028
 !enemyID                =       !enemystart
 !enemyx                 =       !enemyID+!enemyarraysize+2
@@ -129,7 +129,7 @@ print "enemy ram start: ", hex(!enemystart)
 !enemyvariable          =       !enemytimer+!enemyarraysize+2
 !enemyproperty3         =       !enemyvariable+!enemyarraysize+2
 !enemyrespawnpoint      =       !enemyproperty3+!enemyarraysize+2
-print "enemy ram end: ", hex(!enemyrespawnpoint+!enemyarraysize+2)
+print "enemy ram end:    ", hex(!enemyrespawnpoint+!enemyarraysize+2)
 
 ;length of data in room file for each enemy entry
 !kenemyentrylength  =       #$000c
@@ -213,7 +213,7 @@ print "object ram start: ", hex(!objectarraystart)
 !objroutineptr      =       !objpal+!objectarraysize+2
 !objproperty        =       !objroutineptr+!objectarraysize+2
 !objvariable        =       !objproperty+!objectarraysize+2
-print "object ram start: ", hex(!objvariable+!objectarraysize+2)
+print "object ram end:   ", hex(!objvariable+!objectarraysize+2)
 
 ;arrays' ends       last define + !objectarraysize+2 for total size
 

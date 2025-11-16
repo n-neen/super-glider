@@ -33,3 +33,8 @@ ozma: {
 fireplace: {
     can only be properly used in bg7
 }
+
+candle: {
+    must have a variable of 0 or game will crash
+        lmao
+}

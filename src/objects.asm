@@ -648,6 +648,7 @@ obj: {
         ..fireplace:        dw obj_headers_fireplace            ;bg7 only
         ..sewergrate:       dw obj_headers_sewergrate           ;bga only
         ..cabinet:          dw obj_headers_cabinet
+        ..books:            dw obj_headers_books
         
         ;variable size table related objects
         ..varitable:        dw obj_headers_varitable
@@ -753,7 +754,10 @@ obj: {
             dw $0000,                       $0000, $0000, obj_routines_cabinet,         $0000
         
         ..bigwindow:
-            dw #obj_tilemaps_bigwindow,     $000b, $0010, obj_routines_delete,          $8000 
+            dw #obj_tilemaps_bigwindow,     $000b, $0010, obj_routines_delete,          $8000
+            
+        ..books:
+            dw #obj_tilemaps_books,         $0007, $0005, obj_routines_delete,          $0000
     }
     
     ;===========================================================================================
@@ -1514,6 +1518,7 @@ obj: {
         ..fireplace:        %objtilemapentry(fireplace)
         ..sewergrate:       %objtilemapentry(sewergrate)
         ..bigwindow:        %objtilemapentry(bigwindow)
+        ..books:            %objtilemapentry(books)
         
         ..cabinet: {
             ...0: %objtilemapentry(cabinet0)
