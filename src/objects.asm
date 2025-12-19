@@ -80,7 +80,7 @@ obj: {
         plb : plb
         ldx #$0800
         --
-        stz $6000,x
+        stz $6000,x         ;nasty hardcoded pointer... oops
         dex : dex
         bpl --
         

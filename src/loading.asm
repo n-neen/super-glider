@@ -527,7 +527,7 @@ load: {
             phy
             phb
             
-            pea.w !dmabankshort
+            pea.w !dmabankshort<<8
             plb : plb
             
             lda !dmaloadindex                       ;if background type = 0, exit

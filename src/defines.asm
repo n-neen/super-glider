@@ -31,6 +31,11 @@
 !localtempvar4      =       $16
 !pausecounter       =       $18
 
+;sound engine ram
+!soundramstart      =       $90
+;todo: this
+!soundramend        =       $a2
+
 ;one byte color math ppu register mirrors
 ;and related schtuffe
 !ppubrightnessmirror    =       $ac

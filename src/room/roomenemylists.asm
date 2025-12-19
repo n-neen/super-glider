@@ -162,6 +162,7 @@
         dw enemy_ptr_thermostat,    $0060,    $0080,   $002a,       $0000,             $00ff            ;this room, object 2a
         dw enemy_ptr_switch,        $0060,    $0040,   $0013,       $0200,             $0030|$0001      ;room 0, object $30
         
+        
         ;dw enemy_ptr_switch,        $0090,    $0040,   $1234,       $8200,             $0028           ;this room, enemy $28
         dw $ffff                                      
     }                                                 
@@ -347,6 +348,16 @@
     }
     
     ..47: {
+        ;enemy type                 x,        y,       prop,    prop2,  prop3
+        dw enemy_ptr_grease,        $0036,    $008d,   $0002,   $0000,  $0000   ;jar
+        dw enemy_ptr_grease,        $004e,    $008d,   $0004,   $0000,  $0000   ;grease
+        dw enemy_ptr_grease,        $005e,    $008d,   $0004,   $0000,  $0000   ;grease
+        dw enemy_ptr_grease,        $006e,    $008d,   $0004,   $0000,  $0000   ;grease
+        dw enemy_ptr_grease,        $007e,    $008d,   $0004,   $0000,  $0000   ;grease
+        dw enemy_ptr_grease,        $008e,    $008d,   $0004,   $0000,  $0000   ;grease
+        dw enemy_ptr_grease,        $009e,    $008d,   $0004,   $0000,  $0000   ;grease
+        dw enemy_ptr_grease,        $00ae,    $008d,   $0004,   $0000,  $0000   ;grease
+        dw enemy_ptr_grease,        $00be,    $008d,   $0004,   $0000,  $0000   ;grease
         dw $ffff
     }
     

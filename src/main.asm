@@ -51,7 +51,7 @@ debugflag:
     dw $0000
 
 
-boot:
+boot: {
     sei
     clc
     xce             ;enable native mode
@@ -69,27 +69,64 @@ boot:
     tcd             ;clear dp register
     
     ldy #$0000      ;lmaoooo
+}
 
-clear7e:
+clear7e: {
     pea $7e7e
     plb : plb
-    ldx #$fffe
--   stz $0000,x     ;loop to clear all of $7e
-    dex : dex       ;definitely don't jsr to here or you'll obliterate your return address lol
-    bne -
     
-clear7f:
+    ldx #$1ffe
+    
+    -
+    stz $0000,x
+    stz $1000,x
+    stz $2000,x
+    stz $3000,x
+    stz $4000,x
+    stz $5000,x
+    stz $6000,x
+    stz $7000,x
+    stz $8000,x
+    stz $9000,x
+    stz $a000,x
+    stz $b000,x
+    stz $c000,x
+    stz $d000,x
+    stz $e000,x
+    
+    dex : dex
+    bpl -
+}
+    
+clear7f: {
     pea $7f7f
     plb : plb
-    ldx #$7ffe
---  stz $0000,x
-    stz $8000,x
-    dex : dex
-    bpl --
     
+    ldx #$1ffe
+    
+    -
+    stz $0000,x
+    stz $1000,x
+    stz $2000,x
+    stz $3000,x
+    stz $4000,x
+    stz $5000,x
+    stz $6000,x
+    stz $7000,x
+    stz $8000,x
+    stz $9000,x
+    stz $a000,x
+    stz $b000,x
+    stz $c000,x
+    stz $d000,x
+    stz $e000,x
+    
+    dex : dex
+    bpl -
+}
 
-init:
-    .registers:
+init: {
+    .registers: {
         
         phk
         plb                 ;set db
@@ -115,10 +152,12 @@ init:
         sep #$20
         lda #$80            ;enable nmi
         sta $4200
+    }
+    
+    
+    .ppu: {                         ;set up ppu
         
-        ;set up ppu
-        
-        lda #%00010110      ;main screen = sprites, L2
+        lda #%00010110              ;main screen = sprites, L2
         sta $212c
         
         lda.b #!spriteaddrshifted   ;sprite size: 8x8 + 16x16; base address c000
@@ -162,7 +201,8 @@ init:
         jsl dma_clearcgram
         jsl oam_fillbuffer
         jsl oam_hightablejank
-        
+    }
+}
     ;fall through to main
 
 
@@ -179,7 +219,7 @@ main: {
     }
         
     .statehandle: {
-        inc !maincounter                ;main switch case jump table loop
+        inc !maincounter
         lda !gamestate
         asl
         tax
@@ -341,8 +381,8 @@ newgame: {
     
     jsr fixlayerscroll
     
-    lda #$0020             ;real starting room
-    ;lda #$0087
+    ;lda #$0020             ;real starting room
+    lda #$0047
     ;lda #$00d3             ;temp for testing ending
     ;lda #$008c             ;other temp
     ;lda #$0012
@@ -948,6 +988,9 @@ nmi: {
     
     phk         ;db=80
     plb
+    
+    jml .fastrom
+    .fastrom:
     
     sep #$10
     ldx $4210

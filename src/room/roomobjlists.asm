@@ -329,24 +329,28 @@
         dw #obj_ptr_openwall,       $0000, $0001,  $0000,   $0000
         dw #obj_ptr_manholebottom,  $0008, $001a,  $0000,   $0000
         dw #obj_ptr_liftrect,       $0010, $0006,  $0000,   $000f
+        dw #obj_ptr_sewergrate,     $0018, $001a,  $0800,   $0028
         dw $ffff
     }
 
     ..33: {
         dw #obj_ptr_openwall,       $0000, $0001,  $0000,   $0000
         dw #obj_ptr_openwall,       $0000, $0001,  $0000,   $8000
+        dw #obj_ptr_sewergrate,     $000e, $001a,  $0800,   $0028
         dw $ffff
     }
 
     ..34: {
         dw #obj_ptr_openwall,       $0000, $0001,  $0000,   $0000
         dw #obj_ptr_openwall,       $0000, $0001,  $0000,   $8000
+        dw #obj_ptr_sewergrate,     $000e, $001a,  $0800,   $0028
         dw $ffff
     }
 
     ..35: {
         dw #obj_ptr_openwall,       $0000, $0001,  $0000,   $0000
         dw #obj_ptr_openwall,       $0000, $0001,  $0000,   $8000
+        dw #obj_ptr_sewergrate,     $000e, $001a,  $0800,   $0028
         dw $ffff
     }
 
@@ -354,6 +358,7 @@
         dw #obj_ptr_openwall,       $0000, $0001,  $0000,   $0000
         dw #obj_ptr_openwall,       $0000, $0001,  $0000,   $8000
         dw #obj_ptr_upstairs,       $000e, $0005,  $0400,   $0000
+        dw #obj_ptr_vent,           $0012, $001a,  $0800,   $0013
         dw $ffff
     }
 
@@ -460,6 +465,11 @@
     }
 
     ..47: {
+        dw #obj_ptr_varitable,  $0004, $000b,  $0800,   $0c02
+        ;dw #obj_ptr_vent,       $0005, $001a,  $0000,   $0028
+        dw #obj_ptr_vent,       $0016, $001a,  $0000,   $0028
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $8000
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
         dw $ffff
     }
 
@@ -516,6 +526,8 @@
     ..53: {
         dw #obj_ptr_openwall,       $0000, $0000,  $0000,   $8000
         dw #obj_ptr_openwall,       $0000, $0000,  $0000,   $0000
+        dw #obj_ptr_upstairs,       $0012, $0005,  $0400,   $0000
+        dw #obj_ptr_vent,           $0015, $001a,  $0000,   $0013
         dw $ffff
     }
 
@@ -734,6 +746,9 @@
     }
 
     ..73: {
+        dw #obj_ptr_upstairs,   $0005, $0005,  $0400,   $0000
+        dw #obj_ptr_dnstairs,   $0012, $0005,  $0400,   $0000
+        dw #obj_ptr_vent,       $0008, $001a,  $0000,   $0018
         dw $ffff
     }
 
@@ -920,6 +935,9 @@
     }
 
     ..93: {
+        dw #obj_ptr_dnstairs,   $0005, $0005,  $0400,   $0000
+        dw #obj_ptr_upstairs,   $0012, $0005,  $0400,   $0000
+        dw #obj_ptr_vent,       $0015, $001a,  $0000,   $0018
         dw $ffff
     }
 
@@ -1048,6 +1066,9 @@
     }
 
     ..b3: {
+        dw #obj_ptr_upstairs,   $0005, $0005,  $0400,   $0000
+        dw #obj_ptr_dnstairs,   $0012, $0005,  $0400,   $0000
+        dw #obj_ptr_vent,       $0008, $001a,  $0000,   $0018
         dw $ffff
     }
 

@@ -155,6 +155,12 @@ spritemap: {
         ..thermostat: {
             dw spritemap_thermostat
         }
+        
+        ..grease: {
+            dw spritemap_grease_jarleft,
+               spritemap_grease_jarright,
+               spritemap_grease_grease
+        }
     }
     
     
@@ -727,5 +733,24 @@ spritemap: {
         db $02
         db $00, $00, $2e,   %00110100,  %00000010
         db $00, $08, $3e,   %00110100,  %00000010
+    }
+    
+    .grease: {
+        ..jarleft: {
+            db $02
+            db $00, $fb, $58,   %01110001,  %00000010
+            db $f8, $fb, $59,   %01110001,  %00000010
+        }
+        
+        ..jarright: {
+            db $02
+            db $00, $fb, $58,   %00110001,  %00000010
+            db $08, $fb, $59,   %00110001,  %00000010
+        }
+        
+        ..grease: {
+            db $01
+            db $00, $fb, $5b,   %00110001,  %00000010
+        }
     }
 }
