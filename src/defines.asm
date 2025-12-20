@@ -66,50 +66,51 @@
 !multresult         =       $102
 
 ;glider ram
-!gliderramstart     =       $0160                   ;base address
+!gliderramstart         =       $0160                   ;base address
 print "glider ram start: ", hex(!gliderramstart)
-!gliderx            =       !gliderramstart         ;x coord
-!glidery            =       !gliderramstart+2       ;y coord
-!gliderstate        =       !gliderramstart+4       ;movement state
-!gliderdir          =       !gliderramstart+6       ;left or right (1 or 0)
-!glidermovetimer    =       !gliderramstart+8       ;for moving left and right
-!gliderliftstate    =       !gliderramstart+10      ;vent state: up down or the mysterious neither
-!gliderturntimer    =       !gliderramstart+12      ;unimplemented
-!gliderhitbound     =       !gliderramstart+14      ;boolean (zero or nonzero)
-!gliderlives        =       !gliderramstart+16      ;decimal
-!glidernextstate    =       !gliderramstart+18      ;next movement state
-!glidersubx         =       !gliderramstart+20      ;subpixel x
-!glidersuby         =       !gliderramstart+22      ;subpixel y
-!gliderturntimer    =       !gliderramstart+24      ;unimplemented
-!gliderstairstimer  =       !gliderramstart+26      ;timer for extra lift after stairs
-!gliderstairstype   =       !gliderramstart+28      ;direction for lift of above
-!glidertranstimer   =       !gliderramstart+30      ;
+!gliderx                =       !gliderramstart         ;x coord
+!glidery                =       !gliderramstart+2       ;y coord
+!gliderstate            =       !gliderramstart+4       ;movement state
+!gliderdir              =       !gliderramstart+6       ;left or right (1 or 0)
+!glidermovetimer        =       !gliderramstart+8       ;for moving left and right
+!gliderliftstate        =       !gliderramstart+10      ;vent state: up down or the mysterious neither
+!gliderturntimer        =       !gliderramstart+12      ;unimplemented
+!gliderhitbound         =       !gliderramstart+14      ;boolean (zero or nonzero)
+!gliderlives            =       !gliderramstart+16      ;decimal
+!glidernextstate        =       !gliderramstart+18      ;next movement state
+!glidersubx             =       !gliderramstart+20      ;subpixel x
+!glidersuby             =       !gliderramstart+22      ;subpixel y
+!gliderturntimer        =       !gliderramstart+24      ;unimplemented
+!gliderstairstimer      =       !gliderramstart+26      ;timer for extra lift after stairs
+!gliderstairstype       =       !gliderramstart+28      ;direction for lift of above
+!glidertranstimer       =       !gliderramstart+30      ;
 
-!hitboxleft         =       !gliderramstart+32      ;glider x position - hitbox size
-!hitboxright        =       !gliderramstart+34      ;glider x position + hitbox size
-!hitboxtop          =       !gliderramstart+36      ;glider y position - hitbox size
-!hitboxbottom       =       !gliderramstart+38      ;glider y position + hitbox size
+!hitboxleft             =       !gliderramstart+32      ;glider x position - hitbox size
+!hitboxright            =       !gliderramstart+34      ;glider x position + hitbox size
+!hitboxtop              =       !gliderramstart+36      ;glider y position - hitbox size
+!hitboxbottom           =       !gliderramstart+38      ;glider y position + hitbox size
 
-!points             =       !gliderramstart+40      ;number go up
-!gliderbatterytime  =       !gliderramstart+42      ;number of frames
-!batteryactive      =       !gliderramstart+44      ;boolean: zero or nonzero
-!iframecounter      =       !gliderramstart+46      ;
+!points                 =       !gliderramstart+40      ;number go up
+!gliderbatterytime      =       !gliderramstart+42      ;number of frames
+!batteryactive          =       !gliderramstart+44      ;boolean: zero or nonzero
+!iframecounter          =       !gliderramstart+46      ;
 
-!glideryspeed       =       !gliderramstart+48
-!gliderysubspeed    =       !gliderramstart+50
-!gliderxspeed       =       !gliderramstart+52
-!gliderxsubspeed    =       !gliderramstart+54
+!glideryspeed           =       !gliderramstart+48
+!gliderysubspeed        =       !gliderramstart+50
+!gliderxspeed           =       !gliderramstart+52
+!gliderxsubspeed        =       !gliderramstart+54
 
-!coolmode           =       !gliderramstart+56      ;boolean zero or nonzero
+!coolmode               =       !gliderramstart+56      ;boolean zero or nonzero
 
-!bandsammo          =       !gliderramstart+58
-!fireband           =       !gliderramstart+60      ;flag to fire band at next opportunity
-!bandtimer          =       !gliderramstart+62
-!foilamount         =       !gliderramstart+64
-!firetimer          =       !gliderramstart+66
+!bandsammo              =       !gliderramstart+58
+!fireband               =       !gliderramstart+60      ;flag to fire band at next opportunity
+!bandtimer              =       !gliderramstart+62
+!foilamount             =       !gliderramstart+64
+!firetimer              =       !gliderramstart+66
 
-!gliderrespawnx     =       !gliderramstart+68
-!gliderrespawny     =       !gliderramstart+70
+!gliderrespawnx         =       !gliderramstart+68
+!gliderrespawny         =       !gliderramstart+70
+!glidergraphicsindex    =       !gliderramstart+72
 print "glider ram end:   ", hex(!bandtimer)
 
 ;enemy ram
@@ -276,6 +277,8 @@ print "object ram end:   ", hex(!objvariable+!objectarraysize+2)
 !kgliderstatelostlife       =       #$0006
 !kgliderstatefirestarted    =       #$0007
 !kgliderstateonfire         =       #$0008
+
+!kglidergraphicsindexgreased    =   #$0001
 
 ;changed to use dynamic gravity. this get used to
 ;initialize that value at newgame but from then on it uses !gliderysubspeed

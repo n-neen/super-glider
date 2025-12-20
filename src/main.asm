@@ -1005,6 +1005,11 @@ nmi: {
     jsr hud_uploadtilemappartial
     jsr foilpalette
     
+    lda !gamestate
+    cmp !kstateplaygame
+    bne +
+    jsr glidergraphicsupdate
+    +
     
     stz !nmiflag
     
@@ -1020,6 +1025,54 @@ nmi: {
     inc !lagcounter
     bra .return
 }
+
+
+glidergraphicsupdate: {
+        php
+        
+        lda !glidergraphicsindex
+        asl
+        tax
+        lda glidergraphicsupdate_list,x
+        sta !dmasrcptr
+        
+        
+        rep #$20
+        sep #$10
+                                                ;width  register
+        ldx.b #$80                              ;1      dma control
+        stx $2115
+        
+        lda #!spritestart                       ;2      dest base addr
+        sta $2116
+        
+        ldx #$01                                ;1      transfur mode
+        stx $4300
+        
+        ldx #$18                                ;1      register dest (vram port)
+        stx $4301
+        
+        lda !dmasrcptr                          ;2      source addr
+        sta $4302
+        
+        ldx.b #((gliderdata&$ff0000)>>16)+0     ;1      source bank
+        stx $4304
+        
+        lda #$0400                              ;2      transfur size
+        sta $4305
+        
+        ldx #$01                                ;1      enable transfur on dma channel 0
+        stx $420b
+        
+    
+        plp
+    rts
+    
+    .list: {
+        dw gliderdata_graphics, gliderdata_greasegraphics
+    }
+}
+
 
 foilpalette: {
     lda !foilamount

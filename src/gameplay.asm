@@ -10,6 +10,7 @@
 game: {
     .play: {
         
+        stz !glidergraphicsindex
         stz !batteryactive      ;find a better place to do this
         inc !roomcounter
         

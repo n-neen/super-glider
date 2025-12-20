@@ -83,6 +83,9 @@ gliderdata:
         
     .graphics:
         incbin "./data/sprites/glider.gfx"
+        
+    .greasegraphics:
+        incbin "./data/sprites/glider_greased.gfx"
     
     .palette:
         ;incbin "./data/sprites/glider.pal"     ;um... i do not recall doing this

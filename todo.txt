@@ -68,6 +68,8 @@ todo: {
             
         switches acting on enemies or objects in the same room is pretty broken
             ok it kinda works but it can desync ugh
+            
+        because grease is an enemy, you cannot land on grease when you have iframes
     }
     
     
