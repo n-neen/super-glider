@@ -30,11 +30,11 @@ grease: {
     
     
     .touch: {
-        ;lda !kliftstateup
         stz !gliderliftstate
         
         lda !kglidergraphicsindexgreased
         sta !glidergraphicsindex
+        
         rts
     }
     

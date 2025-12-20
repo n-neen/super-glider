@@ -149,15 +149,15 @@ bands: {
         ldx #!enemyarraysize
         -
         lda !enemyID,x
-        beq +                       ;if enemy slot used
-        cmp #enemy_ptr_band         ;and if it is not a band
+        beq +                                   ;if enemy slot used
+        cmp #enemy_ptr_band                     ;and if it is not a band
         beq +
-        jsr enemy_collision_check   ;do collision checks
+        jsr enemy_collision_check_skipallowed   ;do collision checks, do not check for iframes
         bcc +
         lda !enemyshotptr,x
         beq +
-        jsr (!enemyshotptr,x)       ;if carry set, collision happened
-        +                           ;run enemy shot routine
+        jsr (!enemyshotptr,x)                   ;if carry set, collision happened
+        +                                       ;run enemy shot routine
         dex : dex
         bpl -
         

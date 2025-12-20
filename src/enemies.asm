@@ -28,13 +28,13 @@ enemy: {
     .collision: {
         phx
         
-        lda !iframecounter
-        bne ++
+        ;lda !iframecounter
+        ;bne ++
         
         ldx #!enemyarraysize
         -
         lda !enemyID,x
-        beq +
+        beq +                           ;if enemy slot empty, next slot
         jsr enemy_collision_check       ;must preserve x
         bcc +                           ;carry clear = no collision
         lda !enemytouchptr,x
@@ -85,6 +85,18 @@ enemy: {
             ;enemyx and y are radii
             
             
+            jsr enemy_collision_iframeskip
+            bcs ...skipallowed
+            
+            ;lda !enemyID,x
+            ;cmp #enemy_ptr_grease
+            ;beq ...skipallowed
+            
+            lda !iframecounter
+            bne ++
+            
+            ...skipallowed:
+            
             lda !enemyx,x           ;right bound: xpos+xsize
             clc
             adc !enemyxsize,x
@@ -117,6 +129,62 @@ enemy: {
             ++
             clc     ;no collision
             rts
+        }
+        
+        ..iframeskip: {
+            ;currently not called
+            !enemyidtemp    =   !localtempvar
+            pha
+            phb
+            phy
+            
+            phk
+            plb
+            
+            ldy #$0000
+            
+            sta !enemyidtemp
+            
+            -
+            lda.w enemy_collision_iframeskip_list,y
+            cmp #$ffff
+            beq +
+            cmp !enemyidtemp    ;check current enemy against the list of 
+            beq ++              ;enemies allowed to ignore iframes
+            iny
+            iny
+            bpl -
+            
+            
+            +               ;no skip
+            clc
+            ply
+            plb
+            pla
+            rts
+            
+            ++              ;skip
+            sec
+            ply
+            plb
+            pla
+            rts
+            
+            
+            ...list: {
+                ;list of enemies allowed to ignore iframes
+                dw enemy_ptr_grease,
+                   enemy_ptr_duct,
+                   enemy_ptr_paper,
+                   enemy_ptr_clock,
+                   enemy_ptr_battery,
+                   enemy_ptr_bandspack,
+                   enemy_ptr_lightswitch,
+                   enemy_ptr_switch,
+                   enemy_ptr_foil,
+                   enemy_ptr_thermostat,
+                   $ffff
+            }
         }
     }
     

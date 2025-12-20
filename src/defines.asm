@@ -288,12 +288,12 @@ print "object ram end:   ", hex(!objvariable+!objectarraysize+2)
 !kglideryspeeddefault       =       #$0000
 !kgliderysubspeeddefault    =       #$a000
 
-!kglideriframes             =       #$0060
+!kglideriframes             =       #$0080
 
 !kbatteryon                 =       #$0001
 !kbatteryoff                =       #$0000
 
-!kbandammoamount            =       #$0010
+!kbandammoamount            =       #$0018
 !kbandtimerlength           =       #$000a
 
 !kbandxspeed                =       #$0002

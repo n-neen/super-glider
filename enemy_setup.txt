@@ -115,7 +115,12 @@ drip: {
 dart:
     unfinished, todo
     
-    
+grease: {
+    property1 = spritemap selection
+        grease jar left  = 0
+        grease jar right = 2
+        grease grease    = 4
+}
     
 roomlink: {
     %rrrrrrrrssiiiiit, $dddd
