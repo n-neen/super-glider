@@ -401,14 +401,14 @@ obj: {
         
         
         ++
-        
+        ;glider did not hit tile
         ;jsr ..hitboxdraw                ;debug routine to visualize
         
         
         rts
         
         +
-        
+        ;glider hit tile
         lda !kgliderstatelostlife
         sta !gliderstate
         sta !glidernextstate
