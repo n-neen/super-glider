@@ -382,7 +382,7 @@ newgame: {
     jsr fixlayerscroll
     
     lda #$0020             ;real starting room
-    ;lda #$0047
+    ;lda #$0046
     ;lda #$00d3             ;temp for testing ending
     ;lda #$008c             ;other temp
     ;lda #$0012
@@ -1003,11 +1003,11 @@ nmi: {
     jsr updateppuregisters      ;read wram buffer and write register
     jsr readcontroller
     jsr hud_uploadtilemappartial
-    jsr foilpalette
     
     lda !gamestate
     cmp !kstateplaygame
     bne +
+    jsr foilpalette
     jsr glidergraphicsupdate
     +
     

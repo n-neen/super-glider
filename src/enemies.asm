@@ -132,7 +132,9 @@ enemy: {
         }
         
         ..iframeskip: {
-            ;currently not called
+            ;a = enemy id
+            ;x = enemy index
+            
             !enemyidtemp    =   !localtempvar
             pha
             phb
