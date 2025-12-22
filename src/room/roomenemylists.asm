@@ -195,10 +195,19 @@
         dw enemy_ptr_drip,          $0068,    $0010,   $0020,       $0002,             $8000
         dw enemy_ptr_drip,          $0090,    $0010,   $0040,       $0002,             $4000
         dw enemy_ptr_drip,          $00c0,    $0010,   $0080,       $0002,             $0000
+        dw enemy_ptr_duct,          $00b3,    $00c8,   $9049,       $0004,             $0000
+        dw enemy_ptr_grease,        $00c8,    $00c5,   $0004,       $0000,             $0000   ;grease
+        dw enemy_ptr_grease,        $00d8,    $00c5,   $0004,       $0000,             $0000   ;grease
+        dw enemy_ptr_grease,        $00e8,    $00c5,   $0004,       $0000,             $0000   ;grease
+        dw enemy_ptr_grease,        $00f8,    $00c5,   $0004,       $0000,             $0000   ;grease
         dw $ffff
     }
     
     ..25: {
+        dw enemy_ptr_grease,        $0030,    $00c5,   $0000,       $0000,             $0000   ;jar
+        dw enemy_ptr_grease,        $0020,    $00c5,   $0004,       $0000,             $0000   ;grease
+        dw enemy_ptr_grease,        $0010,    $00c5,   $0004,       $0000,             $0000   ;grease
+        dw enemy_ptr_grease,        $0000,    $00c5,   $0004,       $0000,             $0000   ;grease
         dw $ffff
     }
     
@@ -369,7 +378,7 @@
     }
     
     ..48: {
-        dw enemy_ptr_balloon,       $00a8,    $0048,   $1234,   $0302,  $0000
+        dw enemy_ptr_balloon,       $00a8,    $0028,   $1234,   $0302,  $0000
         ;dw enemy_ptr_balloon,       $0078,    $0088,   $4234,   $1302,  $0000
         dw enemy_ptr_grease,        $0000,    $008d,   $0004,   $0000,  $0000   ;grease
         dw enemy_ptr_grease,        $0010,    $008d,   $0004,   $0000,  $0000   ;grease
@@ -387,6 +396,14 @@
     }
     
     ..49: {
+        dw enemy_ptr_grease,        $009f,    $0035,   $0000,   $0000,  $0000   ;jar
+        dw enemy_ptr_grease,        $0088,    $0035,   $0004,   $0000,  $0000   ;grease
+        dw enemy_ptr_grease,        $0078,    $0035,   $0004,   $0000,  $0000   ;grease
+        dw enemy_ptr_grease,        $0068,    $0035,   $0004,   $0000,  $0000   ;grease
+        dw enemy_ptr_grease,        $0058,    $0035,   $0004,   $0000,  $0000   ;grease
+        dw enemy_ptr_grease,        $0048,    $0035,   $0004,   $0000,  $0000   ;grease
+        dw enemy_ptr_grease,        $0038,    $0035,   $0004,   $0000,  $0000   ;grease
+        dw enemy_ptr_duct,          $0090,    $0008,   $24c0,   $8004,  $0000
         dw $ffff
     }
     

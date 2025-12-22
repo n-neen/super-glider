@@ -173,7 +173,7 @@ lorom
         lda !gliderx
         sta !gliderrespawnx
         
-        lda #$0020
+        lda #$001e                      ;ugh
         sta !gliderrespawny
         
         lda !ktranstimer

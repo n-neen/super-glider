@@ -317,7 +317,7 @@ glider: {
             ;!kroomtranstypeup           =       #$0002
             ;!kroomtranstypedown         =       #$0003
             ;!kroomtranstypeduct         =       #$0004
-            dw $0000, $0000, $fffe, $0002, $0001
+            dw $0000, $0000, $fffe, $0002, $0000        ;duct now basically doesnt use this
         }
         
         ..htable: {

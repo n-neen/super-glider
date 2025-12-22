@@ -271,6 +271,7 @@
         dw #obj_ptr_openwall,   $0000, $0001,  $0000,   $8000
         dw #obj_ptr_openwall,   $0000, $0001,  $0000,   $0000
         dw #obj_ptr_vent,       $0010, $001a,  $0000,   $0013
+        dw #obj_ptr_solidrect,  $0000, $000f,  $0000,   $0205
         dw $ffff
     }
 
@@ -489,15 +490,25 @@
         dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
         dw #obj_ptr_cabinet,    $0001, $0014,  $0800,   $0002
         dw #obj_ptr_cabinet,    $000d, $0014,  $0800,   $0002
-        dw #obj_ptr_solidrect,  $0001, $0001,  $0000,   $030b
+        dw #obj_ptr_solidrect,  $0001, $0001,  $0000,   $030c
+        dw #obj_ptr_vent,       $0016, $001a,  $0000,   $0078
         dw $ffff
     }
 
     ..49: {
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $8000
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
+        dw #obj_ptr_shelf,      $0008, $0009,  $0800,   $0015
+        dw #obj_ptr_books,      $0019, $0004,  $0800,   $0015
+        dw #obj_ptr_vent,       $0016, $001a,  $0000,   $0078
+        dw #obj_ptr_ozma,       $0010, $0005,  $1000,   $0000
+        ;dw #obj_ptr_liftrect,   $0013, $0007,  $0000,   $0101
         dw $ffff
     }
 
     ..4a: {
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $8000
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
         dw $ffff
     }
 

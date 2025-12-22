@@ -382,7 +382,7 @@ newgame: {
     jsr fixlayerscroll
     
     lda #$0020             ;real starting room
-    ;lda #$0046
+    ;lda #$0048
     ;lda #$00d3             ;temp for testing ending
     ;lda #$008c             ;other temp
     ;lda #$0012
@@ -986,7 +986,7 @@ nmi: {
     phx
     phy
     
-    phk         ;db=80
+    phk
     plb
     
     jml .fastrom

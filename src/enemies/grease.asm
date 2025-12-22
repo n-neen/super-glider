@@ -30,7 +30,12 @@ grease: {
     
     
     .touch: {
+        ;warn pc
         stz !gliderliftstate
+        stz !glidertranstimer
+        stz !gliderstairstimer
+        
+        ;stz !glidersuby
         
         lda !kglidergraphicsindexgreased
         sta !glidergraphicsindex

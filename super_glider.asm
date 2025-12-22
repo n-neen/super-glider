@@ -37,6 +37,7 @@ org $808000
     incsrc "./src/main.asm"
     incsrc "./src/loading.asm"
     incsrc "./src/hud.asm"
+    incsrc "./src/sound.asm"
     print "bank $80 end: ", pc
     
 org $818000

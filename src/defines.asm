@@ -164,6 +164,7 @@ print "enemy ram end:    ", hex(!enemyrespawnpoint+!enemyarraysize+2)
 !roomcounter             =      !housestart+22
 !roomspecialptr          =      !housestart+24
 !previousroombg          =      !housestart+26
+!ductoutputypos          =      !housestart+28      ;unimplemented
 
 !enemydynamicspawnslot   =      $0880
 !objectdynamicspawnslot  =      $08a0
