@@ -507,33 +507,52 @@
     }
 
     ..4a: {
+        dw #obj_ptr_fireplace,  $0008, $000e,  $1000,   $0000
+        dw #obj_ptr_solidrect,  $0000, $0000,  $0000,   $0209
+        dw #obj_ptr_candle,     $0009, $000a,  $1000,   $0000
+        dw #obj_ptr_candle,     $0014, $000a,  $1000,   $0000
+        dw #obj_ptr_vent,       $0004, $001a,  $0000,   $0078
+        dw #obj_ptr_vent,       $0018, $001a,  $0000,   $0010
         dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $8000
         dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
         dw $ffff
     }
 
     ..4b: {
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $8000
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
         dw $ffff
     }
 
     ..4c: {
+        dw #obj_ptr_bigwindow,  $0003, $0005,  $0c00,   $0000
+        dw #obj_ptr_bigwindow,  $0013, $0005,  $0c00,   $0000
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $8000
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
         dw $ffff
     }
 
     ..4d: {
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $8000
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
         dw $ffff
     }
 
     ..4e: {
+        dw #obj_ptr_bigwindow,  $000e, $0005,  $0c00,   $0000
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $8000
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
         dw $ffff
     }
 
     ..4f: {
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $8000
+        dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
         dw $ffff
     }
 
     ..50: {
-        ;dw #obj_ptr_openwall,       $0000, $0000,  $0000,   $8000
+        dw #obj_ptr_openwall,       $0000, $0000,  $0000,   $8000
         dw #obj_ptr_openwall,       $0000, $0000,  $0000,   $0000
         dw $ffff
     }

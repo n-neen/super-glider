@@ -295,7 +295,6 @@
         ;enemy type                 x,        y,        property,   property2,  property3
         dw enemy_ptr_paper,         $0074,    $0048,    $0000,      $0006,      $0001
         dw enemy_ptr_paper,         $0074,    $0038,    $0000,      $0006,      $0001
-        dw enemy_ptr_switch,        $0060,    $0040,    $0013,      $0200,      $532b|$0001      ;room 53, object $2b
         dw $ffff
     }
     
@@ -396,6 +395,7 @@
     }
     
     ..49: {
+        dw enemy_ptr_copter,        $0020,    $0028,   $00a0,   $0000,  $00a0
         dw enemy_ptr_grease,        $009f,    $0035,   $0000,   $0000,  $0000   ;jar
         dw enemy_ptr_grease,        $0088,    $0035,   $0004,   $0000,  $0000   ;grease
         dw enemy_ptr_grease,        $0078,    $0035,   $0004,   $0000,  $0000   ;grease
@@ -404,10 +404,14 @@
         dw enemy_ptr_grease,        $0048,    $0035,   $0004,   $0000,  $0000   ;grease
         dw enemy_ptr_grease,        $0038,    $0035,   $0004,   $0000,  $0000   ;grease
         dw enemy_ptr_duct,          $0090,    $0008,   $24c0,   $8004,  $0000
+        dw enemy_ptr_battery,       $0050,    $002f,   $0064,   $0006,  $0001
+        dw enemy_ptr_bandspack,     $0040,    $0028,   $0000,   $0006,  $0002
         dw $ffff
     }
     
     ..4a: {
+        dw enemy_ptr_balloon,       $0080,  $00d0,  $191f,      $3002,  $0000
+        dw enemy_ptr_clock,         $0078,  $0048,  $01f4,      $0006,  $0001
         dw $ffff
     }
     
@@ -531,9 +535,11 @@
     }
     
     ..66: {
+                                    ;x      y       prop        prop2   prop3
         dw enemy_ptr_balloon,       $0080,  $0020,  $0000,      $0002,  $0000
         dw enemy_ptr_balloon,       $0080,  $0080,  $0000,      $0002,  $0000
         dw enemy_ptr_balloon,       $0080,  $00c0,  $0000,      $0002,  $0000
+        dw enemy_ptr_switch,        $00a0,  $0050,  $0013,      $0200,  $532b|$0001      ;room 53, object $2b ;switch to endgame
         dw $ffff
     }
     

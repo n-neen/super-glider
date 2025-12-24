@@ -55,6 +55,8 @@ todo: {
     
     room: {
         copter in room 21 needs to be moved away from duct (die on entering room from it)
+            this may be fixed due to the recent duct transition changes dec 21st 2025
+                ducts no longer have stairslift movement at all (table still gets read but it's 0)
     }
     
     bugs: {
@@ -70,6 +72,8 @@ todo: {
             ok it kinda works but it can desync ugh
             
         because grease is an enemy, you cannot land on grease when you have iframes
+            this is fixed. we have a list of enemies allowed to ignore iframes now
+                located at enemy_collision_iframeskip
     }
     
     
