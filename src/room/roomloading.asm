@@ -178,7 +178,8 @@ lorom
         
         lda !ktranstimer
         sta !glidertranstimer
-        sta !gliderstairstimer
+        
+        stz !gliderstairstimer
         rts
     }
     

@@ -709,10 +709,34 @@
     }
 
     ..88: {
+        ;enemy type                 x,        y,       prop,    prop2,  property3
+        dw enemy_ptr_copter,        $00b0,    $0028,   $0008,   $210a,  $0180
+        dw enemy_ptr_grease,        $00ee,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $00de,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $00ce,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $00be,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $00ae,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $009e,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $008e,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $007e,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $006e,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $005e,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $0048,    $005d,   $0002,   $000a,  $0000   ;left jar
         dw $ffff
     }
 
     ..89: {
+        dw enemy_ptr_grease,        $00a0,    $005d,   $0000,   $000a,  $0000   ;right jar
+        dw enemy_ptr_grease,        $0090,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $0080,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $0070,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $0060,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $0050,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $0040,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $0030,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $0020,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $0010,    $005d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $0000,    $005d,   $0004,   $000a,  $0000   ;grease
         dw $ffff
     }
 
@@ -721,6 +745,9 @@
     }
 
     ..8b: {
+        ;enemy type             x,        y,        prop,       prop2,      property3
+        dw enemy_ptr_duct,      $0048,    $00c8,    $c08b,      $0004,      $0000
+        dw enemy_ptr_duct,      $00c0,    $0008,    $388b,      $8004,      $0000
         dw $ffff
     }
 
