@@ -1,7 +1,7 @@
 grease: {
     .header: {
         dw  spritemap_pointers_grease,      ;spritemap ptr
-            $0028,                          ;xsize,
+            $002a,                          ;xsize,
             $0017,                          ;ysize,
             grease_init,                    ;init routine,
             grease_main,                    ;main routine,
@@ -35,7 +35,6 @@ grease: {
         stz !glidertranstimer
         stz !gliderstairstimer
         
-        ;stz !glidersuby
         
         lda !kglidergraphicsindexgreased
         sta !glidergraphicsindex

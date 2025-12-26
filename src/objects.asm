@@ -649,6 +649,8 @@ obj: {
         ..sewergrate:       dw obj_headers_sewergrate           ;bga only
         ..cabinet:          dw obj_headers_cabinet
         ..books:            dw obj_headers_books
+        ..rug:              dw obj_headers_rug
+        ..crate:            dw obj_headers_crate
         
         ;variable size table related objects
         ..varitable:        dw obj_headers_varitable
@@ -758,6 +760,13 @@ obj: {
             
         ..books:
             dw #obj_tilemaps_books,         $0007, $0005, obj_routines_delete,          $0000
+            
+        ..rug:
+            dw #obj_tilemaps_rug,           $000e, $0002, obj_routines_delete,          $0000
+            
+        ..crate:
+            dw #obj_tilemaps_crate,         $0008, $0008, obj_routines_delete,          $0000
+            
     }
     
     ;===========================================================================================
@@ -1519,6 +1528,8 @@ obj: {
         ..sewergrate:       %objtilemapentry(sewergrate)
         ..bigwindow:        %objtilemapentry(bigwindow)
         ..books:            %objtilemapentry(books)
+        ..rug:              %objtilemapentry(rug)
+        ..crate:            %objtilemapentry(crate)
         
         ..cabinet: {
             ...0: %objtilemapentry(cabinet0)

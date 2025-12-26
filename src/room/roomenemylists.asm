@@ -416,10 +416,25 @@
     }
     
     ..4b: {
+        dw enemy_ptr_grease,        $00a5,    $008d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $00a2,    $008d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $0092,    $008d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $0082,    $008d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $0072,    $008d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $0062,    $008d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $0052,    $008d,   $0004,   $000a,  $0000   ;grease
+        dw enemy_ptr_grease,        $003d,    $008d,   $0002,   $000a,  $0000   ;jar
         dw $ffff
     }
     
     ..4c: {
+        dw enemy_ptr_grease,        $00d8,  $008a,  $0000,      $0000,  $0000   ;jar
+        dw enemy_ptr_grease,        $00c8,  $008a,  $0004,      $0000,  $0000   ;grease
+        dw enemy_ptr_grease,        $00b8,  $008a,  $0004,      $0000,  $0000   ;grease
+        dw enemy_ptr_grease,        $00a8,  $008a,  $0004,      $0000,  $0000   ;grease
+        dw enemy_ptr_grease,        $0098,  $008a,  $0004,      $0000,  $0000   ;grease
+        ;dw enemy_ptr_grease,        $0080,  $008a,  $0004,      $0000,  $0000   ;grease
+
         dw $ffff
     }
     

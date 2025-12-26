@@ -986,11 +986,11 @@ nmi: {
     phx
     phy
     
-    phk
-    plb
-    
     jml .fastrom
     .fastrom:
+    
+    phk
+    plb
     
     sep #$10
     ldx $4210
