@@ -329,6 +329,8 @@ print "object ram end:   ", hex(!objvariable+!objectarraysize+2)
 !khitboundright             =       #$0002
 !kturnaroundcooldown        =       #$0010
 
+!kendingscenedelay          =       #$0180
+
 ;room constants
 !kceiling                   =       #$0016
 !kfloor                     =       #$00c9
@@ -363,6 +365,10 @@ print "object ram end:   ", hex(!objvariable+!objectarraysize+2)
 !kstateroomtrans            =       #$0008
 !kstatefadeout              =       #$0009
 !kstatefadein               =       #$000a
+
+!kstatefadetoending         =       #$000b
+!kstatesetupending          =       #$000c
+!kstateendingcard           =       #$000d
 
 !kpausewait                 =       #$0030
 !kfadeamount                =       #$04

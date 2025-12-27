@@ -622,6 +622,8 @@ loadingtable: {
             %loadtablentry(#samanthadata_gfx,       $0800, !spritestart+$0500,      $0b)     ;samantha      = 0b
             %loadtablentry(#pressstartdata_gfx,     $1000, !spritestart+$0000,      $0c)     ;press start   = 0c
             
+            %loadtablentry(#thenddata_gfx,          $1000, !spritestart+$0000,      $0d)     ;THE END       = 0d
+            
         }
         
         ..palettes: {
@@ -638,6 +640,8 @@ loadingtable: {
            %loadtablentry(#stardata_palette,        $0020, !spritepalette+$0010,    $0a)     ;star          = 0a
            %loadtablentry(#samanthadata_palette,    $0020, !spritepalette+$0030,    $0b)     ;samantha      = 0b
            %loadtablentry(#pressstartdata_palette,  $0100, !spritepalette+$0000,    $0c)     ;press start   = 0c
+           
+           %loadtablentry(#thenddata_palette,       $0100, !spritepalette+$0000,    $0d)     ;THE END       = 0d
            
         }
     }

@@ -231,17 +231,21 @@ main: {
     }
         
     .statetable: {
-        dw #splashsetup     ;0
-        dw #splash          ;1
-        dw #newgame         ;2
-        dw #playgame        ;3
-        dw #gameover        ;4
-        dw #debug           ;5
-        dw #loadroom        ;6
-        dw #pause           ;7
-        dw #transition      ;8
-        dw #fade_out        ;9
-        dw #fade_in         ;a
+        dw splashsetup     ;0
+        dw splash          ;1
+        dw newgame         ;2
+        dw playgame        ;3
+        dw gameover        ;4
+        dw debug           ;5
+        dw loadroom        ;6
+        dw pause           ;7
+        dw transition      ;8
+        dw fade_out        ;9
+        dw fade_in         ;a
+        
+        dw fadetoending    ;b
+        dw setupending     ;c
+        dw ending          ;d
     }
 }
 
@@ -281,7 +285,6 @@ splashsetup: {
     jsl enemy_spawnall
     jsl enemy_runinit
     jsl enemy_drawall
-    
     
     jsr enablenmi
     jsr waitfornmi
@@ -969,6 +972,196 @@ pause: {
     sta !gamestate
     ++
     stz !controller
+    rts
+}
+
+
+;===========================================================================================
+;=============================   STATE B:  FADE TO ENDING   ================================
+;===========================================================================================
+
+fadetoending: {
+    ;fade screen out slowly
+    ;this state returns with forced blank enabled and screen brightness at 0
+    
+    lda !nmicounter
+    bit #$000f
+    bne +
+    inc !gamefadecounter
+    +
+    
+    sep #$20
+    ldx !gamefadecounter
+    lda.l fadetoending_outlist,x
+    sta !ppubrightnessmirror
+    beq .done
+    rep #$20
+    
+    rts
+    
+    .done: {
+        rep #$20
+        jsr screenoff
+        
+        stz !gamefadecounter
+        
+        lda !kstatesetupending
+        sta !gamestate
+        rts
+    }
+    
+    .outlist: {
+        db 15, 14, 13, 12, 12, 13, 14, 13, 12, 13
+        db 14, 13, 12, 11, 11, 12, 13, 12, 11, 12
+        db 13, 12, 11, 10, 10, 11, 12, 11, 10, 11
+        db 12, 11, 10, 09, 09, 10, 11, 10, 09, 10
+        db 11, 10, 09, 08, 08, 09, 10, 09, 08, 09
+        db 10, 09, 08, 07, 07, 08, 09, 08, 07, 08
+        db 09, 08, 07, 06, 06, 07, 08, 07, 06, 07
+        db 08, 07, 06, 05, 05, 06, 07, 06, 05, 06
+        db 07, 06, 05, 04, 04, 05, 06, 05, 04, 05
+        db 06, 05, 04, 03, 03, 04, 05, 04, 03, 04
+        db 05, 04, 03, 02, 02, 03, 04, 03, 02, 03
+        db 04, 03, 02, 01, 01, 02, 03, 02, 01, 02
+        db 03, 02, 01, 01, 01, 01, 02, 01, 01, 01
+        db 02, 01, 01, 01, 01, 01, 01, 01, 01, 01
+        db 00
+    }
+}
+
+
+;===========================================================================================
+;=============================   STATE C:  SET UP ENDING   =================================
+;===========================================================================================
+
+setupending: {
+    ;turn on forced blank, disaable nmi, load graphics
+    ;build oam and display ending card
+    
+    jsr disablenmi
+    
+    sep #$20
+    {
+        lda #%00010101
+        sta !mainscreenlayers       ;main screen = bg3, sprites
+        
+        lda #%00000001
+        sta !subscreenlayers        ;subscreen = nothing
+        
+        lda.b #!spriteaddrshifted   
+        ora.b #%01100000            ;sprite sizes = 16x16 and 32x32 (we only use large sprites)
+        sta $2101
+        
+        lda #%00010100              ;color math layers
+        sta !colormathlayers
+        
+        lda #%00000011
+        sta !colormathenable
+    }
+    rep #$20
+    
+    jsr clearoambuffer
+    jsr loadcreditsdata
+    
+    lda #room_entry_credits
+    sta !roomptr
+    
+    jsl enemy_clearall
+    jsl enemy_spawnall
+    jsl enemy_runinit
+    jsl enemy_drawall
+    
+    
+    jsr enablenmi
+    jsr waitfornmi
+    
+    ;and then we fade in clumsily
+    
+    sep #$20
+    {
+        -
+        jsr waitfornmi
+        
+        lda !nmicounter
+        bit #$07
+        bne -
+        
+        lda !gamefadecounter
+        inc
+        sta !gamefadecounter
+        sta !ppubrightnessmirror
+        cmp #$0f
+        bne -
+        
+    }
+    rep #$20
+    
+    jsr waitfornmi
+    jsr screenon
+    
+    lda !kstateendingcard
+    sta !gamestate
+    
+    rts
+}
+
+clearoambuffer: {
+    php
+    rep #$30
+    
+    ldx #$0200
+    
+    -
+    lda #$e0e0
+    sta !oambuffer,x        ;"do we really need to unroll this loop?
+    dex : dex               ;i domnt care"
+    bpl -                   ; -me
+    
+    plp
+    rts
+}
+
+loadcreditsdata: {
+    php
+    rep #$30
+    
+    lda #$000d
+    jsl load_sprite         ;load graphics and palette for "THE END" sprite
+    
+    
+    lda #creditstilemap
+    sta !dmasrcptr
+    
+    lda #$0085
+    sta !dmasrcbank
+    
+    lda #$0700
+    sta !dmasize
+    
+    lda.w #!bg3tilemap
+    sta !dmabaseaddr
+    
+    jsl dma_vramtransfur    ;bg3 tilemap with credits
+    
+    plp
+    rts
+}
+
+
+;===========================================================================================
+;==============================   STATE D:  ENDING CARD  ===================================
+;===========================================================================================
+
+ending: {
+    ;handle whatever events might need to happen
+    ;like reset game if start is pressed
+    ;maybe do some animation
+    stz !oamentrypoint
+    
+    jsl oam_fillbuffer
+    jsl oam_hightablejank
+    jsl enemy_title
+    
     rts
 }
 

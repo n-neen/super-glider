@@ -937,6 +937,7 @@ enemy: {
         ..cutscenehandler:  dw cutscenehandler_header               ;
         ..pressstart:       dw pressstart_header                    ;
         ..grease:           dw grease_header                        ;
+        ..thendenemy:       dw thendenemy_header                    ;
         
         
         ;todo: basketball

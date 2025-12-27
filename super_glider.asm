@@ -58,6 +58,7 @@ org $828000
     incsrc "./src/enemies/cutscenehandler.asm"
     incsrc "./src/enemies/press_start.asm"
     incsrc "./src/enemies/grease.asm"
+    incsrc "./src/enemies/the_end.asm"
     
     incsrc "./data/sprites/spritemaps.asm"
     

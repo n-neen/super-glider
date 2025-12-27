@@ -6,6 +6,11 @@
         dw $ffff
     }
     
+    ..credits: 
+        dw enemy_ptr_thendenemy,    $0020,  $0020,  $0000,  $0000,  $0000
+        dw $ffff
+    }
+    
     ..0: {
         ;enemy type             x,        y,        property,   prop2,      property3
         dw enemy_ptr_duct,      $0020,    $0008,    $9021,      $8004,      $0000

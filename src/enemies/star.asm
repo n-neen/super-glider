@@ -16,6 +16,8 @@ star: {
         phk
         plb
         
+        inc !enemyvariable,x            ;time to delay touch reaction for a bit
+        
         lda !enemytimer,x
         inc
         sta !enemytimer,x
@@ -42,8 +44,14 @@ star: {
     }
     
     .touch: {
-        ;end the game!
-        ;brk #$00
+        lda !enemyvariable,x
+        cmp !kendingscenedelay      ;wait for a bit to allow the player to
+        bmi +                       ;appreciate hangin out on a cloud
+        
+        lda !kstatefadetoending
+        sta !gamestate
+        
+        +
         rts
     }
     
