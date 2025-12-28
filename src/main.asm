@@ -384,8 +384,8 @@ newgame: {
     
     jsr fixlayerscroll
     
-    lda #$0020             ;real starting room
-    ;lda #$004b
+    lda #$0020              ;real starting room
+    ;lda #$0051
     ;lda #$00d3             ;temp for testing ending
     ;lda #$0087             ;other temp
     ;lda #$0012
@@ -444,8 +444,6 @@ transition: {
 ;===========================================================================================
 ;===============================  STATE 9/A:  FADE IN/OUT  =================================
 ;===========================================================================================
-
-;unimplemented
 
 fade: {
 

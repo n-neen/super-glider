@@ -15,6 +15,7 @@ specialtilemaps: {
     .5: incbin "./data/tilemaps/special/5ending_end.map"
     .6: incbin "./data/tilemaps/special/halfroom_bg2.map"
     .7: incbin "./data/tilemaps/special/bg3_ozma.map"
+    .8: incbin "./data/tilemaps/special/bg2_zone.map"
 }
 
 print "bank $88 end: ", pc

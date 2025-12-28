@@ -543,6 +543,7 @@
     ..4d: {
         dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $8000
         dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
+        dw #obj_ptr_vent,       $0011, $001a,  $0000,   $0028
         dw $ffff
     }
 
@@ -556,26 +557,32 @@
     ..4f: {
         dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $8000
         dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
+        dw #obj_ptr_vent,       $0011, $001a,  $0000,   $0028
         dw $ffff
     }
 
     ..50: {
-        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $8000
-        dw #obj_ptr_openwall,   $0000, $0000,  $0000,   $0000
+        dw #obj_ptr_vent,       $0011, $001a,  $0000,   $0028
+        dw #obj_ptr_vent,       $0007, $001a,  $0000,   $0028
+        ;dw #obj_ptr_vent,       $0011, $001a,  $0000,   $0028
         dw $ffff
     }
 
     ..51: {
         dw #obj_ptr_openwall,       $0000, $0000,  $0000,   $8000
         dw #obj_ptr_openwall,       $0000, $0000,  $0000,   $0000
-        dw #obj_ptr_rug,            $000e, $001a,  $0c00,   $0000
-        dw #obj_ptr_vent,           $0008, $001a,  $0000,   $0018
+        ;dw #obj_ptr_vent,           $0008, $001a,  $0000,   $0018
+        dw #obj_ptr_vent,           $000f, $001a,  $0000,   $0013
+        dw #obj_ptr_varitable,      $000e, $0005,  $0800,   $0410
         dw $ffff
     }
 
     ..52: {
         dw #obj_ptr_openwall,       $0000, $0000,  $0000,   $8000
         dw #obj_ptr_openwall,       $0000, $0000,  $0000,   $0000
+        dw #obj_ptr_vent,           $000e, $001a,  $0000,   $0038
+        dw #obj_ptr_rug,            $0010, $001a,  $0c00,   $0000
+        dw #obj_ptr_varitable,      $0002, $0005,  $0800,   $0510
         dw $ffff
     }
 
@@ -592,8 +599,8 @@
         dw #obj_ptr_openwall,       $0000, $0000,  $0000,   $0000 ;2e
         dw #obj_ptr_bigwindow,      $0003, $0005,  $0c00,   $0000 ;2c
         dw #obj_ptr_shelf,          $000e, $0013,  $0800,   $0002 ;2b
-        dw #obj_ptr_vent,           $0004, $001a,  $0000,   $0043 ;28
-        dw #obj_ptr_vent,           $0017, $001a,  $0000,   $0013 ;
+        dw #obj_ptr_vent,           $0004, $001a,  $0000,   $0053 ;28
+        dw #obj_ptr_vent,           $0017, $001a,  $0000,   $0023 ;
         dw #obj_ptr_shelf,          $000e, $0008,  $0800,   $0002 ;
         dw #obj_ptr_bigwindow,      $0014, $0005,  $0c00,   $0000 ;
         dw $ffff

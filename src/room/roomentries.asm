@@ -83,7 +83,7 @@
     ..4d: dw room_objlist_4d, room_enemylist_4d, $c003,     $ffff
     ..4e: dw room_objlist_4e, room_enemylist_4e, $c003,     $ffff
     ..4f: dw room_objlist_4f, room_enemylist_4f, $c003,     $ffff
-    ..50: dw room_objlist_50, room_enemylist_50, $c003,     $ffff   ;
+    ..50: dw room_objlist_50, room_enemylist_50, $c002,     specialtilemaps_8&$7fff
     ..51: dw room_objlist_51, room_enemylist_51, $c003,     $ffff
     ..52: dw room_objlist_52, room_enemylist_52, $c003,     $ffff
     ..53: dw room_objlist_53, room_enemylist_53, $c003,     $ffff
