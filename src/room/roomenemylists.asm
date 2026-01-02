@@ -458,10 +458,18 @@
     }
     
     ..4d: {
+        ;enemy type                 x,      y,      prop,       prop2,  prop3
+        dw enemy_ptr_grease,        $0024,  $0055,  $0000,      $0000,  $0000   ;jar
+        dw enemy_ptr_grease,        $006c,  $0055,  $0002,      $0000,  $0000   ;jar
+        dw enemy_ptr_grease,        $00bc,  $0055,  $0000,      $0000,  $0000   ;jar
+        
+        dw enemy_ptr_drip,          $0050,  $0010,  $0080,      $0002,  $1800
         dw $ffff
     }
     
     ..4e: {
+        dw enemy_ptr_drip,          $0070,  $002f,  $004e,      $0002,  $2800
+        dw enemy_ptr_paper,         $00c0,  $0050,  $0000,      $0006,  $0001
         dw $ffff
     }
     

@@ -547,14 +547,25 @@
     ..4d: {
         dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $8000
         dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
-        dw #obj_ptr_vent,       $0011, $001a,  $0000,   $0028
+        dw #obj_ptr_vent,       $000d, $001a,  $0000,   $0028
+        
+        dw #obj_ptr_pillar,     $0004, $000d,  $0000,   $0000
+        dw #obj_ptr_pillar,     $000e, $000d,  $0000,   $0000
+        dw #obj_ptr_pillar,     $0018, $000d,  $0000,   $0000
+        
+        dw #obj_ptr_window,     $0008, $0005,  $0c00,   $0000
+        dw #obj_ptr_window,     $0012, $0005,  $0c00,   $0000
         dw $ffff
     }
 
     ..4e: {
-        dw #obj_ptr_bigwindow,  $000e, $0005,  $0c00,   $0000
+        dw #obj_ptr_bigwindow,  $000a, $0005,  $0c00,   $0000
         dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $8000
         dw #obj_ptr_openwall,   $0001, $0001,  $0000,   $0000
+        
+        dw #obj_ptr_pillar,     $0004, $000d,  $0000,   $0000
+        dw #obj_ptr_pillar,     $0018, $000d,  $0000,   $0000
+        dw #obj_ptr_vent,       $000d, $001a,  $0000,   $0028
         dw $ffff
     }
 
