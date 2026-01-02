@@ -651,6 +651,8 @@ obj: {
         ..books:            dw obj_headers_books
         ..rug:              dw obj_headers_rug
         ..crate:            dw obj_headers_crate
+        ..pillar:           dw obj_headers_pillar               ;bg3 only
+        ..trunk:            dw obj_headers_trunk
         
         ;variable size table related objects
         ..varitable:        dw obj_headers_varitable
@@ -767,6 +769,11 @@ obj: {
         ..crate:
             dw #obj_tilemaps_crate,         $0008, $0008, obj_routines_delete,          $0000
             
+        ..pillar:
+            dw #obj_tilemaps_pillar,        $0004, $000d, obj_routines_delete,          $8000
+            
+        ..trunk:
+            dw #obj_tilemaps_trunk,         $000b, $0006, obj_routines_delete,          $0000
     }
     
     ;===========================================================================================
@@ -1530,6 +1537,8 @@ obj: {
         ..books:            %objtilemapentry(books)
         ..rug:              %objtilemapentry(rug)
         ..crate:            %objtilemapentry(crate)
+        ..pillar:           %objtilemapentry(bg3_pillar)
+        ..trunk:            %objtilemapentry(trunk)
         
         ..cabinet: {
             ...0: %objtilemapentry(cabinet0)

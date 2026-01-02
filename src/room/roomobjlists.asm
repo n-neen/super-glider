@@ -237,6 +237,8 @@
         dw #obj_ptr_candle,     $000f, $000f,  $0800,   $0000
         dw #obj_ptr_trashcan,   $000c, $0013,  $0800,   $0000
         dw #obj_ptr_cabinet,    $001a, $0004,  $0800,   $0001
+        
+        dw #obj_ptr_pillar,     $0002, $000d,  $0000,   $0000
         dw $ffff
     }
 
@@ -272,6 +274,7 @@
         dw #obj_ptr_openwall,   $0000, $0001,  $0000,   $0000
         dw #obj_ptr_vent,       $0010, $001a,  $0000,   $0013
         dw #obj_ptr_solidrect,  $0000, $000f,  $0000,   $0205
+        dw #obj_ptr_trunk,      $0015, $0015,  $0800,   $0000
         dw $ffff
     }
 
@@ -279,6 +282,7 @@
         dw #obj_ptr_openwall,   $0000, $0001,  $0000,   $8000
         dw #obj_ptr_upstairs,   $000e, $0005,  $0400,   $0000
         dw #obj_ptr_vent,       $0010, $001a,  $0000,   $0013
+        dw #obj_ptr_trunk,      $0005, $0015,  $0800,   $0000
         dw $ffff
     }
 
@@ -591,6 +595,9 @@
         dw #obj_ptr_openwall,       $0000, $0000,  $0000,   $0000 ;2e
         dw #obj_ptr_upstairs,       $0012, $0005,  $0400,   $0000 ;2c
         dw #obj_ptr_vent,           $0015, $001a,  $0000,   $0058 ;2b
+        
+        dw #obj_ptr_pillar,         $0004, $000d,  $0000,   $0000
+        dw #obj_ptr_pillar,         $000c, $000d,  $0000,   $0000
         dw $ffff
     }
 
@@ -603,6 +610,8 @@
         dw #obj_ptr_vent,           $0017, $001a,  $0000,   $0023 ;
         dw #obj_ptr_shelf,          $000e, $0008,  $0800,   $0002 ;
         dw #obj_ptr_bigwindow,      $0014, $0005,  $0c00,   $0000 ;
+        
+        dw #obj_ptr_pillar,         $000f, $000d,  $0000,   $0000
         dw $ffff
     }
 
@@ -623,6 +632,7 @@
         dw #obj_ptr_openwall,       $0000, $0000,  $0000,   $8000
         dw #obj_ptr_dnstairs,       $000e, $0005,  $0400,   $0000
         dw #obj_ptr_vent,           $0006, $001a,  $0000,   $0013
+        dw #obj_ptr_pillar,         $0003, $000d,  $0000,   $0000
         dw $ffff
     }
 
@@ -696,7 +706,10 @@
         
         dw #obj_ptr_lamp,       $0007, $000e,  $1400,   $0000
         dw #obj_ptr_varitable,  $0002, $000b,  $0800,   $0603
-
+        
+        dw #obj_ptr_pillar,     $0006, $000d,  $0000,   $0000
+        dw #obj_ptr_pillar,     $001a, $000d,  $0000,   $0000
+        
         dw $ffff
     }
 

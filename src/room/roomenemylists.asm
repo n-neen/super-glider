@@ -217,6 +217,20 @@
     }
     
     ..26: {
+        ;lmaooo
+        dw enemy_ptr_grease,        $0068,    $0095,   $0000,       $0000,             $0000   ;jar
+        
+        dw enemy_ptr_grease,        $0058,    $0095,   $0004,       $0000,             $0000   ;grease
+        dw enemy_ptr_grease,        $0058,    $0096,   $0004,       $0000,             $0000   ;grease
+        
+        dw enemy_ptr_grease,        $0048,    $0095,   $0004,       $0000,             $0000   ;grease
+        dw enemy_ptr_grease,        $0048,    $0096,   $0004,       $0000,             $0000   ;grease
+        
+        dw enemy_ptr_grease,        $0038,    $0095,   $0004,       $0000,             $0000   ;grease
+        dw enemy_ptr_grease,        $0038,    $0096,   $0004,       $0000,             $0000   ;grease
+        
+        dw enemy_ptr_grease,        $0028,    $0095,   $0004,       $0000,             $0000   ;grease
+        dw enemy_ptr_grease,        $0028,    $0096,   $0004,       $0000,             $0000   ;grease
         dw $ffff
     }
     

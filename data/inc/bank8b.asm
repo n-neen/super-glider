@@ -109,7 +109,7 @@ bg2tilemap:
     incbin "./data/tilemaps/bg2.map"
     
 bg3tilemap:
-    incbin "./data/tilemaps/bg3.bin"
+    incbin "./data/tilemaps/bg3.map"
     
 objtilemap:
     incbin "./data/tilemaps/obj_initial_tilemap.bin"

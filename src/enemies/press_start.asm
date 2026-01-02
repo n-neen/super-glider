@@ -8,15 +8,20 @@ pressstart: {
             $0000,                          ;touch
             $0000                           ;shot
             
+    
     .main: {
         ;!kup                        =       #$0800
         ;!kdn                        =       #$0400
         ;!klf                        =       #$0200
         ;!krt                        =       #$0100
+        
+        lda !gamestate
+        cmp !kstatesplash       ;this gets used in title screen and credits
+        bne ..noa               ;don't want to move the THE END sprite with controller
+        
         lda !controller
         
         ;need to preserve A in all branches here
-        
         bit !kup
         beq ..noup
         {

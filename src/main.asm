@@ -1037,17 +1037,17 @@ setupending: {
     
     sep #$20
     {
-        lda #%00010101
+        lda #%00010100
         sta !mainscreenlayers       ;main screen = bg3, sprites
         
-        lda #%00000001
+        lda #%00000000
         sta !subscreenlayers        ;subscreen = nothing
         
         lda.b #!spriteaddrshifted   
         ora.b #%01100000            ;sprite sizes = 16x16 and 32x32 (we only use large sprites)
         sta $2101
         
-        lda #%00010100              ;color math layers
+        lda #%00010000              ;color math layers
         sta !colormathlayers
         
         lda #%00000011
