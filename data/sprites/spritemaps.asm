@@ -9,7 +9,7 @@
 ;i think the above is done
 ;todo: confirm the above, and above the above
 
-;print "spritemaps: ", pc
+;print "spritemaps start: ", pc
 
 !spritemapbanklong        =   spritemap&$ff0000
 !spritemapbankword        =   !spritemapbanklong>>8
@@ -769,3 +769,6 @@ spritemap: {
         db $a0, $00, $48,   %00111110,  %00001000
     }
 }
+
+
+;print "spritemaps end:   ", pc

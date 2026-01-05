@@ -1951,7 +1951,7 @@
 0013 798da00c c:/users/keenan/desktop/glider pro snes/snes/src/enemies/press_start.asm
 0014 ba98fe2b c:/users/keenan/desktop/glider pro snes/snes/src/enemies/grease.asm
 0015 f060afee c:/users/keenan/desktop/glider pro snes/snes/src/enemies/the_end.asm
-0016 72e41fdc c:/users/keenan/desktop/glider pro snes/snes/data/sprites/spritemaps.asm
+0016 0afd384c c:/users/keenan/desktop/glider pro snes/snes/data/sprites/spritemaps.asm
 0017 13632cb8 c:/users/keenan/desktop/glider pro snes/snes/src/roomroutines.asm
 0018 e25b0745 c:/users/keenan/desktop/glider pro snes/snes/src/specialtilemaps.asm
 0019 bb63b784 c:/users/keenan/desktop/glider pro snes/snes/src/enemies/instructionlisthandler.asm
@@ -1974,7 +1974,7 @@
 002a b77738e0 c:/users/keenan/desktop/glider pro snes/snes/super_glider.asm
 
 [rom checksum]
-706e5e73
+08a4b35e
 
 [addr-to-line mapping]
 80:8000 0000:00000033
